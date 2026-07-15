@@ -2,6 +2,14 @@
 
 > [!WARNING]
 > **MOTO-HUB is an experimental proof-of-concept, not a production-grade product.** It has been built and tested with a CFMOTO **700MT-ADV** dashboard and **OnePlus 13 / Galaxy Z Fold4** phones. Behavior may be unstable, require a retry, or differ on other motorcycles, T-Box firmware versions, or phones. Do not depend on it as your only source of critical navigation information. Plan your route before riding, and use the software at your own risk.
+>
+> <table cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td><img src="1.png" alt="Screenshot 1" width="300"></td>
+    <td><img src="2.png" alt="Screenshot 2" width="300"></td>
+    <td><img src="3.png" alt="Screenshot 3" width="300"></td>
+  </tr>
+</table>
 
 MOTO-HUB is an Android 14+ application for connecting a phone to a compatible motorcycle T-Box and projecting content to the motorcycle TFT display.
 
