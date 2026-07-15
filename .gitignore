@@ -1,0 +1,14 @@
+.DS_Store
+.~lock.*
+.gradle/
+**/build/
+**/.cxx/
+local.properties
+*.keystore
+*.jks
+*.hprof
+*.zip
+/artifacts/
+/tooling/private/
+apps/android/app/src/main/res/raw/aa_cert
+apps/android/app/src/main/res/raw/aa_identity_data
