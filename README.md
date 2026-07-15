@@ -15,6 +15,42 @@ MOTO-HUB is an Android 14+ application for connecting a phone to a compatible mo
 
 The app supports Android Auto, whole-screen mirroring, and Android's app-specific screen sharing flow. It is designed as a personal, local-first project and is not affiliated with or endorsed by CFMOTO, EasyConn, MotoPlay, Google, or any other vehicle or software vendor.
 
+## Download The Latest APK
+
+For the latest manually published Android package, visit the [latest MOTO-HUB release](https://github.com/vincenzobpt/MOTO-HUB/releases/latest).
+
+On the release page, expand **Assets** and download the file ending in `.apk`. Do not download **Source code (zip)** or **Source code (tar.gz)**: those files contain the project source, not an installable application. Android may ask you to allow installation from this source the first time; this is a normal Android security prompt for APKs installed outside Google Play.
+
+## Permissions And Privacy
+
+MOTO-HUB is a local-first app. The permissions below are used to connect to the motorcycle, scan its pairing QR code, keep an active projection running, and provide user controls. The app does not require an account and does not use these permissions to track the rider or upload screen content.
+
+### Permissions requested while using the app
+
+| Permission | When it is requested | Why it is needed | What it does not mean |
+| --- | --- | --- | --- |
+| **Camera** | When you choose live QR scanning | Reads the T-Box QR code shown on the motorcycle TFT | The camera is not needed for normal streaming, and camera frames are not intentionally recorded or uploaded |
+| **Nearby devices / Wi-Fi** | When you connect to a saved or newly paired motorcycle | Finds and requests the motorcycle's Wi-Fi access point, then communicates with the local T-Box | It is not Bluetooth tracking and does not grant access to unrelated nearby devices |
+| **Location** | Requested together with the Wi-Fi permissions on some Android versions | Android requires location permission for parts of Wi-Fi discovery and scanning compatibility | MOTO-HUB does not use this permission to build a location history or track routes |
+| **Notifications** | When starting mirroring or Android Auto on Android 13 and newer | Shows the required foreground-service status and gives you visible controls to stop or manage an active session | It is not telemetry; notifications stay on the phone |
+
+### System confirmations and optional access
+
+| Access | When it is used | Why it is needed |
+| --- | --- | --- |
+| **Screen sharing confirmation** | Every time you start phone mirroring or app-specific sharing | Android requires the user to approve capture of the whole display or a selected app. MOTO-HUB cannot approve this silently |
+| **Display over other apps** *(optional)* | Only if you enable phone-display dimming during projection | Places a non-touchable overlay over the phone display to reduce brightness while the TFT continues receiving the projection. The overlay can be removed from MOTO-HUB or by stopping the session |
+
+### Technical permissions granted by Android
+
+The app also declares network and foreground-service permissions required by Android for this workflow: Internet and network-state access, Wi-Fi state/change access, Wi-Fi multicast discovery, foreground services for media projection and connected devices, and a wake lock. These are used to maintain the local T-Box connection and keep the active projection alive; they are not separate user accounts or remote services.
+
+The Android Auto receiver also declares package visibility for Android Auto and Google Play services so MOTO-HUB can detect and launch the installed Android Auto component. This does not give MOTO-HUB access to Google account data.
+
+### If a permission is denied
+
+The app should continue to open normally. Only the related feature is unavailable: without Camera, use QR import from a photo or an already saved motorcycle; without Nearby Wi-Fi or Location, the T-Box connection cannot be discovered; without Notifications, Android Auto or mirroring cannot be kept as a fully managed foreground session; without screen-capture approval, mirroring cannot start. Optional display dimming simply remains disabled unless overlay access is granted.
+
 ## What It Does
 
 - Pair with a motorcycle T-Box by scanning its QR code.
