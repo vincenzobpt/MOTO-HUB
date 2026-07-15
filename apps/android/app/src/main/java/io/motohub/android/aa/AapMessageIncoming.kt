@@ -1,0 +1,51 @@
+// Ported from headunit-revived (AGPLv3): aap/AapMessageIncoming.kt
+package io.motohub.android.aa
+
+internal class AapMessageIncoming(header: EncryptedHeader, ba: ByteArrayWithLimit)
+    : AapMessage(header.chan, header.flags.toByte(), Utils.bytesToInt(ba.data, 0, true), calcOffset(header), ba.limit, ba.data) {
+
+    internal class EncryptedHeader {
+        var chan: Int = 0
+        var flags: Int = 0
+        var enc_len: Int = 0
+        var msg_type: Int = 0
+        var buf = ByteArray(SIZE)
+
+        fun decode() {
+            this.chan = buf[0].toInt()
+            this.flags = buf[1].toInt()
+            // Encoded length of bytes to be decrypted (minus 4/8 byte headers)
+            this.enc_len = Utils.bytesToInt(buf, 2, true)
+        }
+
+        companion object {
+            const val SIZE = 4
+        }
+    }
+
+    companion object {
+        fun decrypt(header: EncryptedHeader, offset: Int, buf: ByteArray, ssl: AapSsl): AapMessage? {
+            if (header.flags and 0x08 != 0x08) {
+                AaLog.e(
+                    "WRONG FLAG: enc_len: %d  chan: %d %s flags: 0x%02x  msg_type: 0x%02x %s",
+                    header.enc_len, header.chan, Channel.name(header.chan), header.flags, header.msg_type,
+                    MsgType.name(header.msg_type, header.chan)
+                )
+                return null
+            }
+
+            val ba = ssl.decrypt(offset, header.enc_len, buf) ?: return null
+
+            if (ba.data.size < 2) {
+                AaLog.e("Decrypted payload too short: " + ba.data.size)
+                return null
+            }
+
+            val msg = AapMessageIncoming(header, ba)
+            if (AaLog.LOG_VERBOSE) AaLog.d("RECV: %s", msg.toString())
+            return msg
+        }
+
+        fun calcOffset(header: EncryptedHeader): Int = 2
+    }
+}

@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.MotoHub" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/moto_hub_night</item>
+        <item name="android:navigationBarColor">@color/moto_hub_night</item>
+    </style>
+</resources>
+
