@@ -123,11 +123,12 @@ sequenceDiagram
     S-->>A: Streaming state
 ```
 
-The exact order between T-Box session and codec creation can be optimized, but
-the codec must not produce indefinitely before transport is ready. The safe
-area received from the T-Box determines the effective resolution; if no event
-arrives before timeout, use the verified `800x400` profile or fail according to
-hardware tests.
+The codec must not produce indefinitely before transport is ready. The event
+collector is installed before the T-Box handshake so an immediate area message
+cannot be lost. The runtime area determines the effective resolution and is
+aligned to H.264 macroblocks. If the live event times out, only a geometry saved
+for the same T-Box SSID may be used; otherwise startup fails explicitly. There
+is no model-specific or global resolution fallback.
 
 ## State Machine
 

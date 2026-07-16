@@ -94,7 +94,10 @@ Video dumps must be excluded from user logs and deleted after testing.
 
 ### Streaming
 
-- 800x400 profiles at 15, 20 and 30 fps;
+- landscape, portrait and near-square runtime areas, including dimensions that
+  require 16-pixel macroblock alignment;
+- immediate `VideoArea` delivery during handshake and delayed delivery;
+- missing live area with and without a geometry saved for the same SSID;
 - 2, 2.5, 3 and 5 Mbps bitrates;
 - 10 consecutive starts/stops;
 - 30- and 60-minute sessions;

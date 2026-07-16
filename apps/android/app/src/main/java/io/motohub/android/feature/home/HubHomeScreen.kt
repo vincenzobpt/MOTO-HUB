@@ -65,6 +65,7 @@ fun HubHomeScreen(
     onCancelConnection: () -> Unit,
     onOpenNetworkDiagnostics: () -> Unit,
     onOpenApplicationLogs: () -> Unit,
+    onOpenAbout: () -> Unit,
     onOpenGarage: () -> Unit,
     onStartProjection: () -> Unit,
     androidAutoActive: Boolean,
@@ -151,7 +152,49 @@ fun HubHomeScreen(
                     onOpenNetworkDiagnostics = onOpenNetworkDiagnostics
                 )
             }
+            AboutEntry(onClick = onOpenAbout)
             Spacer(Modifier.height(6.dp))
+        }
+    }
+}
+
+@Composable
+private fun AboutEntry(onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.72f)
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
+        shape = MaterialTheme.shapes.medium
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 14.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                Text("About MOTO-HUB", style = MaterialTheme.typography.titleSmall)
+                Text(
+                    text = "Project details, disclaimer, and source code.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Text(
+                text = "View",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+                fontFamily = FontFamily.Monospace,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }

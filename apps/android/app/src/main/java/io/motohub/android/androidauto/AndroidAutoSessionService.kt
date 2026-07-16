@@ -26,19 +26,16 @@ import io.motohub.android.tbox.TBoxEvent
 import io.motohub.android.tbox.TBoxNetworkEvent
 import io.motohub.android.tbox.TBoxSessionHandle
 import io.motohub.android.tbox.TBoxSessionRegistry
+import io.motohub.android.tbox.TBoxVideoAreaSource
+import io.motohub.android.tbox.negotiateVideoConfiguration
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 
 /** Owns the Android Auto loopback receiver and its independent T-Box video pipeline. */
 class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
@@ -180,50 +177,45 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
         }
         ProjectionEventLog.record("ANDROID AUTO", "First AAP video frame received. Starting EasyConn session.")
 
-        val configuration = coroutineScope {
-            val area = async {
-                withTimeoutOrNull(VIDEO_CONFIGURATION_TIMEOUT_MS) {
-                    handle.transport.events.filterIsInstance<TBoxEvent.VideoArea>().first()
-                }
-            }
-            val transportResult = handle.transport.start(handle.host, EncoderProfile())
-            transportResult.exceptionOrNull()?.let {
-                area.cancel()
-                return@coroutineScope Result.failure<BikeStreamConfiguration>(it)
-            }
-            val negotiated = area.await()
-            Result.success(
-                BikeStreamConfiguration(
-                    encoderProfile = negotiated?.let {
-                        EncoderProfile.forTBoxArea(it.width, it.height)
-                    } ?: EncoderProfile(),
-                    negotiatedArea = negotiated
-                )
-            )
+        val savedArea = displayGeometryStore.load(handle.motorcycle.ssid)?.let { geometry ->
+            TBoxEvent.VideoArea(geometry.width, geometry.height)
         }
-        configuration.exceptionOrNull()?.let {
+        val configurationResult = handle.transport.negotiateVideoConfiguration(
+            host = handle.host,
+            savedArea = savedArea,
+            timeoutMillis = VIDEO_CONFIGURATION_TIMEOUT_MS
+        )
+        configurationResult.exceptionOrNull()?.let {
             return fail("T-Box handshake for Android Auto failed: ${it.message}")
         }
         if (stopping) return
 
-        val (encoderProfile, negotiatedArea) = configuration.getOrThrow()
+        val configuration = configurationResult.getOrThrow()
+        val encoderProfile = configuration.encoderProfile
+        val negotiatedArea = configuration.rawArea
         val actualGeometry = DisplayGeometry(encoderProfile.width, encoderProfile.height)
         val expectedGeometry = ActiveAndroidAutoDisplayProfile.current.expectedTft
-        if (negotiatedArea != null) {
+        if (configuration.source == TBoxVideoAreaSource.LIVE) {
             displayGeometryStore.save(
                 handle.motorcycle.ssid,
                 DisplayGeometry(negotiatedArea.width, negotiatedArea.height)
             )
-            if (actualGeometry != expectedGeometry) {
-                ProjectionEventLog.record(
-                    "ANDROID AUTO",
-                    "Updating compositor in this session: raw TFT area " +
-                        "${negotiatedArea.width}x${negotiatedArea.height}, aligned AVC canvas " +
-                        "${actualGeometry.width}x${actualGeometry.height}."
-                )
-            }
-            ActiveAndroidAutoDisplayProfile.configure(actualGeometry)
+        } else {
+            ProjectionEventLog.warning(
+                "ANDROID AUTO",
+                "The live TFT area was not received; using the saved geometry for " +
+                    "${handle.motorcycle.ssid}."
+            )
         }
+        if (actualGeometry != expectedGeometry) {
+            ProjectionEventLog.record(
+                "ANDROID AUTO",
+                "Updating compositor in this session: ${configuration.source} TFT area " +
+                    "${negotiatedArea.width}x${negotiatedArea.height}, aligned AVC canvas " +
+                    "${actualGeometry.width}x${actualGeometry.height}."
+            )
+        }
+        ActiveAndroidAutoDisplayProfile.configure(actualGeometry)
         ProjectionEventLog.record(
             "T-BOX",
             "Area Android Auto ${encoderProfile.width}x${encoderProfile.height}."
@@ -425,7 +417,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
         private const val NOTIFICATION_ID = 4201
         private const val ACTION_STOP = "io.motohub.android.action.STOP_ANDROID_AUTO"
         private const val AAP_VIDEO_READY_TIMEOUT_MS = 60_000L
-        private const val VIDEO_CONFIGURATION_TIMEOUT_MS = 5_000L
+        private const val VIDEO_CONFIGURATION_TIMEOUT_MS = 10_000L
         private const val FRAME_LOG_INTERVAL = 300L
         private const val WAKE_LOCK_TIMEOUT_MS = 4 * 60 * 60 * 1_000L
 
@@ -443,11 +435,6 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
         }
     }
 }
-
-private data class BikeStreamConfiguration(
-    val encoderProfile: EncoderProfile,
-    val negotiatedArea: TBoxEvent.VideoArea?
-)
 
 private fun alignedCanvasGeometry(geometry: DisplayGeometry): DisplayGeometry {
     val profile = EncoderProfile.forTBoxArea(geometry.width, geometry.height)

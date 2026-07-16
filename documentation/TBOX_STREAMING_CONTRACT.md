@@ -54,7 +54,7 @@ Known baseline:
 | Property | Initial value |
 |---|---|
 | Codec | H.264/AVC |
-| Resolution | approximately `800x400`, or negotiated safe area |
+| Resolution | runtime T-Box capture area, aligned down to 16-pixel macroblocks |
 | Frame rate | `15-30 fps` |
 | Bitrate | `2-5 Mbps`, starting at `2.5 Mbps` |
 | Structure | non-buffered, very short GOP, predictive but intra-tolerant |
@@ -64,6 +64,9 @@ Known baseline:
 
 `MobileSession.pushFrame()` accepts the sample produced by `MediaCodec`. The
 library detects AVCC/Annex-B, converts AVCC to Annex-B and prepends an AUD NAL.
+The media-control capture request is the resolution source of truth. MOTO-HUB
+must acknowledge arbitrary valid dimensions and configure the Android encoder
+from that request rather than from a motorcycle model table.
 
 ### Encoder Invariants
 

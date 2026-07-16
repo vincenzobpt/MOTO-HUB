@@ -9,8 +9,8 @@ import java.nio.ByteBuffer
 import java.util.concurrent.atomic.AtomicBoolean
 
 data class EncoderProfile(
-    val width: Int = 800,
-    val height: Int = 400,
+    val width: Int,
+    val height: Int,
     val frameRate: Int = 30,
     val bitRate: Int = 2_500_000
 ) {
@@ -47,7 +47,7 @@ class AvcEncoder(
         try {
             val configuredCodec = MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_VIDEO_AVC)
             codec = configuredCodec
-            val format = MediaFormat.createVideoFormat(
+            fun encoderFormat(forceBaseline: Boolean) = MediaFormat.createVideoFormat(
                 MediaFormat.MIMETYPE_VIDEO_AVC,
                 profile.width,
                 profile.height
@@ -57,8 +57,36 @@ class AvcEncoder(
                 setInteger(MediaFormat.KEY_FRAME_RATE, profile.frameRate)
                 setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 0)
                 setInteger(MediaFormat.KEY_PREPEND_HEADER_TO_SYNC_FRAMES, 1)
+                if (forceBaseline) {
+                    setInteger(
+                        MediaFormat.KEY_PROFILE,
+                        MediaCodecInfo.CodecProfileLevel.AVCProfileBaseline
+                    )
+                    setInteger(MediaFormat.KEY_LEVEL, MediaCodecInfo.CodecProfileLevel.AVCLevel31)
+                }
             }
-            configuredCodec.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE)
+            try {
+                configuredCodec.configure(
+                    encoderFormat(forceBaseline = true),
+                    null,
+                    null,
+                    MediaCodec.CONFIGURE_FLAG_ENCODE
+                )
+                ProjectionEventLog.record("ENCODER", "Configured H.264 Baseline profile at level 3.1.")
+            } catch (baselineFailure: Throwable) {
+                ProjectionEventLog.warning(
+                    "ENCODER",
+                    "H.264 Baseline profile is unavailable; retrying the default codec profile.",
+                    baselineFailure
+                )
+                configuredCodec.reset()
+                configuredCodec.configure(
+                    encoderFormat(forceBaseline = false),
+                    null,
+                    null,
+                    MediaCodec.CONFIGURE_FLAG_ENCODE
+                )
+            }
             inputSurface = configuredCodec.createInputSurface()
             configuredCodec.start()
             ProjectionEventLog.record("ENCODER", "AVC codec ${configuredCodec.name} started with surface input.")

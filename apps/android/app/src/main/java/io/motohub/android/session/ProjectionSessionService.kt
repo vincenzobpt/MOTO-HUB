@@ -19,21 +19,19 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import io.motohub.android.R
 import io.motohub.android.encoding.AvcEncoder
-import io.motohub.android.encoding.EncoderProfile
 import io.motohub.android.androidauto.DisplayGeometry
 import io.motohub.android.androidauto.TBoxDisplayGeometryStore
 import io.motohub.android.tbox.TBoxEvent
 import io.motohub.android.tbox.TBoxNetworkEvent
 import io.motohub.android.tbox.TBoxSessionHandle
 import io.motohub.android.tbox.TBoxSessionRegistry
+import io.motohub.android.tbox.TBoxVideoAreaSource
+import io.motohub.android.tbox.negotiateVideoConfiguration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
@@ -117,30 +115,39 @@ class ProjectionSessionService : Service() {
             ?: return fail("No T-Box session is ready. Reconnect the motorcycle before sharing.")
         tBoxHandle = handle
         observeActiveSession(handle)
-        val transportResult = handle.transport.start(handle.host, EncoderProfile())
-        transportResult.exceptionOrNull()?.let {
-            return fail("T-Box handshake failed: ${it.message}")
+        val geometryStore = TBoxDisplayGeometryStore(this)
+        val savedArea = geometryStore.load(handle.motorcycle.ssid)?.let { geometry ->
+            TBoxEvent.VideoArea(geometry.width, geometry.height)
         }
+        val configurationResult = handle.transport.negotiateVideoConfiguration(
+            host = handle.host,
+            savedArea = savedArea,
+            timeoutMillis = VIDEO_CONFIGURATION_TIMEOUT_MS
+        )
+        configurationResult.exceptionOrNull()?.let {
+            return fail("T-Box video negotiation failed: ${it.message}")
+        }
+        val configuration = configurationResult.getOrThrow()
+        val area = configuration.rawArea
+        val profile = configuration.encoderProfile
         ProjectionEventLog.record("T-BOX", "Handshake completed.")
-        if (stopping) return
-
-        val negotiatedArea = withTimeoutOrNull(VIDEO_CONFIGURATION_TIMEOUT_MS) {
-            handle.transport.events.filterIsInstance<TBoxEvent.VideoArea>().first()
-        }
-        val profile = negotiatedArea?.let { area ->
-            EncoderProfile.forTBoxArea(area.width, area.height)
-        } ?: EncoderProfile()
-        negotiatedArea?.let { area ->
-            TBoxDisplayGeometryStore(this).save(
+        if (configuration.source == TBoxVideoAreaSource.LIVE) {
+            geometryStore.save(
                 handle.motorcycle.ssid,
                 DisplayGeometry(area.width, area.height)
             )
-            ProjectionEventLog.record(
+        } else {
+            ProjectionEventLog.warning(
                 "T-BOX",
-                "Raw TFT area ${area.width}x${area.height}; aligned AVC canvas " +
-                    "${profile.width}x${profile.height}."
+                "The live TFT area was not received; using the saved geometry for " +
+                    "${handle.motorcycle.ssid}."
             )
         }
+        ProjectionEventLog.record(
+            "T-BOX",
+            "${configuration.source} TFT area ${area.width}x${area.height}; aligned AVC canvas " +
+                "${profile.width}x${profile.height}."
+        )
         ProjectionEventLog.record(
             "T-BOX",
             "Area video ${profile.width}x${profile.height} ${profile.frameRate}fps."
@@ -366,7 +373,7 @@ class ProjectionSessionService : Service() {
         private const val ACTION_RESTORE_DISPLAY = "io.motohub.android.action.RESTORE_DISPLAY"
         private const val EXTRA_RESULT_CODE = "result_code"
         private const val EXTRA_RESULT_DATA = "result_data"
-        private const val VIDEO_CONFIGURATION_TIMEOUT_MS = 5_000L
+        private const val VIDEO_CONFIGURATION_TIMEOUT_MS = 10_000L
         private const val AUTO_DIM_DELAY_MS = 5_000L
         private const val FRAME_LOG_INTERVAL = 120L
 

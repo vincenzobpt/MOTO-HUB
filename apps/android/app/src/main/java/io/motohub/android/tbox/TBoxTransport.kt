@@ -1,7 +1,6 @@
 package io.motohub.android.tbox
 
 import android.net.Network
-import io.motohub.android.encoding.EncoderProfile
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -27,7 +26,7 @@ sealed interface TBoxTransportStatus {
 
 interface TBoxTransport {
     suspend fun discover(network: Network): Result<TBoxHost>
-    suspend fun start(host: TBoxHost, profile: EncoderProfile): Result<Unit>
+    suspend fun start(host: TBoxHost): Result<Unit>
     fun offerAccessUnit(avcc: ByteArray): Boolean
     suspend fun stop()
     val events: Flow<TBoxEvent>
@@ -39,7 +38,7 @@ class UnavailableTBoxTransport : TBoxTransport {
         IllegalStateException("hudlib.aar is not integrated")
     )
 
-    override suspend fun start(host: TBoxHost, profile: EncoderProfile): Result<Unit> = Result.failure(
+    override suspend fun start(host: TBoxHost): Result<Unit> = Result.failure(
         IllegalStateException("hudlib.aar is not integrated")
     )
 

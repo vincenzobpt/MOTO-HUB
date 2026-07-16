@@ -12,7 +12,6 @@ import api.Api
 import api.MobileCallback
 import api.MobileSession
 import io.motohub.android.R
-import io.motohub.android.encoding.EncoderProfile
 import io.motohub.android.session.ProjectionEventLog
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -78,13 +77,13 @@ class RideDaemonTransport(
         }
     }
 
-    override suspend fun start(host: TBoxHost, profile: EncoderProfile): Result<Unit> =
+    override suspend fun start(host: TBoxHost): Result<Unit> =
         withContext(Dispatchers.IO) {
             runCatching {
                 ProjectionEventLog.record(
                     "TBOX",
-                    "Starting EasyConn handshake to ${host.ipAddress}:${host.port} with " +
-                        "encoder=${profile.width}x${profile.height}@${profile.frameRate}."
+                    "Starting EasyConn handshake to ${host.ipAddress}:${host.port}; " +
+                        "waiting for the TFT video area."
                 )
                 val activeSession = checkNotNull(session) {
                     "Call discover() before starting the T-Box session"
@@ -295,6 +294,16 @@ class RideDaemonTransport(
                 decodeTBoxTouch(payload)?.let(mutableEvents::tryEmit)
                 return
             }
+            if (command == MEDIA_CAPTURE_CONFIG_COMMAND) {
+                decodeTBoxVideoArea(payload)?.let { area ->
+                    ProjectionEventLog.record(
+                        "TBOX",
+                        "TFT capture area requested: ${area.width}x${area.height}."
+                    )
+                    mutableEvents.tryEmit(area)
+                }
+                return
+            }
             runCatching {
                 val safeArea = org.json.JSONObject(payload.toString(Charsets.UTF_8))
                     .optJSONObject("viewAreaConfig")
@@ -330,6 +339,7 @@ class RideDaemonTransport(
         const val DISCOVERY_TIMEOUT_MS = 15_000L
         const val EC_CONNECT_TIMEOUT_MS = 10_000
         const val MEDIA_CONTROL_EVENT_SOURCE = 3L
+        const val MEDIA_CAPTURE_CONFIG_COMMAND = 16L
         const val MEDIA_TOUCH_COMMAND = 32L
     }
 }
@@ -338,6 +348,14 @@ internal fun decodeEasyConnPackage(value: ByteArray?): String? = value
     ?.toString(Charsets.UTF_8)
     ?.trim()
     ?.takeIf(String::isNotBlank)
+
+internal fun decodeTBoxVideoArea(payload: ByteArray): TBoxEvent.VideoArea? {
+    if (payload.size < 4) return null
+    val body = ByteBuffer.wrap(payload).order(ByteOrder.LITTLE_ENDIAN)
+    val width = body.getShort(0).toInt() and 0xFFFF
+    val height = body.getShort(2).toInt() and 0xFFFF
+    return if (width > 0 && height > 0) TBoxEvent.VideoArea(width, height) else null
+}
 
 internal fun decodeTBoxTouch(payload: ByteArray): TBoxEvent.Touch? {
     if (payload.size < 8) return null

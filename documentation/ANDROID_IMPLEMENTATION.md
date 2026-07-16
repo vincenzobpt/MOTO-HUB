@@ -123,10 +123,11 @@ The overlay:
 Do not permanently modify `Settings.System.SCREEN_BRIGHTNESS`: a crash could
 otherwise leave the phone unusable at minimum brightness.
 
-For the MVP the virtual display remains `800x400` or uses the negotiated safe
-area. Content is scaled into the surface. If aspect ratio or orientation is
-unacceptable, the gate moves to the EGL compositor described in the
-architecture.
+The virtual display uses the runtime area advertised by the connected T-Box.
+Both dimensions are aligned down to complete 16-pixel H.264 macroblocks; no
+motorcycle model or fixed TFT resolution is assumed. A geometry saved for the
+same SSID may recover a missing live event, but an unknown display without a
+valid area fails explicitly instead of receiving a wrongly sized stream.
 
 ## H.264 Encoder
 
@@ -134,7 +135,7 @@ Starting configuration:
 
 ```text
 MIME:                  video/avc
-Resolution:            800x400, overridden by valid safe area
+Resolution:            runtime T-Box area, aligned to 16-pixel macroblocks
 Color format:          COLOR_FormatSurface
 Frame rate:            30 fps, fallback 20/15
 Bitrate:               2.5 Mbps, test range 2-5 Mbps
