@@ -68,9 +68,9 @@ The app should continue to open normally. Only the related feature is unavailabl
 
 ## Current Status
 
-The current Android client is version `0.8.1` (`38`) and targets Android 14/API 34 and newer.
+The current Android client is version `0.8.2-beta.6` (`44`) and targets Android 14/API 34 and newer.
 
-The application has been tested end-to-end on a OnePlus 13 and a CFMOTO motorcycle T-Box. Compatibility with other phones, motorcycle models, T-Box firmware versions, and Android Auto versions is not guaranteed and must be validated separately.
+This build has been tested end-to-end for mirroring and Android Auto on a OnePlus 13 and a CFMOTO 700MT-ADV T-Box. Compatibility with other phones, motorcycle models, T-Box firmware versions, and Android Auto versions is not guaranteed and must be validated separately.
 
 This is still an experimental project. Do not rely on it as the only navigation or safety system, and configure navigation while stationary.
 
@@ -173,6 +173,7 @@ The T-Box Wi-Fi network is a local display transport and may not provide Interne
 - [Test strategy](documentation/TEST_STRATEGY.md)
 - [Roadmap](documentation/ROADMAP.md)
 - [Risk register](documentation/RISK_REGISTER.md)
+- [OpenCfMoto comparative audit](documentation/OPEN_CFMOTO_COMPARATIVE_AUDIT.md)
 - [Architecture decisions](documentation/decisions/README.md)
 
 ## Technical Sources And Attribution
@@ -208,7 +209,7 @@ This section is intentionally explicit because the project combines original MOT
 - `ridedaemon-lib` and the reference Android project are distributed under GPL-3.0 according to their repositories and license files.
 - The generated `hudlib.aar` is derived from the GPL-3.0-only ridedaemon fork. A public distribution containing it must include the corresponding source and comply with the applicable GPL obligations.
 - The `open-cfmoto` project used for research does not contain a license file in the reviewed source snapshot. No code from that project should be published as part of MOTO-HUB until its redistribution terms and attribution requirements are verified.
-- The final MOTO-HUB license and repository notices must be selected before the first public push.
+- The final MOTO-HUB license and repository notices must be selected before broader public distribution.
 - CFMOTO, EasyConn, MotoPlay, Android Auto, Google, and related names remain the property of their respective owners. MOTO-HUB is an independent project and must not imply official support.
 
 This README is a publication draft, not a legal opinion. The final repository should include the exact license texts and notices required by every distributed component.

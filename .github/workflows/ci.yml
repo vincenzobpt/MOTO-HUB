@@ -1,0 +1,101 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android:
+    name: Android lint, test, and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set up Java 17
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@16f3e46a58d2b926c34615132d7969a96bccb22b # v6.0.0
+
+      - name: Install Android SDK components
+        run: |
+          set -euo pipefail
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
+            "platforms;android-36" \
+            "build-tools;36.0.0"
+
+      - name: Verify RideDaemon artifact lock
+        run: |
+          set -euo pipefail
+          lock="tooling/ridedaemon.lock"
+          artifact="$(awk -F= '$1 == "artifact" { print $2 }' "$lock")"
+          expected="$(awk -F= '$1 == "sha256" { print $2 }' "$lock")"
+          source_dirty="$(awk -F= '$1 == "source_dirty" { print $2 }' "$lock")"
+          test -n "$artifact"
+          test -n "$expected"
+          test "$source_dirty" = "false"
+          test -f "$artifact"
+          printf '%s  %s\n' "$expected" "$artifact" | sha256sum --check --strict
+
+      - name: Run Android quality gates
+        working-directory: apps/android
+        run: ./gradlew --no-daemon lintDebug testDebugUnitTest assembleDebug
+
+  ridedaemon:
+    name: Locked RideDaemon tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout MOTO-HUB lockfile
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          path: moto-hub
+
+      - name: Read locked RideDaemon revision
+        id: lock
+        working-directory: moto-hub
+        run: |
+          set -euo pipefail
+          repository="$(awk -F= '$1 == "source_repository" { print $2 }' tooling/ridedaemon.lock)"
+          commit="$(awk -F= '$1 == "source_commit" { print $2 }' tooling/ridedaemon.lock)"
+          repository="${repository#https://github.com/}"
+          repository="${repository%.git}"
+          test -n "$repository"
+          test -n "$commit"
+          echo "repository=$repository" >> "$GITHUB_OUTPUT"
+          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout locked RideDaemon source
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: ${{ steps.lock.outputs.repository }}
+          ref: ${{ steps.lock.outputs.commit }}
+          path: ridedaemon-lib
+
+      - name: Set up Go
+        uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # v6.1.0
+        with:
+          go-version-file: ridedaemon-lib/go.mod
+          cache-dependency-path: ridedaemon-lib/go.sum
+
+      - name: Run RideDaemon tests
+        working-directory: ridedaemon-lib
+        run: |
+          go test ./...
+          go test -race ./...
