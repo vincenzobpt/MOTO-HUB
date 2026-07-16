@@ -13,7 +13,6 @@ import android.opengl.Matrix
 import android.os.Handler
 import android.os.HandlerThread
 import android.view.Surface
-import io.motohub.android.aa.ServiceDiscoveryResponse
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
@@ -22,7 +21,8 @@ import java.util.concurrent.CountDownLatch
 /** GPU compositor that fills the TFT while keeping the complete source in the phone preview. */
 class AaCompositor(
     private val log: (String) -> Unit,
-    private val displayMode: AndroidAutoDisplayMode
+    private val displayMode: AndroidAutoDisplayMode,
+    private val sourceGeometry: DisplayGeometry
 ) {
     private val thread = HandlerThread("aa-compositor").apply { start() }
     private val handler = Handler(thread.looper)
@@ -88,16 +88,15 @@ class AaCompositor(
                 initGl()
                 surfaceTexture = SurfaceTexture(textureId).apply {
                     setDefaultBufferSize(
-                        ServiceDiscoveryResponse.AA_WIDTH,
-                        ServiceDiscoveryResponse.AA_HEIGHT
+                        sourceGeometry.width,
+                        sourceGeometry.height
                     )
                     setOnFrameAvailableListener({ handler.post(::onFrame) }, handler)
                 }
                 inputSurface = Surface(surfaceTexture)
                 handler.postDelayed(keepAlive, KEEPALIVE_INTERVAL_MS)
                 log(
-                    "[COMPOSITOR] ready source=${ServiceDiscoveryResponse.AA_WIDTH}x" +
-                        "${ServiceDiscoveryResponse.AA_HEIGHT}"
+                    "[COMPOSITOR] ready source=${sourceGeometry.width}x${sourceGeometry.height}"
                 )
             } catch (failure: Throwable) {
                 log("[COMPOSITOR] init failed: $failure")
@@ -207,8 +206,8 @@ class AaCompositor(
     )
 
     private fun previewSourceGeometry() = DisplayGeometry(
-        width = srcW.takeIf { it > 0 } ?: ServiceDiscoveryResponse.AA_WIDTH,
-        height = srcH.takeIf { it > 0 } ?: ServiceDiscoveryResponse.AA_HEIGHT
+        width = srcW.takeIf { it > 0 } ?: sourceGeometry.width,
+        height = srcH.takeIf { it > 0 } ?: sourceGeometry.height
     )
 
     private fun onFrame() {

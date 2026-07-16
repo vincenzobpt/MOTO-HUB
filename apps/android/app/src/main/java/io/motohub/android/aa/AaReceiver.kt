@@ -10,6 +10,7 @@ import android.content.Context
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.view.Surface
+import io.motohub.android.androidauto.AndroidAutoCapabilityProfile
 import java.net.ServerSocket
 import java.net.Socket
 import kotlin.concurrent.thread
@@ -21,6 +22,7 @@ class AaReceiver(
     private val onVideoReady: () -> Unit,
     private val onSessionEnded: (clean: Boolean) -> Unit,
     private val mapTouchToSource: (Int, Int) -> Pair<Int, Int>?,
+    private val capabilityProfile: AndroidAutoCapabilityProfile,
 ) {
     companion object {
         const val PORT = 5288
@@ -37,8 +39,8 @@ class AaReceiver(
     @Volatile private var videoReadyFired = false
     @Volatile private var input: AaInput? = null
     private val videoDecoder = VideoDecoder().apply {
-        fallbackWidth = ServiceDiscoveryResponse.AA_WIDTH
-        fallbackHeight = ServiceDiscoveryResponse.AA_HEIGHT
+        fallbackWidth = capabilityProfile.video.width
+        fallbackHeight = capabilityProfile.video.height
         onFirstFrameListener = {
             if (!videoReadyFired) {
                 videoReadyFired = true
@@ -121,7 +123,11 @@ class AaReceiver(
     private fun handleConnection(client: Socket) {
         val conn = SocketAccessoryConnection(client)
         connection = conn
-        val t = AapTransport(videoDecoder, context)
+        val t = AapTransport(
+            videoDecoder = videoDecoder,
+            context = context,
+            androidAutoCapabilityProfile = capabilityProfile
+        )
         t.onQuit = { clean ->
             log("[AA] transport quit (clean=$clean, userExit=${t.wasUserExit})")
             input = null

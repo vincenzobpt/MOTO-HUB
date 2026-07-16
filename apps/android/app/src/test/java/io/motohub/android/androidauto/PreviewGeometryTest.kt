@@ -32,4 +32,32 @@ class PreviewGeometryTest {
         assertEquals(799 to 479, viewport.mapToSource(1528, 606))
         assertNull(viewport.mapToSource(517, 300))
     }
+
+    @Test
+    fun `portrait source maps preview touches without rotating coordinates`() {
+        val portraitSource = DisplayGeometry(720, 1280)
+        val viewport = calculatePreviewViewport(DisplayGeometry(1080, 1920), portraitSource)
+
+        assertEquals(0, viewport.x)
+        assertEquals(0, viewport.y)
+        assertEquals(1080, viewport.width)
+        assertEquals(1920, viewport.height)
+        assertEquals(0 to 0, viewport.mapToSource(0, 0))
+        assertEquals(719 to 1279, viewport.mapToSource(1079, 1919))
+    }
+
+    @Test
+    fun `portrait source maps T-Box touches and rejects side bars`() {
+        val portraitSource = DisplayGeometry(720, 1280)
+        val viewport = calculatePreviewViewport(DisplayGeometry(800, 944), portraitSource)
+
+        assertEquals(134, viewport.x)
+        assertEquals(0, viewport.y)
+        assertEquals(531, viewport.width)
+        assertEquals(944, viewport.height)
+        assertNull(viewport.mapToSource(133, 472))
+        assertEquals(0 to 0, viewport.mapToSource(134, 0))
+        assertEquals(718 to 1278, viewport.mapToSource(664, 943))
+        assertNull(viewport.mapToSource(665, 472))
+    }
 }

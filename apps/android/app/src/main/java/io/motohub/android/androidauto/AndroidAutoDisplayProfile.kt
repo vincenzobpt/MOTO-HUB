@@ -61,24 +61,25 @@ internal fun calculateAndroidAutoDisplayProfile(
 private fun even(value: Int): Int = value and 1.inv()
 
 object ActiveAndroidAutoDisplayProfile {
+    private const val AAP_CANVAS_WIDTH = 800
+    private const val AAP_CANVAS_HEIGHT = 480
+    private val DEFAULT_SOURCE = DisplayGeometry(AAP_CANVAS_WIDTH, AAP_CANVAS_HEIGHT)
+
     @Volatile
     var current: AndroidAutoDisplayProfile = calculateAndroidAutoDisplayProfile(uncalibratedGeometry())
         private set
 
-    fun configure(target: DisplayGeometry): AndroidAutoDisplayProfile =
-        calculateAndroidAutoDisplayProfile(target).also { current = it }
+    fun configure(
+        target: DisplayGeometry,
+        source: DisplayGeometry = DEFAULT_SOURCE
+    ): AndroidAutoDisplayProfile =
+        calculateAndroidAutoDisplayProfile(target, source).also { current = it }
 
-    /**
-     * Android Auto's fixed source canvas. This is not a motorcycle display size: without a
-     * negotiated T-Box [DisplayGeometry], keeping the whole source visible is the only neutral
-     * choice. A real area is persisted as soon as the T-Box advertises VideoArea.
-     */
-    fun configureUncalibrated(): AndroidAutoDisplayProfile = configure(uncalibratedGeometry())
+    /** Keeps the complete selected AA source visible until a T-Box geometry is available. */
+    fun configureUncalibrated(source: DisplayGeometry = DEFAULT_SOURCE): AndroidAutoDisplayProfile =
+        configure(source, source)
 
-    private fun uncalibratedGeometry() = DisplayGeometry(AAP_CANVAS_WIDTH, AAP_CANVAS_HEIGHT)
-
-    private const val AAP_CANVAS_WIDTH = 800
-    private const val AAP_CANVAS_HEIGHT = 480
+    private fun uncalibratedGeometry() = DEFAULT_SOURCE
 }
 
 class TBoxDisplayGeometryStore(context: Context) {

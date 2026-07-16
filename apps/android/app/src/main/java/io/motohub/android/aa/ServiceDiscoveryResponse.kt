@@ -4,20 +4,24 @@
 package io.motohub.android.aa
 
 import com.google.protobuf.Message
+import io.motohub.android.androidauto.AndroidAutoCapabilityProfile
+import io.motohub.android.androidauto.AndroidAutoCapabilityProfiles
+import io.motohub.android.androidauto.AndroidAutoVideoPreset
 import io.motohub.android.aa.proto.Common
 import io.motohub.android.aa.proto.Control
 import io.motohub.android.aa.proto.Media
 import io.motohub.android.aa.proto.Sensors
 
-class ServiceDiscoveryResponse
-    : AapMessage(Channel.ID_CTR, Control.ControlMsgType.MESSAGE_SERVICE_DISCOVERY_RESPONSE_VALUE, makeProto()) {
+class ServiceDiscoveryResponse(
+    profile: AndroidAutoCapabilityProfile = AndroidAutoCapabilityProfiles.fallback()
+) : AapMessage(
+    Channel.ID_CTR,
+    Control.ControlMsgType.MESSAGE_SERVICE_DISCOVERY_RESPONSE_VALUE,
+    makeProto(profile)
+) {
 
     companion object {
-        const val AA_WIDTH = 800
-        const val AA_HEIGHT = 480
-        private const val AA_DENSITY = 160
-
-        private fun makeProto(): Message {
+        private fun makeProto(profile: AndroidAutoCapabilityProfile): Message {
             val services = mutableListOf<Control.Service>()
 
             // --- Sensor service (driving status + night) ---
@@ -29,7 +33,7 @@ class ServiceDiscoveryResponse
                 }.build()
             }.build())
 
-            // --- Video service: fixed Android Auto source canvas, composed into T-Box VideoArea. ---
+            // --- Video service: standard AA source selected from the learned T-Box orientation. ---
             services.add(Control.Service.newBuilder().also { service ->
                 service.id = Channel.ID_VID
                 service.mediaSinkService = Control.Service.MediaSinkService.newBuilder().also { sink ->
@@ -38,12 +42,9 @@ class ServiceDiscoveryResponse
                     sink.availableWhileInCall = true
                     sink.addVideoConfigs(
                         Control.Service.MediaSinkService.VideoConfiguration.newBuilder().apply {
-                            codecResolution = Control.Service.MediaSinkService.VideoConfiguration
-                                .VideoCodecResolutionType._800x480
+                            codecResolution = profile.videoPreset.toProtocolResolution()
                             frameRate = Control.Service.MediaSinkService.VideoConfiguration.VideoFrameRateType._30
-                            setDensity(AA_DENSITY)
-                            // Keep the AAP contract byte-compatible with the proven OpenCfMoto
-                            // profile. TFT-specific fill/crop belongs exclusively to AaCompositor.
+                            setDensity(profile.densityDpi)
                             setMarginWidth(0)
                             setMarginHeight(0)
                             setVideoCodecType(Media.MediaCodecType.MEDIA_CODEC_VIDEO_H264_BP)
@@ -57,8 +58,8 @@ class ServiceDiscoveryResponse
                 service.id = Channel.ID_INP
                 service.inputSourceService = Control.Service.InputSourceService.newBuilder().also { inp ->
                     inp.touchscreen = Control.Service.InputSourceService.TouchConfig.newBuilder().apply {
-                        setWidth(AA_WIDTH)
-                        setHeight(AA_HEIGHT)
+                        setWidth(profile.video.width)
+                        setHeight(profile.video.height)
                     }.build()
                 }.build()
             }.build())
@@ -124,6 +125,14 @@ class ServiceDiscoveryResponse
 
         private fun makeSensorType(type: Sensors.SensorType): Control.Service.SensorSourceService.Sensor =
             Control.Service.SensorSourceService.Sensor.newBuilder().setType(type).build()
+
+        private fun AndroidAutoVideoPreset.toProtocolResolution():
+            Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType = when (this) {
+            AndroidAutoVideoPreset.LANDSCAPE_800X480 ->
+                Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._800x480
+            AndroidAutoVideoPreset.PORTRAIT_720X1280 ->
+                Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._720x1280
+        }
 
         private const val VEHICLE_MAKE = "OpenCfMoto"
         private const val VEHICLE_MODEL = "MotoPlay"
