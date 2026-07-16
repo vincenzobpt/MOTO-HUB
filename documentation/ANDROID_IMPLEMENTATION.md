@@ -220,6 +220,13 @@ the adapter may use a same-subnet gateway/DNS address or, on an otherwise
 unrouted `/24`, derive the Wi-Fi Direct group owner at `.1`. It must not invent
 the service metadata when NSD itself fails.
 
+The EC command connection and reverse PXC startup use a three-attempt budget for
+transient timeouts, connection failures and temporary T-Box rejection. Delays
+are `750ms` and `1500ms`; cancellation, invalid session state and reverse-port
+bind failures are not retried. RideDaemon synchronously closes all listeners
+and accepted sockets from a failed attempt before Kotlin opens the next
+network-bound command socket.
+
 The operational fallback is the T-Box AP as primary Wi-Fi and source-app
 Internet through the mobile network. Reference:
 [WifiNetworkSuggestion](https://developer.android.com/reference/android/net/wifi/WifiNetworkSuggestion).
