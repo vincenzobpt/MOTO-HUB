@@ -1,8 +1,33 @@
+import java.io.File
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
+
+val localSigningPropertiesFile = rootProject.projectDir.resolve(
+    "../../tooling/private/android-auto/release-signing.properties"
+)
+val localSigningProperties = Properties().apply {
+    if (localSigningPropertiesFile.isFile) {
+        localSigningPropertiesFile.inputStream().use { stream -> load(stream) }
+    }
+}
+val localSigningStore = localSigningProperties.getProperty("storeFile")?.let { configuredPath ->
+    File(configuredPath).let { file ->
+        if (file.isAbsolute) {
+            file
+        } else {
+            rootProject.projectDir.resolve("../..").resolve(configuredPath).normalize()
+        }
+    }
+}
+val hasLocalReleaseSigning = localSigningStore?.isFile == true &&
+    localSigningProperties.getProperty("storePassword") != null &&
+    localSigningProperties.getProperty("keyAlias") != null &&
+    localSigningProperties.getProperty("keyPassword") != null
 
 android {
     namespace = "io.motohub.android"
@@ -12,13 +37,25 @@ android {
         applicationId = "io.motohub.android"
         minSdk = 34
         targetSdk = 36
-        versionCode = 38
-        versionName = "0.8.1"
+        versionCode = 44
+        versionName = "0.8.2-beta.6"
+    }
+
+    signingConfigs {
+        if (hasLocalReleaseSigning) {
+            create("localRelease") {
+                storeFile = localSigningStore
+                storePassword = localSigningProperties.getProperty("storePassword")
+                keyAlias = localSigningProperties.getProperty("keyAlias")
+                keyPassword = localSigningProperties.getProperty("keyPassword")
+            }
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.findByName("localRelease")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -39,12 +76,6 @@ android {
         compose = true
         buildConfig = true
     }
-}
-
-val prepareHudStaticSignal by tasks.registering(Copy::class) {
-    from(rootProject.projectDir.resolve("../../tooling/assets/static_signal.h264"))
-    into(layout.buildDirectory.dir("generated/res/hud-static/main/raw"))
-    rename { "static_signal.h264" }
 }
 
 val androidAutoIdentityDir = rootProject.projectDir.resolve("../../tooling/private/android-auto")
@@ -70,12 +101,9 @@ val prepareAndroidAutoIdentity by tasks.registering(Copy::class) {
     }
 }
 
-android.sourceSets.getByName("main").res.srcDir(
-    layout.buildDirectory.dir("generated/res/hud-static/main")
-)
 android.sourceSets.getByName("main").res.srcDir(androidAutoIdentityOutputDir)
 tasks.named("preBuild").configure {
-    dependsOn(prepareHudStaticSignal, prepareAndroidAutoIdentity)
+    dependsOn(prepareAndroidAutoIdentity)
 }
 
 val exportPublicApk by tasks.registering(Copy::class) {
@@ -86,10 +114,15 @@ val exportPublicApk by tasks.registering(Copy::class) {
 }
 
 val exportPrivateAndroidAutoApk by tasks.registering(Copy::class) {
-    dependsOn("assembleDebug")
-    from(layout.buildDirectory.file("outputs/apk/debug/app-debug.apk"))
+    dependsOn("assembleRelease")
+    from(layout.buildDirectory.file("outputs/apk/release/app-release.apk"))
     into(rootProject.projectDir.resolve("../../artifacts"))
     rename { "MOTO-HUB-${android.defaultConfig.versionName}-${android.defaultConfig.versionCode}-android-auto-private.apk" }
+    doFirst {
+        check(hasLocalReleaseSigning) {
+            "The persistent MOTO-HUB release keystore and release-signing.properties are required."
+        }
+    }
 }
 
 dependencies {

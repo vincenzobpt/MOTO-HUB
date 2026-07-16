@@ -130,7 +130,7 @@ fun TBoxQrScannerScreen(
                     )
                     .padding(horizontal = 14.dp, vertical = 10.dp),
                 trailing = {
-                    TextButton(onClick = onClose) { Text("Chiudi") }
+                    TextButton(onClick = onClose) { Text("Close") }
                 }
             )
 

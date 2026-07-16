@@ -40,9 +40,9 @@ the password is encrypted with AES-GCM using a non-exportable Android Keystore
 key. Manual entry remains available as a fallback and updates the same
 persistent profile.
 
-The network follows the reference app's model: a `WifiNetworkSuggestion` from
-the QR code and a callback that confirms a local `192.168.0.x` address before
-discovery. Host, port and package are passed to the Go session with
+The network request uses the QR-provided SSID and password, then waits for a
+usable IPv4 address on the exact Android network returned for that request.
+T-Box firmware may use different private DHCP subnets. Host, port and package are passed to the Go session with
 `setECHost()`, and the handshake runs on the primary T-Box Wi-Fi network.
 TFT configuration events, fatal errors and network loss stop the projection
 session through one idempotent cleanup path.

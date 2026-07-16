@@ -36,6 +36,8 @@ import io.motohub.android.androidauto.AndroidAutoSessionService
 import io.motohub.android.androidauto.AndroidAutoDisplayMode
 import io.motohub.android.androidauto.AndroidAutoDisplayModeStore
 import io.motohub.android.data.MotorcyclePhotoStore
+import io.motohub.android.feature.about.AboutScreen
+import io.motohub.android.feature.about.MOTO_HUB_GITHUB_URL
 import io.motohub.android.feature.garage.GarageScreen
 import io.motohub.android.feature.garage.MotorcycleDetailsScreen
 import io.motohub.android.feature.home.HubHomeScreen
@@ -85,6 +87,7 @@ class MainActivity : ComponentActivity() {
                 var showQrScanner by rememberSaveable { mutableStateOf(false) }
                 var showNetworkDiagnostics by rememberSaveable { mutableStateOf(false) }
                 var showApplicationLogs by rememberSaveable { mutableStateOf(false) }
+                var showAbout by rememberSaveable { mutableStateOf(false) }
                 var showAndroidAutoPreview by rememberSaveable { mutableStateOf(false) }
                 var showGarage by rememberSaveable { mutableStateOf(false) }
                 var editorProfileId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -278,6 +281,28 @@ class MainActivity : ComponentActivity() {
                             showApplicationLogs = false
                         }
                     )
+                } else if (showAbout) {
+                    AboutScreen(
+                        onOpenGithub = {
+                            ProjectionEventLog.record("UI", "GitHub repository link opened.")
+                            runCatching {
+                                context.startActivity(
+                                    Intent(Intent.ACTION_VIEW, Uri.parse(MOTO_HUB_GITHUB_URL))
+                                )
+                            }.onFailure {
+                                ProjectionEventLog.error("UI", "Unable to open the GitHub repository.", it)
+                                Toast.makeText(
+                                    context,
+                                    "Unable to open GitHub",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        },
+                        onBack = {
+                            ProjectionEventLog.record("UI", "About screen closed.")
+                            showAbout = false
+                        }
+                    )
                 } else if (showAndroidAutoPreview && androidAutoStreaming) {
                     AndroidAutoPreviewScreen(onBack = {
                         ProjectionEventLog.record("UI", "Android Auto phone preview closed.")
@@ -432,6 +457,10 @@ class MainActivity : ComponentActivity() {
                         onOpenApplicationLogs = {
                             ProjectionEventLog.record("UI", "Application log screen opened.")
                             showApplicationLogs = true
+                        },
+                        onOpenAbout = {
+                            ProjectionEventLog.record("UI", "About screen opened.")
+                            showAbout = true
                         },
                         onStartProjection = {
                             ProjectionEventLog.record("MIRROR", "User selected mirroring mode.")

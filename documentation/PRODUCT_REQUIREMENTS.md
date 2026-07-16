@@ -70,8 +70,8 @@ receives it as an H.264 stream and displays it.
   stream ready.
 - `FR-12`: capture the projection onto a `Surface` accepted by `MediaCodec`.
 - `FR-13`: send every AVCC access unit to `MobileSession.pushFrame()`.
-- `FR-14`: use a valid static signal when the live source is not ready,
-  according to the library's expected behavior.
+- `FR-14`: use a live-only video source and restart delivery from a fresh
+  SPS/PPS/IDR sequence whenever the T-Box attaches its media consumer.
 - `FR-15`: support manual stop from the app and persistent notification.
 - `FR-16`: treat `MediaProjection.Callback.onStop()` as the definitive stop of
   the current capture.

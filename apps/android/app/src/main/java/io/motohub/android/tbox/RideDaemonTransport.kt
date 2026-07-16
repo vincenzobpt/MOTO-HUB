@@ -1,6 +1,7 @@
 package io.motohub.android.tbox
 
 import android.content.Context
+import android.net.ConnectivityManager
 import android.net.Network
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
@@ -11,9 +12,9 @@ import androidx.core.content.ContextCompat
 import api.Api
 import api.MobileCallback
 import api.MobileSession
-import io.motohub.android.R
-import io.motohub.android.encoding.EncoderProfile
 import io.motohub.android.session.ProjectionEventLog
+import java.net.Inet4Address
+import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Socket
 import java.nio.ByteBuffer
@@ -33,6 +34,7 @@ class RideDaemonTransport(
     context: Context
 ) : TBoxTransport {
     private val appContext = context.applicationContext
+    private val connectivityManager = appContext.getSystemService(ConnectivityManager::class.java)
     private val nsdManager = appContext.getSystemService(NsdManager::class.java)
     private val wifiManager = appContext.getSystemService(WifiManager::class.java)
     private val callbackExecutor = ContextCompat.getMainExecutor(appContext)
@@ -53,7 +55,7 @@ class RideDaemonTransport(
             }
             val createdSession = Api.newMobileSession(
                 Api.newMobileConfig(
-                    loadStaticSignal(),
+                    ByteArray(0),
                     30L,
                     10L,
                     5L,
@@ -69,7 +71,8 @@ class RideDaemonTransport(
             )
             ProjectionEventLog.record(
                 "DISCOVERY",
-                "RideDaemon session configured for ${host.ipAddress}:${host.port}; package=${host.packageName}."
+                "RideDaemon live-only session configured for ${host.ipAddress}:${host.port}; " +
+                    "package=${host.packageName}."
             )
             host
         }.onFailure {
@@ -78,13 +81,13 @@ class RideDaemonTransport(
         }
     }
 
-    override suspend fun start(host: TBoxHost, profile: EncoderProfile): Result<Unit> =
+    override suspend fun start(host: TBoxHost): Result<Unit> =
         withContext(Dispatchers.IO) {
             runCatching {
                 ProjectionEventLog.record(
                     "TBOX",
-                    "Starting EasyConn handshake to ${host.ipAddress}:${host.port} with " +
-                        "encoder=${profile.width}x${profile.height}@${profile.frameRate}."
+                    "Starting EasyConn handshake to ${host.ipAddress}:${host.port}; " +
+                        "waiting for the TFT video area."
                 )
                 val activeSession = checkNotNull(session) {
                     "Call discover() before starting the T-Box session"
@@ -147,10 +150,6 @@ class RideDaemonTransport(
         }
     }
 
-    private fun loadStaticSignal(): ByteArray = appContext.resources
-        .openRawResource(R.raw.static_signal)
-        .use { it.readBytes() }
-
     private suspend fun discoverWithAndroidNsd(network: Network): TBoxHost = suspendCancellableCoroutine { continuation ->
         val completed = AtomicBoolean(false)
         val multicastLock = wifiManager.createMulticastLock("$TAG.mDns").apply {
@@ -202,9 +201,28 @@ class RideDaemonTransport(
                             return
                         }
 
-                        val ipAddress = attributes[IP_ATTRIBUTE]
+                        val advertisedIp = attributes[IP_ATTRIBUTE]
                             ?.toString(Charsets.UTF_8)
-                            ?: resolved.hostAddresses.firstOrNull()?.hostAddress
+                            ?.let(::parseIpv4Literal)
+                        val resolvedIp = resolved.hostAddresses
+                            .filterIsInstance<Inet4Address>()
+                            .firstOrNull()
+                            ?.hostAddress
+                        val derivedIp = if (advertisedIp == null && resolvedIp == null) {
+                            connectivityManager.getLinkProperties(network)?.let { linkProperties ->
+                                deriveTBoxPeerIpv4(
+                                    gateways = linkProperties.routes
+                                        .filter { it.isDefaultRoute }
+                                        .mapNotNull { it.gateway },
+                                    dnsServers = linkProperties.dnsServers,
+                                    localAddresses = linkProperties.linkAddresses
+                                        .map { it.address to it.prefixLength }
+                                )
+                            }?.hostAddress
+                        } else {
+                            null
+                        }
+                        val ipAddress = advertisedIp ?: resolvedIp ?: derivedIp
                         val port = resolved.port
                         if (ipAddress.isNullOrBlank() || port !in 1..65535) {
                             Log.w(TAG, "EasyConn service resolved without a usable host")
@@ -213,6 +231,12 @@ class RideDaemonTransport(
                                 "Resolved EasyConn service has invalid endpoint: ip=$ipAddress, port=$port."
                             )
                             return
+                        }
+                        if (derivedIp != null) {
+                            ProjectionEventLog.warning(
+                                "DISCOVERY",
+                                "EasyConn advertised no IPv4 host; using network-derived peer $derivedIp."
+                            )
                         }
                         ProjectionEventLog.record(
                             "DISCOVERY",
@@ -290,13 +314,32 @@ class RideDaemonTransport(
 
         override fun onEvent(time: Long, type: Long, command: Long, payload: ByteArray?) {
             Log.d(TAG, "T-Box event type=$type command=$command bytes=${payload?.size ?: 0}")
-            if (type != MEDIA_CONTROL_EVENT_SOURCE || payload == null) return
+            if (type != MEDIA_CONTROL_EVENT_SOURCE) return
+            if (command == MEDIA_STREAM_START_COMMAND) {
+                ProjectionEventLog.record(
+                    "TBOX",
+                    "TFT video consumer is ready; requesting a fresh decoder sync frame."
+                )
+                mutableEvents.tryEmit(TBoxEvent.VideoStreamStart)
+                return
+            }
+            val eventPayload = payload ?: return
             if (command == MEDIA_TOUCH_COMMAND) {
-                decodeTBoxTouch(payload)?.let(mutableEvents::tryEmit)
+                decodeTBoxTouch(eventPayload)?.let(mutableEvents::tryEmit)
+                return
+            }
+            if (command == MEDIA_CAPTURE_CONFIG_COMMAND) {
+                decodeTBoxVideoArea(eventPayload)?.let { area ->
+                    ProjectionEventLog.record(
+                        "TBOX",
+                        "TFT capture area requested: ${area.width}x${area.height}."
+                    )
+                    mutableEvents.tryEmit(area)
+                }
                 return
             }
             runCatching {
-                val safeArea = org.json.JSONObject(payload.toString(Charsets.UTF_8))
+                val safeArea = org.json.JSONObject(eventPayload.toString(Charsets.UTF_8))
                     .optJSONObject("viewAreaConfig")
                     ?.optJSONArray("viewAreas")
                     ?.optJSONObject(0)
@@ -330,7 +373,9 @@ class RideDaemonTransport(
         const val DISCOVERY_TIMEOUT_MS = 15_000L
         const val EC_CONNECT_TIMEOUT_MS = 10_000
         const val MEDIA_CONTROL_EVENT_SOURCE = 3L
+        const val MEDIA_CAPTURE_CONFIG_COMMAND = 16L
         const val MEDIA_TOUCH_COMMAND = 32L
+        const val MEDIA_STREAM_START_COMMAND = 112L
     }
 }
 
@@ -338,6 +383,14 @@ internal fun decodeEasyConnPackage(value: ByteArray?): String? = value
     ?.toString(Charsets.UTF_8)
     ?.trim()
     ?.takeIf(String::isNotBlank)
+
+internal fun decodeTBoxVideoArea(payload: ByteArray): TBoxEvent.VideoArea? {
+    if (payload.size < 4) return null
+    val body = ByteBuffer.wrap(payload).order(ByteOrder.LITTLE_ENDIAN)
+    val width = body.getShort(0).toInt() and 0xFFFF
+    val height = body.getShort(2).toInt() and 0xFFFF
+    return if (width > 0 && height > 0) TBoxEvent.VideoArea(width, height) else null
+}
 
 internal fun decodeTBoxTouch(payload: ByteArray): TBoxEvent.Touch? {
     if (payload.size < 8) return null
@@ -351,4 +404,55 @@ internal fun decodeTBoxTouch(payload: ByteArray): TBoxEvent.Touch? {
     val x = body.getShort(2).toInt() and 0xFFFF
     val y = body.getInt(4)
     return TBoxEvent.Touch(action, x, y)
+}
+
+internal fun deriveTBoxPeerIpv4(
+    gateways: List<InetAddress>,
+    dnsServers: List<InetAddress>,
+    localAddresses: List<Pair<InetAddress, Int>>
+): Inet4Address? {
+    val localIpv4 = localAddresses.mapNotNull { (address, prefixLength) ->
+        (address as? Inet4Address)?.let { it to prefixLength }
+    }.filter { (address, _) -> isUsableTBoxIpv4Address(address) }
+    if (localIpv4.isEmpty()) return null
+
+    val routedCandidate = (gateways + dnsServers)
+        .filterIsInstance<Inet4Address>()
+        .firstOrNull { candidate ->
+            isUsableTBoxIpv4Address(candidate) && localIpv4.any { (local, prefixLength) ->
+                candidate != local && isSameIpv4Subnet(candidate, local, prefixLength)
+            }
+        }
+    if (routedCandidate != null) return routedCandidate
+
+    val local = localIpv4.firstOrNull { (_, prefixLength) -> prefixLength == 24 }?.first
+        ?: return null
+    val octets = local.address
+    if ((octets[3].toInt() and 0xFF) == 1) return null
+    return InetAddress.getByAddress(byteArrayOf(octets[0], octets[1], octets[2], 1)) as Inet4Address
+}
+
+internal fun parseIpv4Literal(value: String): String? {
+    val octets = value.trim().split('.')
+    if (octets.size != 4) return null
+    val numbers = octets.map { part ->
+        if (part.isEmpty() || part.any { !it.isDigit() }) return null
+        part.toIntOrNull()?.takeIf { it in 0..255 } ?: return null
+    }
+    return numbers.joinToString(".")
+}
+
+private fun isSameIpv4Subnet(first: Inet4Address, second: Inet4Address, prefixLength: Int): Boolean {
+    if (prefixLength !in 1..32) return false
+    val fullBytes = prefixLength / 8
+    val remainingBits = prefixLength % 8
+    val firstBytes = first.address
+    val secondBytes = second.address
+    for (index in 0 until fullBytes) {
+        if (firstBytes[index] != secondBytes[index]) return false
+    }
+    if (remainingBits == 0) return true
+    val mask = (0xFF shl (8 - remainingBits)) and 0xFF
+    return (firstBytes[fullBytes].toInt() and mask) ==
+        (secondBytes[fullBytes].toInt() and mask)
 }

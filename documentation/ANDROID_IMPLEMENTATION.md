@@ -123,10 +123,11 @@ The overlay:
 Do not permanently modify `Settings.System.SCREEN_BRIGHTNESS`: a crash could
 otherwise leave the phone unusable at minimum brightness.
 
-For the MVP the virtual display remains `800x400` or uses the negotiated safe
-area. Content is scaled into the surface. If aspect ratio or orientation is
-unacceptable, the gate moves to the EGL compositor described in the
-architecture.
+The virtual display uses the runtime area advertised by the connected T-Box.
+Both dimensions are aligned down to complete 16-pixel H.264 macroblocks; no
+motorcycle model or fixed TFT resolution is assumed. A geometry saved for the
+same SSID may recover a missing live event, but an unknown display without a
+valid area fails explicitly instead of receiving a wrongly sized stream.
 
 ## H.264 Encoder
 
@@ -134,12 +135,13 @@ Starting configuration:
 
 ```text
 MIME:                  video/avc
-Resolution:            800x400, overridden by valid safe area
+Resolution:            runtime T-Box area, aligned to 16-pixel macroblocks
 Color format:          COLOR_FormatSurface
 Frame rate:            30 fps, fallback 20/15
 Bitrate:               2.5 Mbps, test range 2-5 Mbps
 I-frame interval:      0 where it produces compatible frequent IDRs
 Prepend SPS/PPS:       KEY_PREPEND_HEADER_TO_SYNC_FRAMES = 1
+Static-frame repeat:   KEY_REPEAT_PREVIOUS_FRAME_AFTER = 100000 us
 B-frame:               disabled through a compatible profile/configuration
 Rate control:          CBR if supported and stable
 ```
@@ -151,8 +153,8 @@ added AUD and absence of B-frames.
 The drain loop must:
 
 - honor `BufferInfo.offset` and `size`;
-- ignore `BUFFER_FLAG_CODEC_CONFIG` only if SPS/PPS are actually included in
-  keyframes;
+- cache `BUFFER_FLAG_CODEC_CONFIG` and prepend missing SPS/PPS to keyframes;
+- request a sync frame when the T-Box media consumer attaches;
 - always release the output buffer;
 - avoid unnecessary sleeping when `dequeueOutputBuffer` already has a timeout;
 - propagate errors to the service;
@@ -175,7 +177,7 @@ interface TBoxTransport {
 
 The adapter:
 
-- creates `MobileConfig` with a verified static-signal asset;
+- creates a live-only `MobileConfig` without a fixed-resolution fallback;
 - translates Go callbacks into typed events;
 - guarantees one `MobileSession` only;
 - calls `setECHost()` before `startSession()`;
@@ -190,26 +192,33 @@ and the selected network. Confirm the decision with routing tests.
 
 ## T-Box Network
 
-Follow the reference app model with a persistent Wi-Fi suggestion:
+Request the saved motorcycle network explicitly:
 
 ```text
-WifiNetworkSuggestion
+WifiNetworkSpecifier
   + SSID and WPA2 passphrase from QR
-  + high priority
-  + no additional interaction
+  + local-only network request
+  + Android NetworkCallback
 ```
 
-The system may request authorization for Wi-Fi suggestions. Keep a
-`NetworkCallback`, read addresses from `LinkProperties` and proceed only when
-the T-Box `192.168.0.x` subnet appears.
+The system may request authorization before connecting. Keep a
+`NetworkCallback`, read addresses from `LinkProperties` and proceed after the
+SSID-specific network has a usable IPv4 address. T-Box firmware is free to use
+different DHCP subnets, including `192.168.0.0/24` and `192.168.43.0/24`.
 
 When the network is available:
 
-- verify the exact SSID, not only the `192.168.0.x` subnet;
+- rely on the SSID-specific Android network request rather than a subnet heuristic;
 - perform the EasyConn TCP dial with the normal Go transport on the primary
   T-Box Wi-Fi;
 - start NSD `_EasyConn._tcp.`;
 - validate `packagename`, `ip` and port TXT values.
+
+RideDaemon opens reverse ports `10920`, `10921`, and `10922` before sending the
+EC init probe. If a resolved NSD service has package and port but no IPv4 host,
+the adapter may use a same-subnet gateway/DNS address or, on an otherwise
+unrouted `/24`, derive the Wi-Fi Direct group owner at `.1`. It must not invent
+the service metadata when NSD itself fails.
 
 The operational fallback is the T-Box AP as primary Wi-Fi and source-app
 Internet through the mobile network. Reference:

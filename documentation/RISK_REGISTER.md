@@ -9,7 +9,7 @@ Scale: probability and impact are `Low`, `Medium` or `High`.
 | R-01 | T-Box Wi-Fi interrupts Internet needed by the source app | High | High | local-only spike, process binding, STA/cellular tests | Open |
 | R-02 | Go sockets do not reliably follow the selected Android network | Medium | High | use primary T-Box Wi-Fi as the reference app does; physical tests on OPPO and T-Box | Mitigating |
 | R-03 | OEM encoder produces incompatible GOP/B-frames | Medium | High | bitstream inspection and codec profiles | Open |
-| R-04 | Aspect ratio/orientation is unreadable on 800x400 TFT | High | Medium | direct-surface test; EGL compositor gate | Open |
+| R-04 | Aspect ratio/orientation is unreadable on an unknown TFT geometry | Medium | Medium | runtime area negotiation; fit/stretch compositor modes; device matrix | Mitigating |
 | R-05 | Lock or OEM policies terminate projection/service | High | Medium | callback, notification, battery guidance, OEM matrix | Open |
 | R-06 | DRM/`FLAG_SECURE` app displays black | High | Medium | documented limitation, no bypass | Accepted |
 | R-07 | Latency is too high for navigation | Medium | High | short GOP, zero-copy, frame dropping, physical measurement | Open |

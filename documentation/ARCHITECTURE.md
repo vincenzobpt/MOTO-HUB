@@ -123,11 +123,12 @@ sequenceDiagram
     S-->>A: Streaming state
 ```
 
-The exact order between T-Box session and codec creation can be optimized, but
-the codec must not produce indefinitely before transport is ready. The safe
-area received from the T-Box determines the effective resolution; if no event
-arrives before timeout, use the verified `800x400` profile or fail according to
-hardware tests.
+The codec must not produce indefinitely before transport is ready. The event
+collector is installed before the T-Box handshake so an immediate area message
+cannot be lost. The runtime area determines the effective resolution and is
+aligned to H.264 macroblocks. If the live event times out, only a geometry saved
+for the same T-Box SSID may be used; otherwise startup fails explicitly. There
+is no model-specific or global resolution fallback.
 
 ## State Machine
 
@@ -168,18 +169,19 @@ Rules:
 The T-Box is a local network, often without Internet access. The source app may
 still depend on Internet for maps and live data.
 
-Proposed strategy:
+Implemented strategy:
 
-1. Register a WPA2 `WifiNetworkSuggestion` with the QR SSID and password.
-2. Observe active Wi-Fi networks with `ConnectivityManager`.
-3. Start Go discovery and transport only when `LinkProperties` contains a
-   `192.168.0.x` address; this is the same strategy as the reference app.
-4. Let Android use the T-Box as the primary Wi-Fi network for the session.
+1. Request the QR-provided WPA2 SSID and password with `WifiNetworkSpecifier`.
+2. Accept the Android `Network` only after its `LinkProperties` contain a usable
+   IPv4 address; do not assume a fixed T-Box DHCP subnet.
+3. Bind the process while EasyConn opens its reverse sockets and run Android
+   NSD explicitly on the requested network.
+4. Validate the `_EasyConn._tcp` service metadata before configuring RideDaemon.
+5. Release the process-wide binding when possible while keeping the requested
+   T-Box network alive for network-bound sockets.
 
-`WifiNetworkSpecifier` and per-socket local-network binding are not the MVP
-path: on some OEMs the network is assigned but `Network.bindSocket()` returns
-`EPERM`. The operational fallback is primary T-Box Wi-Fi with mobile data for
-apps that need Internet.
+Some OEMs or active VPNs can reject process or socket binding. Those failures
+must remain explicit diagnostics rather than being treated as a subnet mismatch.
 
 ## Video Pipeline
 

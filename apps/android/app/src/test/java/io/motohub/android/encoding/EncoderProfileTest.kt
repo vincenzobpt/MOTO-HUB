@@ -18,4 +18,9 @@ class EncoderProfileTest {
     fun `already aligned runtime area remains unchanged`() {
         assertEquals(EncoderProfile(width = 1280, height = 576), EncoderProfile.forTBoxArea(1280, 576))
     }
+
+    @Test
+    fun `unknown runtime area is aligned without a device profile`() {
+        assertEquals(EncoderProfile(width = 1024, height = 592), EncoderProfile.forTBoxArea(1024, 601))
+    }
 }

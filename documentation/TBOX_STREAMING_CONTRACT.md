@@ -32,6 +32,13 @@ Relevant TXT values observed:
 - EC service port.
 
 Do not assume that IP and subnet are identical across all models/firmware.
+Reverse TCP listeners `10920`, `10921`, and `10922` must be open before the EC
+init probe is sent because a T-Box may connect back immediately.
+
+If NSD supplies a valid service package and port but no IPv4 host, Android may
+derive the peer from same-subnet route/DNS information. A `.1` Wi-Fi Direct
+group-owner fallback is allowed only for a `/24` local link. MOTO-HUB does not
+invent a service port or package when discovery itself fails.
 
 ## Stream Clock
 
@@ -54,7 +61,7 @@ Known baseline:
 | Property | Initial value |
 |---|---|
 | Codec | H.264/AVC |
-| Resolution | approximately `800x400`, or negotiated safe area |
+| Resolution | runtime T-Box capture area, aligned down to 16-pixel macroblocks |
 | Frame rate | `15-30 fps` |
 | Bitrate | `2-5 Mbps`, starting at `2.5 Mbps` |
 | Structure | non-buffered, very short GOP, predictive but intra-tolerant |
@@ -64,12 +71,17 @@ Known baseline:
 
 `MobileSession.pushFrame()` accepts the sample produced by `MediaCodec`. The
 library detects AVCC/Annex-B, converts AVCC to Annex-B and prepends an AUD NAL.
+The media-control capture request is the resolution source of truth. MOTO-HUB
+must acknowledge arbitrary valid dimensions and configure the Android encoder
+from that request rather than from a motorcycle model table.
 
 ### Encoder Invariants
 
 - Each call must represent a complete access unit, not an arbitrary stream
   fragment.
 - Keyframes must carry SPS/PPS if codec-config buffers are ignored.
+- When the TFT sends media command `112`, stale queued access units must be
+  discarded and the encoder must provide a fresh SPS/PPS/IDR sequence.
 - Long GOPs increase recovery time and may break the decoder.
 - An encoder that introduces B-frames is incompatible with the low-latency,
   polling assumption.
@@ -91,18 +103,17 @@ and tested with missing, malformed and multiple view-area payloads.
 `To validate`: event-type meaning, JSON schema stability and behavior of
 firmware that does not send the safe area.
 
-## Static Signal
+## Live-Only Startup
 
-`MobileConfig` requires bytes from a static stream. The library creates a
-fallback source and alternates between static/live sources. The asset must be:
+MOTO-HUB creates `MobileConfig` without a static source. A fixed-resolution
+fallback can be incompatible with the runtime TFT area and can replace an
+otherwise healthy stream during a short encoder pause.
 
-- valid H.264 Annex-B;
-- compatible with the target resolution and decoder;
-- separable into access units through AUD;
-- short and legally distributable.
-
-The build must include a test that verifies parsing and presence. Do not use an
-empty placeholder file.
+On media command `112`, RideDaemon clears stale frames and waits for a fresh
+IDR before serving the TFT. Android requests that sync frame immediately,
+caches codec configuration, and prepends missing SPS/PPS to the keyframe. A
+surface-input repeat interval keeps static screens producing frames without
+switching sources.
 
 ## Motorcycle Assumptions To Verify
 
