@@ -68,7 +68,7 @@ The app should continue to open normally. Only the related feature is unavailabl
 
 ## Current Status
 
-The current Android client is version `0.8.0` and targets Android 14/API 34 and newer.
+The current Android client is version `0.8.1` (`38`) and targets Android 14/API 34 and newer.
 
 The application has been tested end-to-end on a OnePlus 13 and a CFMOTO motorcycle T-Box. Compatibility with other phones, motorcycle models, T-Box firmware versions, and Android Auto versions is not guaranteed and must be validated separately.
 
@@ -119,27 +119,25 @@ gomobile bind -target=android -androidapi 34 -o ../MOTO-HUB/apps/android/app/lib
 
 The source commit and AAR checksum must be updated in [`tooling/ridedaemon.lock`](tooling/ridedaemon.lock) whenever the artifact changes.
 
-### Android Auto identity files
+### Android Auto release builds
 
-The public source intentionally does **not** include the static Android Auto head-unit identity (`aa_cert` and `aa_identity_data`). Those files are private build inputs copied from `tooling/private/android-auto/` only when the explicit Gradle property below is enabled. They must never be committed or uploaded to a public repository.
+The public source intentionally does **not** contain the static Android Auto head-unit identity (`aa_cert` and `aa_identity_data`) or the APK-signing keystore. Official GitHub releases are built by the repository release workflow, which provisions maintainer-controlled build inputs from GitHub Actions secrets on an ephemeral runner. The resulting release APK includes Android Auto support and requires no certificate setup or technical configuration from the user.
 
-Without those files, the public build remains usable for pairing, T-Box streaming, mirroring, and diagnostics, but Android Auto reports that its private identity is unavailable. This separation is intentional.
+A normal source build without those inputs remains usable for pairing, T-Box streaming, mirroring, and diagnostics, but Android Auto reports that its identity is unavailable. This separation keeps private build inputs out of Git history; it does not make identity material embedded in a publicly downloadable APK confidential.
 
-For a private sideload build that keeps Android Auto enabled, place the two identity files in `tooling/private/android-auto/` and run:
-
-```bash
-./gradlew -PincludeAndroidAutoIdentity=true exportPrivateAndroidAutoApk
-```
-
-The generated APK is copied to `artifacts/MOTO-HUB-0.8.0-37-android-auto-private.apk`. It contains the private identity and is intended only for private sideloading. It must not be attached to a public GitHub release.
-
-For the first public preview APK, use the default build without the identity:
+For a local Android Auto build, place the two identity files in `tooling/private/android-auto/` and run:
 
 ```bash
-./gradlew exportPublicApk
+./gradlew -PincludeAndroidAutoIdentity=true assembleDebug
 ```
 
-This produces `artifacts/MOTO-HUB-0.8.0-37-public.apk`. It is installable for public testing, but Android Auto remains unavailable by design.
+For a local build without Android Auto identity files, use the default build:
+
+```bash
+./gradlew assembleDebug
+```
+
+Maintainers can find the complete release process and required GitHub secret names in [`documentation/PUBLIC_RELEASE.md`](documentation/PUBLIC_RELEASE.md).
 
 ## Android Features
 
@@ -221,7 +219,7 @@ MOTO-HUB is designed to operate locally and does not require an account or remot
 
 Review [Security and Privacy](documentation/SECURITY_AND_PRIVACY.md) before distributing an APK outside personal use.
 
-The first public source release does not include the Android Auto private identity. A public APK built from that source can be downloaded and used for mirroring, but Android Auto requires a separate private build.
+The public source does not include the Android Auto identity or APK-signing keystore. APKs attached to official MOTO-HUB releases are complete runtime builds and include Android Auto support.
 
 ## Disclaimer
 

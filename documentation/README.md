@@ -1,7 +1,7 @@
 # MOTO-HUB - Documentation
 
 Status: initial architectural draft
-Last updated: 14 July 2026
+Last updated: 16 July 2026
 
 MOTO-HUB is an Android app that captures, encodes and sends either the complete
 phone display or a single app selected through Android's sharing picker to the

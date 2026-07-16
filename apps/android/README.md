@@ -15,15 +15,15 @@ export ANDROID_HOME="$HOME/Library/Android/sdk"
 
 The system JDK 26 is not compatible with the current Gradle/AGP combination.
 
-The public source intentionally excludes the Android Auto identity files. A normal build supports mirroring and T-Box streaming; Android Auto is enabled only when the private files are supplied through the root `tooling/private/android-auto/` directory and the build is invoked with `-PincludeAndroidAutoIdentity=true`.
+The public source intentionally excludes the Android Auto identity files. A normal build supports mirroring and T-Box streaming; Android Auto is enabled only when the files are supplied through the root `tooling/private/android-auto/` directory and the build is invoked with `-PincludeAndroidAutoIdentity=true`. Official GitHub release APKs are built with those inputs through encrypted GitHub Actions secrets and include Android Auto without requiring user configuration.
 
-For a private Android Auto APK:
+For a local Android Auto build:
 
 ```bash
-./gradlew -PincludeAndroidAutoIdentity=true exportPrivateAndroidAutoApk
+./gradlew -PincludeAndroidAutoIdentity=true assembleDebug
 ```
 
-The APK is exported as `artifacts/MOTO-HUB-0.8.0-37-android-auto-private.apk`. Do not publish that APK or the identity files. `./gradlew exportPublicApk` creates the installable public preview APK without Android Auto identity files.
+The APK is generated under `app/build/outputs/apk/debug/`. A default `./gradlew assembleDebug` build excludes the identity and therefore cannot start Android Auto. See the root [`documentation/PUBLIC_RELEASE.md`](../../documentation/PUBLIC_RELEASE.md) for the maintainer release process.
 
 ## Transport Status
 

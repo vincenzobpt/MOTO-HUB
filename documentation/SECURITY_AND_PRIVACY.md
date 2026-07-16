@@ -35,7 +35,7 @@ Status: initial threat model, not legal advice
 | Local video interception | disclose risk; verify protocol before promising encryption |
 | Android components invoked by third parties | non-exported service; explicit intents |
 | AAR supply chain | reproducible build, commit SHA and artifact checksum | 
-| Android Auto head-unit identity | keep certificate/private key out of public source and public APKs | private build input only |
+| Android Auto head-unit identity | keep source files out of Git history; provision release inputs through repository secrets; disclose that packaged APK material is extractable | controlled release workflow |
 | Overlay/tapjacking over consent | rely on the system dialog, no deceptive UI |
 
 ## Protected Content
@@ -93,7 +93,7 @@ Before distribution:
 - publish the corresponding source for the distributed version;
 - document the AAR build procedure;
 - avoid marks or descriptions suggesting official CFMoto affiliation.
-- never commit or publicly distribute the Android Auto private identity files; use a private sideload build when Android Auto support is required.
+- never commit Android Auto identity source files or signing credentials; provision them only through the controlled release workflow and document that a public APK contains its runtime identity.
 
 This section identifies a technical and organizational constraint and requires
 legal review before commercial distribution.
