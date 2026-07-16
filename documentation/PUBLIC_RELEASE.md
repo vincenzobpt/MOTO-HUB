@@ -38,9 +38,8 @@ Configure these repository-level Actions secrets before pushing a release tag:
 | `MOTOHUB_KEYSTORE_B64` | Base64 encoding of the APK-signing JKS file |
 | `MOTOHUB_KEYSTORE_PASSWORD` | Signing keystore password |
 | `MOTOHUB_KEY_ALIAS` | Signing key alias |
-| `MOTOHUB_KEY_PASSWORD` | Signing key password |
 
-GitHub does not expose secret values after they are stored. Rotate the APK-signing key only as a deliberate migration: Android will reject an update signed by a different key unless a supported signing-key rotation process is used.
+The current JKS uses the keystore password for its signing-key entry as well. GitHub does not expose secret values after they are stored. Rotate the APK-signing key only as a deliberate migration: Android will reject an update signed by a different key unless a supported signing-key rotation process is used.
 
 ## Workflow Gate
 

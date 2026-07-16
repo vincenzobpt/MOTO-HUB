@@ -40,7 +40,6 @@ jobs:
           MOTOHUB_KEYSTORE_B64: ${{ secrets.MOTOHUB_KEYSTORE_B64 }}
           MOTOHUB_KEYSTORE_PASSWORD: ${{ secrets.MOTOHUB_KEYSTORE_PASSWORD }}
           MOTOHUB_KEY_ALIAS: ${{ secrets.MOTOHUB_KEY_ALIAS }}
-          MOTOHUB_KEY_PASSWORD: ${{ secrets.MOTOHUB_KEY_PASSWORD }}
         run: |
           set -euo pipefail
           for name in \
@@ -48,8 +47,7 @@ jobs:
             ANDROID_AUTO_IDENTITY_B64 \
             MOTOHUB_KEYSTORE_B64 \
             MOTOHUB_KEYSTORE_PASSWORD \
-            MOTOHUB_KEY_ALIAS \
-            MOTOHUB_KEY_PASSWORD; do
+            MOTOHUB_KEY_ALIAS; do
             if [[ -z "${!name:-}" ]]; then
               echo "Required GitHub Actions secret is missing: $name" >&2
               exit 1
@@ -112,7 +110,6 @@ jobs:
         env:
           MOTOHUB_KEYSTORE_PASSWORD: ${{ secrets.MOTOHUB_KEYSTORE_PASSWORD }}
           MOTOHUB_KEY_ALIAS: ${{ secrets.MOTOHUB_KEY_ALIAS }}
-          MOTOHUB_KEY_PASSWORD: ${{ secrets.MOTOHUB_KEY_PASSWORD }}
         run: |
           set -euo pipefail
           build_tools="$ANDROID_HOME/build-tools/36.0.0"
@@ -144,7 +141,7 @@ jobs:
             --ks "$RUNNER_TEMP/motohub-release/motohub-release.jks" \
             --ks-key-alias "$MOTOHUB_KEY_ALIAS" \
             --ks-pass env:MOTOHUB_KEYSTORE_PASSWORD \
-            --key-pass env:MOTOHUB_KEY_PASSWORD \
+            --key-pass env:MOTOHUB_KEYSTORE_PASSWORD \
             --out "$apk_path" \
             "$aligned_apk"
 
