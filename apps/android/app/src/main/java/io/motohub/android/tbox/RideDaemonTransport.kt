@@ -20,6 +20,7 @@ import java.net.Socket
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -126,27 +127,54 @@ class RideDaemonTransport(
     }
 
     /** Opens the EasyConn command socket through Android's selected T-Box network. */
-    private fun startWithNetworkSocket(
+    private suspend fun startWithNetworkSocket(
+        activeSession: MobileSession,
+        host: TBoxHost,
+        network: Network
+    ) {
+        val policy = EasyConnRetryPolicy()
+        retryEasyConnStart(
+            policy = policy,
+            shouldRetry = ::isTransientEasyConnFailure,
+            onRetry = { failedAttempt, delayMillis, failure ->
+                ProjectionEventLog.warning(
+                    "TBOX",
+                    "EasyConn attempt $failedAttempt/${policy.maxAttempts} failed: " +
+                        "${failure.message.orEmpty()}. Retrying in ${delayMillis}ms."
+                )
+            }
+        ) { attempt ->
+            kotlinx.coroutines.currentCoroutineContext().ensureActive()
+            ProjectionEventLog.debug(
+                "TBOX",
+                "EasyConn attempt $attempt/${policy.maxAttempts}: opening network-bound command " +
+                    "socket to ${host.ipAddress}:${host.port} on network=$network."
+            )
+            startSingleAttempt(activeSession, host, network)
+            if (attempt > 1) {
+                ProjectionEventLog.record(
+                    "TBOX",
+                    "EasyConn handshake recovered on attempt $attempt/${policy.maxAttempts}."
+                )
+            }
+        }
+    }
+
+    private fun startSingleAttempt(
         activeSession: MobileSession,
         host: TBoxHost,
         network: Network
     ) {
         val socket: Socket = network.socketFactory.createSocket()
-        var descriptorTransferred = false
-        try {
-            ProjectionEventLog.debug(
-                "TBOX",
-                "Opening network-bound command socket to ${host.ipAddress}:${host.port} on network=$network."
-            )
-            socket.connect(InetSocketAddress(host.ipAddress, host.port), EC_CONNECT_TIMEOUT_MS)
+        socket.use {
+            it.connect(InetSocketAddress(host.ipAddress, host.port), EC_CONNECT_TIMEOUT_MS)
             ProjectionEventLog.record("TBOX", "EasyConn TCP command socket connected.")
-            val descriptor = ParcelFileDescriptor.fromSocket(socket)
-            val fd = descriptor.detachFd().toLong()
-            descriptorTransferred = true
-            activeSession.startSessionWithSocketFd(fd)
-        } finally {
-            // After detachFd(), Go owns and closes the descriptor during the init handshake.
-            if (!descriptorTransferred) socket.close()
+            ParcelFileDescriptor.fromSocket(it).use { descriptor ->
+                val fd = descriptor.detachFd().toLong()
+                // ParcelFileDescriptor duplicates the socket descriptor. Go owns and closes the
+                // detached duplicate; the outer use{} closes the original Java socket.
+                activeSession.startSessionWithSocketFd(fd)
+            }
         }
     }
 
