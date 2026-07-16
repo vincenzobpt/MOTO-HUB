@@ -11,7 +11,6 @@ import androidx.core.content.ContextCompat
 import api.Api
 import api.MobileCallback
 import api.MobileSession
-import io.motohub.android.R
 import io.motohub.android.session.ProjectionEventLog
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -52,7 +51,7 @@ class RideDaemonTransport(
             }
             val createdSession = Api.newMobileSession(
                 Api.newMobileConfig(
-                    loadStaticSignal(),
+                    ByteArray(0),
                     30L,
                     10L,
                     5L,
@@ -68,7 +67,8 @@ class RideDaemonTransport(
             )
             ProjectionEventLog.record(
                 "DISCOVERY",
-                "RideDaemon session configured for ${host.ipAddress}:${host.port}; package=${host.packageName}."
+                "RideDaemon live-only session configured for ${host.ipAddress}:${host.port}; " +
+                    "package=${host.packageName}."
             )
             host
         }.onFailure {
@@ -145,10 +145,6 @@ class RideDaemonTransport(
             if (!descriptorTransferred) socket.close()
         }
     }
-
-    private fun loadStaticSignal(): ByteArray = appContext.resources
-        .openRawResource(R.raw.static_signal)
-        .use { it.readBytes() }
 
     private suspend fun discoverWithAndroidNsd(network: Network): TBoxHost = suspendCancellableCoroutine { continuation ->
         val completed = AtomicBoolean(false)
@@ -289,13 +285,22 @@ class RideDaemonTransport(
 
         override fun onEvent(time: Long, type: Long, command: Long, payload: ByteArray?) {
             Log.d(TAG, "T-Box event type=$type command=$command bytes=${payload?.size ?: 0}")
-            if (type != MEDIA_CONTROL_EVENT_SOURCE || payload == null) return
+            if (type != MEDIA_CONTROL_EVENT_SOURCE) return
+            if (command == MEDIA_STREAM_START_COMMAND) {
+                ProjectionEventLog.record(
+                    "TBOX",
+                    "TFT video consumer is ready; requesting a fresh decoder sync frame."
+                )
+                mutableEvents.tryEmit(TBoxEvent.VideoStreamStart)
+                return
+            }
+            val eventPayload = payload ?: return
             if (command == MEDIA_TOUCH_COMMAND) {
-                decodeTBoxTouch(payload)?.let(mutableEvents::tryEmit)
+                decodeTBoxTouch(eventPayload)?.let(mutableEvents::tryEmit)
                 return
             }
             if (command == MEDIA_CAPTURE_CONFIG_COMMAND) {
-                decodeTBoxVideoArea(payload)?.let { area ->
+                decodeTBoxVideoArea(eventPayload)?.let { area ->
                     ProjectionEventLog.record(
                         "TBOX",
                         "TFT capture area requested: ${area.width}x${area.height}."
@@ -305,7 +310,7 @@ class RideDaemonTransport(
                 return
             }
             runCatching {
-                val safeArea = org.json.JSONObject(payload.toString(Charsets.UTF_8))
+                val safeArea = org.json.JSONObject(eventPayload.toString(Charsets.UTF_8))
                     .optJSONObject("viewAreaConfig")
                     ?.optJSONArray("viewAreas")
                     ?.optJSONObject(0)
@@ -341,6 +346,7 @@ class RideDaemonTransport(
         const val MEDIA_CONTROL_EVENT_SOURCE = 3L
         const val MEDIA_CAPTURE_CONFIG_COMMAND = 16L
         const val MEDIA_TOUCH_COMMAND = 32L
+        const val MEDIA_STREAM_START_COMMAND = 112L
     }
 }
 

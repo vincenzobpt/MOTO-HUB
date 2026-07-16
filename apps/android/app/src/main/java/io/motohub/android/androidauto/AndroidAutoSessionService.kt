@@ -51,6 +51,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
     private val displayGeometryStore by lazy { TBoxDisplayGeometryStore(this) }
     private val bikeStartRequested = AtomicBoolean(false)
     private val transportUnavailable = AtomicBoolean(false)
+    private val videoStreamStartRequested = AtomicBoolean(false)
     private val framesAccepted = AtomicLong(0)
 
     @Volatile
@@ -244,6 +245,9 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
                 }
             )
             activeEncoder.start()
+            if (videoStreamStartRequested.get()) {
+                activeEncoder.requestSyncFrame("TFT consumer already requested Android Auto video")
+            }
             val encoderSurface = activeEncoder.inputSurface
                 ?: error("Android Auto encoder has no input surface")
             encoder = activeEncoder
@@ -269,6 +273,10 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
             handle.transport.events.collect { event ->
                 if (stopping) return@collect
                 when (event) {
+                    TBoxEvent.VideoStreamStart -> {
+                        videoStreamStartRequested.set(true)
+                        encoder?.requestSyncFrame("TFT consumer requested Android Auto video")
+                    }
                     is TBoxEvent.Touch -> receiver?.sendTouch(event.action, event.x, event.y)
                     is TBoxEvent.Warning -> ProjectionEventLog.record("T-BOX", event.message)
                     is TBoxEvent.FatalError -> fail("T-Box error: ${event.message}")

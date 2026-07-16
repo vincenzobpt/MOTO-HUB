@@ -44,7 +44,8 @@ Android keeps control of the network and permissions.
 - `pushFrame()` receives a complete access unit.
 - The sample must be valid AVCC or detectable Annex-B.
 - SPS/PPS must accompany keyframes according to the codec contract.
-- The static signal asset must be valid H.264.
+- A media consumer starts on a fresh SPS/PPS/IDR sequence, never a stale
+  predictive frame or a fixed-resolution fallback.
 - `setECHost()` precedes `startSession()`.
 - Fatal errors and `onStopped()` terminate the Android lifecycle.
 

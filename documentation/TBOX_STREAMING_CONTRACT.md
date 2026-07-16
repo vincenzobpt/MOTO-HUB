@@ -73,6 +73,8 @@ from that request rather than from a motorcycle model table.
 - Each call must represent a complete access unit, not an arbitrary stream
   fragment.
 - Keyframes must carry SPS/PPS if codec-config buffers are ignored.
+- When the TFT sends media command `112`, stale queued access units must be
+  discarded and the encoder must provide a fresh SPS/PPS/IDR sequence.
 - Long GOPs increase recovery time and may break the decoder.
 - An encoder that introduces B-frames is incompatible with the low-latency,
   polling assumption.
@@ -94,18 +96,17 @@ and tested with missing, malformed and multiple view-area payloads.
 `To validate`: event-type meaning, JSON schema stability and behavior of
 firmware that does not send the safe area.
 
-## Static Signal
+## Live-Only Startup
 
-`MobileConfig` requires bytes from a static stream. The library creates a
-fallback source and alternates between static/live sources. The asset must be:
+MOTO-HUB creates `MobileConfig` without a static source. A fixed-resolution
+fallback can be incompatible with the runtime TFT area and can replace an
+otherwise healthy stream during a short encoder pause.
 
-- valid H.264 Annex-B;
-- compatible with the target resolution and decoder;
-- separable into access units through AUD;
-- short and legally distributable.
-
-The build must include a test that verifies parsing and presence. Do not use an
-empty placeholder file.
+On media command `112`, RideDaemon clears stale frames and waits for a fresh
+IDR before serving the TFT. Android requests that sync frame immediately,
+caches codec configuration, and prepends missing SPS/PPS to the keyframe. A
+surface-input repeat interval keeps static screens producing frames without
+switching sources.
 
 ## Motorcycle Assumptions To Verify
 

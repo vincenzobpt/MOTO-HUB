@@ -23,5 +23,7 @@ The source commit, gomobile API level, checksum, and license are recorded in
 [`ridedaemon.lock`](ridedaemon.lock). Update that file whenever the artifact
 changes.
 
-The Android build also packages the static H.264 fallback signal from
-[`assets/static_signal.h264`](assets/static_signal.h264).
+MOTO-HUB configures RideDaemon in live-only mode. The historical stream under
+`assets/` is retained as a diagnostic fixture but is not packaged in the APK or
+used as a runtime fallback because its fixed geometry is not portable across
+T-Box displays.

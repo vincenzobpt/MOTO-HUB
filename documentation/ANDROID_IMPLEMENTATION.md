@@ -141,6 +141,7 @@ Frame rate:            30 fps, fallback 20/15
 Bitrate:               2.5 Mbps, test range 2-5 Mbps
 I-frame interval:      0 where it produces compatible frequent IDRs
 Prepend SPS/PPS:       KEY_PREPEND_HEADER_TO_SYNC_FRAMES = 1
+Static-frame repeat:   KEY_REPEAT_PREVIOUS_FRAME_AFTER = 100000 us
 B-frame:               disabled through a compatible profile/configuration
 Rate control:          CBR if supported and stable
 ```
@@ -152,8 +153,8 @@ added AUD and absence of B-frames.
 The drain loop must:
 
 - honor `BufferInfo.offset` and `size`;
-- ignore `BUFFER_FLAG_CODEC_CONFIG` only if SPS/PPS are actually included in
-  keyframes;
+- cache `BUFFER_FLAG_CODEC_CONFIG` and prepend missing SPS/PPS to keyframes;
+- request a sync frame when the T-Box media consumer attaches;
 - always release the output buffer;
 - avoid unnecessary sleeping when `dequeueOutputBuffer` already has a timeout;
 - propagate errors to the service;

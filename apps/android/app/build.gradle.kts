@@ -37,8 +37,8 @@ android {
         applicationId = "io.motohub.android"
         minSdk = 34
         targetSdk = 36
-        versionCode = 42
-        versionName = "0.8.2-beta.4"
+        versionCode = 43
+        versionName = "0.8.2-beta.5"
     }
 
     signingConfigs {
@@ -78,12 +78,6 @@ android {
     }
 }
 
-val prepareHudStaticSignal by tasks.registering(Copy::class) {
-    from(rootProject.projectDir.resolve("../../tooling/assets/static_signal.h264"))
-    into(layout.buildDirectory.dir("generated/res/hud-static/main/raw"))
-    rename { "static_signal.h264" }
-}
-
 val androidAutoIdentityDir = rootProject.projectDir.resolve("../../tooling/private/android-auto")
 val androidAutoIdentityOutputDir = layout.buildDirectory.dir("generated/res/android-auto-identity/main")
 val includeAndroidAutoIdentity = providers.gradleProperty("includeAndroidAutoIdentity")
@@ -107,12 +101,9 @@ val prepareAndroidAutoIdentity by tasks.registering(Copy::class) {
     }
 }
 
-android.sourceSets.getByName("main").res.srcDir(
-    layout.buildDirectory.dir("generated/res/hud-static/main")
-)
 android.sourceSets.getByName("main").res.srcDir(androidAutoIdentityOutputDir)
 tasks.named("preBuild").configure {
-    dependsOn(prepareHudStaticSignal, prepareAndroidAutoIdentity)
+    dependsOn(prepareAndroidAutoIdentity)
 }
 
 val exportPublicApk by tasks.registering(Copy::class) {

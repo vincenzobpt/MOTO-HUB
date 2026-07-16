@@ -45,6 +45,7 @@ class ProjectionSessionService : Service() {
     private var transportEventsJob: Job? = null
     private var networkEventsJob: Job? = null
     private val transportUnavailable = AtomicBoolean(false)
+    private val videoStreamStartRequested = AtomicBoolean(false)
     private val framesAccepted = AtomicLong(0)
     private val mainHandler = Handler(Looper.getMainLooper())
     private lateinit var displayDimmer: PhoneDisplayDimmer
@@ -183,6 +184,9 @@ class ProjectionSessionService : Service() {
                 }
             )
             activeEncoder.start()
+            if (videoStreamStartRequested.get()) {
+                activeEncoder.requestSyncFrame("TFT consumer already requested video")
+            }
             val surface = activeEncoder.inputSurface ?: error("AVC encoder has no input surface")
 
             mediaProjection = projection
@@ -220,6 +224,10 @@ class ProjectionSessionService : Service() {
             handle.transport.events.collect { event ->
                 if (stopping) return@collect
                 when (event) {
+                    TBoxEvent.VideoStreamStart -> {
+                        videoStreamStartRequested.set(true)
+                        encoder?.requestSyncFrame("TFT consumer requested mirroring video")
+                    }
                     is TBoxEvent.Warning -> ProjectionEventLog.record("T-BOX", event.message)
                     is TBoxEvent.FatalError -> fail("T-Box error: ${event.message}")
                     TBoxEvent.Stopped -> fail("The T-Box ended the session.")
