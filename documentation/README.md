@@ -24,6 +24,7 @@ final app.
 | [TEST_STRATEGY.md](TEST_STRATEGY.md) | Software test strategy and hardware matrix |
 | [ROADMAP.md](ROADMAP.md) | Spikes, MVP, later phases and decision gates |
 | [RISK_REGISTER.md](RISK_REGISTER.md) | Open risks, impact and mitigations |
+| [DYNAMIC_ANDROID_AUTO_PROFILE.md](DYNAMIC_ANDROID_AUTO_PROFILE.md) | Runtime Android Auto orientation profiles and fallback contract |
 | [decisions/README.md](decisions/README.md) | Architecture decision record index |
 
 ## Reference Repositories

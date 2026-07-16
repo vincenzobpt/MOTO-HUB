@@ -9,7 +9,7 @@ internal class AapVideo(
     private val videoDecoder: VideoDecoder,
     private val onFrameCorrupted: () -> Unit
 ) {
-    // ~2MB is ample for 800x480 H.264 access units.
+    // ~2 MiB is ample for access units from the supported standard AA source profiles.
     private val messageBuffer = ByteBuffer.allocate(Messages.DEF_BUFFER_LENGTH * 16)
     private var isFrameCorrupt = false
     private var lastKeyframeRequestMs = 0L

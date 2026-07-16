@@ -16,7 +16,6 @@ import io.motohub.android.MainActivity
 import io.motohub.android.R
 import io.motohub.android.aa.AaReceiver
 import io.motohub.android.aa.SingleKeyKeyManager
-import io.motohub.android.aa.ServiceDiscoveryResponse
 import io.motohub.android.encoding.AvcEncoder
 import io.motohub.android.encoding.EncoderProfile
 import io.motohub.android.session.ProjectionEventLog
@@ -53,6 +52,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
     private val transportUnavailable = AtomicBoolean(false)
     private val videoStreamStartRequested = AtomicBoolean(false)
     private val framesAccepted = AtomicLong(0)
+    private var capabilityProfile = AndroidAutoCapabilityProfiles.fallback()
 
     @Volatile
     private var stopping = false
@@ -85,9 +85,17 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
             ?: return fail("No T-Box is ready. Connect and find the T-Box before starting Android Auto.")
         tBoxHandle = handle
         val learnedGeometry = displayGeometryStore.load(handle.motorcycle.ssid)
+        capabilityProfile = AndroidAutoCapabilityProfiles.select(learnedGeometry)
         val learnedCanvas = learnedGeometry?.let(::alignedCanvasGeometry)
-        val displayProfile = learnedCanvas?.let(ActiveAndroidAutoDisplayProfile::configure)
-            ?: ActiveAndroidAutoDisplayProfile.configureUncalibrated()
+        val displayProfile = learnedCanvas?.let { target ->
+            ActiveAndroidAutoDisplayProfile.configure(target, capabilityProfile.video)
+        } ?: ActiveAndroidAutoDisplayProfile.configureUncalibrated(capabilityProfile.video)
+        ProjectionEventLog.record(
+            "ANDROID AUTO",
+            "Capability profile: source=${capabilityProfile.video.width}x" +
+                "${capabilityProfile.video.height}@${capabilityProfile.densityDpi}dpi, " +
+                "selection=${capabilityProfile.source}; ${capabilityProfile.reason}"
+        )
         if (learnedGeometry == null) {
             ProjectionEventLog.record(
                 "ANDROID AUTO",
@@ -115,7 +123,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
                 "ANDROID AUTO",
                 "TFT display mode selected for ${handle.motorcycle.ssid}: $displayMode."
             )
-            val activeCompositor = AaCompositor(::log, displayMode)
+            val activeCompositor = AaCompositor(::log, displayMode, capabilityProfile.video)
             activeCompositor.start()
             val decoderSurface = activeCompositor.inputSurface
                 ?: error("Android Auto compositor did not create the video surface")
@@ -143,7 +151,8 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
                         }
                     }
                 },
-                mapTouchToSource = activeCompositor::mapCanvasToSource
+                mapTouchToSource = activeCompositor::mapCanvasToSource,
+                capabilityProfile = capabilityProfile
             )
             if (!SingleKeyKeyManager.isAvailable(applicationContext)) {
                 error(
@@ -216,7 +225,20 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
                     "${actualGeometry.width}x${actualGeometry.height}."
             )
         }
-        ActiveAndroidAutoDisplayProfile.configure(actualGeometry)
+        ActiveAndroidAutoDisplayProfile.configure(actualGeometry, capabilityProfile.video)
+        val learnedCapability = AndroidAutoCapabilityProfiles.select(
+            DisplayGeometry(negotiatedArea.width, negotiatedArea.height)
+        )
+        if (learnedCapability.videoPreset != capabilityProfile.videoPreset) {
+            ProjectionEventLog.warning(
+                "ANDROID AUTO",
+                "The live TFT geometry recommends ${learnedCapability.video.width}x" +
+                    "${learnedCapability.video.height}@${learnedCapability.densityDpi}dpi. " +
+                    "The current AAP session remains ${capabilityProfile.video.width}x" +
+                    "${capabilityProfile.video.height}; the learned profile will be used automatically " +
+                    "the next time Android Auto starts."
+            )
+        }
         ProjectionEventLog.record(
             "T-BOX",
             "Area Android Auto ${encoderProfile.width}x${encoderProfile.height}."
@@ -255,8 +277,8 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
                 encoderSurface,
                 encoderProfile.width,
                 encoderProfile.height,
-                ServiceDiscoveryResponse.AA_WIDTH,
-                ServiceDiscoveryResponse.AA_HEIGHT
+                capabilityProfile.video.width,
+                capabilityProfile.video.height
             )
             AndroidAutoRuntime.publish(AndroidAutoRuntimeState.Streaming)
             ProjectionRuntime.publish(ProjectionRuntimeState.Streaming)

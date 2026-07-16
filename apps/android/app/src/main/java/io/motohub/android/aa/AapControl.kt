@@ -186,7 +186,15 @@ internal class AapControlService(private val aapTransport: AapTransport) : AapCo
 
     private fun serviceDiscoveryRequest(request: Control.ServiceDiscoveryRequest): Int {
         AaLog.i("Service Discovery Request: %s", request.phoneName)
-        aapTransport.send(ServiceDiscoveryResponse())
+        val profile = aapTransport.androidAutoCapabilityProfile
+        AaLog.i(
+            "Service Discovery AA profile: %dx%d @%ddpi (%s)",
+            profile.video.width,
+            profile.video.height,
+            profile.densityDpi,
+            profile.source.name
+        )
+        aapTransport.send(ServiceDiscoveryResponse(profile))
         return 0
     }
 

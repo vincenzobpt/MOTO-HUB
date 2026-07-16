@@ -13,11 +13,15 @@ import android.os.Process
 import android.os.SystemClock
 import android.util.SparseIntArray
 import io.motohub.android.aa.proto.Control
+import io.motohub.android.androidauto.AndroidAutoCapabilityProfile
+import io.motohub.android.androidauto.AndroidAutoCapabilityProfiles
 
 class AapTransport(
     private val videoDecoder: VideoDecoder,
     private val context: Context,
-    private val externalSsl: AapSslContext? = null
+    private val externalSsl: AapSslContext? = null,
+    internal val androidAutoCapabilityProfile: AndroidAutoCapabilityProfile =
+        AndroidAutoCapabilityProfiles.fallback()
 ) {
     val ssl: AapSsl = externalSsl ?: AapSslContext(SingleKeyKeyManager(context))
 

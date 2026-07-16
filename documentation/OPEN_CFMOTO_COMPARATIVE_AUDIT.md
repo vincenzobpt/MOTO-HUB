@@ -221,15 +221,15 @@ OpenCfMoto advantage:
 
 Important MOTO-HUB constraint:
 
-MOTO-HUB currently advertises the proven `800x480@160` Android Auto source and
-composes it into the runtime T-Box canvas. Its compatibility identity values
-must not be renamed or modernized casually: a previous identity change caused
-Android Auto startup failure. A future dynamic source-resolution feature must
-preserve this complete profile as the default and be validated profile by
-profile on physical hardware.
+Starting with the beta.8 candidate, MOTO-HUB selects `800x480@160` for a saved
+landscape T-Box geometry and `720x1280@240` for a saved portrait geometry.
+Missing or invalid geometry still selects the hardware-validated landscape
+profile. The compatibility identity remains unchanged. Portrait support must
+remain marked unvalidated until it passes on physical hardware.
 
-Verdict: tie at the protocol-feature level. MOTO-HUB is better integrated and
-supportable; OpenCfMoto currently has broader known orientation profiles.
+Verdict: MOTO-HUB now has the stronger profile-selection design because it uses
+runtime geometry rather than motorcycle identifiers. OpenCfMoto retains the
+advantage of existing portrait hardware validation.
 
 ### 6. Mirroring and Phone Interaction
 
