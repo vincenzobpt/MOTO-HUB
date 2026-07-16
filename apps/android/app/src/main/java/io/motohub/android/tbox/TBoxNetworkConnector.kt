@@ -10,6 +10,8 @@ import android.net.wifi.WifiNetworkSpecifier
 import android.util.Log
 import io.motohub.android.session.MotorcycleProfile
 import io.motohub.android.session.ProjectionEventLog
+import java.net.Inet4Address
+import java.net.InetAddress
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -51,7 +53,7 @@ class TBoxNetworkConnector(context: Context) {
         disconnect()
         Result.failure(
             IllegalStateException(
-                "Android did not connect to the T-Box AP $TBOX_SUBNET_PREFIX* within 30 seconds."
+                "Android did not obtain a usable IPv4 address from the requested T-Box AP within 30 seconds."
             )
         )
     } catch (failure: Throwable) {
@@ -75,7 +77,7 @@ class TBoxNetworkConnector(context: Context) {
             ?.onFailure { ProjectionEventLog.warning("NETWORK", "Network callback unregister failed.", it) }
     }
 
-    /** Current Wi-Fi network confirmed by the T-Box subnet callback, if still active. */
+    /** Current Wi-Fi network confirmed by the SSID-specific request callback, if still active. */
     fun currentNetwork(): Network? = activeNetwork
 
     /** Keeps the requested T-Box network alive but restores Android's normal process route. */
@@ -119,9 +121,15 @@ class TBoxNetworkConnector(context: Context) {
             networkCallback = object : ConnectivityManager.NetworkCallback() {
                 override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) {
                     val addresses = linkProperties.linkAddresses.mapNotNull { it.address.hostAddress }
+                    val gateways = linkProperties.routes.mapNotNull { it.gateway?.hostAddress }.distinct()
                     Log.d(TAG, "Wi-Fi addresses=$addresses")
-                    ProjectionEventLog.debug("NETWORK", "Link properties changed: network=$network, addresses=$addresses.")
-                    val isTBoxNetwork = addresses.any(::isTBoxLinkAddress)
+                    ProjectionEventLog.debug(
+                        "NETWORK",
+                        "Link properties changed: network=$network, interface=${linkProperties.interfaceName}, " +
+                            "addresses=$addresses, gateways=$gateways."
+                    )
+                    val isTBoxNetwork = linkProperties.linkAddresses
+                        .any { isUsableTBoxIpv4Address(it.address) }
                     if (isTBoxNetwork) {
                         if (!connectivityManager.bindProcessToNetwork(network)) {
                             val activeVpn = activeVpnLabel()
@@ -159,7 +167,8 @@ class TBoxNetworkConnector(context: Context) {
                         Log.w(TAG, "T-Box network address update is temporarily incomplete")
                         ProjectionEventLog.warning(
                             "NETWORK",
-                            "Active T-Box network temporarily has no 192.168.0.* address; waiting for onLost before disconnecting."
+                            "Active T-Box network temporarily has no usable IPv4 address; " +
+                                "waiting for onLost before disconnecting."
                         )
                     }
                 }
@@ -236,12 +245,14 @@ class TBoxNetworkConnector(context: Context) {
     private companion object {
         const val TAG = "TBoxNetwork"
         const val CONNECTION_TIMEOUT_MS = 30_000L
-        const val TBOX_SUBNET_PREFIX = TBOX_LINK_PREFIX
     }
 
     private val contextPackageManager = context.applicationContext.packageManager
 }
 
-internal const val TBOX_LINK_PREFIX = "192.168.0."
-
-internal fun isTBoxLinkAddress(address: String): Boolean = address.startsWith(TBOX_LINK_PREFIX)
+internal fun isUsableTBoxIpv4Address(address: InetAddress): Boolean =
+    address is Inet4Address &&
+        !address.isAnyLocalAddress &&
+        !address.isLoopbackAddress &&
+        !address.isLinkLocalAddress &&
+        !address.isMulticastAddress

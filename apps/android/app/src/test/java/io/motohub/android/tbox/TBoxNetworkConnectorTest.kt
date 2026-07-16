@@ -1,5 +1,6 @@
 package io.motohub.android.tbox
 
+import java.net.InetAddress
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import org.junit.Assert.assertEquals
@@ -10,11 +11,20 @@ import org.junit.Test
 
 class TBoxNetworkConnectorTest {
     @Test
-    fun recognizesTBoxSubnetWithoutMatchingHomeWifi() {
-        assertTrue(isTBoxLinkAddress("192.168.0.23"))
-        assertFalse(isTBoxLinkAddress("192.168.50.7"))
-        assertFalse(isTBoxLinkAddress("10.0.0.4"))
-        assertFalse(isTBoxLinkAddress("fe80::1"))
+    fun acceptsUsableIpv4AddressesAcrossTBoxDhcpSubnets() {
+        assertTrue(isUsableTBoxIpv4Address(InetAddress.getByName("192.168.0.23")))
+        assertTrue(isUsableTBoxIpv4Address(InetAddress.getByName("192.168.43.91")))
+        assertTrue(isUsableTBoxIpv4Address(InetAddress.getByName("10.42.0.8")))
+        assertTrue(isUsableTBoxIpv4Address(InetAddress.getByName("172.20.10.4")))
+    }
+
+    @Test
+    fun rejectsAddressesThatCannotCarryTheEasyConnIpv4Session() {
+        assertFalse(isUsableTBoxIpv4Address(InetAddress.getByName("0.0.0.0")))
+        assertFalse(isUsableTBoxIpv4Address(InetAddress.getByName("127.0.0.1")))
+        assertFalse(isUsableTBoxIpv4Address(InetAddress.getByName("169.254.12.4")))
+        assertFalse(isUsableTBoxIpv4Address(InetAddress.getByName("224.0.0.251")))
+        assertFalse(isUsableTBoxIpv4Address(InetAddress.getByName("fe80::1")))
     }
 
     @Test

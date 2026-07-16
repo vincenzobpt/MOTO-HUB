@@ -190,22 +190,23 @@ and the selected network. Confirm the decision with routing tests.
 
 ## T-Box Network
 
-Follow the reference app model with a persistent Wi-Fi suggestion:
+Request the saved motorcycle network explicitly:
 
 ```text
-WifiNetworkSuggestion
+WifiNetworkSpecifier
   + SSID and WPA2 passphrase from QR
-  + high priority
-  + no additional interaction
+  + local-only network request
+  + Android NetworkCallback
 ```
 
-The system may request authorization for Wi-Fi suggestions. Keep a
-`NetworkCallback`, read addresses from `LinkProperties` and proceed only when
-the T-Box `192.168.0.x` subnet appears.
+The system may request authorization before connecting. Keep a
+`NetworkCallback`, read addresses from `LinkProperties` and proceed after the
+SSID-specific network has a usable IPv4 address. T-Box firmware is free to use
+different DHCP subnets, including `192.168.0.0/24` and `192.168.43.0/24`.
 
 When the network is available:
 
-- verify the exact SSID, not only the `192.168.0.x` subnet;
+- rely on the SSID-specific Android network request rather than a subnet heuristic;
 - perform the EasyConn TCP dial with the normal Go transport on the primary
   T-Box Wi-Fi;
 - start NSD `_EasyConn._tcp.`;
