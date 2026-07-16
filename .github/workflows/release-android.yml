@@ -176,12 +176,17 @@ jobs:
           CHECKSUM_PATH: ${{ steps.package.outputs.checksum_path }}
         run: |
           set -euo pipefail
+          release_flags=()
+          if [[ "$GITHUB_REF_NAME" == *-* ]]; then
+            release_flags+=(--prerelease)
+          fi
           gh release create "$GITHUB_REF_NAME" \
             "$APK_PATH" \
             "$CHECKSUM_PATH" \
             --repo "$GITHUB_REPOSITORY" \
             --title "MOTO-HUB $GITHUB_REF_NAME" \
             --generate-notes \
+            "${release_flags[@]}" \
             --verify-tag
 
       - name: Remove provisioned private material
