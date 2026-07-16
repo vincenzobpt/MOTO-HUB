@@ -32,6 +32,13 @@ Relevant TXT values observed:
 - EC service port.
 
 Do not assume that IP and subnet are identical across all models/firmware.
+Reverse TCP listeners `10920`, `10921`, and `10922` must be open before the EC
+init probe is sent because a T-Box may connect back immediately.
+
+If NSD supplies a valid service package and port but no IPv4 host, Android may
+derive the peer from same-subnet route/DNS information. A `.1` Wi-Fi Direct
+group-owner fallback is allowed only for a `/24` local link. MOTO-HUB does not
+invent a service port or package when discovery itself fails.
 
 ## Stream Clock
 

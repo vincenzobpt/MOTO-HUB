@@ -1,8 +1,8 @@
 # Generated dependency record. Update this file whenever hudlib.aar is rebuilt.
 source_repository=https://github.com/vincenzobpt/ridedaemon-lib
-source_commit=9cf22f2385824f9d311b8361dec0b73d75ff2116
+source_commit=2a5f6e4510f31361279c4d4c8b894128affc529a
 source_dirty=false
 gomobile_android_api=34
 artifact=apps/android/app/libs/hudlib.aar
-sha256=def3debf770086c31a200ee5f3f3637c31b1f96949f7f474ae24ddce7341e875
+sha256=bba982041dc953a9e57bea3709a903dda7b2518aee67d071b8f960396e052a98
 license=GPL-3.0-only

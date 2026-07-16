@@ -177,7 +177,7 @@ interface TBoxTransport {
 
 The adapter:
 
-- creates `MobileConfig` with a verified static-signal asset;
+- creates a live-only `MobileConfig` without a fixed-resolution fallback;
 - translates Go callbacks into typed events;
 - guarantees one `MobileSession` only;
 - calls `setECHost()` before `startSession()`;
@@ -213,6 +213,12 @@ When the network is available:
   T-Box Wi-Fi;
 - start NSD `_EasyConn._tcp.`;
 - validate `packagename`, `ip` and port TXT values.
+
+RideDaemon opens reverse ports `10920`, `10921`, and `10922` before sending the
+EC init probe. If a resolved NSD service has package and port but no IPv4 host,
+the adapter may use a same-subnet gateway/DNS address or, on an otherwise
+unrouted `/24`, derive the Wi-Fi Direct group owner at `.1`. It must not invent
+the service metadata when NSD itself fails.
 
 The operational fallback is the T-Box AP as primary Wi-Fi and source-app
 Internet through the mobile network. Reference:

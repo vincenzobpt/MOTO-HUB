@@ -1,6 +1,7 @@
 package io.motohub.android.tbox
 
 import android.content.Context
+import android.net.ConnectivityManager
 import android.net.Network
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
@@ -12,6 +13,8 @@ import api.Api
 import api.MobileCallback
 import api.MobileSession
 import io.motohub.android.session.ProjectionEventLog
+import java.net.Inet4Address
+import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Socket
 import java.nio.ByteBuffer
@@ -31,6 +34,7 @@ class RideDaemonTransport(
     context: Context
 ) : TBoxTransport {
     private val appContext = context.applicationContext
+    private val connectivityManager = appContext.getSystemService(ConnectivityManager::class.java)
     private val nsdManager = appContext.getSystemService(NsdManager::class.java)
     private val wifiManager = appContext.getSystemService(WifiManager::class.java)
     private val callbackExecutor = ContextCompat.getMainExecutor(appContext)
@@ -197,9 +201,28 @@ class RideDaemonTransport(
                             return
                         }
 
-                        val ipAddress = attributes[IP_ATTRIBUTE]
+                        val advertisedIp = attributes[IP_ATTRIBUTE]
                             ?.toString(Charsets.UTF_8)
-                            ?: resolved.hostAddresses.firstOrNull()?.hostAddress
+                            ?.let(::parseIpv4Literal)
+                        val resolvedIp = resolved.hostAddresses
+                            .filterIsInstance<Inet4Address>()
+                            .firstOrNull()
+                            ?.hostAddress
+                        val derivedIp = if (advertisedIp == null && resolvedIp == null) {
+                            connectivityManager.getLinkProperties(network)?.let { linkProperties ->
+                                deriveTBoxPeerIpv4(
+                                    gateways = linkProperties.routes
+                                        .filter { it.isDefaultRoute }
+                                        .mapNotNull { it.gateway },
+                                    dnsServers = linkProperties.dnsServers,
+                                    localAddresses = linkProperties.linkAddresses
+                                        .map { it.address to it.prefixLength }
+                                )
+                            }?.hostAddress
+                        } else {
+                            null
+                        }
+                        val ipAddress = advertisedIp ?: resolvedIp ?: derivedIp
                         val port = resolved.port
                         if (ipAddress.isNullOrBlank() || port !in 1..65535) {
                             Log.w(TAG, "EasyConn service resolved without a usable host")
@@ -208,6 +231,12 @@ class RideDaemonTransport(
                                 "Resolved EasyConn service has invalid endpoint: ip=$ipAddress, port=$port."
                             )
                             return
+                        }
+                        if (derivedIp != null) {
+                            ProjectionEventLog.warning(
+                                "DISCOVERY",
+                                "EasyConn advertised no IPv4 host; using network-derived peer $derivedIp."
+                            )
                         }
                         ProjectionEventLog.record(
                             "DISCOVERY",
@@ -375,4 +404,55 @@ internal fun decodeTBoxTouch(payload: ByteArray): TBoxEvent.Touch? {
     val x = body.getShort(2).toInt() and 0xFFFF
     val y = body.getInt(4)
     return TBoxEvent.Touch(action, x, y)
+}
+
+internal fun deriveTBoxPeerIpv4(
+    gateways: List<InetAddress>,
+    dnsServers: List<InetAddress>,
+    localAddresses: List<Pair<InetAddress, Int>>
+): Inet4Address? {
+    val localIpv4 = localAddresses.mapNotNull { (address, prefixLength) ->
+        (address as? Inet4Address)?.let { it to prefixLength }
+    }.filter { (address, _) -> isUsableTBoxIpv4Address(address) }
+    if (localIpv4.isEmpty()) return null
+
+    val routedCandidate = (gateways + dnsServers)
+        .filterIsInstance<Inet4Address>()
+        .firstOrNull { candidate ->
+            isUsableTBoxIpv4Address(candidate) && localIpv4.any { (local, prefixLength) ->
+                candidate != local && isSameIpv4Subnet(candidate, local, prefixLength)
+            }
+        }
+    if (routedCandidate != null) return routedCandidate
+
+    val local = localIpv4.firstOrNull { (_, prefixLength) -> prefixLength == 24 }?.first
+        ?: return null
+    val octets = local.address
+    if ((octets[3].toInt() and 0xFF) == 1) return null
+    return InetAddress.getByAddress(byteArrayOf(octets[0], octets[1], octets[2], 1)) as Inet4Address
+}
+
+internal fun parseIpv4Literal(value: String): String? {
+    val octets = value.trim().split('.')
+    if (octets.size != 4) return null
+    val numbers = octets.map { part ->
+        if (part.isEmpty() || part.any { !it.isDigit() }) return null
+        part.toIntOrNull()?.takeIf { it in 0..255 } ?: return null
+    }
+    return numbers.joinToString(".")
+}
+
+private fun isSameIpv4Subnet(first: Inet4Address, second: Inet4Address, prefixLength: Int): Boolean {
+    if (prefixLength !in 1..32) return false
+    val fullBytes = prefixLength / 8
+    val remainingBits = prefixLength % 8
+    val firstBytes = first.address
+    val secondBytes = second.address
+    for (index in 0 until fullBytes) {
+        if (firstBytes[index] != secondBytes[index]) return false
+    }
+    if (remainingBits == 0) return true
+    val mask = (0xFF shl (8 - remainingBits)) and 0xFF
+    return (firstBytes[fullBytes].toInt() and mask) ==
+        (secondBytes[fullBytes].toInt() and mask)
 }

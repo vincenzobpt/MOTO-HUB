@@ -37,8 +37,8 @@ android {
         applicationId = "io.motohub.android"
         minSdk = 34
         targetSdk = 36
-        versionCode = 43
-        versionName = "0.8.2-beta.5"
+        versionCode = 44
+        versionName = "0.8.2-beta.6"
     }
 
     signingConfigs {

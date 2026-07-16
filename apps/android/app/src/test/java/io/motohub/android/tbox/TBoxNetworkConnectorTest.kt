@@ -46,4 +46,52 @@ class TBoxNetworkConnectorTest {
         }.array()
         assertNull(decodeTBoxTouch(unknown))
     }
+
+    @Test
+    fun prefersSameSubnetGatewayForEasyConnPeer() {
+        val peer = deriveTBoxPeerIpv4(
+            gateways = listOf(InetAddress.getByName("192.168.49.1")),
+            dnsServers = emptyList(),
+            localAddresses = listOf(InetAddress.getByName("192.168.49.37") to 24)
+        )
+
+        assertEquals("192.168.49.1", peer?.hostAddress)
+    }
+
+    @Test
+    fun derivesWifiDirectGroupOwnerOnlyForSlash24() {
+        val peer = deriveTBoxPeerIpv4(
+            gateways = emptyList(),
+            dnsServers = emptyList(),
+            localAddresses = listOf(InetAddress.getByName("192.168.49.37") to 24)
+        )
+
+        assertEquals("192.168.49.1", peer?.hostAddress)
+        assertNull(
+            deriveTBoxPeerIpv4(
+                gateways = emptyList(),
+                dnsServers = emptyList(),
+                localAddresses = listOf(InetAddress.getByName("192.168.49.37") to 16)
+            )
+        )
+    }
+
+    @Test
+    fun rejectsOffSubnetDnsAndLocalGroupOwner() {
+        assertNull(
+            deriveTBoxPeerIpv4(
+                gateways = emptyList(),
+                dnsServers = listOf(InetAddress.getByName("8.8.8.8")),
+                localAddresses = listOf(InetAddress.getByName("192.168.49.1") to 24)
+            )
+        )
+    }
+
+    @Test
+    fun acceptsOnlyNumericIpv4TxtValues() {
+        assertEquals("192.168.49.1", parseIpv4Literal(" 192.168.49.1 "))
+        assertNull(parseIpv4Literal("192.168.49.999"))
+        assertNull(parseIpv4Literal("fe80::1"))
+        assertNull(parseIpv4Literal("bike.local"))
+    }
 }
