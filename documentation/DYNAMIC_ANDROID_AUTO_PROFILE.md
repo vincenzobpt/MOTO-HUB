@@ -1,6 +1,7 @@
 # Dynamic Android Auto Capability Profile
 
-Status: implemented in `0.8.2-beta.8`; physical portrait TFT validation pending.
+Status: landscape hardware validation passed in `0.8.2-beta.8`; physical
+portrait TFT validation pending.
 
 MOTO-HUB selects one standard Android Auto source profile before the local AAP
 handshake:

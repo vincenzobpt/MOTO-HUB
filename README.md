@@ -68,7 +68,7 @@ The app should continue to open normally. Only the related feature is unavailabl
 
 ## Current Status
 
-The current Android client is version `0.8.2-beta.7` (`45`) and targets Android 14/API 34 and newer.
+The current Android client is version `0.8.2-beta.8` (`46`) and targets Android 14/API 34 and newer.
 
 This build has been tested end-to-end for mirroring and Android Auto on a OnePlus 13 and a CFMOTO 700MT-ADV T-Box. Compatibility with other phones, motorcycle models, T-Box firmware versions, and Android Auto versions is not guaranteed and must be validated separately.
 
