@@ -12,3 +12,9 @@ local.properties
 /tooling/private/
 apps/android/app/src/main/res/raw/aa_cert
 apps/android/app/src/main/res/raw/aa_identity_data
+
+# Private-only on this branch: never publish (see MOTO-HUB-PRO)
+/tools/tbox-simulator/
+/documentation/.obsidian/
+/documentation/2026-07-20.md
+/documentation/Untitled.canvas
