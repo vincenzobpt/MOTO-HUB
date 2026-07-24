@@ -196,23 +196,22 @@ The T-Box Wi-Fi network is a local display transport and may not provide Interne
 
 ## Technical Sources And Attribution
 
-MOTO-HUB was developed using the following public projects as technical sources. The links below are references and attribution; they are not claims of endorsement.
+MOTO-HUB exists because of the reverse-engineering, prototyping, and documentation work of several independent open-source projects. **Thank you to everyone below — please go look at their repositories too.** Each one explores this space in its own way and is worth a look independently of MOTO-HUB.
 
-### Ridedaemon library fork
+The links are references and attribution, not claims of endorsement by those projects. License information was checked directly against each repository on **24 July 2026** and is accurate as of that date only — any of these projects can change its license at any time, so re-check the source repository yourself before relying on this table for anything license-sensitive.
 
-- [vincenzobpt/ridedaemon-lib](https://github.com/vincenzobpt/ridedaemon-lib) - the fork used to generate the Android `hudlib.aar` binding.
-- [charliecharlieO-o/ridedaemon-lib](https://github.com/charliecharlieO-o/ridedaemon-lib) - upstream project and protocol implementation.
+| Project | License (checked 24 Jul 2026) | Why MOTO-HUB uses it | MOTO-HUB feature |
+|---|---|---|---|
+| [vincenzobpt/ridedaemon-lib](https://github.com/vincenzobpt/ridedaemon-lib) | GPL-3.0 | MOTO-HUB's own fork, rebuilt into the Android `hudlib.aar` binding used at runtime | Every T-Box connection: EasyConn discovery, handshake, and H.264 frame delivery |
+| [charliecharlieO-o/ridedaemon-lib](https://github.com/charliecharlieO-o/ridedaemon-lib) | GPL-3.0 | Upstream Go protocol implementation the fork above is based on | Same underlying transport protocol |
+| [charliecharlieO-o/ridedaemon-android](https://github.com/charliecharlieO-o/ridedaemon-android) | GPL-3.0 | Reference Android integration studied to understand QR pairing, Wi-Fi provisioning, network discovery, and encoder setup | Motorcycle QR pairing and the screen-mirroring pipeline |
+| [andreknieriem/headunit-revived](https://github.com/andreknieriem/headunit-revived) | AGPL-3.0 | Technique directly ported for the loopback "self-mode" Android Auto trigger and the local receiver that decodes Android Auto's video | The Android Auto feature end to end |
+| [BojanJ/open-cfmoto](https://github.com/BojanJ/open-cfmoto) | No license file (all rights reserved by default) | Original CFMoto T-Box research: how the Android Auto receiver flow, self-mode startup, and touch input behave on this hardware | Android Auto and general T-Box protocol understanding |
+| [zanderp/open-cfmoto](https://github.com/zanderp/open-cfmoto) | AGPL-3.0 | Fork studied for bitrate selection, Android Auto source-resolution profiles, and stream-recovery behavior | Video quality settings and Android Auto reconnection |
+| [ionutradu252/open-cflink](https://github.com/ionutradu252/open-cflink) | No license file (all rights reserved by default) | Fork of BojanJ's project, cited (with OpenMoto) as a reference for the T-Box's diagnostic EasyConn port | Network diagnostics (T-Box port scanning) |
+| [NegligentNarwhal/openmoto](https://github.com/NegligentNarwhal/openmoto) | AGPL-3.0 | Fork of dcoletto/open-cfmoto, same diagnostic-port reference as OpenCfLink above | Network diagnostics (T-Box port scanning) |
 
-The library implements EasyConn discovery, the T-Box handshake, control channels, media polling, H.264 framing, and the `gomobile` Android API.
-
-### Reference Android integration
-
-- [charliecharlieO-o/ridedaemon-android](https://github.com/charliecharlieO-o/ridedaemon-android) - reference Android integration used to study QR parsing, Wi-Fi provisioning, NSD discovery, MediaCodec configuration, and frame delivery.
-
-### Android Auto and CFMOTO research
-
-- [BojanJ/open-cfmoto](https://github.com/BojanJ/open-cfmoto) - independent Android Auto and CFMOTO T-Box research used to understand the local Android Auto receiver flow, self-mode startup, touch input, and video pipeline behavior.
-- [zanderp/open-cfmoto](https://github.com/zanderp/open-cfmoto) - AGPL-licensed implementation studied for user-selectable bitrate, Android Auto source profiles, startup automation, and stream recovery behavior.
+Several files under the Android Auto receiver are directly adapted from headunit-revived's AGPL-3.0 source, credited by name in the file's own header comment. MOTO-HUB's own project license has not yet been finalized for public distribution — see [Licensing And Publication Gate](#licensing-and-publication-gate) below before treating anything in this README as a final legal statement.
 
 ### Vendor and platform references
 
