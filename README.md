@@ -3,6 +3,9 @@
 > [!IMPORTANT]
 > [**JOIN US ON DISCORD TO RECEIVE SUPPORT, HELP THE COMMUNITY AND FOLLOW THE APP DEVELOPMENT**](https://discord.gg/uCUK55nJ5v)
 
+> [!IMPORTANT]
+>> **APP IS UNDERGOING REORGANISATION AND WILL BE READY LATER TODAY - JOIN OUR DISCORD FOR INFO**
+
 > [!WARNING]
 > **MOTO-HUB is an experimental proof-of-concept, not a production-grade product.** It has been built and tested with a CFMOTO **700MT-ADV** dashboard and **OnePlus 13 / Galaxy Z Fold4** phones. Behavior may be unstable, require a retry, or differ on other motorcycles, T-Box firmware versions, or phones. Do not depend on it as your only source of critical navigation information. Plan your route before riding, and use the software at your own risk.
 
