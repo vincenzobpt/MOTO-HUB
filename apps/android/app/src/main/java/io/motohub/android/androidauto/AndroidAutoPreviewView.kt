@@ -25,13 +25,54 @@ class AndroidAutoPreviewView(context: Context) : SurfaceView(context), SurfaceHo
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val action = when (event.actionMasked) {
-            MotionEvent.ACTION_DOWN -> AaInput.ACTION_DOWN
-            MotionEvent.ACTION_MOVE -> AaInput.ACTION_MOVE
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> AaInput.ACTION_UP
-            else -> return true
+        when (event.actionMasked) {
+            MotionEvent.ACTION_DOWN,
+            MotionEvent.ACTION_POINTER_DOWN -> {
+                val index = event.actionIndex
+                AndroidAutoPreviewRuntime.sendTouch(
+                    AaInput.ACTION_DOWN,
+                    event.getPointerId(index),
+                    event.getX(index).toInt(),
+                    event.getY(index).toInt()
+                )
+            }
+            MotionEvent.ACTION_MOVE -> {
+                for (index in 0 until event.pointerCount) {
+                    AndroidAutoPreviewRuntime.sendTouch(
+                        AaInput.ACTION_MOVE,
+                        event.getPointerId(index),
+                        event.getX(index).toInt(),
+                        event.getY(index).toInt()
+                    )
+                }
+            }
+            MotionEvent.ACTION_POINTER_UP,
+            MotionEvent.ACTION_UP -> {
+                val index = if (event.actionMasked == MotionEvent.ACTION_POINTER_UP) {
+                    event.actionIndex
+                } else {
+                    event.pointerCount - 1
+                }
+                if (index >= 0) {
+                    AndroidAutoPreviewRuntime.sendTouch(
+                        AaInput.ACTION_UP,
+                        event.getPointerId(index),
+                        event.getX(index).toInt(),
+                        event.getY(index).toInt()
+                    )
+                }
+            }
+            MotionEvent.ACTION_CANCEL -> {
+                for (index in 0 until event.pointerCount) {
+                    AndroidAutoPreviewRuntime.sendTouch(
+                        AaInput.ACTION_UP,
+                        event.getPointerId(index),
+                        event.getX(index).toInt(),
+                        event.getY(index).toInt()
+                    )
+                }
+            }
         }
-        AndroidAutoPreviewRuntime.sendTouch(action, event.x.toInt(), event.y.toInt())
         if (event.actionMasked == MotionEvent.ACTION_UP) performClick()
         return true
     }

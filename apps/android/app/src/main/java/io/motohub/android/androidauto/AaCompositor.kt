@@ -22,7 +22,9 @@ import java.util.concurrent.CountDownLatch
 class AaCompositor(
     private val log: (String) -> Unit,
     private val displayMode: AndroidAutoDisplayMode,
-    private val sourceGeometry: DisplayGeometry
+    private val sourceGeometry: DisplayGeometry,
+    touchSurface: DisplayGeometry = sourceGeometry,
+    private var screenMargins: TBoxScreenMargins = TBoxScreenMargins.NONE
 ) {
     private val thread = HandlerThread("aa-compositor").apply { start() }
     private val handler = Handler(thread.looper)
@@ -56,13 +58,27 @@ class AaCompositor(
     @Volatile private var previewVpY = 0
     @Volatile private var previewVpW = 0
     @Volatile private var previewVpH = 0
+    @Volatile private var touchUiW = touchSurface.width
+    @Volatile private var touchUiH = touchSurface.height
+    @Volatile private var tftClipLeft = 0
+    @Volatile private var tftClipTop = 0
+    @Volatile private var tftClipW = 0
+    @Volatile private var tftClipH = 0
     @Volatile private var tftViewport: PreviewViewport? = null
 
     private val texMatrix = FloatArray(16)
     private val tftMatrix = FloatArray(16)
-    private val fullSourceMatrix = FloatArray(16)
+    private val previewMatrix = FloatArray(16)
     @Volatile private var hasContent = false
+    @Volatile private var pendingFrame = false
     private var lastDrawMs = 0L
+    @Volatile private var frameCap = DEFAULT_FRAME_CAP
+    @Volatile private var lastSourceFrameNanos = 0L
+
+    // The decoder may keep producing frames while Android Auto shows a static screen. Coalesce
+    // those frames and use a slow redraw only as a transport keep-alive.
+    private val keepAliveTickMs = 150L
+    private val idleRedrawMs = 2_000L
 
     private val quad: FloatBuffer = ByteBuffer
         .allocateDirect(4 * 4 * 4)
@@ -80,8 +96,10 @@ class AaCompositor(
             position(0)
         }
 
-    fun start() {
+    /** True once EGL/GL initialized and [inputSurface] is ready; false leaves the compositor unusable. */
+    fun start(): Boolean {
         val latch = CountDownLatch(1)
+        var initialized = false
         handler.post {
             try {
                 initEgl()
@@ -94,10 +112,11 @@ class AaCompositor(
                     setOnFrameAvailableListener({ handler.post(::onFrame) }, handler)
                 }
                 inputSurface = Surface(surfaceTexture)
-                handler.postDelayed(keepAlive, KEEPALIVE_INTERVAL_MS)
+                handler.postDelayed(keepAlive, keepAliveTickMs)
                 log(
                     "[COMPOSITOR] ready source=${sourceGeometry.width}x${sourceGeometry.height}"
                 )
+                initialized = true
             } catch (failure: Throwable) {
                 log("[COMPOSITOR] init failed: $failure")
             } finally {
@@ -105,12 +124,13 @@ class AaCompositor(
             }
         }
         latch.await()
+        return initialized
     }
 
     fun setOutput(encoderSurface: Surface, cw: Int, ch: Int, sw: Int, sh: Int) {
         handler.post {
             try {
-                encoderWindowSurface = replaceWindowSurface(encoderWindowSurface, encoderSurface)
+                encoderWindowSurface = replaceWindowSurface(encoderWindowSurface, encoderSurface, "encoder")
                 canvasW = cw
                 canvasH = ch
                 srcW = sw
@@ -128,10 +148,43 @@ class AaCompositor(
         }
     }
 
+    /** Caps source redraws during thermal/link adaptation; keep-alive redraws remain enabled. */
+    fun setFrameCap(frameRate: Int) {
+        frameCap = frameRate.coerceIn(1, DEFAULT_FRAME_CAP)
+        lastSourceFrameNanos = 0L
+        pendingFrame = false
+    }
+
+    fun setTouchSurface(surface: DisplayGeometry) {
+        handler.post {
+            touchUiW = surface.width
+            touchUiH = surface.height
+            if (canvasW > 0 && canvasH > 0 && srcW > 0 && srcH > 0) {
+                configureTftViewport()
+            }
+        }
+    }
+
+    /**
+     * Applies a changed TFT safe-margin setting to a running session immediately, instead of
+     * requiring the rider to stop and restart Android Auto for it to take effect.
+     */
+    fun refreshMargins(margins: TBoxScreenMargins) {
+        handler.post {
+            if (screenMargins == margins) return@post
+            screenMargins = margins
+            log("[COMPOSITOR] screen margins updated: $margins")
+            if (canvasW > 0 && canvasH > 0 && srcW > 0 && srcH > 0) {
+                configureTftViewport()
+                if (hasContent) drawFrame()
+            }
+        }
+    }
+
     fun setPreview(surface: Surface, width: Int, height: Int) {
         handler.post {
             try {
-                previewWindowSurface = replaceWindowSurface(previewWindowSurface, surface)
+                previewWindowSurface = replaceWindowSurface(previewWindowSurface, surface, "preview")
                 previewCanvasW = width
                 previewCanvasH = height
                 computePreviewViewport()
@@ -159,8 +212,35 @@ class AaCompositor(
         }
     }
 
+    /** Detaches the encoder surface before its MediaCodec is released during link recovery. */
+    fun clearOutput() {
+        val latch = CountDownLatch(1)
+        handler.post {
+            try {
+                encoderWindowSurface = destroyWindowSurface(encoderWindowSurface)
+                canvasW = 0
+                canvasH = 0
+                tftViewport = null
+                log("[COMPOSITOR] TFT encoder output detached")
+            } finally {
+                latch.countDown()
+            }
+        }
+        latch.await()
+    }
+
     fun mapCanvasToSource(cx: Int, cy: Int): Pair<Int, Int>? {
         return tftViewport?.mapToSource(cx, cy)
+    }
+
+    /** Maps a T-Box canvas point into the touchscreen dimensions advertised to Android Auto. */
+    fun mapCanvasToUi(cx: Int, cy: Int): Pair<Int, Int>? {
+        if (tftClipW > 0 && tftClipH > 0 &&
+            (cx < tftClipLeft || cy < tftClipTop ||
+                cx >= tftClipLeft + tftClipW || cy >= tftClipTop + tftClipH)
+        ) return null
+        val source = mapCanvasToSource(cx, cy) ?: return null
+        return mapSourceToUi(source.first, source.second)
     }
 
     fun mapPreviewToSource(px: Int, py: Int): Pair<Int, Int>? {
@@ -168,33 +248,83 @@ class AaCompositor(
         return currentPreviewViewport().mapToSource(px, py)
     }
 
+    fun mapPreviewToUi(px: Int, py: Int): Pair<Int, Int>? =
+        mapPreviewToSource(px, py)?.let { mapSourceToUi(it.first, it.second) }
+
+   fun mapSourceToUi(sourceX: Int, sourceY: Int): Pair<Int, Int>? {
+        if (sourceX < screenMargins.left || sourceY < screenMargins.top ||
+            sourceX >= srcW - screenMargins.right || sourceY >= srcH - screenMargins.bottom
+        ) return null
+       val uiW = touchUiW.coerceIn(1, srcW.coerceAtLeast(1))
+        val uiH = touchUiH.coerceIn(1, srcH.coerceAtLeast(1))
+        // The touch surface is srcW/H trimmed by screenMargins.left/top/right/bottom (see
+        // AndroidAutoCapabilityProfile.touchSurface and setTouchSurface's caller), so the true
+        // left/top offset is screenMargins.left/top - NOT (srcW - uiW) / 2, which silently assumed
+        // the trim was split evenly and was wrong for any asymmetric margin (e.g. left=0, right=100).
+        val uiX = sourceX - screenMargins.left
+        val uiY = sourceY - screenMargins.top
+        if (uiX !in 0 until uiW || uiY !in 0 until uiH) return null
+        return uiX to uiY
+    }
+
     private fun configureTftViewport() {
         val canvas = DisplayGeometry(canvasW, canvasH)
         val source = DisplayGeometry(srcW, srcH)
+        val available = DisplayGeometry(
+            width = (canvas.width - screenMargins.left - screenMargins.right).coerceAtLeast(1),
+            height = (canvas.height - screenMargins.top - screenMargins.bottom).coerceAtLeast(1)
+        )
+        Matrix.setIdentityM(tftMatrix, 0)
+        tftClipLeft = screenMargins.left
+        tftClipTop = screenMargins.top
+        tftClipW = available.width
+        tftClipH = available.height
         tftViewport = when (displayMode) {
-            AndroidAutoDisplayMode.LETTERBOX -> calculatePreviewViewport(canvas, source)
-            AndroidAutoDisplayMode.STRETCH -> PreviewViewport(
-                x = 0,
-                y = 0,
-                width = canvas.width,
-                height = canvas.height,
-                source = source
+            // The touch/UI surface describes input coordinates only. It must not trim the video:
+            // on an 800x384 TFT using an 800x480 AA stream, trimming it made FIT and STRETCH
+            // indistinguishable and exposed an inactive strip at the bottom of the display.
+            AndroidAutoDisplayMode.LETTERBOX -> calculatePreviewViewport(available, source).offsetBy(
+                screenMargins.left,
+                screenMargins.top
+            )
+            AndroidAutoDisplayMode.STRETCH -> {
+                val stretchViewport = calculateStretchViewport(
+                    canvas = available,
+                    source = source
+                )
+                stretchViewport.copy(
+                    x = stretchViewport.x + screenMargins.left,
+                    y = stretchViewport.y + screenMargins.top
+                )
+            }
+            AndroidAutoDisplayMode.FILL -> calculateFillViewport(available, source).offsetBy(
+                screenMargins.left,
+                screenMargins.top
             )
         }
-        Matrix.setIdentityM(tftMatrix, 0)
         computePreviewViewport()
+    }
+
+    private fun configureCropMatrix(viewport: PreviewViewport) {
+        Matrix.setIdentityM(tftMatrix, 0)
+        tftMatrix[0] = viewport.sourceWidth.toFloat() / viewport.source.width
+        tftMatrix[5] = viewport.sourceHeight.toFloat() / viewport.source.height
+        tftMatrix[12] = viewport.sourceLeft.toFloat() / viewport.source.width
+        tftMatrix[13] = viewport.sourceTop.toFloat() / viewport.source.height
     }
 
     private fun computePreviewViewport() {
         if (previewCanvasW <= 0 || previewCanvasH <= 0) return
+        val source = previewSourceGeometry()
         val viewport = calculatePreviewViewport(
             canvas = DisplayGeometry(previewCanvasW, previewCanvasH),
-            source = previewSourceGeometry()
+            source = source
         )
         previewVpX = viewport.x
         previewVpY = viewport.y
         previewVpW = viewport.width
         previewVpH = viewport.height
+        Matrix.setIdentityM(previewMatrix, 0)
     }
 
     private fun currentPreviewViewport() = PreviewViewport(
@@ -202,12 +332,19 @@ class AaCompositor(
         y = previewVpY,
         width = previewVpW,
         height = previewVpH,
-        source = previewSourceGeometry()
+        source = previewSourceGeometry(),
+        sourceLeft = 0,
+        sourceTop = 0
     )
 
     private fun previewSourceGeometry() = DisplayGeometry(
         width = srcW.takeIf { it > 0 } ?: sourceGeometry.width,
         height = srcH.takeIf { it > 0 } ?: sourceGeometry.height
+    )
+
+    private fun PreviewViewport.offsetBy(dx: Int, dy: Int): PreviewViewport = copy(
+        x = x + dx,
+        y = y + dy
     )
 
     private fun onFrame() {
@@ -217,16 +354,32 @@ class AaCompositor(
             return
         }
         hasContent = true
-        drawFrame()
+        val now = System.nanoTime()
+        val interval = 1_000_000_000L / frameCap.coerceAtLeast(1)
+        val idleMs = android.os.SystemClock.uptimeMillis() - lastDrawMs
+        if (lastSourceFrameNanos == 0L || idleMs >= interval / 1_000_000L) {
+            lastSourceFrameNanos = now
+            pendingFrame = false
+            drawFrame()
+        } else {
+            // SurfaceTexture already contains the newest frame; flush it on the next pacing tick.
+            pendingFrame = true
+        }
     }
 
     private val keepAlive = object : Runnable {
         override fun run() {
             if (hasContent && encoderWindowSurface != EGL14.EGL_NO_SURFACE) {
                 val idleMs = android.os.SystemClock.uptimeMillis() - lastDrawMs
-                if (idleMs >= KEEPALIVE_INTERVAL_MS) drawFrame()
+                val intervalMs = 1_000L / frameCap.coerceAtLeast(1)
+                if (pendingFrame && idleMs >= intervalMs) {
+                    pendingFrame = false
+                    drawFrame()
+                } else if (idleMs >= idleRedrawMs) {
+                    drawFrame()
+                }
             }
-            handler.postDelayed(this, KEEPALIVE_INTERVAL_MS)
+            handler.postDelayed(this, keepAliveTickMs)
         }
     }
 
@@ -241,8 +394,13 @@ class AaCompositor(
                 viewport.y,
                 viewport.width,
                 viewport.height,
-                tftMatrix,
-                recordable = true
+               tftMatrix,
+                recordable = true,
+                clipX = tftClipLeft,
+                clipY = tftClipTop,
+                clipWidth = tftClipW,
+                clipHeight = tftClipH,
+                framebufferHeight = canvasH
             )
             lastDrawMs = android.os.SystemClock.uptimeMillis()
         }
@@ -253,7 +411,7 @@ class AaCompositor(
                 previewVpY,
                 previewVpW,
                 previewVpH,
-                fullSourceMatrix,
+                previewMatrix,
                 recordable = false
             )
         }
@@ -265,14 +423,23 @@ class AaCompositor(
         viewportY: Int,
         viewportWidth: Int,
         viewportHeight: Int,
-        contentMatrix: FloatArray,
-        recordable: Boolean
+       contentMatrix: FloatArray,
+        recordable: Boolean,
+        clipX: Int = 0,
+        clipY: Int = 0,
+        clipWidth: Int = 0,
+        clipHeight: Int = 0,
+        framebufferHeight: Int = 0
     ) {
         if (viewportWidth <= 0 || viewportHeight <= 0) return
         if (!EGL14.eglMakeCurrent(eglDisplay, target, target, eglContext)) return
-        GLES20.glClearColor(0f, 0f, 0f, 1f)
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
-        GLES20.glViewport(viewportX, viewportY, viewportWidth, viewportHeight)
+       GLES20.glClearColor(0f, 0f, 0f, 1f)
+       GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
+        if (clipWidth > 0 && clipHeight > 0 && framebufferHeight > 0) {
+            GLES20.glEnable(GLES20.GL_SCISSOR_TEST)
+            GLES20.glScissor(clipX, framebufferHeight - clipY - clipHeight, clipWidth, clipHeight)
+        }
+       GLES20.glViewport(viewportX, viewportY, viewportWidth, viewportHeight)
         GLES20.glUseProgram(program)
 
         quad.position(0)
@@ -286,8 +453,11 @@ class AaCompositor(
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textureId)
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4)
-        GLES20.glDisableVertexAttribArray(aPosition)
-        GLES20.glDisableVertexAttribArray(aTexCoord)
+       GLES20.glDisableVertexAttribArray(aPosition)
+       GLES20.glDisableVertexAttribArray(aTexCoord)
+        if (clipWidth > 0 && clipHeight > 0 && framebufferHeight > 0) {
+            GLES20.glDisable(GLES20.GL_SCISSOR_TEST)
+        }
 
         if (recordable) {
             EGLExt.eglPresentationTimeANDROID(eglDisplay, target, System.nanoTime())
@@ -320,16 +490,27 @@ class AaCompositor(
         thread.quitSafely()
     }
 
-    private fun replaceWindowSurface(current: EGLSurface, surface: Surface): EGLSurface {
+    /**
+     * Destroys [current] and creates [surface]'s replacement. Never throws: on create failure the
+     * old handle is already gone (destroyed above), so returning it here would leave the caller's
+     * field pointing at a destroyed EGLSurface - drawFrame() would then eglMakeCurrent()/
+     * eglSwapBuffers() on a dead surface instead of skipping the target. Always assign the result.
+     */
+    private fun replaceWindowSurface(current: EGLSurface, surface: Surface, tag: String): EGLSurface {
         destroyWindowSurface(current)
-        return EGL14.eglCreateWindowSurface(
-            eglDisplay,
-            eglConfig,
-            surface,
-            intArrayOf(EGL14.EGL_NONE),
-            0
-        ).also {
-            check(it != EGL14.EGL_NO_SURFACE) { "eglCreateWindowSurface failed: ${EGL14.eglGetError()}" }
+        return try {
+            EGL14.eglCreateWindowSurface(
+                eglDisplay,
+                eglConfig,
+                surface,
+                intArrayOf(EGL14.EGL_NONE),
+                0
+            ).also {
+                check(it != EGL14.EGL_NO_SURFACE) { "eglCreateWindowSurface failed: ${EGL14.eglGetError()}" }
+            }
+        } catch (failure: Throwable) {
+            log("[COMPOSITOR] $tag surface creation failed: $failure")
+            EGL14.EGL_NO_SURFACE
         }
     }
 
@@ -401,7 +582,7 @@ class AaCompositor(
         uCropMatrix = GLES20.glGetUniformLocation(program, "uCropMatrix")
         Matrix.setIdentityM(texMatrix, 0)
         Matrix.setIdentityM(tftMatrix, 0)
-        Matrix.setIdentityM(fullSourceMatrix, 0)
+        Matrix.setIdentityM(previewMatrix, 0)
 
         val ids = IntArray(1)
         GLES20.glGenTextures(1, ids, 0)
@@ -451,6 +632,6 @@ class AaCompositor(
     }
 
     private companion object {
-        const val KEEPALIVE_INTERVAL_MS = 66L
+        const val DEFAULT_FRAME_CAP = 30
     }
 }

@@ -1,0 +1,13 @@
+{
+  "": {
+    "dependencies": "/Volumes/BACKUP/DATA/SMB-DOCUMENTS/NEXTCLOUD/Vincenzo/Claude/Projects/CFMOTO-HUB/MOTO-HUB/tools/tbox-simulator/macos-app/.build/arm64-apple-macosx/release/MotoHubTBoxSimulatorApp.build/MotoHubTBoxSimulatorApp.d",
+    "object": "/Volumes/BACKUP/DATA/SMB-DOCUMENTS/NEXTCLOUD/Vincenzo/Claude/Projects/CFMOTO-HUB/MOTO-HUB/tools/tbox-simulator/macos-app/.build/arm64-apple-macosx/release/MotoHubTBoxSimulatorApp.build/MotoHubTBoxSimulatorApp.o",
+    "swift-dependencies": "/Volumes/BACKUP/DATA/SMB-DOCUMENTS/NEXTCLOUD/Vincenzo/Claude/Projects/CFMOTO-HUB/MOTO-HUB/tools/tbox-simulator/macos-app/.build/arm64-apple-macosx/release/MotoHubTBoxSimulatorApp.build/primary.swiftdeps"
+  },
+  "/Volumes/BACKUP/DATA/SMB-DOCUMENTS/NEXTCLOUD/Vincenzo/Claude/Projects/CFMOTO-HUB/MOTO-HUB/tools/tbox-simulator/macos-app/Sources/MotoHubTBoxSimulatorApp/main.swift": {
+    "object": "/Volumes/BACKUP/DATA/SMB-DOCUMENTS/NEXTCLOUD/Vincenzo/Claude/Projects/CFMOTO-HUB/MOTO-HUB/tools/tbox-simulator/macos-app/.build/arm64-apple-macosx/release/MotoHubTBoxSimulatorApp.build/main.swift.o",
+    "swiftmodule": "/Volumes/BACKUP/DATA/SMB-DOCUMENTS/NEXTCLOUD/Vincenzo/Claude/Projects/CFMOTO-HUB/MOTO-HUB/tools/tbox-simulator/macos-app/.build/arm64-apple-macosx/release/MotoHubTBoxSimulatorApp.build/main~partial.swiftmodule",
+    "swift-dependencies": "/Volumes/BACKUP/DATA/SMB-DOCUMENTS/NEXTCLOUD/Vincenzo/Claude/Projects/CFMOTO-HUB/MOTO-HUB/tools/tbox-simulator/macos-app/.build/arm64-apple-macosx/release/MotoHubTBoxSimulatorApp.build/main.swiftdeps",
+    "diagnostics": "/Volumes/BACKUP/DATA/SMB-DOCUMENTS/NEXTCLOUD/Vincenzo/Claude/Projects/CFMOTO-HUB/MOTO-HUB/tools/tbox-simulator/macos-app/.build/arm64-apple-macosx/release/MotoHubTBoxSimulatorApp.build/main.dia"
+  }
+}

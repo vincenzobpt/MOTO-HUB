@@ -8,6 +8,7 @@ import android.view.Surface
 import io.motohub.android.session.ProjectionEventLog
 import java.nio.ByteBuffer
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicLong
 
 data class EncoderProfile(
     val width: Int,
@@ -29,14 +30,27 @@ internal fun alignTBoxEncoderDimension(value: Int): Int =
 /** Owns the AVC codec and emits complete AVCC access units from a surface input. */
 class AvcEncoder(
     private val profile: EncoderProfile,
-    private val onAccessUnit: (ByteArray) -> Unit,
+    private val onAccessUnit: (ByteArray) -> Boolean,
     private val onFailure: (Throwable) -> Unit
 ) {
     private val running = AtomicBoolean(false)
-    private var codec: MediaCodec? = null
+    @Volatile private var codec: MediaCodec? = null
     private var drainThread: Thread? = null
+    /** Set by [stop] when the drain thread didn't terminate within its join timeout, so
+     *  [drainLoop] releases the codec itself instead of racing a concurrent release. */
+    @Volatile private var selfReleaseOnExit = false
+    private val rejectedAccessUnits = AtomicLong(0L)
+    @Volatile private var frameCap = profile.frameRate
+    @Volatile private var frameCapListener: ((Int) -> Unit)? = null
+    private var nextFrameDeadlineNanos = 0L
     var inputSurface: Surface? = null
         private set
+
+    val baseFrameRate: Int get() = profile.frameRate
+
+    fun targetBitrate(): Int = profile.bitRate
+
+    fun rejectedAccessUnitsTotal(): Long = rejectedAccessUnits.get()
 
     fun start() {
         check(running.compareAndSet(false, true)) { "Encoder is already running" }
@@ -58,7 +72,9 @@ class AvcEncoder(
                 setInteger(MediaFormat.KEY_FRAME_RATE, profile.frameRate)
                 setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 0)
                 setInteger(MediaFormat.KEY_PREPEND_HEADER_TO_SYNC_FRAMES, 1)
-                setLong(MediaFormat.KEY_REPEAT_PREVIOUS_FRAME_AFTER, 100_000L)
+                // Keep the existing broadly-supported codec setting. Idle pacing is handled by
+                // the compositor; some phone encoders reject larger repeat-frame intervals here.
+                setLong(MediaFormat.KEY_REPEAT_PREVIOUS_FRAME_AFTER, 900_000L)
                 if (forceBaseline) {
                     setInteger(
                         MediaFormat.KEY_PROFILE,
@@ -105,10 +121,24 @@ class AvcEncoder(
         if (!running.compareAndSet(true, false)) return
         ProjectionEventLog.record("ENCODER", "Stopping AVC encoder.")
         val activeDrainThread = drainThread
+        drainThread = null
         if (activeDrainThread != null && activeDrainThread !== Thread.currentThread()) {
             activeDrainThread.join(1_500)
+            if (activeDrainThread.isAlive) {
+                // The drain thread is still inside a blocking call (most likely
+                // onAccessUnit()/offerAccessUnit() congested on the T-Box link) and may
+                // still be calling releaseOutputBuffer() on this codec. Do not race a
+                // concurrent MediaCodec.release() against it - let drainLoop()'s own
+                // finally block release the codec once it unblocks and observes
+                // running=false, instead of releasing it here.
+                selfReleaseOnExit = true
+                ProjectionEventLog.warning(
+                    "ENCODER",
+                    "AVC drain thread did not stop within 1500ms; deferring codec release to it."
+                )
+                return
+            }
         }
-        drainThread = null
         releaseCodec()
     }
 
@@ -122,6 +152,32 @@ class AvcEncoder(
         }.onFailure {
             ProjectionEventLog.warning("ENCODER", "AVC sync-frame request failed: $reason.", it)
         }
+    }
+
+    /** Adjust the running H.264 bitrate without recreating the codec. */
+    fun setEncoderBitrate(bitRate: Int) {
+        val activeCodec = codec ?: return
+        val clamped = bitRate.coerceIn(1, profile.bitRate)
+        runCatching {
+            activeCodec.setParameters(Bundle().apply {
+                putInt(MediaCodec.PARAMETER_KEY_VIDEO_BITRATE, clamped)
+            })
+            ProjectionEventLog.record("ENCODER", "AVC bitrate adjusted to ${clamped / 1000}kbps.")
+        }.onFailure {
+            ProjectionEventLog.warning("ENCODER", "AVC bitrate adjustment failed.", it)
+        }
+    }
+
+    /** Cap forwarded access units; the encoder remains surface-driven and the cap is live. */
+    fun setFrameCap(frameRate: Int) {
+        frameCap = frameRate.coerceIn(1, profile.frameRate)
+        nextFrameDeadlineNanos = 0L
+        frameCapListener?.invoke(frameCap)
+    }
+
+    fun setFrameCapListener(listener: (Int) -> Unit) {
+        frameCapListener = listener
+        listener(frameCap)
     }
 
     private fun drainLoop() {
@@ -160,14 +216,16 @@ class AvcEncoder(
                                             "Cached AVC codec configuration (${sample.size} bytes)."
                                         )
                                     }
-                                    if (accessUnit != null) {
+                                    if (accessUnit != null && shouldForwardFrame(isKeyFrame)) {
                                         if (accessUnitAssembler.prependedCodecConfig) {
                                             ProjectionEventLog.record(
                                                 "ENCODER",
                                                 "Prepended cached SPS/PPS to AVC keyframe."
                                             )
                                         }
-                                        onAccessUnit(accessUnit)
+                                        if (!onAccessUnit(accessUnit)) {
+                                            rejectedAccessUnits.incrementAndGet()
+                                        }
                                     }
                                 }
                             }
@@ -184,6 +242,10 @@ class AvcEncoder(
             }
         } finally {
             ProjectionEventLog.debug("ENCODER", "AVC drain loop ended.")
+            if (selfReleaseOnExit) {
+                selfReleaseOnExit = false
+                releaseCodec()
+            }
         }
     }
 
@@ -193,6 +255,22 @@ class AvcEncoder(
         codec?.runCatching { stop() }
         codec?.release()
         codec = null
+    }
+
+    private fun shouldForwardFrame(isKeyFrame: Boolean): Boolean {
+        // Never pace out a sync frame: after a reconnect the T-Box decoder needs the next keyframe
+        // immediately or the resumed stream can remain black until the next codec refresh.
+        if (isKeyFrame) {
+            nextFrameDeadlineNanos = System.nanoTime() +
+                1_000_000_000L / frameCap.coerceIn(1, profile.frameRate)
+            return true
+        }
+        val cap = frameCap.coerceIn(1, profile.frameRate)
+        if (cap >= profile.frameRate) return true
+        val now = System.nanoTime()
+        if (now < nextFrameDeadlineNanos) return false
+        nextFrameDeadlineNanos = now + 1_000_000_000L / cap
+        return true
     }
 
     private fun ByteBuffer.copyRange(offset: Int, size: Int): ByteArray {

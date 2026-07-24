@@ -5,6 +5,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
 import io.motohub.android.session.MotorcycleProfile
+import io.motohub.android.session.TBoxConnectionMode
 import java.security.KeyStore
 import java.util.UUID
 import javax.crypto.Cipher
@@ -89,6 +90,9 @@ class MotorcycleProfileStore(context: Context) {
                     putNullable(KEY_MODEL_ID, profile.modelId)
                     putNullable(KEY_DISPLAY_NAME, profile.displayName)
                     putNullable(KEY_PHOTO_PATH, profile.photoPath)
+                    putNullable(KEY_PROFILE_OVERRIDE_KEY, profile.profileOverrideKey)
+                    put(KEY_CONNECTION_MODE, profile.connectionMode.name)
+                    if (profile.fuelTankRangeKm != null) put(KEY_FUEL_TANK_RANGE_KM, profile.fuelTankRangeKm)
                 }
             )
         }
@@ -117,7 +121,12 @@ class MotorcycleProfileStore(context: Context) {
                     ),
                     modelId = item.optNullableString(KEY_MODEL_ID),
                     displayName = item.optNullableString(KEY_DISPLAY_NAME),
-                    photoPath = item.optNullableString(KEY_PHOTO_PATH)
+                    photoPath = item.optNullableString(KEY_PHOTO_PATH),
+                    fuelTankRangeKm = item.optDouble(KEY_FUEL_TANK_RANGE_KM, 0.0).takeIf { it > 0 },
+                    profileOverrideKey = item.optNullableString(KEY_PROFILE_OVERRIDE_KEY),
+                    connectionMode = item.optString(KEY_CONNECTION_MODE)
+                        .let { raw -> TBoxConnectionMode.entries.firstOrNull { it.name == raw } }
+                        ?: TBoxConnectionMode.AUTO
                 )
             )
         }
@@ -204,6 +213,9 @@ class MotorcycleProfileStore(context: Context) {
         const val KEY_MODEL_ID = "model_id"
         const val KEY_DISPLAY_NAME = "display_name"
         const val KEY_PHOTO_PATH = "photo_path"
+        const val KEY_FUEL_TANK_RANGE_KM = "fuel_tank_range_km"
+        const val KEY_PROFILE_OVERRIDE_KEY = "profile_override_key"
+        const val KEY_CONNECTION_MODE = "connection_mode"
         const val LEGACY_KEY_SSID = "ssid"
         const val LEGACY_KEY_PASSWORD_IV = "password_iv"
         const val LEGACY_KEY_PASSWORD_CIPHERTEXT = "password_ciphertext"

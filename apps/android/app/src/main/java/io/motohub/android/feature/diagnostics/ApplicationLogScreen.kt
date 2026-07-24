@@ -1,5 +1,8 @@
 package io.motohub.android.feature.diagnostics
 
+import io.motohub.android.i18n.motoHubText
+
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.motohub.android.session.LogLevel
 import io.motohub.android.session.ProjectionEvent
@@ -42,6 +46,8 @@ fun ApplicationLogScreen(
     onClear: () -> Unit,
     onBack: () -> Unit
 ) {
+    BackHandler(onBack = onBack)
+
     MotoHubBackground(Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -53,13 +59,13 @@ fun ApplicationLogScreen(
         ) {
             MotoHubHeader(
                 modifier = Modifier.fillMaxWidth(),
-                trailing = { TextButton(onClick = onBack) { Text("Close") } }
+                trailing = { TextButton(onClick = onBack) { Text(motoHubText("Close")) } }
             )
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                MonoLabel("TROUBLESHOOTING")
-                Text("Application logs", style = MaterialTheme.typography.headlineMedium)
+                MonoLabel(motoHubText("TROUBLESHOOTING"))
+                Text(motoHubText("Application logs"), style = MaterialTheme.typography.headlineMedium)
                 Text(
-                    "Persistent events from Wi-Fi, T-Box, mirroring, encoder, and Android Auto.",
+                    motoHubText("Persistent events from Wi-Fi, T-Box, mirroring, encoder, and Android Auto."),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -69,17 +75,17 @@ fun ApplicationLogScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Button(onClick = onCopy, modifier = Modifier.weight(1f)) {
-                    Text("Copy log", fontWeight = FontWeight.Bold)
+                    Text(motoHubText("Copy log"), fontWeight = FontWeight.Bold)
                 }
                 OutlinedButton(onClick = onShare, modifier = Modifier.weight(1f)) {
-                    Text("Share")
+                    Text(motoHubText("Share"))
                 }
                 OutlinedButton(onClick = onClear) {
-                    Text("Clear")
+                    Text(motoHubText("Clear"))
                 }
             }
             Text(
-                "${events.size} entries  /  newest first",
+                motoHubText("%1\$d entries  /  newest first", events.size),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontFamily = FontFamily.Monospace
@@ -91,12 +97,12 @@ fun ApplicationLogScreen(
                 if (events.isEmpty()) {
                     item {
                         Text(
-                            "No diagnostic events have been recorded.",
+                            motoHubText("No diagnostic events have been recorded."),
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
-                items(events.asReversed(), key = { "${it.timestampMillis}-${it.source}-${it.message.hashCode()}" }) {
+                items(events.asReversed(), key = { it.sequence }) {
                     LogEntryCard(it)
                 }
             }
@@ -154,7 +160,13 @@ private fun LogEntryCard(event: ProjectionEvent) {
             Text(
                 event.message,
                 style = MaterialTheme.typography.bodySmall,
-                fontFamily = FontFamily.Monospace
+                fontFamily = FontFamily.Monospace,
+                // A handful of very long entries (raw CLIENT_INFO JSON, hex dumps under
+                // verbose T-Box logging) laying out in full every time they scroll into view
+                // was heavy enough to hang the screen - this list is for scanning, not
+                // reading a full JSON blob; Copy/Share still export the untruncated text.
+                maxLines = 20,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

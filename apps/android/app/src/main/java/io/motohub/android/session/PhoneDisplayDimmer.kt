@@ -1,5 +1,7 @@
 package io.motohub.android.session
 
+import io.motohub.android.i18n.motoHubText
+
 import android.content.Context
 import android.graphics.Color
 import android.graphics.PixelFormat
@@ -43,7 +45,7 @@ class PhoneDisplayDimmer(context: Context) {
             alpha = OVERLAY_ALPHA
             screenBrightness = MIN_DIM_BRIGHTNESS
             buttonBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
-            title = "MOTO-HUB display dimmer"
+            title = motoHubText("MOTO-HUB display dimmer")
         }
 
         return runCatching {

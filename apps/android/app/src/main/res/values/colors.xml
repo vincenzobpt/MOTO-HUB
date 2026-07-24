@@ -1,5 +1,6 @@
 <resources>
     <color name="moto_hub_lime">#C9F53A</color>
     <color name="moto_hub_night">#10130D</color>
+    <color name="ic_launcher_background">#090B0F</color>
 </resources>
 

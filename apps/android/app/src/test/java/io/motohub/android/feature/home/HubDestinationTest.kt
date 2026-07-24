@@ -37,7 +37,7 @@ class HubDestinationTest {
     }
 
     @Test
-    fun `projection and android auto open active session`() {
+    fun `projection android auto and ride dashboard open active session`() {
         assertEquals(
             HubDestination.ACTIVE_SESSION,
             resolveHubDestination(session(SessionPhase.REQUESTING_PROJECTION), false)
@@ -49,6 +49,10 @@ class HubDestinationTest {
         assertEquals(
             HubDestination.ACTIVE_SESSION,
             resolveHubDestination(session(SessionPhase.READY), true)
+        )
+        assertEquals(
+            HubDestination.ACTIVE_SESSION,
+            resolveHubDestination(session(SessionPhase.READY), false, true)
         )
     }
 

@@ -1,7 +1,7 @@
 # MOTO-HUB vs OpenCfMoto Comparative Audit
 
-Date: 2026-07-16  
-Status: evidence-based engineering audit  
+Date: 2026-07-16
+Status: evidence-based engineering audit
 Scope: Android application, Android Auto receiver, EasyConn/T-Box transport,
 video pipeline, lifecycle, diagnostics, build and release engineering
 

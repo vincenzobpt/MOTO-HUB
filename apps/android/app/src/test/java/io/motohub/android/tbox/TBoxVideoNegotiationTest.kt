@@ -1,6 +1,5 @@
 package io.motohub.android.tbox
 
-import android.net.Network
 import io.motohub.android.encoding.EncoderProfile
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -57,7 +56,8 @@ class TBoxVideoNegotiationTest {
         private val mutableEvents = MutableSharedFlow<TBoxEvent>()
         override val events: Flow<TBoxEvent> = mutableEvents.asSharedFlow()
 
-        override suspend fun discover(network: Network): Result<TBoxHost> = Result.success(HOST)
+        override suspend fun discover(link: TBoxLink, expectedModelId: String?): Result<TBoxHost> =
+            Result.success(HOST)
 
         override suspend fun start(host: TBoxHost): Result<Unit> {
             areaOnStart?.let { mutableEvents.emit(it) }

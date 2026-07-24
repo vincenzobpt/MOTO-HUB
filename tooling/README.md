@@ -10,13 +10,13 @@ The artifact is stored at:
 apps/android/app/libs/hudlib.aar
 ```
 
-After installing Go and `gomobile`, clone the fork beside the MOTO-HUB
-repository and rebuild the artifact with:
+After installing Go and `gomobile`, use the MOTO-HUB-specific checkout at
+`refs/ridedaemon-lib-motohub` and rebuild the artifact with:
 
 ```bash
-git clone https://github.com/vincenzobpt/ridedaemon-lib ../ridedaemon-lib
-cd ../ridedaemon-lib
-gomobile bind -target=android -androidapi 34 -o ../MOTO-HUB/apps/android/app/libs/hudlib.aar ./hud/api
+git clone https://github.com/vincenzobpt/ridedaemon-lib refs/ridedaemon-lib-motohub
+cd refs/ridedaemon-lib-motohub
+gomobile bind -target=android -androidapi 34 -o ../../MOTO-HUB/apps/android/app/libs/hudlib.aar ./hud/api
 ```
 
 The source commit, gomobile API level, checksum, and license are recorded in

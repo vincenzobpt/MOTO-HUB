@@ -1,14 +1,17 @@
 # Test Strategy
 
-Status: initial plan
+Status: active strategy
 
 ## Goals
 
-Tests must demonstrate three independent properties:
+Tests must demonstrate five independent properties:
 
 1. Android lifecycle correctness;
 2. bitstream/transport correctness;
 3. real compatibility across phone + Android + T-Box + firmware.
+4. Android Auto compositor correctness across `FIT`, `STRETCH`, and `CROP`;
+5. touch-coordinate correctness across safe areas, safe margins, and motorcycle
+   model profiles.
 
 Emulators and unit tests do not replace testing on the motorcycle.
 
@@ -23,6 +26,10 @@ Emulators and unit tests do not replace testing on the motorcycle.
 - Go callback to typed-event mapping;
 - log redaction;
 - encoder profile selection;
+- Android Auto profile selection, display placement, safe margins and touch
+  viewport mapping;
+- adaptive power-mode controller behavior;
+- GitHub update version selection, including pre-release handling;
 - idempotent cleanup with fake dependencies.
 
 ### Go Tests
@@ -96,6 +103,13 @@ Video dumps must be excluded from user logs and deleted after testing.
 
 - landscape, portrait and near-square runtime areas, including dimensions that
   require 16-pixel macroblock alignment;
+- touch at the four projection corners and centre using Auto and manual AA
+  source presets; raw T-Box coordinates must map through the aligned AVC canvas
+  before the visible AA viewport;
+- `FIT`, `STRETCH`, and `CROP` in full Android Auto, including `AUTO 800x480`
+  where the usable projection area is `800x384`;
+- motorcycles that report touch accurately, motorcycles that report touch but
+  require focus/handlebar control, and `Disable touchscreen` enabled;
 - immediate `VideoArea` delivery during handshake and delayed delivery;
 - missing live area with and without a geometry saved for the same SSID;
 - 2, 2.5, 3 and 5 Mbps bitrates;
@@ -105,6 +119,18 @@ Video dumps must be excluded from user logs and deleted after testing.
 - packet loss or weak Wi-Fi signal in a controlled environment;
 - T-Box restart during a session.
 
+### Settings And Updates
+
+- save a Garage profile and confirm visible success/failure feedback;
+- change Android Auto display mode and confirm it applies after restarting the
+  affected projection mode;
+- enable and disable seamless resume after overlay permission has been granted;
+- stop mirroring and full Android Auto with auto-connect enabled
+  and confirm MOTO-HUB reconnects to the saved motorcycle;
+- share application logs and confirm Android receives a diagnostic text file;
+- check GitHub update flow with no newer release, newer pre-release, newer
+  release and invalid/no-APK release fixtures.
+
 ## Device Matrix
 
 Table to be filled with real data:
@@ -112,6 +138,11 @@ Table to be filled with real data:
 | Phone | SoC/codec | Android | Concurrent STA | Motorcycle/T-Box | Full screen | Single app | 60 min | Notes |
 |---|---|---:|---|---|---|---|---|---|
 | To define | | | | | | | | |
+
+Known physical entries should include:
+
+- CFMOTO 700MT-ADV with physical `800x480` and measured projection `800x384`;
+- CFMOTO 800NK/CRCP variants, including portrait touch displays when available.
 
 Minimum before beta:
 

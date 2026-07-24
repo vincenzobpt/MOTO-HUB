@@ -1,6 +1,6 @@
 # Android Implementation
 
-Status: proposed technical guide
+Status: active technical guide
 
 ## Baseline
 
@@ -9,7 +9,8 @@ Status: proposed technical guide
 - `compileSdk 36` and initial `targetSdk 36`; reassess at every release.
 - Java/Kotlin target at least 11, preferably 17 if the toolchain and AAR allow
   it.
-- One Activity; the session is owned by a non-exported foreground service.
+- One Activity; projection and recording sessions are owned by non-exported
+  foreground services.
 - Coroutines/Flow for application state; callbacks adapted at the boundary.
 
 Single-app sharing is available through the system picker from Android 14 QPR2.
@@ -23,7 +24,8 @@ and [App screen sharing](https://developer.android.com/about/versions/14/feature
 - Material 3.
 - CameraX and ML Kit barcode scanning for QR onboarding.
 - `hudlib.aar` generated from `ridedaemon-lib/hud/api` with `gomobile bind`.
-- No additional video library in the MVP: use `MediaCodec`.
+- `MediaCodec` for H.264 encoding and decoding boundaries; Android Auto uses a
+  GPU compositor before the final encoder.
 - No analytics or crash-reporting SDK until the privacy model is decided.
 
 ## Manifest
@@ -53,6 +55,9 @@ Service:
     android:exported="false"
     android:foregroundServiceType="mediaProjection" />
 ```
+
+An additional foreground service owns full Android Auto, using
+connected-device/location style service behavior rather than `MediaProjection`.
 
 Android 16/API 36 introduces opt-in testing of LAN protections; Android
 17/API 37 plans enforcement with `ACCESS_LOCAL_NETWORK`. Reassess the
@@ -107,8 +112,8 @@ Required behavior:
 ### Darkened Phone Display
 
 Android terminates a `MediaProjection` session when the device is locked, so the
-Power button cannot be used to continue streaming with the display off. The MVP
-instead offers an optional mode that keeps the display on and unlocked and sets
+Power button cannot be used to continue mirroring with the display off. MOTO-HUB
+offers an optional mode that keeps the display on and unlocked and sets
 its physical brightness to minimum through a transparent
 `TYPE_APPLICATION_OVERLAY` window.
 
@@ -129,6 +134,10 @@ motorcycle model or fixed TFT resolution is assumed. A geometry saved for the
 same SSID may recover a missing live event, but an unknown display without a
 valid area fails explicitly instead of receiving a wrongly sized stream.
 
+Full Android Auto does not depend on `MediaProjection`, so it
+can continue while the phone display is locked. It is started through
+the local AAP receiver and self-mode launcher.
+
 ## H.264 Encoder
 
 Starting configuration:
@@ -138,13 +147,17 @@ MIME:                  video/avc
 Resolution:            runtime T-Box area, aligned to 16-pixel macroblocks
 Color format:          COLOR_FormatSurface
 Frame rate:            30 fps, fallback 20/15
-Bitrate:               2.5 Mbps, test range 2-5 Mbps
+Bitrate:               negotiated base, adjusted by quality/adaptive settings
 I-frame interval:      0 where it produces compatible frequent IDRs
 Prepend SPS/PPS:       KEY_PREPEND_HEADER_TO_SYNC_FRAMES = 1
 Static-frame repeat:   KEY_REPEAT_PREVIOUS_FRAME_AFTER = 100000 us
 B-frame:               disabled through a compatible profile/configuration
 Rate control:          CBR if supported and stable
 ```
+
+Quality settings apply a multiplier to the negotiated base bitrate. Adaptive
+power mode may lower frame pressure/bitrate during heat or weak-link conditions
+and recover upward when the stream stabilizes.
 
 Do not assume that every codec interprets `KEY_I_FRAME_INTERVAL = 0` the same
 way. During the spike, inspect the bitstream and verify IDR, SPS, PPS, library-
@@ -231,6 +244,50 @@ The operational fallback is the T-Box AP as primary Wi-Fi and source-app
 Internet through the mobile network. Reference:
 [WifiNetworkSuggestion](https://developer.android.com/reference/android/net/wifi/WifiNetworkSuggestion).
 
+## Android Auto Self-Mode (AAP Loopback)
+
+MOTO-HUB starts Android Auto without a VPN and without system Wi-Fi Direct
+pairing, by triggering Google's own `WirelessStartupActivity` (package
+`com.google.android.projection.gearhead`, falling back to its
+`WirelessStartupReceiver` broadcast) with a `PARAM_HOST_ADDRESS=127.0.0.1`
+extra. Google's Android Auto app then opens its AAP session directly against
+`AaReceiver`'s local loopback listener (`AaReceiver.PORT`) - no VPN
+interface, no change to the phone's real network routing. Technique ported
+from headunit-revived (`AaSelfMode.kt`).
+
+Two extras Android Auto's wireless setup expects are not constructible from
+application code through public API, so they are built via reflection:
+
+- an `android.net.Network` wrapping a raw netId (`Parcel` + the class's own
+  `CREATOR`), used when no real active network is available to reuse;
+- an `android.net.wifi.WifiInfo` with a fake SSID (`Headunit-Fake-Wifi`), set
+  via the private `mSSID` field with `isAccessible = true`.
+
+Both are best-effort: `AaSelfMode.trigger()` falls back from the Activity
+intent to the broadcast receiver, then gives up with a log line if neither
+works. This is fragile by construction - it depends on internal Android
+Auto/Android framework field and class shapes that a Google Play Services or
+OS update could change without notice - so a self-mode failure after either
+updates first.
+
+### AU2 audio sink: advertised, PCM discarded
+
+Google's Android Auto client drops the AAP connection right after service
+discovery if the head unit advertises no audio sink at all. MOTO-HUB always
+advertises `Channel.ID_AU2` (system sounds, see `ServiceDiscoveryResponse.kt`)
+purely to satisfy that requirement - the PCM Android Auto sends on that
+channel is received and discarded, never played or routed anywhere.
+Navigation and system audio reach the rider through the phone's own output
+(Bluetooth helmet/headset), not through this channel. OpenCfMoto does the
+same, for the same reason.
+
+### AAP TLS: loopback only, peer certificate not validated
+
+`AapSslContext` initializes its `SSLContext` with `NoCheckTrustManager`
+(`checkClientTrusted`/`checkServerTrusted` are no-ops - any certificate is
+accepted). See `SECURITY_AND_PRIVACY.md` Trust Boundaries for why this is
+safe specifically because this session never leaves loopback.
+
 ## Storage
 
 Prefer Proto DataStore for non-sensitive settings:
@@ -244,24 +301,27 @@ If the Wi-Fi password is stored, encrypt it with a non-exportable Android
 Keystore key. Do not store projection tokens, frames, raw QR, HUID, MAC or
 serial values in logs.
 
-The MVP persists the T-Box profile in private `SharedPreferences`: cleartext
+MOTO-HUB persists the T-Box profile in private `SharedPreferences`: cleartext
 SSID and AES-GCM encrypted password. IV and ciphertext are stored separately;
 the AES key is generated and held by `AndroidKeyStore` and needs no additional
 interaction. The profile is updated by both QR scanning and manual fallback and
 loaded while creating the `HubViewModel`.
 
-## Minimal UI
+## Implemented UI Surfaces
 
 Screens:
 
-- `Welcome/Setup`: explain the local network and capture consent.
-- `Pairing`: QR scanner, manual entry, connection state and T-Box test.
-- `Home`: paired motorcycle, `Share app or screen` button, last error.
-- `Streaming`: state, source when available, duration, quality and `Stop`.
+- `Home`: active motorcycle, connection and mirroring/Android Auto actions.
+- `Garage`: multiple motorcycles, photos, display mode, safe margins and
+  capability inspector.
+- `Settings`: General, Video quality, Android Auto, automation and
+  diagnostics.
+- `Diagnostics`: application logs, network routing tests, T-Box capability
+  data, VPN/conflict hints and share-as-file export.
 - `Diagnostics`: session parameters, redacted log and manual export.
 - `Settings`: automatic/manual quality, credentials and open-source licenses.
 
-Do not build an app launcher for the MVP. The system picker is authoritative
+Do not build a proprietary captured-app launcher for mirroring. The system picker is authoritative
 for which content is shared.
 
 ## Idempotent Cleanup

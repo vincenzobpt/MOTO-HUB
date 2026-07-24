@@ -6,48 +6,14 @@
 > [!WARNING]
 > **MOTO-HUB is an experimental proof-of-concept, not a production-grade product.** It has been built and tested with a CFMOTO **700MT-ADV** dashboard and **OnePlus 13 / Galaxy Z Fold4** phones. Behavior may be unstable, require a retry, or differ on other motorcycles, T-Box firmware versions, or phones. Do not depend on it as your only source of critical navigation information. Plan your route before riding, and use the software at your own risk.
 
-<table cellpadding="0" cellspacing="0" border="0">
-  <tr>
-    <td align="center" width="25%">
-      <img src="4.png" alt="Home screen: choose Mirror, Ride Dashboard, or Android Auto" width="190"><br>
-      <sub>Home &mdash; choose what to project</sub>
-    </td>
-    <td align="center" width="25%">
-      <img src="1.png" alt="Ride Dashboard with GPS speed, live map, and trip stats" width="190"><br>
-      <sub>Ride Dashboard &mdash; speed, map, trip</sub>
-    </td>
-    <td align="center" width="25%">
-      <img src="2.png" alt="Ride Dashboard with weather and phone status widgets" width="190"><br>
-      <sub>Ride Dashboard &mdash; weather &amp; phone status</sub>
-    </td>
-    <td align="center" width="25%">
-      <img src="6.png" alt="Android Auto embedded in the Ride Dashboard map panel" width="190"><br>
-      <sub>Ride Dashboard &mdash; embedded Android Auto</sub>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="25%">
-      <img src="5.png" alt="Navigation route preview with weather, curvy roads, and route type" width="190"><br>
-      <sub>Navigation &mdash; route preview</sub>
-    </td>
-    <td align="center" width="25%">
-      <img src="7.png" alt="Customize Dashboard screen assigning widgets to each panel" width="190"><br>
-      <sub>Customize Dashboard &mdash; per-panel widgets</sub>
-    </td>
-    <td align="center" width="25%">
-      <img src="8.png" alt="Full Android Auto (Waze) projected to the motorcycle TFT" width="190"><br>
-      <sub>Full Android Auto on the TFT</sub>
-    </td>
-    <td align="center" width="25%">
-      <img src="3.png" alt="Phone-side Ride Dashboard preview using the phone's own GPS" width="190"><br>
-      <sub>Phone-side preview &mdash; no T-Box needed</sub>
-    </td>
-  </tr>
-</table>
+<p align="center">
+  <img src="8.png" alt="Full Android Auto (Waze) projected to the motorcycle TFT" width="220"><br>
+  <sub>Full Android Auto on the TFT</sub>
+</p>
 
 MOTO-HUB is an Android 14+ application for connecting a phone to a compatible motorcycle T-Box and projecting content to the motorcycle TFT display.
 
-The app supports Android Auto, whole-screen mirroring, Android's app-specific screen sharing flow, a native Ride Dashboard, turn-by-turn Navigation, trip recording, and local diagnostics. It is designed as a personal, local-first project and is not affiliated with or endorsed by CFMOTO, EasyConn, MotoPlay, Google, or any other vehicle or software vendor.
+The app supports Android Auto, whole-screen mirroring, Android's app-specific screen sharing flow, and local diagnostics. It is designed as a personal, local-first project and is not affiliated with or endorsed by CFMOTO, EasyConn, MotoPlay, Google, or any other vehicle or software vendor.
 
 ## Download The Latest APK
 
@@ -57,7 +23,7 @@ On the release page, expand **Assets** and download the file ending in `.apk`. D
 
 ## Permissions And Privacy
 
-MOTO-HUB is a local-first app. The permissions below are used to connect to the motorcycle, scan its pairing QR code, keep an active projection running, provide user controls, and record GPS tracks only when trip recording is active. The app does not require an account and does not upload screen content or recorded trips.
+MOTO-HUB is a local-first app. The permissions below are used to connect to the motorcycle, scan its pairing QR code, keep an active projection running, and provide user controls. The app does not require an account and does not upload screen content.
 
 ### Permissions requested while using the app
 
@@ -65,8 +31,8 @@ MOTO-HUB is a local-first app. The permissions below are used to connect to the 
 | --- | --- | --- | --- |
 | **Camera** | When you choose live QR scanning | Reads the T-Box QR code shown on the motorcycle TFT | The camera is not needed for normal streaming, and camera frames are not intentionally recorded or uploaded |
 | **Nearby devices / Wi-Fi** | When you connect to a saved or newly paired motorcycle | Finds and requests the motorcycle's Wi-Fi access point, then communicates with the local T-Box | It is not Bluetooth tracking and does not grant access to unrelated nearby devices |
-| **Location** | Requested while connecting to the T-Box or starting a manual trip | Supports Android Wi-Fi discovery, Ride Dashboard GNSS data, Navigation, and local trip recording | MOTO-HUB does not upload ride history; when a map is visible or a route is being searched/calculated, its approximate area is necessarily disclosed to the relevant mapping, geocoding, or routing service (see [Privacy Notes](#privacy-notes)) |
-| **Notifications** | When starting projection or trip recording on Android 13 and newer | Shows the required foreground-service status and gives you visible controls to stop or manage an active session | It is not remote telemetry; notifications stay on the phone |
+| **Location** | Requested while connecting to the T-Box | Supports Android Wi-Fi discovery | MOTO-HUB does not upload location data |
+| **Notifications** | When starting projection on Android 13 and newer | Shows the required foreground-service status and gives you visible controls to stop or manage an active session | It is not remote telemetry; notifications stay on the phone |
 
 ### System confirmations and optional access
 
@@ -77,13 +43,13 @@ MOTO-HUB is a local-first app. The permissions below are used to connect to the 
 
 ### Technical permissions granted by Android
 
-The app also declares network and foreground-service permissions required by Android for this workflow: Internet and network-state access, Wi-Fi state/change access, Wi-Fi multicast discovery, foreground services for media projection, connected devices and location, and a wake lock. These maintain the local T-Box connection, projection, and an explicitly active trip recording; they are not separate user accounts or remote services.
+The app also declares network and foreground-service permissions required by Android for this workflow: Internet and network-state access, Wi-Fi state/change access, Wi-Fi multicast discovery, foreground services for media projection, connected devices and location, and a wake lock. These maintain the local T-Box connection and projection; they are not separate user accounts or remote services.
 
 The Android Auto receiver also declares package visibility for Android Auto and Google Play services so MOTO-HUB can detect and launch the installed Android Auto component. This does not give MOTO-HUB access to Google account data.
 
 ### If a permission is denied
 
-The app should continue to open normally. Only the related feature is unavailable: without Camera, use QR import from a photo or an already saved motorcycle; without Nearby Wi-Fi or Location, the T-Box connection cannot be discovered and GPS rides cannot be recorded; without Notifications, projection and trip recording cannot be kept as managed foreground sessions; without screen-capture approval, mirroring cannot start. Optional display dimming simply remains disabled unless overlay access is granted.
+The app should continue to open normally. Only the related feature is unavailable: without Camera, use QR import from a photo or an already saved motorcycle; without Nearby Wi-Fi or Location, the T-Box connection cannot be discovered; without Notifications, projection cannot be kept as a managed foreground session; without screen-capture approval, mirroring cannot start. Optional display dimming simply remains disabled unless overlay access is granted.
 
 ## What It Does
 
@@ -94,32 +60,26 @@ The app should continue to open normally. Only the related feature is unavailabl
 - Discover the EasyConn service and establish the T-Box session.
 - Mirror the entire phone screen or a single Android app.
 - Start Android Auto through an embedded local head-unit receiver.
-- Start a native Ride Dashboard with GPS speed, live track, trip statistics, technical telemetry, and a selectable OpenStreetMap or embedded Android Auto map region.
-- Search a destination by address or coordinates, preview a calculated motorcycle route (fastest or scenic), and tap the map to fine-tune the destination when OpenStreetMap has the street but not the exact house number.
-- Save favorite places, a home destination, and full route "rides" for later reuse.
-- Enrich a route preview with weather at arrival, an estimated remaining-fuel warning, golden-hour timing, and detected curvy segments.
-- Record rides manually or automatically, inspect saved GPS tracks on an interactive map, and export GPX files.
 - Choose the Android Auto TFT layout per motorcycle:
   - `FIT`: preserve the complete image and use black bars when necessary.
   - `STRETCH`: use the complete available TFT area with geometric stretching.
   - `CROP`: use the complete available TFT area without stretching and crop edges when necessary.
 - Calibrate per-motorcycle TFT safe margins so Android Auto video and touch stay inside the projection area not occupied by native motorcycle UI.
-- Keep the phone preview available for Android Auto touch control in both full Android Auto and Ride Dashboard embedded mode.
+- Keep the phone preview available for Android Auto touch control.
 - Select Smoother, Balanced, Sharper, or adaptive power behavior for the next stream.
 - Override Android Auto with landscape or portrait SD/HD source resolutions, or keep automatic selection.
 - Optionally connect to the saved motorcycle when MOTO-HUB opens.
-- Optionally recover or seamlessly resume a stalled or dropped Android Auto/Ride Dashboard TFT stream when the T-Box returns.
+- Optionally recover or seamlessly resume a stalled or dropped Android Auto TFT stream when the T-Box returns.
 - Show persistent diagnostics and share application logs as an exported file for troubleshooting.
 - Check GitHub releases and pre-releases from inside the app, showing release notes before installing a newer APK.
-- Display the recorded GPS route live on the Ride Dashboard with an in-session visibility toggle.
 
 ## Current Status
 
-The current Android client is version `0.9.0-beta.10-build.63-r1` (`63`) and targets Android 14/API 34 and newer.
+The current Android client is version `0.9.0-beta.10-build.82-r1` (`82`) and targets Android 14/API 34 and newer.
 
 This build has been tested end-to-end for mirroring and Android Auto on a OnePlus 13 and a CFMOTO 700MT-ADV T-Box. Compatibility with other phones, motorcycle models, T-Box firmware versions, and Android Auto versions is not guaranteed and must be validated separately.
 
-Ride Dashboard, full Android Auto, embedded Android Auto, trip recording, and diagnostics are implemented, but every motorcycle model and T-Box firmware still requires explicit validation before it can be considered supported.
+Full Android Auto and diagnostics are implemented, but every motorcycle model and T-Box firmware still requires explicit validation before it can be considered supported.
 
 This is still an experimental project. Do not rely on it as the only navigation or safety system, and configure navigation while stationary.
 
@@ -210,16 +170,6 @@ Existing single-profile data is migrated automatically when the app is upgraded.
 
 `Android Auto` runs through a local Android Auto Projection receiver. The decoded Android Auto video is composited, encoded as H.264, and sent to the T-Box through the ridedaemon transport. The compositor supports `FIT`, `STRETCH`, and `CROP` against the usable TFT projection area. When Android Auto declares internal letterbox margins, `STRETCH` uses the active Android Auto content rather than stretching black bars.
 
-`Ride Dashboard` draws a native scene at the negotiated TFT geometry directly into the H.264 encoder surface. Speed, course, altitude, accuracy, satellites and the live track come from the phone GNSS receiver. The map region can use cached CartoDB Voyager OpenStreetMap tiles over the cellular network or an Android Auto source decoded in memory and composited into the dashboard. Each side panel shows one of several selectable widgets (speed gauge, trip metrics, compass, altitude, satellites, battery, weather), independently configurable per motorcycle. Mirroring, full Android Auto, and Ride Dashboard remain three separate modes; embedded Android Auto replaces only the dashboard map region. A phone-side preview (with its own fullscreen mode) can render the same dashboard using the phone's own GPS, without a T-Box connection. The T-Box does not currently provide verified RPM, gear, fuel or engine-temperature telemetry.
-
-### Navigation
-
-`Navigation` geocodes free-text or coordinate destinations with Photon (OpenStreetMap data), calculates a motorcycle route with the Valhalla routing engine, and previews it on an OpenStreetMap route map before starting turn-by-turn guidance on the Ride Dashboard. Routing uses either the rider's own free Stadia Maps API key or, for a quick try without one, FOSSGIS's rate-limited public Valhalla demo server. If OpenStreetMap has a street but not the exact house number searched, the route preview map lets the rider zoom in and tap the correct spot to recalculate the route there instead. Saved places, a home destination, recent searches, and full saved "rides" (route plus its weather/fuel/golden-hour enrichment) persist locally. All OpenStreetMap-based maps in the app (Ride Dashboard, Trip history, Navigation preview) use CartoDB's Voyager basemap style for consistent, light, road-legible tiles.
-
-### Trip Recording
-
-`Trips` records GPS rides in a location foreground service, either manually or automatically with a projection session. Summary rows and optimized track points are stored transactionally in a local SQLite database. The history screen loads summaries without loading every coordinate, and the detail screen provides an interactive OpenStreetMap route, statistics, naming, deletion, and GPX 1.1 export. Active recordings can resume from their last committed batch after Android recreates the service.
-
 ### Projection Settings
 
 The global Settings page controls the next stream. `Balanced` preserves the existing 2.5 Mbps base bitrate; `Smoother` uses 70% and `Sharper` uses 160% of the negotiated base. Adaptive power mode can lower output pressure when thermal or link conditions degrade. Android Auto `Auto` preserves dynamic orientation selection from learned T-Box geometry. Manual source overrides are 800 x 480, 1280 x 720, 720 x 1280, and 1080 x 1920. The T-Box output canvas is still negotiated at runtime and is not replaced by the Android Auto source resolution.
@@ -241,10 +191,6 @@ The T-Box Wi-Fi network is a local display transport and may not provide Interne
 - [Roadmap](documentation/ROADMAP.md)
 - [Risk register](documentation/RISK_REGISTER.md)
 - [OpenCfMoto comparative audit](documentation/OPEN_CFMOTO_COMPARATIVE_AUDIT.md)
-- [Ride Dashboard](documentation/RIDE_DASHBOARD.md)
-- [Navigation](documentation/NAVIGATION.md)
-- [Projection settings](documentation/PROJECTION_SETTINGS.md)
-- [Trip recording](documentation/TRIP_RECORDING.md)
 - [Public release process](documentation/PUBLIC_RELEASE.md)
 - [Architecture decisions](documentation/decisions/README.md)
 
@@ -268,16 +214,6 @@ The library implements EasyConn discovery, the T-Box handshake, control channels
 - [BojanJ/open-cfmoto](https://github.com/BojanJ/open-cfmoto) - independent Android Auto and CFMOTO T-Box research used to understand the local Android Auto receiver flow, self-mode startup, touch input, and video pipeline behavior.
 - [zanderp/open-cfmoto](https://github.com/zanderp/open-cfmoto) - AGPL-licensed implementation studied for user-selectable bitrate, Android Auto source profiles, startup automation, and stream recovery behavior.
 
-### Navigation and mapping services
-
-- [OpenStreetMap](https://www.openstreetmap.org/copyright) - underlying map, address, and routing data, credited to OpenStreetMap contributors, for every map and navigation feature below.
-- [CARTO basemaps](https://carto.com/basemaps) - the Voyager raster tile style rendered by Ride Dashboard, Trip history, and the Navigation route preview.
-- [Photon](https://photon.komoot.io/) (Komoot) - the free geocoding API used to turn a searched address or place name into coordinates.
-- [Valhalla](https://github.com/valhalla/valhalla) - the open-source routing engine used for turn-by-turn motorcycle routing.
-- [Stadia Maps](https://stadiamaps.com/) - hosts the Valhalla routing API MOTO-HUB uses by default, with the rider's own free API key.
-- [FOSSGIS public Valhalla demo server](https://github.com/valhalla/valhalla/discussions/3373) - an optional, rate-limited, keyless routing fallback so a rider can try Navigation before creating a Stadia Maps key.
-- [Open-Meteo](https://open-meteo.com/) - free weather API used for the route-preview weather-at-arrival estimate.
-
 ### Vendor and platform references
 
 - [EasyConn](https://www.easyconn.net/) - vendor context for the T-Box ecosystem.
@@ -299,7 +235,7 @@ This README is a publication draft, not a legal opinion. The final repository sh
 
 ## Privacy Notes
 
-MOTO-HUB is designed to operate without an account or proprietary telemetry service. It handles screen content, T-Box credentials, and diagnostic data on the phone. Wi-Fi passwords are encrypted with Android Keystore. Screen frames are processed in memory for the active projection and are not intentionally recorded to disk. Map, geocoding, routing, and weather features each disclose only what that request needs to the respective third-party service, none of them MOTO-HUB accounts: cached map tiles visible around the current location are requested from CartoDB; a typed search is sent to Photon (Komoot) to resolve coordinates; a calculated route sends the origin/destination pair to Stadia Maps (with the rider's own API key) or, if enabled instead, FOSSGIS's public Valhalla demo server; a route-preview weather estimate sends the destination coordinates and arrival time to Open-Meteo. See [Technical Sources And Attribution](#technical-sources-and-attribution) for links to each service.
+MOTO-HUB is designed to operate without an account or proprietary telemetry service. It handles screen content, T-Box credentials, and diagnostic data on the phone. Wi-Fi passwords are encrypted with Android Keystore. Screen frames are processed in memory for the active projection and are not intentionally recorded to disk.
 
 Review [Security and Privacy](documentation/SECURITY_AND_PRIVACY.md) before distributing an APK outside personal use.
 

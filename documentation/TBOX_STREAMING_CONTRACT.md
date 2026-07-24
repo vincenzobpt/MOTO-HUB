@@ -37,8 +37,68 @@ init probe is sent because a T-Box may connect back immediately.
 
 If NSD supplies a valid service package and port but no IPv4 host, Android may
 derive the peer from same-subnet route/DNS information. A `.1` Wi-Fi Direct
-group-owner fallback is allowed only for a `/24` local link. MOTO-HUB does not
-invent a service port or package when discovery itself fails.
+group-owner fallback is allowed when the local IPv4 prefix is known and the
+derived network address is valid. MOTO-HUB does not invent a service port or
+package when discovery itself fails.
+
+### Wi-Fi Direct Group Owner dashes (`DIRECT-` SSIDs)
+
+Some dashes (CL-C450 class, and units advertising SSIDs like `DIRECT-go-CFMOTO-xxxx`)
+run the EasyConn head unit as a Wi-Fi Direct **Group Owner**, not as a normal WPA2
+access point. `WifiNetworkSpecifier` cannot associate to a GO as a proper P2P client —
+on some units the join even *appears* to succeed (DHCP hands out an address) while the
+dash never treats the phone as a connected client, so every EasyConn port stays closed
+and mDNS never answers. `TBoxLinkResolver` therefore routes `DIRECT-` SSIDs through
+`TBoxWifiDirectConnector`, which joins the group by credentials via `WifiP2pManager`
+(ported from OpenCfMoto's `BikeWifiP2p`). A P2P group has no
+`ConnectivityManager.Network`; sockets bind to the phone's `192.168.49.x` source
+address (`TBoxLink.WifiDirect`) and the dash is the group owner at `192.168.49.1`.
+All other SSIDs keep the existing `WifiNetworkSpecifier` path (`TBoxLink.Infrastructure`).
+
+### Wake probe on Wi-Fi Direct links (`DIRECT-` SSIDs)
+
+Some T-Box units on a Wi-Fi Direct group-owner AP (SSID starts with `DIRECT-`)
+never broadcast an `_EasyConn._tcp.` advertisement on their own; they only
+respond once directly asked. `RideDaemonTransport.sendEasyConnWakeProbe()`
+sends this request (`CMD_MDNS_RESPOND`, `0x70000010`, on the well-known port
+`10930`) to the `.1`-derived peer as a last resort, after both regular NSD
+discovery windows time out. This does not supply the EC host/port: an ack
+only re-arms one more real NSD window on an infrastructure link, so the "no
+invented port/package" rule above still holds there.
+
+On a **Wi-Fi Direct group** there is no bindable `Network`, so NSD cannot
+resolve the service even after the wake probe. In that case only, a completed
+probe ACK (a full `CMD_MDNS_RESPOND` handshake) is treated as proof of the EC
+endpoint, and the host is taken directly as the group owner
+(`192.168.49.1:10930`, package `com.cfmoto.cfmotointernational`). This is a
+*confirmed* endpoint, not an invented one, and matches what every reference
+implementation does for P2P dashes. Frame layout and port were
+reverse-engineered by OpenCfMoto/OpenMoto, not confirmed by an official spec.
+
+## Heartbeat, ACK And Model-Specific Compatibility
+
+The Android transport records PXC and MediaControl command IDs, sequence
+numbers and payload sizes in the persistent diagnostic log. It also records
+the age of the last control event and last offered video frame when the
+session stops.
+
+MOTO-HUB now carries model-aware compatibility behavior inspired by OpenCfMoto:
+
+- known 800NK/CRCP identifiers and HUID/firmware patterns select an 800NK
+  behavior profile, while modelId `66660732` selects the distinct MTX800
+  portrait profile;
+- affected 800NK and MTX800 sessions send the dual PXC heartbeat on both
+  CAR_CTRL and CAR_DATA to avoid the firmware-side timeout seen on those
+  displays;
+- additional PXC configuration, OTA, or media setup frames are acknowledged
+  with the expected command-plus-one ACK where supported by the profile;
+- non-touch profiles and the global `Disable touchscreen` setting avoid
+  advertising a touch surface to Android Auto when the real motorcycle UX is
+  focus/handlebar based.
+
+These behaviors must remain profile-gated or capability-gated. Do not apply a
+firmware-specific heartbeat or ACK rule globally until it has been validated on
+the generic and simulator profiles.
 
 ## Stream Clock
 
@@ -100,8 +160,56 @@ viewAreaConfig.viewAreas[0].safeArea.height
 Only positive values may override the default profile. Parsing must be isolated
 and tested with missing, malformed and multiple view-area payloads.
 
+The safe-area width and height are the encoder canvas available to MOTO-HUB;
+they must not be treated as proof of the complete physical TFT resolution. A
+motorcycle may render speed, RPM, gear and other native information outside
+that rectangle. The observed safe-area payload does not currently establish
+the physical display dimensions or the safe area's X/Y offset.
+
+The macOS simulator therefore models two separate geometries:
+
+- physical TFT width and height, used only for the full-display preview;
+- projection X/Y/width/height, whose width and height are negotiated with the
+  Android transport and used for touch coordinates.
+
+The known `Auto` test profile is physical `800 x 480` with projection
+`800 x 384` at `(0, 0)`. The size difference is measured; the top-left
+placement remains an explicit simulator assumption until confirmed on the
+motorcycle. Other motorcycle profiles must remain manually configurable until
+their physical and projection geometry has been measured.
+
+The Android app treats the negotiated projection width and height as the
+encoder canvas available to MOTO-HUB. It does not assume that the simulator's
+full preview window equals the real motorcycle safe area. Per-motorcycle safe
+margins can further exclude native motorcycle UI from Android Auto video and
+touch when a T-Box reports a canvas larger than the rider-usable projection
+area.
+
+Touch mapping must remain independent from the selected Android Auto source
+resolution. MOTO-HUB first normalises raw T-Box coordinates from the runtime
+capture area into the macroblock-aligned AVC canvas, then applies the inverse
+of the actual visible Android Auto viewport. Manual AA presets affect only the
+last source geometry and cannot replace the T-Box touch domain.
+
+Touch coordinates outside the runtime capture area are dropped and recorded in
+diagnostics instead of being clamped into an unrelated on-screen location. Such
+an event indicates that the firmware may report physical-panel coordinates,
+safe-area offsets or a rotated touch controller. The touch packet contains no
+declared coordinate extents, so that case requires corner-touch measurements
+from the affected motorcycle before a model-independent affine transform can be
+derived safely.
+
+For Android Auto, touch mapping is based on the actual compositor viewport:
+
+- `FIT` maps only the visible non-bar region;
+- `STRETCH` maps the full active Android Auto content across the full usable
+  TFT area;
+- `CROP` maps through the cropped source rectangle and rejects points outside
+  the usable projection area.
+
 `To validate`: event-type meaning, JSON schema stability and behavior of
-firmware that does not send the safe area.
+firmware that does not send the safe area, plus whether any firmware reports
+safe-area offsets or full physical TFT dimensions elsewhere.
 
 ## Live-Only Startup
 
@@ -120,6 +228,8 @@ switching sources.
 - model, year and T-Box firmware version;
 - IP/subnet and TXT record;
 - effective safe area and orientation;
+- physical TFT size and projection-area X/Y placement;
+- raw touch coordinates at the projection area's four corners and orientation;
 - accepted AVC profile (Baseline/Main), level and entropy mode;
 - maximum tolerated GOP;
 - stable bitrate and upper limit;
@@ -139,6 +249,8 @@ Motorcycle/model year:
 TFT firmware:
 T-Box hardware/firmware:
 Phone and Android build:
+Physical TFT size:
+Projection area X/Y/width/height:
 Selected hardware codec:
 Resolution/fps/bitrate/profile:
 ridedaemon-lib commit:

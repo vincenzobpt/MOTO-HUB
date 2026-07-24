@@ -1,16 +1,16 @@
 # Product Requirements
 
-Status: MVP draft
+Status: current product requirements
 
 ## Vision
 
-Allow the rider to view a single Android app or the entire display on the
-CFMoto TFT, using the protocol already supported by the T-Box without
-modifying the motorcycle hardware.
+Allow the rider to use the motorcycle TFT as a flexible phone-powered display:
+screen/app mirroring and full Android Auto can both run through the T-Box
+without modifying the motorcycle hardware.
 
-The product is a projection bridge, not an Android Auto implementation and not
-a launcher running on the T-Box. The phone produces every frame; the T-Box
-receives it as an H.264 stream and displays it.
+The phone produces every frame. The T-Box receives an H.264 stream and displays
+it in the negotiated projection area. MOTO-HUB must keep two user-facing modes
+separate: mirroring and full Android Auto.
 
 ## Product Principles
 
@@ -21,6 +21,10 @@ receives it as an H.264 stream and displays it.
 - If the network or capture is lost, the session must end predictably or attempt
   a limited, visible reconnection.
 - Do not promise capture of DRM or protected content.
+- Do not invent motorcycle telemetry. Phone-derived values must be labelled as
+  phone/GNSS values.
+- Display and touch mapping must adapt to the real T-Box projection area, safe
+  margins and motorcycle model profile.
 
 ## Primary Personas
 
@@ -28,20 +32,20 @@ receives it as an H.264 stream and displays it.
 - User who wants to project a dashboard, weather app or personal UI.
 - Developer/tester who needs to measure compatibility and video parameters.
 
-## MVP Flow
+## Core Flow
 
 1. The user opens HUB and starts motorcycle pairing.
 2. HUB obtains T-Box network data through QR or manual entry.
 3. Android displays consent for connecting to the local Wi-Fi network.
 4. HUB verifies the network, EasyConn discovery and T-Box reachability.
-5. The user selects `Share app or screen`.
-6. Android displays its system sharing picker.
-7. After consent, HUB starts the foreground service, T-Box session,
-   `MediaProjection` and H.264 encoder.
-8. HUB shows state, source, duration, quality and a `Stop` action.
-9. A user, system or T-Box stop releases all resources.
+5. The user selects Mirroring or Android Auto.
+6. The selected foreground service starts the T-Box session and encoder path.
+7. HUB shows state, controls, diagnostics and a `Stop` action.
+8. A user, system or T-Box stop releases all mode-specific resources.
+9. If auto-connect is enabled, HUB reconnects to the saved motorcycle after the
+   deliberate stop so the next mode can start quickly.
 
-## MVP Functional Requirements
+## Functional Requirements
 
 ### Onboarding and Network
 
@@ -56,9 +60,10 @@ receives it as an H.264 stream and displays it.
 
 ### Source Selection
 
-- `FR-06`: on Android 14 QPR2 or later, offer system-picker selection between a
+- `FR-06`: for mirroring, on Android 14 QPR2 or later, offer system-picker selection between a
   single app and the entire screen.
-- `FR-07`: on earlier versions, offer full-screen capture.
+- `FR-07`: on earlier versions, offer full-screen capture when supported by the
+  platform.
 - `FR-08`: require new consent for every new projection session.
 - `FR-09`: do not present a proprietary app list as if HUB could select or
   capture an app without system involvement.
@@ -84,16 +89,36 @@ receives it as an H.264 stream and displays it.
   user's only information.
 - `FR-19`: maintain a local, exportable diagnostic log with sensitive data
   removed.
+- `FR-20`: share diagnostics as a generated text file when the user selects
+  Share.
 
-## Out Of Scope For MVP
+### Android Auto
+
+- `FR-21`: start Android Auto through a local AAP receiver and self-mode launch.
+- `FR-22`: include the Android Auto identity in maintainer-built APKs.
+- `FR-23`: expose `FIT`, `STRETCH` and `CROP` per motorcycle.
+- `FR-24`: support automatic and manual Android Auto source profiles.
+- `FR-25`: keep phone preview/touch control available for non-touch TFTs.
+- `FR-26`: support optional recovery/seamless resume after post-start stalls or
+  T-Box interruptions.
+
+### Updates And Settings
+
+- `FR-27`: check GitHub releases/pre-releases and offer only a newer APK build.
+- `FR-28`: allow users to disable touchscreen advertisement.
+- `FR-29`: store per-motorcycle safe margins and apply them to Android Auto
+  video/touch.
+
+## Out Of Scope
 
 - BLE control of media, alarms, notifications or motorcycle commands.
-- Android Auto, CarPlay or emulation of their certifications.
-- Touch control of the app projected from the TFT.
+- CarPlay.
 - Bypassing `FLAG_SECURE`, DRM or `MediaProjection` consent.
-- Audio streaming to the T-Box.
-- Graphic overlays, advanced crop and rotation through a GPU compositor.
 - Automatic Play Store publication.
+- Claiming support for a motorcycle model without measured projection/touch
+  validation.
+- Native Waze/Google Maps replication including traffic, speed traps or
+  proprietary navigation data.
 
 ## Platform Constraints
 
@@ -116,17 +141,20 @@ receives it as an H.264 stream and displays it.
   leaks.
 - `NFR-04 Resources`: no unbounded video queue; prefer recent frames.
 - `NFR-05 Temperature`: monitor thermal throttling in 30- and 60-minute tests.
-- `NFR-06 Privacy`: no frame saved to disk and no remote telemetry in the MVP.
+- `NFR-06 Privacy`: no frame saved to disk and no remote telemetry.
 - `NFR-07 Compatibility`: Android 14/API 34 minimum; app-window sharing only
   where available in the system.
 - `NFR-08 Recovery`: all resources must be released within 3 seconds of stop.
 
-## MVP Acceptance Criteria
+## Acceptance Criteria
 
 - A supported phone connects to the T-Box through QR or manual data.
 - The TFT displays the complete screen with unprotected content.
 - On Android 14 QPR2+, the TFT displays only the app selected in the picker,
   without system-included notifications and system UI.
+- Full Android Auto fills, fits or crops according to the selected
+  per-motorcycle mode.
+- TFT and phone-preview touches land on the intended Android Auto controls.
 - The projected app can continue using Internet through an available network on
   at least the devices in the certification matrix.
 - Screen lock, consent revocation and Wi-Fi disconnection do not leave an
@@ -136,8 +164,7 @@ receives it as an H.264 stream and displays it.
 ## Open Product Questions
 
 - Which CFMoto models and firmware versions will be declared supported?
-- Should HUB remember multiple motorcycles/T-Boxes?
-- What behavior is preferred after network loss: immediate stop or short
-  automatic reconnection?
 - Is distributing the entire app under GPL-3.0, as required by the embedded
   library, acceptable?
+- Which motorcycle-specific safe margins and touch transforms should become
+  built-in defaults after real hardware measurement?

@@ -1,7 +1,10 @@
 package io.motohub.android.androidauto
 
+import io.motohub.android.i18n.motoHubText
+
 import android.content.Context
 import io.motohub.android.session.MotorcycleProfile
+import io.motohub.android.tbox.TBoxModelProfile
 import kotlin.math.roundToInt
 
 data class DisplayGeometry(val width: Int, val height: Int) {
@@ -15,12 +18,16 @@ enum class AndroidAutoDisplayMode(
     val description: String
 ) {
     LETTERBOX(
-        title = "Preserve aspect ratio",
-        description = "Show the complete image with black side bars when needed."
+        title = motoHubText("Preserve aspect ratio"),
+        description = motoHubText("Show the complete image with black side bars when needed.")
     ),
     STRETCH(
-        title = "Fill display",
-        description = "Use the whole TFT and keep all content visible with slight stretching."
+        title = motoHubText("Stretch display"),
+        description = motoHubText("Use the whole TFT and keep all content visible with slight stretching.")
+    ),
+    FILL(
+        title = motoHubText("Fill and crop"),
+        description = motoHubText("Use the whole TFT without stretching; crop the edges when aspect ratios differ.")
     )
 }
 
@@ -117,7 +124,7 @@ class AndroidAutoDisplayModeStore(context: Context) {
     fun load(profile: MotorcycleProfile): AndroidAutoDisplayMode {
         val profileValue = preferences.getString(key(profile.id), null)
         return parse(profileValue) ?: parse(preferences.getString(key(profile.ssid), null))
-        ?: AndroidAutoDisplayMode.LETTERBOX
+        ?: TBoxModelProfile.fromModelId(profile.modelId).defaultAndroidAutoDisplayMode
     }
 
     fun save(profile: MotorcycleProfile, mode: AndroidAutoDisplayMode) {

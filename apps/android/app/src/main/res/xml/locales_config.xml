@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Languages currently shipped by MOTO-HUB. Add a locale here when its catalog is ready. -->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="en-US" />
+    <locale android:name="it-IT" />
+    <locale android:name="pt-PT" />
+    <locale android:name="ko-KR" />
+</locale-config>

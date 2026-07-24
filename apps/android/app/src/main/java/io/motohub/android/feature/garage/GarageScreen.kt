@@ -1,5 +1,7 @@
 package io.motohub.android.feature.garage
 
+import io.motohub.android.i18n.motoHubText
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,8 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -36,84 +36,71 @@ import androidx.compose.ui.unit.dp
 import io.motohub.android.session.MotorcycleProfile
 import io.motohub.android.ui.components.LivePill
 import io.motohub.android.ui.components.MonoLabel
-import io.motohub.android.ui.components.MotoHubBackground
-import io.motohub.android.ui.components.MotoHubHeader
 
 @Composable
-fun GarageScreen(
+fun GarageTabContent(
     profiles: List<MotorcycleProfile>,
     activeProfileId: String?,
-    onBack: () -> Unit,
     onAddMotorcycle: () -> Unit,
+    onAddMotorcycleManually: () -> Unit,
     onSelectMotorcycle: (String) -> Unit,
     onOpenDetails: (String) -> Unit
 ) {
     val active = profiles.firstOrNull { it.id == activeProfileId }
     val others = profiles.filterNot { it.id == activeProfileId }
 
-    MotoHubBackground(Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp, vertical = 18.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp)
-        ) {
-            MotoHubHeader(
-                modifier = Modifier.fillMaxWidth(),
-                trailing = { TextButton(onClick = onBack) { Text("Close") } }
-            )
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                MonoLabel("YOUR GARAGE")
-                Text("Motorcycle profiles", style = MaterialTheme.typography.headlineMedium)
-                Text(
-                    "Keep connection credentials, display preferences, and a visual identity for every motorcycle.",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Spacer(Modifier.height(4.dp))
+        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            MonoLabel(motoHubText("YOUR GARAGE"))
+            Text(motoHubText("Motorcycles"), style = MaterialTheme.typography.displaySmall)
+        }
 
-            if (active == null) {
-                EmptyGarageCard(onAddMotorcycle)
-            } else {
-                Text("Active motorcycle", style = MaterialTheme.typography.titleMedium)
-                ActiveMotorcycleCard(
-                    profile = active,
-                    onOpenDetails = { onOpenDetails(active.id) }
-                )
-                if (others.isNotEmpty()) {
-                    Text(
-                        "Saved motorcycles",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(top = 4.dp)
+        if (active == null) {
+            EmptyGarageCard(onAddMotorcycle, onAddMotorcycleManually)
+        } else {
+            ActiveMotorcycleCard(
+                profile = active,
+                onOpenDetails = { onOpenDetails(active.id) }
+            )
+            if (others.isNotEmpty()) {
+                MonoLabel(motoHubText("SAVED MOTORCYCLES"))
+                others.forEach { profile ->
+                    SavedMotorcycleCard(
+                        profile = profile,
+                        onSelect = { onSelectMotorcycle(profile.id) },
+                        onOpenDetails = { onOpenDetails(profile.id) }
                     )
-                    others.forEach { profile ->
-                        SavedMotorcycleCard(
-                            profile = profile,
-                            onSelect = { onSelectMotorcycle(profile.id) },
-                            onOpenDetails = { onOpenDetails(profile.id) }
-                        )
-                    }
                 }
             }
-
-            Button(
-                onClick = onAddMotorcycle,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            ) {
-                Text("Add motorcycle", fontWeight = FontWeight.Bold)
-            }
-            Spacer(Modifier.height(4.dp))
         }
+
+        Button(
+            onClick = onAddMotorcycle,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp),
+            shape = RoundedCornerShape(14.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            )
+        ) {
+            Text(motoHubText("Add motorcycle"), fontWeight = FontWeight.Bold)
+        }
+        TextButton(
+            onClick = onAddMotorcycleManually,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(motoHubText("No QR? Connect manually"))
+        }
+        Spacer(Modifier.height(8.dp))
     }
 }
 
@@ -146,7 +133,7 @@ private fun ActiveMotorcycleCard(
                 verticalAlignment = Alignment.Top
             ) {
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                    LivePill("ACTIVE PROFILE")
+                    LivePill(motoHubText("ACTIVE PROFILE"))
                     Text(
                         profile.displayName ?: "Unnamed motorcycle",
                         style = MaterialTheme.typography.headlineSmall,
@@ -160,7 +147,7 @@ private fun ActiveMotorcycleCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                TextButton(onClick = onOpenDetails) { Text("Options") }
+                TextButton(onClick = onOpenDetails) { Text(motoHubText("Options")) }
             }
         }
     }
@@ -208,15 +195,15 @@ private fun SavedMotorcycleCard(
                     onClick = onSelect,
                     modifier = Modifier.height(38.dp),
                     shape = RoundedCornerShape(12.dp)
-                ) { Text("Use this motorcycle") }
+                ) { Text(motoHubText("Use this motorcycle")) }
             }
-            TextButton(onClick = onOpenDetails) { Text("Edit") }
+            TextButton(onClick = onOpenDetails) { Text(motoHubText("Edit")) }
         }
     }
 }
 
 @Composable
-private fun EmptyGarageCard(onAddMotorcycle: () -> Unit) {
+private fun EmptyGarageCard(onAddMotorcycle: () -> Unit, onAddMotorcycleManually: () -> Unit) {
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = MaterialTheme.shapes.large
@@ -234,13 +221,14 @@ private fun EmptyGarageCard(onAddMotorcycle: () -> Unit) {
             ) {
                 Text("M", style = MaterialTheme.typography.headlineLarge, color = MaterialTheme.colorScheme.primary)
             }
-            Text("Your garage is empty", style = MaterialTheme.typography.titleLarge)
+            Text(motoHubText("Your garage is empty"), style = MaterialTheme.typography.titleLarge)
             Text(
-                "Add a motorcycle by scanning its T-Box QR code.",
+                motoHubText("Add a motorcycle by scanning its T-Box QR code."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            OutlinedButton(onClick = onAddMotorcycle) { Text("Scan a QR code") }
+            OutlinedButton(onClick = onAddMotorcycle) { Text(motoHubText("Scan a QR code")) }
+            TextButton(onClick = onAddMotorcycleManually) { Text(motoHubText("No QR? Connect manually")) }
         }
     }
 }

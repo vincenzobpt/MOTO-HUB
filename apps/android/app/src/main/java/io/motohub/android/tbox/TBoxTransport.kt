@@ -1,6 +1,5 @@
 package io.motohub.android.tbox
 
-import android.net.Network
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -11,8 +10,9 @@ data class TBoxHost(
 )
 
 sealed interface TBoxEvent {
+    data class Capabilities(val value: TBoxCapabilities) : TBoxEvent
     data class VideoArea(val width: Int, val height: Int) : TBoxEvent
-    data class Touch(val action: Int, val x: Int, val y: Int) : TBoxEvent
+    data class Touch(val action: Int, val pointerId: Int, val x: Int, val y: Int) : TBoxEvent
     data object VideoStreamStart : TBoxEvent
     data class Warning(val message: String) : TBoxEvent
     data class FatalError(val message: String) : TBoxEvent
@@ -26,7 +26,9 @@ sealed interface TBoxTransportStatus {
 }
 
 interface TBoxTransport {
-    suspend fun discover(network: Network): Result<TBoxHost>
+    /** Selects the profile whose wire-level capabilities will be advertised for the next session. */
+    fun configureProtocolProfile(profile: TBoxModelProfile) = Unit
+    suspend fun discover(link: TBoxLink, expectedModelId: String? = null): Result<TBoxHost>
     suspend fun start(host: TBoxHost): Result<Unit>
     fun offerAccessUnit(avcc: ByteArray): Boolean
     suspend fun stop()
@@ -35,7 +37,7 @@ interface TBoxTransport {
 
 /** Keeps UI and session code honest until the GPL transport AAR is packaged. */
 class UnavailableTBoxTransport : TBoxTransport {
-    override suspend fun discover(network: Network): Result<TBoxHost> = Result.failure(
+    override suspend fun discover(link: TBoxLink, expectedModelId: String?): Result<TBoxHost> = Result.failure(
         IllegalStateException("hudlib.aar is not integrated")
     )
 

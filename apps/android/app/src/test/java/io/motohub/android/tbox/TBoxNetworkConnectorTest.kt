@@ -32,10 +32,11 @@ class TBoxNetworkConnectorTest {
         val payload = ByteBuffer.allocate(18).order(ByteOrder.LITTLE_ENDIAN).apply {
             putShort(0, 2.toShort())
             putShort(2, 645.toShort())
-            putInt(4, 217)
+            putShort(4, 217.toShort())
+            putShort(6, 1.toShort())
         }.array()
 
-        assertEquals(TBoxEvent.Touch(action = 0, x = 645, y = 217), decodeTBoxTouch(payload))
+        assertEquals(TBoxEvent.Touch(action = 0, pointerId = 1, x = 645, y = 217), decodeTBoxTouch(payload))
     }
 
     @Test
@@ -59,20 +60,21 @@ class TBoxNetworkConnectorTest {
     }
 
     @Test
-    fun derivesWifiDirectGroupOwnerOnlyForSlash24() {
+    fun derivesWifiDirectGroupOwnerForAnyUsableIpv4Prefix() {
         val peer = deriveTBoxPeerIpv4(
             gateways = emptyList(),
             dnsServers = emptyList(),
-            localAddresses = listOf(InetAddress.getByName("192.168.49.37") to 24)
+            localAddresses = listOf(InetAddress.getByName("192.168.49.37") to 16)
         )
 
-        assertEquals("192.168.49.1", peer?.hostAddress)
-        assertNull(
+        assertEquals("192.168.0.1", peer?.hostAddress)
+        assertEquals(
+            "192.168.49.1",
             deriveTBoxPeerIpv4(
                 gateways = emptyList(),
                 dnsServers = emptyList(),
-                localAddresses = listOf(InetAddress.getByName("192.168.49.37") to 16)
-            )
+                localAddresses = listOf(InetAddress.getByName("192.168.49.37") to 24)
+            )?.hostAddress
         )
     }
 
@@ -93,5 +95,13 @@ class TBoxNetworkConnectorTest {
         assertNull(parseIpv4Literal("192.168.49.999"))
         assertNull(parseIpv4Literal("fe80::1"))
         assertNull(parseIpv4Literal("bike.local"))
+    }
+
+    @Test
+    fun rejectsLoopbackTxtValuesForEasyConnDiscovery() {
+        assertEquals("192.168.49.1", parseUsableEasyConnIpv4Literal("192.168.49.1"))
+        assertNull(parseUsableEasyConnIpv4Literal("127.0.0.1"))
+        assertNull(parseUsableEasyConnIpv4Literal("0.0.0.0"))
+        assertNull(parseUsableEasyConnIpv4Literal("224.0.0.251"))
     }
 }

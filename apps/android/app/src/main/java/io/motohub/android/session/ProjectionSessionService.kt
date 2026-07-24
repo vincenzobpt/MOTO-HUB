@@ -14,23 +14,35 @@ import android.media.projection.MediaProjectionManager
 import android.os.IBinder
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import io.motohub.android.R
+import io.motohub.android.encoding.AdaptiveVideoController
 import io.motohub.android.encoding.AvcEncoder
 import io.motohub.android.androidauto.DisplayGeometry
 import io.motohub.android.androidauto.TBoxDisplayGeometryStore
+import io.motohub.android.feature.settings.MotoHubSettings
 import io.motohub.android.tbox.TBoxEvent
+import io.motohub.android.tbox.TBoxLinkResolver
+import io.motohub.android.tbox.TBoxModelProfile
+import io.motohub.android.tbox.ProfileOverride
+import io.motohub.android.tbox.TBoxCapabilityStore
 import io.motohub.android.tbox.TBoxNetworkEvent
 import io.motohub.android.tbox.TBoxSessionHandle
 import io.motohub.android.tbox.TBoxSessionRegistry
+import io.motohub.android.tbox.TBoxStreamingLocks
 import io.motohub.android.tbox.TBoxVideoAreaSource
 import io.motohub.android.tbox.negotiateVideoConfiguration
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
@@ -41,12 +53,28 @@ class ProjectionSessionService : Service() {
     private var mediaProjection: MediaProjection? = null
     private var virtualDisplay: VirtualDisplay? = null
     private var encoder: AvcEncoder? = null
+    private val adaptiveVideoController = AdaptiveVideoController(this, ::log)
+    private var adaptiveJob: Job? = null
+    private val streamingLocks = TBoxStreamingLocks(this, "Mirroring")
     private var tBoxHandle: TBoxSessionHandle? = null
     private var transportEventsJob: Job? = null
     private var networkEventsJob: Job? = null
+    private var handleCleanupJob: Job? = null
+    private var recoveryJob: Job? = null
+    private val recoveryRequested = AtomicBoolean(false)
     private val transportUnavailable = AtomicBoolean(false)
     private val videoStreamStartRequested = AtomicBoolean(false)
+    /**
+     * Guards [startCapture] against duplicate concurrent starts. [mediaProjection] is
+     * only assigned near the end of [startCapture] (after the T-Box handshake, which can
+     * take up to [VIDEO_CONFIGURATION_TIMEOUT_MS]), so it cannot be used as the reentrancy
+     * guard: a second `onStartCommand` before the first finishes would otherwise pass the
+     * old "mediaProjection != null" check and race a second encoder/VirtualDisplay into
+     * existence, leaking the first one.
+     */
+    private val capturing = AtomicBoolean(false)
     private val framesAccepted = AtomicLong(0)
+    private val capabilityStore by lazy { TBoxCapabilityStore(this) }
     private val mainHandler = Handler(Looper.getMainLooper())
     private lateinit var displayDimmer: PhoneDisplayDimmer
     @Volatile
@@ -86,6 +114,7 @@ class ProjectionSessionService : Service() {
 
         ProjectionEventLog.record("SERVICE", "Projection request received.")
         startForeground(NOTIFICATION_ID, createNotification())
+        streamingLocks.acquire()
 
         val resultCode = intent?.getIntExtra(EXTRA_RESULT_CODE, Activity.RESULT_CANCELED)
             ?: Activity.RESULT_CANCELED
@@ -104,11 +133,19 @@ class ProjectionSessionService : Service() {
     override fun onDestroy() {
         ProjectionEventLog.record("SERVICE", "Projection foreground service onDestroy called.")
         stopSession(stopProjection = true, reason = "Projection service stopped by Android.")
+        // Cancel only after any T-Box teardown stopSession() just launched has finished -
+        // cancelling serviceScope immediately would abort transport.stop()/disconnect() mid-flight.
+        val pendingCleanup = handleCleanupJob
+        if (pendingCleanup != null) {
+            pendingCleanup.invokeOnCompletion { serviceScope.cancel() }
+        } else {
+            serviceScope.cancel()
+        }
         super.onDestroy()
     }
 
     private suspend fun startCapture(resultCode: Int, resultData: Intent) {
-        if (stopping || mediaProjection != null) return
+        if (stopping || !capturing.compareAndSet(false, true)) return
         ProjectionRuntime.publish(ProjectionRuntimeState.Starting)
         ProjectionEventLog.record("SERVICE", "Starting EasyConn handshake.")
 
@@ -130,7 +167,10 @@ class ProjectionSessionService : Service() {
         }
         val configuration = configurationResult.getOrThrow()
         val area = configuration.rawArea
-        val profile = configuration.encoderProfile
+        val quality = MotoHubSettings.videoQuality(this)
+        val profile = configuration.encoderProfile.copy(
+            bitRate = quality.bitrateFor(configuration.encoderProfile.bitRate)
+        )
         ProjectionEventLog.record("T-BOX", "Handshake completed.")
         if (configuration.source == TBoxVideoAreaSource.LIVE) {
             geometryStore.save(
@@ -151,7 +191,8 @@ class ProjectionSessionService : Service() {
         )
         ProjectionEventLog.record(
             "T-BOX",
-            "Area video ${profile.width}x${profile.height} ${profile.frameRate}fps."
+            "Area video ${profile.width}x${profile.height} ${profile.frameRate}fps; " +
+                "quality=${quality.name}, bitrate=${profile.bitRate}."
         )
         if (stopping) return
 
@@ -169,11 +210,13 @@ class ProjectionSessionService : Service() {
                         serviceScope.launch {
                             if (!stopping) fail("The T-Box session no longer accepts video frames.")
                         }
+                        false
                     } else {
                         val accepted = framesAccepted.incrementAndGet()
                         if (accepted == 1L || accepted % FRAME_LOG_INTERVAL == 0L) {
                             ProjectionEventLog.record("ENCODER", "Frames sent to T-Box: $accepted.")
                         }
+                        true
                     }
                 },
                 onFailure = { failure ->
@@ -184,6 +227,7 @@ class ProjectionSessionService : Service() {
                 }
             )
             activeEncoder.start()
+            adaptiveVideoController.reset()
             if (videoStreamStartRequested.get()) {
                 activeEncoder.requestSyncFrame("TFT consumer already requested video")
             }
@@ -203,6 +247,13 @@ class ProjectionSessionService : Service() {
             ) ?: error("Virtual display was not created")
             ProjectionRuntime.publish(ProjectionRuntimeState.Streaming)
             ProjectionEventLog.record("SERVICE", "Android capture and streaming are active.")
+            adaptiveJob?.cancel()
+            adaptiveJob = serviceScope.launch {
+                while (!stopping) {
+                    delay(ADAPTIVE_TICK_MS)
+                    adaptiveVideoController.onTick(encoder)
+                }
+            }
             scheduleAutoDim()
         } catch (failure: Throwable) {
             ProjectionEventLog.error("MIRROR", "Screen capture setup threw an exception.", failure)
@@ -217,20 +268,118 @@ class ProjectionSessionService : Service() {
         stopSession(stopProjection = true, reason = message)
     }
 
+    /**
+     * The T-Box ending the EasyConn session or a fatal transport error previously went
+     * straight to [fail], tearing down the whole mirroring session (and the user's granted
+     * MediaProjection consent) on the very first transient hiccup - unlike
+     * [io.motohub.android.androidauto.AndroidAutoSessionService], which retries within a
+     * budget before giving up. This brings mirroring in line with that mode: the running
+     * [MediaProjection]/[VirtualDisplay]/[AvcEncoder] are left alone -
+     * only the T-Box transport needs to reconnect - so a recovered EasyConn session resumes
+     * streaming without a new consent prompt.
+     */
+    private fun handleRecoverableFailure(message: String) {
+        if (stopping) return
+        if (!MotoHubSettings.autoRecovery(this)) {
+            fail(message)
+            return
+        }
+        requestTBoxRecovery(message)
+    }
+
+    private fun requestTBoxRecovery(reason: String) {
+        if (!recoveryRequested.compareAndSet(false, true)) {
+            ProjectionEventLog.debug("WATCHDOG", "Recovery already active; ignored: $reason")
+            return
+        }
+        ProjectionEventLog.warning("WATCHDOG", "Mirroring recovery requested: $reason")
+        recoveryJob = serviceScope.launch {
+            val deadline = SystemClock.elapsedRealtime() + RECOVERY_GIVE_UP_MILLIS
+            var attempt = 0
+            while (!stopping && SystemClock.elapsedRealtime() < deadline) {
+                attempt++
+                try {
+                    recoverTBoxStream(reason, attempt)
+                    recoveryRequested.set(false)
+                    transportUnavailable.set(false)
+                    ProjectionEventLog.record("WATCHDOG", "Mirroring T-Box stream recovered on attempt $attempt.")
+                    return@launch
+                } catch (cancelled: CancellationException) {
+                    recoveryRequested.set(false)
+                    throw cancelled
+                } catch (failure: Throwable) {
+                    ProjectionEventLog.warning(
+                        "WATCHDOG",
+                        "Mirroring recovery attempt $attempt failed: ${failure.message}"
+                    )
+                    delay(RECOVERY_RETRY_MILLIS)
+                }
+            }
+            recoveryRequested.set(false)
+            if (!stopping) {
+                fail(
+                    "Mirroring recovery timed out after " +
+                        "${RECOVERY_GIVE_UP_MILLIS / 1_000L} seconds ($attempt attempt(s))."
+                )
+            }
+        }
+    }
+
+    private suspend fun recoverTBoxStream(reason: String, attempt: Int) {
+        val previousHandle = tBoxHandle ?: error("No T-Box session is available for recovery")
+        ProjectionEventLog.record(
+            "WATCHDOG",
+            "Reconnecting mirroring EasyConn, attempt=$attempt, reason=$reason."
+        )
+        transportEventsJob?.cancel()
+        networkEventsJob?.cancel()
+        transportEventsJob = null
+        networkEventsJob = null
+        previousHandle.transport.stop()
+        TBoxSessionRegistry.clear(previousHandle)
+
+        val link = TBoxLinkResolver.reacquire(
+            applicationContext,
+            previousHandle.networkConnector,
+            previousHandle.motorcycle,
+            NETWORK_REJOIN_WAIT_MILLIS
+        )
+        previousHandle.transport.configureProtocolProfile(
+            TBoxModelProfile.resolve(
+                previousHandle.motorcycle.modelId,
+                null,
+                ProfileOverride.byKey(previousHandle.motorcycle.profileOverrideKey)
+            )
+        )
+        val host = previousHandle.transport.discover(link, previousHandle.motorcycle.modelId).getOrThrow()
+        val recoveredHandle = previousHandle.copy(host = host, link = link)
+        tBoxHandle = recoveredHandle
+        TBoxSessionRegistry.install(recoveredHandle)
+        observeActiveSession(recoveredHandle)
+        recoveredHandle.transport.start(host).getOrThrow()
+    }
+
     private fun observeActiveSession(handle: TBoxSessionHandle) {
         transportEventsJob?.cancel()
         networkEventsJob?.cancel()
-        transportEventsJob = serviceScope.launch {
+        transportEventsJob = serviceScope.launch(start = CoroutineStart.UNDISPATCHED) {
             handle.transport.events.collect { event ->
                 if (stopping) return@collect
                 when (event) {
+                    is TBoxEvent.Capabilities -> {
+                        capabilityStore.recordCapabilities(handle.motorcycle, event.value)
+                        ProjectionEventLog.record(
+                            "T-BOX",
+                            "Capability snapshot saved for ${handle.motorcycle.ssid}."
+                        )
+                    }
                     TBoxEvent.VideoStreamStart -> {
                         videoStreamStartRequested.set(true)
                         encoder?.requestSyncFrame("TFT consumer requested mirroring video")
                     }
                     is TBoxEvent.Warning -> ProjectionEventLog.record("T-BOX", event.message)
-                    is TBoxEvent.FatalError -> fail("T-Box error: ${event.message}")
-                    TBoxEvent.Stopped -> fail("The T-Box ended the session.")
+                    is TBoxEvent.FatalError -> handleRecoverableFailure("T-Box error: ${event.message}")
+                    TBoxEvent.Stopped -> handleRecoverableFailure("The T-Box ended the session.")
                     is TBoxEvent.VideoArea -> Unit
                     is TBoxEvent.Touch -> Unit
                 }
@@ -257,12 +406,19 @@ class ProjectionSessionService : Service() {
         transportEventsJob = null
         networkEventsJob?.cancel()
         networkEventsJob = null
+        adaptiveJob?.cancel()
+        adaptiveJob = null
+        recoveryJob?.cancel()
+        recoveryJob = null
+        recoveryRequested.set(false)
         mainHandler.removeCallbacks(autoDimRunnable)
         displayDimmer.restore()
+        streamingLocks.release()
         virtualDisplay?.release()
         virtualDisplay = null
         encoder?.stop()
         encoder = null
+        adaptiveVideoController.reset()
         mediaProjection?.unregisterCallback(projectionCallback)
         if (stopProjection) mediaProjection?.stop()
         mediaProjection = null
@@ -270,7 +426,7 @@ class ProjectionSessionService : Service() {
         val releasedHandle = tBoxHandle ?: TBoxSessionRegistry.current()
         tBoxHandle = null
         if (releasedHandle != null) {
-            serviceScope.launch {
+            handleCleanupJob = serviceScope.launch {
                 releasedHandle.transport.stop()
                 releasedHandle.networkConnector.disconnect()
                 TBoxSessionRegistry.clear(releasedHandle)
@@ -284,9 +440,13 @@ class ProjectionSessionService : Service() {
         stopSelf()
     }
 
+    private fun log(message: String) {
+        ProjectionEventLog.record("ENCODER", message)
+    }
+
     private fun createNotification(): android.app.Notification {
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-        .setSmallIcon(R.drawable.ic_launcher)
+        .setSmallIcon(R.drawable.ic_notification)
         .setContentTitle(getString(R.string.projection_notification_title))
         .setContentText(
             if (::displayDimmer.isInitialized && displayDimmer.isDimmed) {
@@ -299,13 +459,13 @@ class ProjectionSessionService : Service() {
 
         if (::displayDimmer.isInitialized && displayDimmer.isDimmed) {
             builder.addAction(
-                R.drawable.ic_launcher,
+                R.drawable.ic_notification,
                 getString(R.string.restore_phone_display),
                 serviceAction(ACTION_RESTORE_DISPLAY, 1)
             )
         } else if (PhoneDisplayDimmer.canDim(this)) {
             builder.addAction(
-                R.drawable.ic_launcher,
+                R.drawable.ic_notification,
                 getString(R.string.dim_phone_display),
                 serviceAction(ACTION_DIM_DISPLAY, 2)
             )
@@ -313,7 +473,7 @@ class ProjectionSessionService : Service() {
 
         builder
         .addAction(
-            R.drawable.ic_launcher,
+            R.drawable.ic_notification,
             getString(R.string.stop_projection),
             serviceAction(ACTION_STOP, 0)
         )
@@ -384,6 +544,10 @@ class ProjectionSessionService : Service() {
         private const val VIDEO_CONFIGURATION_TIMEOUT_MS = 10_000L
         private const val AUTO_DIM_DELAY_MS = 5_000L
         private const val FRAME_LOG_INTERVAL = 120L
+        private const val ADAPTIVE_TICK_MS = 5_000L
+        private const val NETWORK_REJOIN_WAIT_MILLIS = 75_000L
+        private const val RECOVERY_RETRY_MILLIS = 5_000L
+        private const val RECOVERY_GIVE_UP_MILLIS = 120_000L
 
         fun start(context: Context, resultCode: Int, resultData: Intent) {
             val intent = Intent(context, ProjectionSessionService::class.java)

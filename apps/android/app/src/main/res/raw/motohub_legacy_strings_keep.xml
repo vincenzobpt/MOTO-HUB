@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The legacy_* string catalogue is resolved at runtime via
+     Resources.getIdentifier (MotoHubStrings.keyFor computes hashed names),
+     which the resource shrinker cannot trace - keep every entry. -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@string/legacy_*" />

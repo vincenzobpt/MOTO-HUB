@@ -7,7 +7,8 @@ data class TBoxSessionHandle(
     val transport: TBoxTransport,
     val host: TBoxHost,
     val networkConnector: TBoxNetworkConnector,
-    val motorcycle: MotorcycleProfile
+    val motorcycle: MotorcycleProfile,
+    val link: TBoxLink
 )
 
 /** In-process handoff from connection UI to the foreground projection service. */
@@ -17,9 +18,12 @@ object TBoxSessionRegistry {
     @Synchronized
     fun install(handle: TBoxSessionHandle) {
         activeHandle = handle
+        val modelProfile = TBoxModelProfile.fromModelId(handle.motorcycle.modelId)
         ProjectionEventLog.record(
             "SESSION",
-            "Registry installed T-Box ${handle.host.ipAddress}:${handle.host.port} for ${handle.motorcycle.ssid}."
+            "Registry installed T-Box ${handle.host.ipAddress}:${handle.host.port} for " +
+                "${handle.motorcycle.ssid}; model=${modelProfile.displayName}, " +
+                "modelId=${handle.motorcycle.modelId ?: "unknown"}."
         )
     }
 
@@ -31,7 +35,10 @@ object TBoxSessionRegistry {
         if (handle == null || activeHandle === handle) {
             val previous = activeHandle
             activeHandle = null
-            if (previous != null) ProjectionEventLog.record("SESSION", "T-Box registry cleared.")
+            if (previous != null) {
+                previous.link.disconnect()
+                ProjectionEventLog.record("SESSION", "T-Box registry cleared.")
+            }
         }
     }
 }

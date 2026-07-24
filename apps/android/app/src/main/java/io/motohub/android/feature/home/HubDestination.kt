@@ -13,12 +13,14 @@ internal enum class HubDestination {
 
 internal fun resolveHubDestination(
     session: HubSessionState,
-    androidAutoActive: Boolean
+    androidAutoActive: Boolean,
+    rideDashboardActive: Boolean = false,
+    externalDisplayActive: Boolean = false
 ): HubDestination = when {
     session.motorcycle == null -> HubDestination.PAIRING
     session.phase == SessionPhase.CONNECTING_NETWORK ||
         session.phase == SessionPhase.DISCOVERING_TBOX -> HubDestination.CONNECTING
-    androidAutoActive ||
+    androidAutoActive || rideDashboardActive || externalDisplayActive ||
         session.phase == SessionPhase.REQUESTING_PROJECTION ||
         session.phase == SessionPhase.CAPTURING -> HubDestination.ACTIVE_SESSION
     session.phase == SessionPhase.READY -> HubDestination.MODE_SELECTION

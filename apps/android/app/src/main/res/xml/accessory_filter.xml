@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Matches the AOA descriptor the external head unit reports (confirmed via
+    `adb shell dumpsys usb`: manufacturer="Sunplus, Inc.", model="DVD"). Without this filter
+    Android never offers MOTO-HUB when the head unit attaches - com.link.autolink is the only
+    app with a matching filter, so the system launches it directly every time.
+-->
+<resources>
+    <usb-accessory manufacturer="Sunplus, Inc." model="DVD" />
+</resources>

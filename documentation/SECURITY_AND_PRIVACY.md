@@ -1,6 +1,6 @@
 # Security, Privacy and Licensing
 
-Status: initial threat model, not legal advice
+Status: active threat model, not legal advice
 
 ## Processed Data
 
@@ -11,7 +11,7 @@ Status: initial threat model, not legal advice
 | T-Box SSID/password | connection | private preferences; password AES-GCM encrypted with Android Keystore key |
 | IP/MAC/serial/HUID | protocol/diagnostics | redacted in logs |
 | Session log | support | local, limited retention |
-| Audio | not used in MVP | no capture |
+| Android Auto microphone audio | Android Auto Assistant / voice channel | live only; not recorded by MOTO-HUB |
 
 ## Trust Boundaries
 
@@ -21,6 +21,10 @@ Status: initial threat model, not legal advice
 - The T-Box and local Wi-Fi network must not be considered a secure Internet
   channel by default.
 - Other captured apps are outside HUB's control.
+- The AAP (Android Auto Projection) session is strictly loopback
+  (`127.0.0.1`, self-mode, no VPN, no Wi-Fi Direct pairing) - the only
+  process that can ever be the TLS peer is Google's own Android Auto app on
+  the same device; see `ANDROID_IMPLEMENTATION.md` Android Auto Self-Mode.
 
 ## Threats and Controls
 
@@ -34,9 +38,10 @@ Status: initial threat model, not legal advice
 | Malicious/incorrect T-Box AP | validate record, package and known profile |
 | Local video interception | disclose risk; verify protocol before promising encryption |
 | Android components invoked by third parties | non-exported service; explicit intents |
-| AAR supply chain | reproducible build, commit SHA and artifact checksum | 
-| Android Auto head-unit identity | keep source files out of Git history; provision release inputs through repository secrets; disclose that packaged APK material is extractable | controlled release workflow |
+| AAR supply chain | reproducible build, commit SHA and artifact checksum |
+| Android Auto head-unit identity | keep source files out of Git history; include only in maintainer-built APKs; disclose that packaged APK material is extractable | manual or controlled release workflow |
 | Overlay/tapjacking over consent | rely on the system dialog, no deceptive UI |
+| AAP TLS peer certificate not validated (`NoCheckTrustManager`) | acceptable only because the session is loopback-only (`127.0.0.1`) with no real network path for a MITM; never bind the AAP listener to a non-loopback interface, and treat that change as re-opening this threat |
 
 ## Protected Content
 
@@ -75,8 +80,9 @@ Forbidden events:
 - unredacted protocol payload;
 - captured app names/content without explicit need.
 
-Proposed retention: limited local ring buffer, deletable by the user; export only
-after a manual action.
+Retention: limited local event history, deletable by the user; export only after
+a manual action. Sharing logs creates a diagnostic text file and sends that file
+through Android's share sheet.
 
 ## Licensing
 
@@ -90,10 +96,12 @@ Before distribution:
 
 - confirm the fork license and every asset license;
 - include license texts and notices in the app;
-- publish the corresponding source for the distributed version;
+- decide the source publication policy for each release before distribution;
 - document the AAR build procedure;
 - avoid marks or descriptions suggesting official CFMoto affiliation.
-- never commit Android Auto identity source files or signing credentials; provision them only through the controlled release workflow and document that a public APK contains its runtime identity.
+- never commit Android Auto identity source files or signing credentials;
+  provision them only for maintainer builds and document that a public APK
+  contains its runtime identity.
 
 This section identifies a technical and organizational constraint and requires
 legal review before commercial distribution.
@@ -103,7 +111,7 @@ legal review before commercial distribution.
 - fully local processing;
 - no account;
 - no remote telemetry;
-- no audio recording;
+- no MOTO-HUB audio recording; Android Auto microphone transport is live only;
 - no frame persistence;
 - opt-in diagnostics and manual export;
 - privacy page accessible before the first projection starts.

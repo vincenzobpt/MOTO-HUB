@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import io.motohub.android.BuildConfig
+import io.motohub.android.feature.settings.MotoHubSettings
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Base64
@@ -24,20 +25,35 @@ data class ProjectionEvent(
     val timestampMillis: Long,
     val source: String,
     val message: String,
-    val level: LogLevel = LogLevel.INFO
+    val level: LogLevel = LogLevel.INFO,
+    /**
+     * In-memory only, never persisted: assigned fresh on every app run so it's
+     * guaranteed unique within [ProjectionEventLog.events], unlike timestamp+message,
+     * which collide easily (e.g. two identical "PXC event received" heartbeats logged
+     * in the same millisecond) and crashed the log screen's LazyColumn on scroll when
+     * used as its key.
+     */
+    val sequence: Long = 0
 )
 
 /** Persistent application-wide diagnostic log exposed directly in the UI. */
 object ProjectionEventLog {
-    private const val MAX_EVENTS = 2_500
+    // Oldest events drop automatically once this is exceeded (a ring buffer, not a manual
+    // clear) - lowered from 2_500 after a very long/verbose session made the log screen
+    // heavy enough to hang while scrolling. 800 is still generous for troubleshooting a
+    // single connect/stream session.
+    private const val MAX_EVENTS = 800
     private const val FILE_NAME = "moto-hub-diagnostics.log"
     private val lock = Any()
 
     private val mutableEvents = MutableStateFlow<List<ProjectionEvent>>(emptyList())
     val events: StateFlow<List<ProjectionEvent>> = mutableEvents.asStateFlow()
     private var logFile: File? = null
+    private var appContext: Context? = null
+    private val sequenceCounter = java.util.concurrent.atomic.AtomicLong(0)
 
     fun initialize(context: Context) {
+        appContext = context.applicationContext
         synchronized(lock) {
             if (logFile != null) return
             logFile = File(context.applicationContext.filesDir, FILE_NAME)
@@ -48,6 +64,7 @@ object ProjectionEventLog {
                     ?.takeLast(MAX_EVENTS)
                     .orEmpty()
             }.getOrElse { emptyList() }
+                .map { it.copy(sequence = sequenceCounter.incrementAndGet()) }
             mutableEvents.value = restored
         }
         record(
@@ -64,6 +81,13 @@ object ProjectionEventLog {
         level: LogLevel = LogLevel.INFO,
         throwable: Throwable? = null
     ) {
+        // Master switch (Settings > Diagnostics > Enable logging): when off, nothing is
+        // written anywhere - not Logcat, not memory, not the log file - not just the
+        // verbose extras. appContext is only null for the instant before initialize()
+        // runs, which never calls record(); defaulting to enabled there is unreachable
+        // in practice but keeps this fail-open rather than silently swallowing events.
+        val loggingEnabled = appContext?.let(MotoHubSettings::loggingEnabled) ?: true
+        if (!loggingEnabled) return
         val detail = redact(buildString {
             append(message)
             if (throwable != null) {
@@ -77,7 +101,7 @@ object ProjectionEventLog {
             LogLevel.WARNING -> Log.w(LOG_TAG, "$source: $detail")
             LogLevel.ERROR -> Log.e(LOG_TAG, "$source: $detail")
         }
-        val event = ProjectionEvent(System.currentTimeMillis(), source, detail, level)
+        val event = ProjectionEvent(System.currentTimeMillis(), source, detail, level, sequenceCounter.incrementAndGet())
         synchronized(lock) {
             val updated = (mutableEvents.value + event).takeLast(MAX_EVENTS)
             mutableEvents.value = updated
@@ -158,8 +182,10 @@ object ProjectionEventLog {
     private fun decode(value: String): String =
         String(Base64.getDecoder().decode(value), Charsets.UTF_8)
 
-    private fun redact(value: String): String = value
+    internal fun redact(value: String): String = value
         .replace(SECRET_PATTERN, "$1=<redacted>")
+        .replace(MAC_ADDRESS_PATTERN, "<redacted-mac>")
+        .replace(IPV4_ADDRESS_PATTERN, "<redacted-ip>")
         .take(MAX_MESSAGE_CHARS)
 
     private fun formatTime(timestampMillis: Long): String =
@@ -167,8 +193,26 @@ object ProjectionEventLog {
 
     private const val LOG_TAG = "MotoHubProjection"
     private const val MAX_FILE_BYTES = 2L * 1024L * 1024L
-    private const val MAX_MESSAGE_CHARS = 16_000
+    // A single event could reach this size (e.g. a raw CLIENT_INFO JSON dump under verbose
+    // T-Box logging) - 16_000 let one entry's Text composable choke the log screen's layout
+    // pass badly enough to hang while scrolling. 2_000 is still ample to read a JSON blob or
+    // stack trace; anything genuinely longer is truncated rather than rendered whole.
+    private const val MAX_MESSAGE_CHARS = 2_000
+    // Quote-tolerant so this also catches quoted-JSON shapes like "btPin": "1234" or
+    // "pwd":"1234", not just bare key=value/key: value - needed now that verbose T-Box
+    // logging (Settings > Diagnostics) can log a raw CLIENT_INFO JSON blob, which carries
+    // btPin among other fields.
     private val SECRET_PATTERN = Regex(
-        "(?i)(password|pwd|passphrase)\\s*[:=]\\s*[^\\s,;]+"
+        "(?i)\"?(password|pwd|passphrase|psk|btpin|bt_pin)\"?\\s*[:=]\\s*\"?[^\\s,;\"]+\"?"
+    )
+    // Catches MAC addresses and literal IPv4 addresses wherever they surface in a message
+    // or exception text (e.g. "failed to connect to /192.168.49.1"), not just at known
+    // call sites - ARCHITECTURE.md commits to replacing IP/MAC values with placeholders
+    // in the exported log.
+    private val MAC_ADDRESS_PATTERN = Regex(
+        "\\b[0-9A-Fa-f]{2}(?:[:-][0-9A-Fa-f]{2}){5}\\b"
+    )
+    private val IPV4_ADDRESS_PATTERN = Regex(
+        "\\b(?:(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d)\\b"
     )
 }

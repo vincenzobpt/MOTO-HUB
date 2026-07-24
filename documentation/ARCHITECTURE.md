@@ -1,24 +1,26 @@
 # Architecture
 
-Status: initial proposal
+Status: active architecture
 
 ## Summary
 
-The recommended architecture is a native Kotlin/Compose Android app with a
-foreground service owning the session. `ridedaemon-lib` remains an isolated
+MOTO-HUB is a native Kotlin/Compose Android app with foreground services owning
+projection sessions. `ridedaemon-lib` remains an isolated
 transport module: it receives already encoded H.264 frames and handles
 discovery, handshake, control channels and delivery to the T-Box.
 
-The video source is Android `MediaProjection`. In the MVP, projection writes
-directly to the `MediaCodec` input `Surface`; a later EGL pipeline can add
-scaling, crop, rotation and overlays without changing the transport.
+There are two separate projection modes:
+
+- screen/app mirroring through Android `MediaProjection`;
+- full Android Auto through a local AAP receiver and GPU compositor.
 
 ## Context
 
 ```mermaid
 flowchart LR
-    User["User"] -->|"Wi-Fi and capture consent"| Hub["MOTO-HUB"]
+    User["User"] -->|"Wi-Fi, capture or AA action"| Hub["MOTO-HUB"]
     Source["Android display or app"] -->|"MediaProjection"| Hub
+    AA["Android Auto self-mode"] -->|"AAP loopback"| Hub
     Hub -->|"H.264 over EasyConn local network"| TBox["T-Box"]
     TBox -->|"video"| TFT["Motorcycle TFT"]
     Android["Android OS"] -->|"picker, lifecycle, permissions"| Hub
@@ -39,11 +41,13 @@ flowchart TB
         QR["QR scanner"]
     end
 
-    subgraph Service["ProjectionSessionService"]
-        Orchestrator["SessionOrchestrator"]
+    subgraph Service["Foreground services"]
+        Projection["ProjectionSessionService"]
+        AndroidAuto["AndroidAutoSessionService"]
         Network["TBoxNetworkManager"]
         Discovery["TBoxDiscovery"]
         Capture["ProjectionCapture"]
+        Compositor["AaCompositor"]
         Encoder["AvcEncoder"]
         Monitor["SessionMonitor"]
     end
@@ -55,13 +59,19 @@ flowchart TB
 
     Compose --> VM
     VM --> Consent
-    VM --> Orchestrator
+    VM --> Projection
+    VM --> AndroidAuto
     QR --> Network
-    Orchestrator --> Network
-    Orchestrator --> Discovery
-    Orchestrator --> Adapter
-    Orchestrator --> Capture
+    Projection --> Network
+    AndroidAuto --> Network
+    Projection --> Discovery
+    AndroidAuto --> Discovery
+    Projection --> Adapter
+    AndroidAuto --> Adapter
+    Projection --> Capture
+    AndroidAuto --> Compositor
     Capture --> Encoder
+    Compositor --> Encoder
     Encoder -->|"AVCC access unit"| Adapter
     Adapter --> AAR
     Monitor --> Orchestrator
@@ -79,7 +89,7 @@ flowchart TB
 | `ProjectionCapture` | token, callback and `VirtualDisplay` | encode or transmit frames |
 | `AvcEncoder` | configure/drain `MediaCodec` | accumulate unbounded frames |
 | `RideDaemonAdapter` | adapt AAR callbacks and lifecycle | know about Activity or Compose |
-| `SessionMonitor` | local metrics, timeout and health | send remote telemetry in MVP |
+| `SessionMonitor` | local metrics, timeout and health | send remote telemetry |
 
 ## Data Boundaries
 
@@ -185,7 +195,7 @@ must remain explicit diagnostics rather than being treated as a subnet mismatch.
 
 ## Video Pipeline
 
-### MVP: Direct Surface
+### Mirroring: Direct Surface
 
 ```text
 MediaProjection -> VirtualDisplay -> MediaCodec input Surface
@@ -196,16 +206,16 @@ MediaProjection -> VirtualDisplay -> MediaCodec input Surface
 Advantages: fewer copies, lower latency and contained implementation. Limits:
 reduced control over aspect ratio, rotation, background and overlays.
 
-### Evolution: EGL Compositor
+### Android Auto: EGL Compositor
 
 ```text
 MediaProjection -> SurfaceTexture -> OpenGL/EGL compositor
                 -> MediaCodec input Surface -> transport
 ```
 
-Introduce it only if tests demonstrate that direct scaling is insufficient. It
-allows fit/fill, custom bars, rotation, privacy masks and diagnostic overlays,
-but increases power use and the risk of irregular frame pacing.
+Android Auto uses a GPU compositor to place the decoded AAP video on the T-Box
+canvas. It applies `FIT`, `STRETCH`, and `CROP`, safe margins, phone-preview
+output, touch mapping and encoder-surface recovery.
 
 ## Concurrency and Backpressure
 
@@ -229,7 +239,25 @@ but increases power use and the risk of irregular frame pacing.
 | Fatal protocol | handshake rejected | complete cleanup, no loop |
 | Projection | `onStop()` | definitive stop and new consent |
 | Codec | encoder unavailable | known-profile fallback, otherwise error |
-| Thermal | severe throttling | future fps/bitrate reduction or visible stop |
+| Thermal | severe throttling | adaptive fps/bitrate reduction or visible stop |
+
+### Reconnection Budgets
+
+Two independent retry budgets exist, both identical across both
+projection modes (mirroring, Android Auto):
+
+- **Initial EasyConn connect** (`EasyConnRetry.kt`, `EasyConnRetryPolicy`):
+  3 attempts, exponential backoff `750ms -> 1500ms` (capped at `2000ms`),
+  only for failures classified as transient (timeout, connection
+  refused/reset, transport-level I/O errors). Runs once, before the
+  RideDaemon session exists.
+- **Mid-session stream recovery** (`RECOVERY_RETRY_MILLIS` /
+  `RECOVERY_GIVE_UP_MILLIS`, defined identically in
+  `ProjectionSessionService` and `AndroidAutoSessionService`): retries every
+  `5s`, gives up after `120s` total with no successful reconnect - this is
+  the concrete budget behind the `Reconnecting -> Stopping: retry budget
+  exhausted` transition above. Unified 2026-07-20; before that, mirroring
+  had no recovery at all and Android Auto was single-attempt-only.
 
 ## Proposed Repository Structure
 
@@ -251,9 +279,9 @@ documentation/           project documents
 external upstream repositories                    consulted upstream, not included in the build
 ```
 
-For the MVP, a single Gradle `app` module with well-separated internal
-packages is sufficient. Extracting Gradle modules before real tests and
-dependencies exist would add cost without concrete isolation.
+The current Android app remains a single Gradle `app` module with separated
+internal packages. Extract Gradle modules only when tests or ownership
+boundaries justify the cost.
 
 ## Local Observability
 
@@ -265,8 +293,16 @@ Minimum per-session metrics:
 - normalized stop reason;
 - network changes, projection callbacks and thermal level.
 
-The exported log must replace SSID, IP, MAC, serial and QR values with hashes or
-placeholders.
+The exported log must replace IP and MAC values with placeholders
+(`ProjectionEventLog.redact()` does this with pattern matching, independent of call site,
+covered by `ProjectionEventLogRedactionTest`). Full QR payloads and passwords must never be
+logged in the first place rather than redacted after the fact - verify any new QR/credential
+handling code logs only derived, non-secret fields. T-Box Wi-Fi SSIDs are deliberately left
+unredacted: they are short manufacturer-assigned identifiers (e.g. `CFMOTO-XXXX`), not
+personally revealing, and are needed in context throughout diagnostics and support logs; a
+generic pattern cannot reliably distinguish them from other free text without restructuring
+every call site. There is currently no serial/HUID field collected from the T-Box at all, so
+none appears in logs to redact.
 
 ## Deferred Decisions
 

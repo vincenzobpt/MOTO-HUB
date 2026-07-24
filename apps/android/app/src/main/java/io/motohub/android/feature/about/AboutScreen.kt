@@ -1,5 +1,8 @@
 package io.motohub.android.feature.about
 
+import io.motohub.android.i18n.motoHubText
+
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,12 +32,17 @@ import io.motohub.android.ui.components.MotoHubBackground
 import io.motohub.android.ui.components.MotoHubHeader
 
 const val MOTO_HUB_GITHUB_URL = "https://github.com/vincenzobpt/MOTO-HUB"
+const val MOTO_HUB_DISCORD_URL = "https://discord.gg/Y8bnx9Zxgw"
 
 @Composable
 fun AboutScreen(
     onOpenGithub: () -> Unit,
+    onOpenDiscord: () -> Unit,
+    onCheckUpdates: () -> Unit,
     onBack: () -> Unit
 ) {
+    BackHandler(onBack = onBack)
+
     MotoHubBackground(Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -49,13 +57,13 @@ fun AboutScreen(
                 modifier = Modifier.fillMaxWidth(),
                 trailing = {
                     TextButton(onClick = onBack) {
-                        Text("Close")
+                        Text(motoHubText("Close"))
                     }
                 }
             )
 
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                MonoLabel("ABOUT THE PROJECT")
+                MonoLabel(motoHubText("ABOUT THE PROJECT"))
                 Text(
                     text = "Your phone.\nYour motorcycle display.",
                     style = MaterialTheme.typography.headlineMedium,
@@ -70,39 +78,55 @@ fun AboutScreen(
                 )
             }
 
-            VersionCard()
-            DisclaimerCard()
-
             Card(
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 shape = MaterialTheme.shapes.large
             ) {
                 Column(
                     modifier = Modifier.padding(18.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
-                    MonoLabel("SOURCE & SUPPORT")
+                    MonoLabel(motoHubText("COMMUNITY & SOURCE"))
                     Text(
-                        text = "Follow development, report issues, and download releases on GitHub.",
+                        text = "Follow development, join our community, report issues, and download releases.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Text(
-                        text = "github.com/vincenzobpt/MOTO-HUB",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontFamily = FontFamily.Monospace
-                    )
-                    Button(
-                        onClick = onOpenGithub,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(54.dp)
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Text("Open GitHub repository")
+                        Button(
+                            onClick = onOpenGithub,
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(54.dp)
+                        ) {
+                            Text(motoHubText("GitHub"))
+                        }
+                        Button(
+                            onClick = onOpenDiscord,
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(54.dp)
+                        ) {
+                            Text(motoHubText("Discord"))
+                        }
                     }
                 }
             }
+
+            VersionCard()
+            Button(
+                onClick = onCheckUpdates,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(54.dp)
+            ) {
+                Text(motoHubText("Check for updates"))
+            }
+            DisclaimerCard()
 
             Text(
                 text = "MOTO-HUB is an independent project and is not affiliated with or endorsed " +
@@ -131,7 +155,7 @@ private fun VersionCard() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                MonoLabel("VERSION")
+                MonoLabel(motoHubText("VERSION"))
                 Text(
                     text = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
                     style = MaterialTheme.typography.titleMedium,
@@ -140,7 +164,7 @@ private fun VersionCard() {
                 )
             }
             Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                MonoLabel("PLATFORM")
+                MonoLabel(motoHubText("PLATFORM"))
                 Text(
                     text = "Android 14+",
                     style = MaterialTheme.typography.titleMedium,
@@ -163,7 +187,7 @@ private fun DisclaimerCard() {
             modifier = Modifier.padding(18.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            MonoLabel("EXPERIMENTAL SOFTWARE")
+            MonoLabel(motoHubText("EXPERIMENTAL SOFTWARE"))
             Text(
                 text = "MOTO-HUB is an experimental proof-of-concept, not a production-grade product.",
                 style = MaterialTheme.typography.titleMedium,

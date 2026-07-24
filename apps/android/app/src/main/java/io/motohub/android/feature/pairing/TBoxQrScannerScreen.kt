@@ -1,5 +1,7 @@
 package io.motohub.android.feature.pairing
 
+import io.motohub.android.i18n.motoHubText
+
 import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
@@ -43,6 +45,7 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import java.util.concurrent.atomic.AtomicBoolean
 import android.util.Size
+import androidx.activity.compose.BackHandler
 import io.motohub.android.ui.components.MotoHubHeader
 
 @Composable
@@ -50,6 +53,8 @@ fun TBoxQrScannerScreen(
     onPayload: (TBoxQrPayload) -> Unit,
     onClose: () -> Unit
 ) {
+    BackHandler(onBack = onClose)
+
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
@@ -130,7 +135,7 @@ fun TBoxQrScannerScreen(
                     )
                     .padding(horizontal = 14.dp, vertical = 10.dp),
                 trailing = {
-                    TextButton(onClick = onClose) { Text("Close") }
+                    TextButton(onClick = onClose) { Text(motoHubText("Close")) }
                 }
             )
 
@@ -157,7 +162,7 @@ fun TBoxQrScannerScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    "T-BOX SCAN",
+                    motoHubText("T-BOX SCAN"),
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.labelMedium
                 )

@@ -1,6 +1,9 @@
 package io.motohub.android.feature.diagnostics
 
+import io.motohub.android.i18n.motoHubText
+
 import android.text.format.DateFormat
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -52,6 +55,8 @@ fun NetworkDiagnosticsScreen(
     var showEvents by rememberSaveable { mutableStateOf(false) }
     var showNetworks by rememberSaveable { mutableStateOf(false) }
 
+    BackHandler(onBack = onBack)
+
     MotoHubBackground(Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -64,13 +69,13 @@ fun NetworkDiagnosticsScreen(
         ) {
             MotoHubHeader(
                 modifier = Modifier.fillMaxWidth(),
-                trailing = { TextButton(onClick = onBack) { Text("Close") } }
+                trailing = { TextButton(onClick = onBack) { Text(motoHubText("Close")) } }
             )
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                MonoLabel("SYSTEM LAB")
-                Text("Network diagnostics", style = MaterialTheme.typography.headlineMedium)
+                MonoLabel(motoHubText("SYSTEM LAB"))
+                Text(motoHubText("Network diagnostics"), style = MaterialTheme.typography.headlineMedium)
                 Text(
-                    "Check T-Box and cellular routes without starting a VPN or changing the default network.",
+                    motoHubText("Check T-Box and cellular routes without starting a VPN or changing the default network."),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -107,14 +112,14 @@ fun NetworkDiagnosticsScreen(
             state.checks.forEach { check -> DiagnosticCheckCard(check) }
 
             DetailSection(
-                title = "Session events",
+                title = motoHubText("Session events"),
                 detail = if (projectionEvents.isEmpty()) "No events recorded" else "${projectionEvents.size} events",
                 expanded = showEvents,
                 onToggle = { showEvents = !showEvents }
             ) {
                 if (projectionEvents.isEmpty()) {
                     Text(
-                        "Start a projection to populate the log.",
+                        motoHubText("Start a projection to populate the log."),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -125,7 +130,7 @@ fun NetworkDiagnosticsScreen(
                         }
                         val time = DateFormat.format("HH:mm:ss", event.timestampMillis)
                         Text(
-                            "$time  ${event.source}: ${event.message}",
+                            motoHubText("%1\$s  %2\$s: %3\$s", time, event.source, event.message),
                             modifier = Modifier.padding(vertical = 7.dp),
                             style = MaterialTheme.typography.bodySmall,
                             fontFamily = FontFamily.Monospace
@@ -135,14 +140,14 @@ fun NetworkDiagnosticsScreen(
             }
 
             DetailSection(
-                title = "Detected networks",
+                title = motoHubText("Detected networks"),
                 detail = if (state.networkSnapshot.isEmpty()) "Run the test first" else "${state.networkSnapshot.size} routes",
                 expanded = showNetworks,
                 onToggle = { showNetworks = !showNetworks }
             ) {
                 if (state.networkSnapshot.isEmpty()) {
                     Text(
-                        "No network snapshot available.",
+                        motoHubText("No network snapshot available."),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -172,7 +177,7 @@ private fun SummaryCard(conclusion: String) {
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(7.dp)
         ) {
-            MonoLabel("RESULT")
+            MonoLabel(motoHubText("RESULT"))
             Text(conclusion, style = MaterialTheme.typography.bodyMedium)
         }
     }
