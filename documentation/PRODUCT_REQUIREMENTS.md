@@ -5,12 +5,14 @@ Status: current product requirements
 ## Vision
 
 Allow the rider to use the motorcycle TFT as a flexible phone-powered display:
-screen/app mirroring and full Android Auto can both run through the T-Box
-without modifying the motorcycle hardware.
+screen/app mirroring, full Android Auto, and a native Ride Dashboard can all
+run through the T-Box without modifying the motorcycle hardware.
 
 The phone produces every frame. The T-Box receives an H.264 stream and displays
-it in the negotiated projection area. MOTO-HUB must keep two user-facing modes
-separate: mirroring and full Android Auto.
+it in the negotiated projection area. MOTO-HUB must keep three user-facing modes
+separate: mirroring, full Android Auto, and Ride Dashboard. Ride Dashboard can
+embed Android Auto inside its map region, but that must not collapse it into
+the full Android Auto mode.
 
 ## Product Principles
 
@@ -38,7 +40,7 @@ separate: mirroring and full Android Auto.
 2. HUB obtains T-Box network data through QR or manual entry.
 3. Android displays consent for connecting to the local Wi-Fi network.
 4. HUB verifies the network, EasyConn discovery and T-Box reachability.
-5. The user selects Mirroring or Android Auto.
+5. The user selects Mirroring, Android Auto or Ride Dashboard.
 6. The selected foreground service starts the T-Box session and encoder path.
 7. HUB shows state, controls, diagnostics and a `Stop` action.
 8. A user, system or T-Box stop releases all mode-specific resources.
@@ -102,11 +104,24 @@ separate: mirroring and full Android Auto.
 - `FR-26`: support optional recovery/seamless resume after post-start stalls or
   T-Box interruptions.
 
-### Updates And Settings
+### Ride Dashboard
 
-- `FR-27`: check GitHub releases/pre-releases and offer only a newer APK build.
-- `FR-28`: allow users to disable touchscreen advertisement.
-- `FR-29`: store per-motorcycle safe margins and apply them to Android Auto
+- `FR-27`: render GPS speed, course, altitude, trip statistics, battery, link
+  data and T-Box identity natively.
+- `FR-28`: support OpenStreetMap as the native map source.
+- `FR-29`: support embedded Android Auto as a replacement for the map region.
+- `FR-30`: allow handlebar controls to cycle panels and toggle fullscreen.
+- `FR-31`: expand map/embedded Android Auto into freed panel space.
+
+### Trips, Updates And Settings
+
+- `FR-32`: record trips manually or automatically with projection modes and native Navigation;
+  a Navigation-owned recording must survive an interrupted Ride Dashboard or Android Auto session.
+- `FR-33`: store trips locally, show them on an interactive map and export GPX.
+- `FR-34`: check GitHub releases/pre-releases and offer only a newer APK build.
+- `FR-35`: allow users to disable touchscreen advertisement and configure
+  handlebar timing/actions.
+- `FR-36`: store per-motorcycle safe margins and apply them to Android Auto
   video/touch.
 
 ## Out Of Scope
@@ -154,7 +169,10 @@ separate: mirroring and full Android Auto.
   without system-included notifications and system UI.
 - Full Android Auto fills, fits or crops according to the selected
   per-motorcycle mode.
+- Ride Dashboard OpenStreetMap and embedded Android Auto expand correctly as
+  panels are cycled and fullscreen is toggled.
 - TFT and phone-preview touches land on the intended Android Auto controls.
+- A recorded trip is accessible in Trips and exportable as GPX.
 - The projected app can continue using Internet through an available network on
   at least the devices in the certification matrix.
 - Screen lock, consent revocation and Wi-Fi disconnection do not leave an

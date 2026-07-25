@@ -55,7 +55,8 @@ Each motorcycle stores an Android Auto display mode:
 | `CROP` | Fill the complete available TFT area without distortion by cropping edges when aspect ratios differ. |
 
 Full Android Auto applies this mode in `AaCompositor` before encoding to the
-T-Box.
+T-Box. Ride Dashboard embedded Android Auto applies the same stored mode when
+placing the decoded AA frame inside the dashboard map region.
 
 `800x480@160` remains the hardware-validated fallback. Android Auto identity,
 EasyConn transport and the mirroring pipeline remain separate from source

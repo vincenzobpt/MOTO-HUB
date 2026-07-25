@@ -80,6 +80,7 @@ fun MotorcycleDetailsScreen(
     onBack: () -> Unit,
     onSave: (MotorcycleProfile) -> Boolean,
     onOpenCapabilities: () -> Unit,
+    onCustomizeDashboard: () -> Unit,
     onDisplayModeChanged: (AndroidAutoDisplayMode) -> Unit,
     onScreenMarginsChanged: (TBoxScreenMargins) -> Unit,
     onChoosePhoto: () -> Unit,
@@ -114,6 +115,7 @@ fun MotorcycleDetailsScreen(
                     onSave = onSave,
                     onOpenDetail = { detail = it },
                     onOpenCapabilities = onOpenCapabilities,
+                    onCustomizeDashboard = onCustomizeDashboard,
                     onChoosePhoto = onChoosePhoto,
                     onRemovePhoto = onRemovePhoto,
                     onRequestDelete = { showDeleteConfirmation = true }
@@ -166,6 +168,7 @@ private fun MotorcycleDetailsMainList(
     onSave: (MotorcycleProfile) -> Boolean,
     onOpenDetail: (MotorcycleDetail) -> Unit,
     onOpenCapabilities: () -> Unit,
+    onCustomizeDashboard: () -> Unit,
     onChoosePhoto: () -> Unit,
     onRemovePhoto: () -> Unit,
     onRequestDelete: () -> Unit
@@ -310,6 +313,11 @@ private fun MotorcycleDetailsMainList(
                 title = motoHubText("T-Box Capability Inspector"),
                 description = motoHubText("Endpoint, geometry, protocol, and feature flags"),
                 onClick = onOpenCapabilities
+            )
+            MotoHubActionRow(
+                title = motoHubText("Customize Dashboard"),
+                description = motoHubText("Choose widgets for each side panel"),
+                onClick = onCustomizeDashboard
             )
         }
 

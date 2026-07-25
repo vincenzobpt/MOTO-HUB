@@ -45,8 +45,8 @@ class ServiceDiscoveryResponse(
                             codecResolution = profile.videoPreset.toProtocolResolution()
                             frameRate = Control.Service.MediaSinkService.VideoConfiguration.VideoFrameRateType._30
                             setDensity(profile.densityDpi)
-                            setMarginWidth(0)
-                            setMarginHeight(0)
+                            setMarginWidth(profile.marginWidth)
+                            setMarginHeight(profile.marginHeight)
                             setVideoCodecType(Media.MediaCodecType.MEDIA_CODEC_VIDEO_H264_BP)
                         }.build()
                     )
@@ -57,10 +57,16 @@ class ServiceDiscoveryResponse(
             services.add(Control.Service.newBuilder().also { service ->
                 service.id = Channel.ID_INP
                 service.inputSourceService = Control.Service.InputSourceService.newBuilder().also { inp ->
-                    inp.touchscreen = Control.Service.InputSourceService.TouchConfig.newBuilder().apply {
-                        setWidth(profile.video.width)
-                        setHeight(profile.video.height)
-                    }.build()
+                    AaInput.SUPPORTED_KEYCODES.forEach(inp::addKeycodesSupported)
+                    if (profile.touchEnabled) {
+                        inp.touchscreen = Control.Service.InputSourceService.TouchConfig.newBuilder().apply {
+                            // Android Auto lays out its controls inside the declared video margins.
+                            // The T-Box touch controller sees only that effective UI surface, so
+                            // advertising the full source here introduces a second, wrong scale.
+                            setWidth(profile.touchSurface.width)
+                            setHeight(profile.touchSurface.height)
+                        }.build()
+                    }
                 }.build()
             }.build())
 
@@ -130,10 +136,10 @@ class ServiceDiscoveryResponse(
             Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType = when (this) {
             AndroidAutoVideoPreset.LANDSCAPE_800X480 ->
                 Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._800x480
-            AndroidAutoVideoPreset.PORTRAIT_720X1280 ->
-                Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._720x1280
             AndroidAutoVideoPreset.LANDSCAPE_1280X720 ->
                 Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._1280x720
+            AndroidAutoVideoPreset.PORTRAIT_720X1280 ->
+                Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._720x1280
             AndroidAutoVideoPreset.PORTRAIT_1080X1920 ->
                 Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._1080x1920
         }

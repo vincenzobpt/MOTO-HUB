@@ -134,7 +134,7 @@ fun HubAppBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "MOTO-HUB",
+            text = if (io.motohub.android.BuildConfig.IS_PRO) "MOTO-HUB PRO" else "MOTO-HUB",
             fontFamily = FontFamily.Monospace,
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.bodySmall,
@@ -171,7 +171,7 @@ fun HubAppBar(
     }
 }
 
-enum class HubTab { HOME, GARAGE, SETTINGS }
+enum class HubTab { RIDE, NAV, TRIPS, GARAGE, SETTINGS }
 
 @Composable
 fun HubBottomNavigation(
@@ -192,7 +192,12 @@ fun HubBottomNavigation(
             .padding(horizontal = 4.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        NavItem("Home", selected == HubTab.HOME, Modifier.weight(1f)) { onSelect(HubTab.HOME) }
+        NavItem("Ride", selected == HubTab.RIDE, Modifier.weight(1f)) { onSelect(HubTab.RIDE) }
+        // Nav and Trips are PRO-only features. CORE ships without them (see build.gradle.kts flavors).
+        if (io.motohub.android.BuildConfig.IS_PRO) {
+            NavItem("Nav", selected == HubTab.NAV, Modifier.weight(1f)) { onSelect(HubTab.NAV) }
+            NavItem("Trips", selected == HubTab.TRIPS, Modifier.weight(1f)) { onSelect(HubTab.TRIPS) }
+        }
         NavItem("Garage", selected == HubTab.GARAGE, Modifier.weight(1f)) { onSelect(HubTab.GARAGE) }
         NavItem("Settings", selected == HubTab.SETTINGS, Modifier.weight(1f)) { onSelect(HubTab.SETTINGS) }
     }
@@ -255,12 +260,6 @@ private fun NavIcon(label: String, active: Boolean) {
                 drawLine(color, Offset(s * 0.38f, s * 0.88f), Offset(s * 0.38f, s * 0.56f), stroke.width)
                 drawLine(color, Offset(s * 0.62f, s * 0.88f), Offset(s * 0.62f, s * 0.56f), stroke.width)
                 drawLine(color, Offset(s * 0.38f, s * 0.56f), Offset(s * 0.62f, s * 0.56f), stroke.width)
-            }
-            "CF" -> {
-                drawCircle(color = color, radius = s * 0.36f, center = Offset(s * 0.5f, s * 0.5f), style = stroke)
-                drawLine(color, Offset(s * 0.62f, s * 0.31f), Offset(s * 0.38f, s * 0.31f), stroke.width)
-                drawLine(color, Offset(s * 0.38f, s * 0.31f), Offset(s * 0.38f, s * 0.69f), stroke.width)
-                drawLine(color, Offset(s * 0.38f, s * 0.69f), Offset(s * 0.62f, s * 0.69f), stroke.width)
             }
             "Settings" -> {
                 drawCircle(color = color, radius = s * 0.14f, center = Offset(s * 0.5f, s * 0.5f), style = stroke)
@@ -368,7 +367,7 @@ fun MotoHubHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "MOTO-HUB",
+            text = if (io.motohub.android.BuildConfig.IS_PRO) "MOTO-HUB PRO" else "MOTO-HUB",
             fontFamily = FontFamily.Monospace,
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.bodySmall,

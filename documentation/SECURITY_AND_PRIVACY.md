@@ -12,6 +12,7 @@ Status: active threat model, not legal advice
 | IP/MAC/serial/HUID | protocol/diagnostics | redacted in logs |
 | Session log | support | local, limited retention |
 | Android Auto microphone audio | Android Auto Assistant / voice channel | live only; not recorded by MOTO-HUB |
+| Trip GPS points | trip recording and GPX export | local SQLite database until user deletes or exports |
 
 ## Trust Boundaries
 
@@ -113,5 +114,6 @@ legal review before commercial distribution.
 - no remote telemetry;
 - no MOTO-HUB audio recording; Android Auto microphone transport is live only;
 - no frame persistence;
+- local trip recording only when explicitly enabled or manually started;
 - opt-in diagnostics and manual export;
 - privacy page accessible before the first projection starts.

@@ -5,22 +5,25 @@ Status: active architecture
 ## Summary
 
 MOTO-HUB is a native Kotlin/Compose Android app with foreground services owning
-projection sessions. `ridedaemon-lib` remains an isolated
+projection and trip-recording sessions. `ridedaemon-lib` remains an isolated
 transport module: it receives already encoded H.264 frames and handles
 discovery, handshake, control channels and delivery to the T-Box.
 
-There are two separate projection modes:
+There are three separate projection modes:
 
 - screen/app mirroring through Android `MediaProjection`;
-- full Android Auto through a local AAP receiver and GPU compositor.
+- full Android Auto through a local AAP receiver and GPU compositor;
+- Ride Dashboard through a native Canvas renderer, optionally embedding Android
+  Auto into the dashboard map region.
 
 ## Context
 
 ```mermaid
 flowchart LR
-    User["User"] -->|"Wi-Fi, capture or AA action"| Hub["MOTO-HUB"]
+    User["User"] -->|"Wi-Fi, capture, AA or dashboard action"| Hub["MOTO-HUB"]
     Source["Android display or app"] -->|"MediaProjection"| Hub
     AA["Android Auto self-mode"] -->|"AAP loopback"| Hub
+    GPS["Phone GNSS"] -->|"location samples"| Hub
     Hub -->|"H.264 over EasyConn local network"| TBox["T-Box"]
     TBox -->|"video"| TFT["Motorcycle TFT"]
     Android["Android OS"] -->|"picker, lifecycle, permissions"| Hub
@@ -44,10 +47,13 @@ flowchart TB
     subgraph Service["Foreground services"]
         Projection["ProjectionSessionService"]
         AndroidAuto["AndroidAutoSessionService"]
+        Dashboard["RideDashboardSessionService"]
+        Trips["TripRecordingService"]
         Network["TBoxNetworkManager"]
         Discovery["TBoxDiscovery"]
         Capture["ProjectionCapture"]
         Compositor["AaCompositor"]
+        DashboardRenderer["RideDashboardRenderer"]
         Encoder["AvcEncoder"]
         Monitor["SessionMonitor"]
     end
@@ -61,17 +67,24 @@ flowchart TB
     VM --> Consent
     VM --> Projection
     VM --> AndroidAuto
+    VM --> Dashboard
+    VM --> Trips
     QR --> Network
     Projection --> Network
     AndroidAuto --> Network
+    Dashboard --> Network
     Projection --> Discovery
     AndroidAuto --> Discovery
+    Dashboard --> Discovery
     Projection --> Adapter
     AndroidAuto --> Adapter
+    Dashboard --> Adapter
     Projection --> Capture
     AndroidAuto --> Compositor
+    Dashboard --> DashboardRenderer
     Capture --> Encoder
     Compositor --> Encoder
+    DashboardRenderer --> Encoder
     Encoder -->|"AVCC access unit"| Adapter
     Adapter --> AAR
     Monitor --> Orchestrator
@@ -243,8 +256,8 @@ output, touch mapping and encoder-surface recovery.
 
 ### Reconnection Budgets
 
-Two independent retry budgets exist, both identical across both
-projection modes (mirroring, Android Auto):
+Two independent retry budgets exist, both identical across all three
+projection modes (mirroring, Android Auto, Ride Dashboard):
 
 - **Initial EasyConn connect** (`EasyConnRetry.kt`, `EasyConnRetryPolicy`):
   3 attempts, exponential backoff `750ms -> 1500ms` (capped at `2000ms`),
@@ -253,11 +266,12 @@ projection modes (mirroring, Android Auto):
   RideDaemon session exists.
 - **Mid-session stream recovery** (`RECOVERY_RETRY_MILLIS` /
   `RECOVERY_GIVE_UP_MILLIS`, defined identically in
-  `ProjectionSessionService` and `AndroidAutoSessionService`): retries every
-  `5s`, gives up after `120s` total with no successful reconnect - this is
-  the concrete budget behind the `Reconnecting -> Stopping: retry budget
-  exhausted` transition above. Unified 2026-07-20; before that, mirroring
-  had no recovery at all and Android Auto was single-attempt-only.
+  `ProjectionSessionService`, `AndroidAutoSessionService` and
+  `RideDashboardSessionService`): retries every `5s`, gives up after `120s`
+  total with no successful reconnect - this is the concrete budget behind
+  the `Reconnecting -> Stopping: retry budget exhausted` transition above.
+  Unified 2026-07-20; before that, mirroring had no recovery at all and
+  Android Auto was single-attempt-only.
 
 ## Proposed Repository Structure
 

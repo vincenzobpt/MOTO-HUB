@@ -64,6 +64,12 @@
     <string name="route_preference_scenic">Panorâmico</string>
     <string name="route_preference_scenic_description">Privilegia estradas secundárias e evita autoestradas.</string>
 
+    <!-- Ponte Core/Pro -->
+    <string name="core_bridge_channel_name">Ponte MOTO-HUB Core</string>
+    <string name="core_bridge_channel_description">Mantém a ligação ao T-Box ativa enquanto o MOTO-HUB Pro a está a utilizar</string>
+    <string name="core_bridge_notification_title">MOTO-HUB Core está ativo</string>
+    <string name="core_bridge_notification_text">A servir o MOTO-HUB Pro.</string>
+
     <!-- Notificações de projeção -->
     <string name="projection_channel_name">Projeção MOTO-HUB</string>
     <string name="projection_channel_description">Estado da transmissão para o ecrã da moto</string>

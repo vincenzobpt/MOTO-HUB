@@ -15,5 +15,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "MOTO-HUB Android"
-include(":app")
+include(":app", ":ipc-contract")
 

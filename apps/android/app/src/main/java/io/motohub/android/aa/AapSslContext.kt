@@ -8,7 +8,10 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLEngine
 import javax.net.ssl.SSLEngineResult
 
-class AapSslContext(keyManager: SingleKeyKeyManager) : AapSsl {
+class AapSslContext(
+    keyManager: SingleKeyKeyManager,
+    private val useClientMode: Boolean = true
+) : AapSsl {
     private val sslContext: SSLContext = createSslContext(keyManager)
     private lateinit var sslEngine: SSLEngine
     private lateinit var txBuffer: ByteBuffer
@@ -111,7 +114,7 @@ class AapSslContext(keyManager: SingleKeyKeyManager) : AapSsl {
 
     private fun prepare(): Int {
         sslEngine = sslContext.createSSLEngine("android-auto", 5277).apply {
-            useClientMode = true
+            this.useClientMode = this@AapSslContext.useClientMode
             session.also {
                 val appBufferMax = it.applicationBufferSize
                 val netBufferMax = it.packetBufferSize

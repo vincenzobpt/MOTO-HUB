@@ -30,6 +30,7 @@ Emulators and unit tests do not replace testing on the motorcycle.
   viewport mapping;
 - adaptive power-mode controller behavior;
 - GitHub update version selection, including pre-release handling;
+- GPX export and trip database filtering;
 - idempotent cleanup with fake dependencies.
 
 ### Go Tests
@@ -108,6 +109,8 @@ Video dumps must be excluded from user logs and deleted after testing.
   before the visible AA viewport;
 - `FIT`, `STRETCH`, and `CROP` in full Android Auto, including `AUTO 800x480`
   where the usable projection area is `800x384`;
+- `FIT`, `STRETCH`, and `CROP` in Ride Dashboard embedded Android Auto while
+  cycling panels and toggling fullscreen;
 - motorcycles that report touch accurately, motorcycles that report touch but
   require focus/handlebar control, and `Disable touchscreen` enabled;
 - immediate `VideoArea` delivery during handshake and delayed delivery;
@@ -119,14 +122,15 @@ Video dumps must be excluded from user logs and deleted after testing.
 - packet loss or weak Wi-Fi signal in a controlled environment;
 - T-Box restart during a session.
 
-### Settings And Updates
+### Settings, Trips And Updates
 
 - save a Garage profile and confirm visible success/failure feedback;
 - change Android Auto display mode and confirm it applies after restarting the
   affected projection mode;
 - enable and disable seamless resume after overlay permission has been granted;
-- stop mirroring and full Android Auto with auto-connect enabled
+- stop mirroring, full Android Auto and Ride Dashboard with auto-connect enabled
   and confirm MOTO-HUB reconnects to the saved motorcycle;
+- start, finish, save, rename, delete and GPX-export a trip;
 - share application logs and confirm Android receives a diagnostic text file;
 - check GitHub update flow with no newer release, newer pre-release, newer
   release and invalid/no-APK release fixtures.
@@ -139,10 +143,12 @@ Table to be filled with real data:
 |---|---|---:|---|---|---|---|---|---|
 | To define | | | | | | | | |
 
-Known physical entries should include:
+Known physical/simulator entries should include:
 
 - CFMOTO 700MT-ADV with physical `800x480` and measured projection `800x384`;
-- CFMOTO 800NK/CRCP variants, including portrait touch displays when available.
+- CFMOTO 800NK/CRCP variants, including portrait touch displays when available;
+- MOTO-HUB macOS T-Box simulator with configurable physical and projection
+  geometry.
 
 Minimum before beta:
 

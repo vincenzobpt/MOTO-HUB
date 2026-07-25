@@ -56,8 +56,9 @@ Service:
     android:foregroundServiceType="mediaProjection" />
 ```
 
-An additional foreground service owns full Android Auto, using
-connected-device/location style service behavior rather than `MediaProjection`.
+Additional foreground services own full Android Auto, Ride Dashboard and trip
+recording. Android Auto and Ride Dashboard use connected-device/location style
+service behavior rather than `MediaProjection`; trip recording uses location.
 
 Android 16/API 36 introduces opt-in testing of LAN protections; Android
 17/API 37 plans enforcement with `ACCESS_LOCAL_NETWORK`. Reassess the
@@ -134,9 +135,10 @@ motorcycle model or fixed TFT resolution is assumed. A geometry saved for the
 same SSID may recover a missing live event, but an unknown display without a
 valid area fails explicitly instead of receiving a wrongly sized stream.
 
-Full Android Auto does not depend on `MediaProjection`, so it
-can continue while the phone display is locked. It is started through
-the local AAP receiver and self-mode launcher.
+Full Android Auto and Ride Dashboard do not depend on `MediaProjection`, so they
+can continue while the phone display is locked. Android Auto is started through
+the local AAP receiver and self-mode launcher; Ride Dashboard is rendered
+natively from local GNSS/system data.
 
 ## H.264 Encoder
 
@@ -311,11 +313,13 @@ loaded while creating the `HubViewModel`.
 
 Screens:
 
-- `Home`: active motorcycle, connection and mirroring/Android Auto actions.
+- `Ride`: active motorcycle, connection, mirroring, Android Auto and Ride
+  Dashboard actions.
 - `Garage`: multiple motorcycles, photos, display mode, safe margins and
   capability inspector.
-- `Settings`: General, Video quality, Android Auto, automation and
-  diagnostics.
+- `Trips`: manual recording, saved rides, interactive OSM route and GPX export.
+- `Settings`: General, Video quality, Android Auto, automation, handlebar
+  controls and diagnostics.
 - `Diagnostics`: application logs, network routing tests, T-Box capability
   data, VPN/conflict hints and share-as-file export.
 - `Diagnostics`: session parameters, redacted log and manual export.

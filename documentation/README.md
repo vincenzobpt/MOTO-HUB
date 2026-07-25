@@ -4,8 +4,9 @@ Status: active project documentation
 Last updated: 19 July 2026
 
 MOTO-HUB is an Android app that connects to a motorcycle T-Box and can stream
-screen mirroring or Android Auto to the motorcycle TFT. It also provides local
-diagnostics and GitHub APK update checks.
+screen mirroring, Android Auto, or a native Ride Dashboard to the motorcycle
+TFT. It also provides trip recording, local diagnostics, handlebar-control
+mapping, GitHub APK update checks, and a macOS T-Box simulator for development.
 
 This folder is the source of truth for the product to be built. The repositories
 in `external upstream repositories` are technical references and are not the
@@ -25,6 +26,11 @@ final app.
 | [ROADMAP.md](ROADMAP.md) | Spikes, MVP, later phases and decision gates |
 | [RISK_REGISTER.md](RISK_REGISTER.md) | Open risks, impact and mitigations |
 | [DYNAMIC_ANDROID_AUTO_PROFILE.md](DYNAMIC_ANDROID_AUTO_PROFILE.md) | Runtime Android Auto orientation profiles and fallback contract |
+| [RIDE_DASHBOARD.md](RIDE_DASHBOARD.md) | Native GNSS dashboard, data provenance and staged scope |
+| [NAVIGATION.md](NAVIGATION.md) | Native turn-by-turn navigation design (Valhalla/Photon), rendered into Ride Dashboard |
+| [NAVIGATION_M2_REQUIREMENTS.md](NAVIGATION_M2_REQUIREMENTS.md) | Phone navigation UX requirements: classic GPS features plus motorcycle-specific differentiators |
+| [PROJECTION_SETTINGS.md](PROJECTION_SETTINGS.md) | Video quality, Android Auto source profiles, startup and recovery preferences |
+| [TRIP_RECORDING.md](TRIP_RECORDING.md) | Persistent GPS trip recording, storage, maps, filtering and GPX export |
 | [PUBLIC_RELEASE.md](PUBLIC_RELEASE.md) | Manual/public APK release process and private Android Auto identity handling |
 | [OPEN_CFMOTO_COMPARATIVE_AUDIT.md](OPEN_CFMOTO_COMPARATIVE_AUDIT.md) | Functional audit against OpenCfMoto and remaining gaps |
 | [decisions/README.md](decisions/README.md) | Architecture decision record index |
@@ -49,6 +55,8 @@ final app.
 - **Session**: the interval from consent and connection through complete stop.
 - **Full Android Auto**: the standalone Android Auto mode. It owns the TFT
   stream and replaces the entire usable T-Box projection area.
+- **Embedded Android Auto**: the Ride Dashboard map-region source. It uses the
+  same local AAP receiver architecture but is composited into the dashboard.
 - **TFT safe margins**: per-motorcycle pixels excluded because the motorcycle
   UI owns them. MOTO-HUB uses them for Android Auto video and touch mapping.
 

@@ -41,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.motohub.android.BuildConfig
 import io.motohub.android.R
+import io.motohub.android.feature.ridedashboard.nav.NavigationSettingsStore
 import io.motohub.android.session.ProjectionEventLog
 import io.motohub.android.ui.components.MonoLabel
 import io.motohub.android.ui.components.MotoHubActionRow
@@ -49,13 +50,15 @@ import io.motohub.android.ui.components.MotoHubDetailScreen
 import io.motohub.android.ui.components.MotoHubRadioRow
 import io.motohub.android.ui.components.ToggleRow
 
-private enum class SettingsDetail { GENERAL, LANGUAGE, VIDEO, ANDROID_AUTO, AUTOMATION, DIAGNOSTICS }
+private enum class SettingsDetail { GENERAL, LANGUAGE, VIDEO, ANDROID_AUTO, AUTOMATION, CONTROLS, NAVIGATION, DIAGNOSTICS }
 
 @Composable
 fun SettingsTabContent(
+    onOpenControls: () -> Unit,
     onOpenNetworkDiagnostics: () -> Unit,
     onOpenApplicationLogs: () -> Unit,
     onOpenAbout: () -> Unit,
+    onOpenRideDashboardPreview: () -> Unit,
     seamlessResumeEnabled: Boolean,
     onSeamlessResumeChanged: (Boolean) -> Unit
 ) {
@@ -79,9 +82,11 @@ fun SettingsTabContent(
         when (current) {
             null -> SettingsMainList(
                 onOpenDetail = { detail = it },
+                onOpenControls = onOpenControls,
                 onOpenNetworkDiagnostics = onOpenNetworkDiagnostics,
                 onOpenApplicationLogs = onOpenApplicationLogs,
-                onOpenAbout = onOpenAbout
+                onOpenAbout = onOpenAbout,
+                onOpenRideDashboardPreview = onOpenRideDashboardPreview
             )
             SettingsDetail.GENERAL -> GeneralDetail(
                 onBack = { detail = null },
@@ -93,6 +98,11 @@ fun SettingsTabContent(
             SettingsDetail.VIDEO -> VideoQualityDetail(onBack = { detail = null })
             SettingsDetail.ANDROID_AUTO -> AndroidAutoDetail(onBack = { detail = null })
             SettingsDetail.AUTOMATION -> AutomationDetail(onBack = { detail = null })
+            SettingsDetail.NAVIGATION -> NavigationSettingsRoot(onBack = { detail = null })
+            SettingsDetail.CONTROLS -> {
+                detail = null
+                onOpenControls()
+            }
             SettingsDetail.DIAGNOSTICS -> DiagnosticsDetail(
                 onBack = { detail = null },
                 onOpenNetworkDiagnostics = onOpenNetworkDiagnostics,
@@ -105,9 +115,11 @@ fun SettingsTabContent(
 @Composable
 private fun SettingsMainList(
     onOpenDetail: (SettingsDetail) -> Unit,
+    onOpenControls: () -> Unit,
     onOpenNetworkDiagnostics: () -> Unit,
     onOpenApplicationLogs: () -> Unit,
-    onOpenAbout: () -> Unit
+    onOpenAbout: () -> Unit,
+    onOpenRideDashboardPreview: () -> Unit
 ) {
     val context = LocalContext.current
     val strings = context.resources
@@ -145,8 +157,23 @@ private fun SettingsMainList(
             )
             MotoHubActionRow(
                 title = motoHubText("Connection & automation"),
-                description = motoHubText("Auto-connect and recovery"),
+                description = motoHubText("Auto-connect, recovery, trip recording"),
                 onClick = { onOpenDetail(SettingsDetail.AUTOMATION) }
+            )
+            MotoHubActionRow(
+                title = motoHubText("Handlebar controls"),
+                description = motoHubText("Bluetooth capture and mapping"),
+                onClick = onOpenControls
+            )
+            MotoHubActionRow(
+                title = motoHubText("Navigation"),
+                description = motoHubText("Your own routing API key for turn-by-turn"),
+                value = when {
+                    NavigationSettingsStore.hasKey(context) -> "Configured"
+                    MotoHubSettings.useDemoRoutingServer(context) -> "Demo server"
+                    else -> "Not set"
+                },
+                onClick = { onOpenDetail(SettingsDetail.NAVIGATION) }
             )
         }
 
@@ -155,6 +182,11 @@ private fun SettingsMainList(
                 title = motoHubText("Diagnostics"),
                 description = motoHubText("Network tests and application logs"),
                 onClick = { onOpenDetail(SettingsDetail.DIAGNOSTICS) }
+            )
+            MotoHubActionRow(
+                title = motoHubText("Preview Ride Dashboard"),
+                description = motoHubText("See the TFT render on this phone, using its own GPS - no T-Box needed"),
+                onClick = onOpenRideDashboardPreview
             )
             MotoHubActionRow(
                 title = motoHubText("About MOTO-HUB"),
@@ -227,6 +259,9 @@ private fun GeneralDetail(
 ) {
     val context = LocalContext.current
     var autoUpdateChecks by remember { mutableStateOf(MotoHubSettings.autoUpdateChecks(context)) }
+    var rideDashboardStartupScreen by remember {
+        mutableStateOf(MotoHubSettings.rideDashboardStartupScreen(context))
+    }
     MotoHubDetailScreen(
         title = context.getString(R.string.settings_general_title),
         backLabel = "‹ ${context.getString(R.string.settings_title)}",
@@ -246,6 +281,16 @@ private fun GeneralDetail(
                 autoUpdateChecks = it
                 MotoHubSettings.setAutoUpdateChecks(context, it)
                 ProjectionEventLog.record("SETTINGS", "Automatic update checks changed to enabled=$it.")
+            }
+        )
+        ToggleRow(
+            title = motoHubText("Ride Dashboard startup screen"),
+            description = motoHubText("Show the motorcycle photo puzzle and MOTO-HUB logo while the TFT starts."),
+            checked = rideDashboardStartupScreen,
+            onCheckedChange = {
+                rideDashboardStartupScreen = it
+                MotoHubSettings.setRideDashboardStartupScreen(context, it)
+                ProjectionEventLog.record("SETTINGS", "Ride Dashboard startup screen changed to enabled=$it.")
             }
         )
         ToggleRow(
@@ -344,6 +389,7 @@ private fun AutomationDetail(onBack: () -> Unit) {
     val context = LocalContext.current
     var autoConnect by remember { mutableStateOf(MotoHubSettings.autoConnect(context)) }
     var autoRecovery by remember { mutableStateOf(MotoHubSettings.autoRecovery(context)) }
+    var autoRecordTrips by remember { mutableStateOf(MotoHubSettings.autoRecordTrips(context)) }
     MotoHubDetailScreen(title = motoHubText("Connection & automation"), backLabel = motoHubText("‹ Settings"), onBack = onBack) {
         ToggleRow(
             title = motoHubText("Auto-connect on launch"),
@@ -363,6 +409,16 @@ private fun AutomationDetail(onBack: () -> Unit) {
                 autoRecovery = it
                 MotoHubSettings.setAutoRecovery(context, it)
                 ProjectionEventLog.record("SETTINGS", "Auto-recovery changed to enabled=$it.")
+            }
+        )
+        ToggleRow(
+            title = motoHubText("Auto-record rides"),
+            description = motoHubText("Start GPS logging with projection sessions"),
+            checked = autoRecordTrips,
+            onCheckedChange = {
+                autoRecordTrips = it
+                MotoHubSettings.setAutoRecordTrips(context, it)
+                ProjectionEventLog.record("SETTINGS", "Automatic trip recording changed to enabled=$it.")
             }
         )
     }

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- The BIND_CORE_SERVICE permission and the IpcBridgeService that enforces it are declared
+         in the CORE flavor only (src/core/AndroidManifest.xml) — PRO binds to CORE's service, it
+         doesn't host its own. -->
+
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.usb.accessory" android:required="false" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -36,7 +40,7 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:label="@string/app_name"
+        android:label="${appLabel}"
         android:localeConfig="@xml/locales_config"
         android:supportsRtl="true"
         android:theme="@style/Theme.MotoHub">
@@ -67,9 +71,44 @@
             android:foregroundServiceType="connectedDevice|microphone" />
 
         <service
+            android:name=".feature.ridedashboard.RideDashboardSessionService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice|location" />
+
+        <service
             android:name=".externaldisplay.AoaExternalService"
             android:exported="false"
             android:foregroundServiceType="mediaProjection" />
+
+        <service
+            android:name=".externaldisplay.AoaRideDashboardService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice|location" />
+
+        <!-- exported=true only so `adb shell am start-foreground-service` can trigger this
+             diagnostic-only probe directly; no UI wiring, no external intent data consumed. -->
+        <service
+            android:name=".externaldisplay.AapAccessoryProbeService"
+            android:exported="true"
+            android:foregroundServiceType="connectedDevice" />
+
+        <service
+            android:name=".feature.trips.TripRecordingService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <service
+            android:name=".feature.ridedashboard.NowPlayingListenerService"
+            android:exported="false"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <!-- IpcBridgeService (the Core/Pro AIDL boundary) is declared in the CORE flavor only —
+             see src/core/AndroidManifest.xml. It contains GPL code (transport + AA receiver) so
+             it must not exist in the PRO APK. -->
 
         <provider
             android:name="androidx.core.content.FileProvider"

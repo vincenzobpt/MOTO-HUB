@@ -24,6 +24,8 @@ import io.motohub.android.encoding.AvcEncoder
 import io.motohub.android.androidauto.DisplayGeometry
 import io.motohub.android.androidauto.TBoxDisplayGeometryStore
 import io.motohub.android.feature.settings.MotoHubSettings
+import io.motohub.android.feature.trips.TripRecordingService
+import io.motohub.android.feature.trips.TripRecordingSource
 import io.motohub.android.tbox.TBoxEvent
 import io.motohub.android.tbox.TBoxLinkResolver
 import io.motohub.android.tbox.TBoxModelProfile
@@ -272,9 +274,10 @@ class ProjectionSessionService : Service() {
      * The T-Box ending the EasyConn session or a fatal transport error previously went
      * straight to [fail], tearing down the whole mirroring session (and the user's granted
      * MediaProjection consent) on the very first transient hiccup - unlike
-     * [io.motohub.android.androidauto.AndroidAutoSessionService], which retries within a
-     * budget before giving up. This brings mirroring in line with that mode: the running
-     * [MediaProjection]/[VirtualDisplay]/[AvcEncoder] are left alone -
+     * [io.motohub.android.androidauto.AndroidAutoSessionService] and
+     * [io.motohub.android.feature.ridedashboard.RideDashboardSessionService], which both
+     * retry within a budget before giving up. This brings mirroring in line with the other
+     * two modes: the running [MediaProjection]/[VirtualDisplay]/[AvcEncoder] are left alone -
      * only the T-Box transport needs to reconnect - so a recovered EasyConn session resumes
      * streaming without a new consent prompt.
      */
@@ -398,6 +401,7 @@ class ProjectionSessionService : Service() {
     private fun stopSession(stopProjection: Boolean, reason: String) {
         if (stopping) return
         stopping = true
+        TripRecordingService.stopAuto(this, TripRecordingSource.MIRRORING)
         ProjectionEventLog.record(
             "SERVICE",
             "Stopping mirroring session: stopProjection=$stopProjection, reason=$reason, frames=${framesAccepted.get()}."

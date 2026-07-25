@@ -66,6 +66,12 @@
     <string name="route_preference_scenic">Scenic</string>
     <string name="route_preference_scenic_description">Bias toward back roads and away from motorways.</string>
 
+    <!-- Core/Pro bridge notification -->
+    <string name="core_bridge_channel_name">MOTO-HUB Core bridge</string>
+    <string name="core_bridge_channel_description">Keeps the T-Box connection alive while MOTO-HUB Pro is using it</string>
+    <string name="core_bridge_notification_title">MOTO-HUB Core is active</string>
+    <string name="core_bridge_notification_text">Serving MOTO-HUB Pro.</string>
+
     <!-- Projection notifications -->
     <string name="projection_channel_name">MOTO-HUB projection</string>
     <string name="projection_channel_description">Streaming status for the motorcycle display</string>

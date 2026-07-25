@@ -74,9 +74,86 @@ removed, renamed, or materially changed.
 - Preserve correct touch mapping through safe margins and the selected `FIT`, `STRETCH`, or
   `CROP` compositor mode.
 
+## Ride Dashboard
+
+- Render a native dashboard directly into the T-Box H.264 stream.
+- Display GPS speed from the phone GNSS receiver.
+- Display current course and compass direction.
+- Display altitude, GPS accuracy, and fix age.
+- Display visible satellites and satellites used in the fix.
+- Display trip distance, elapsed time, moving time, average speed, and maximum speed.
+- Display phone battery level and cellular-network availability.
+- Display encoder bitrate, target frame rate, and active T-Box information.
+- Display an OpenStreetMap view centred on the current motorcycle position.
+- Replace the OpenStreetMap region with embedded Android Auto while keeping Ride Dashboard as a
+  separate mode from full Android Auto.
+- Expand embedded Android Auto progressively as dashboard panels are hidden.
+- Use the same per-motorcycle `FIT`, `STRETCH`, and `CROP` display modes for embedded Android Auto.
+- Download visible map tiles over the cellular network independently from T-Box Wi-Fi traffic.
+- Cache map tiles locally and display the required OpenStreetMap attribution.
+- Continue operating while the phone display is locked because this mode does not use
+  `MediaProjection`.
+
+## Ride Dashboard Layout Controls
+
+- Animate dashboard panel transitions while the map expands or contracts.
+- Use Up to cycle through the complete dashboard, right panel hidden, both panels hidden, left
+  panel restored, and complete dashboard restored.
+- Use Down to toggle a fullscreen map.
+- Use Down to toggle fullscreen for either OpenStreetMap or embedded Android Auto.
+- Restore the exact previous panel layout after leaving fullscreen.
+- Control the layout from either the phone or supported motorcycle physical buttons.
+
+## Live Recorded Route
+
+- Display accepted trip-recording GPS points on the Ride Dashboard in real time.
+- Draw individual GPS points and a connected route line.
+- Provide a persistent `Show recorded GPS track` switch in the active Ride Dashboard screen.
+- Hide the route without stopping the underlying trip recording.
+- Preserve the overall route shape efficiently during long recordings.
+- Keep every accepted point in the database and exported GPX independently from display
+  optimization.
+
+## Trip Recording
+
+- Start a ride recording manually.
+- Optionally start recording automatically with screen mirroring, Android Auto, or Ride Dashboard.
+- Continue recording while the phone is locked.
+- Run recording in a location foreground service with a persistent notification.
+- Display live speed, distance, moving time, maximum speed, GPS accuracy, and accepted point count.
+- Finish and save a recording or discard it.
+- Recover an active recording after Android recreates the service.
+- Filter inaccurate fixes, impossible GPS jumps, and long signal gaps.
+- Automatically reject insignificant or accidental recordings.
+- Store trip data transactionally in a local SQLite database with write-ahead logging.
+
+## Trip Library
+
+- Browse saved trips.
+- View aggregate ride count, total distance, and total moving time.
+- Open each recorded route on an interactive OpenStreetMap map.
+- Pan, pinch to zoom, use zoom buttons, and fit the complete route on screen.
+- View recorded ride statistics and optimized point count.
+- Rename or delete recorded trips.
+- Export routes as standards-compliant GPX 1.1 files.
+- Keep trip information local unless the user explicitly exports it.
+
+## Physical Motorcycle Controls
+
+- Capture Bluetooth media-button events from supported motorcycle handlebar controls.
+- Enable or disable handlebar control capture.
+- Preserve normal media controls when handlebar capture is disabled.
+- Configure Android Auto actions for supported physical gestures.
+- Configure double-tap timing and Select hold timing.
+- Map Select hold and Select double tap separately from single Select.
+- Reset handlebar mappings to their defaults.
+- Use dedicated Ride Dashboard panel and fullscreen-map controls.
+- Re-announce the Ride Dashboard media session after TFT startup so the motorcycle refreshes its
+  Bluetooth AVRCP control target.
+
 ## Video Quality
 
-- Apply H.264 quality settings to mirroring and Android Auto.
+- Apply H.264 quality settings to mirroring, Android Auto, and Ride Dashboard.
 - Select `Smoother` for reduced bitrate, heat, network load, and phone workload.
 - Select `Balanced` for the recommended default quality.
 - Select `Sharper` for clearer maps and text at a higher bitrate.
@@ -85,7 +162,7 @@ removed, renamed, or materially changed.
 
 ## Reliability And Recovery
 
-- Use persistent foreground services for projection.
+- Use persistent foreground services for projection and trip recording.
 - Monitor outgoing Android Auto TFT frames with an optional recovery watchdog.
 - Detect supported stream stalls, encoder failures, and T-Box network losses.
 - Reacquire the network, repeat EasyConn discovery and handshake, and rebuild the encoder when
@@ -94,6 +171,7 @@ removed, renamed, or materially changed.
 - Hold high-performance Wi-Fi resources while streaming where Android allows it.
 - Auto-reconnect to the saved motorcycle after deliberate mode stops when auto-connect is enabled.
 - Perform controlled cleanup after deliberate session stops.
+- Recover active trip recordings from their last committed database progress.
 
 ## Diagnostics
 

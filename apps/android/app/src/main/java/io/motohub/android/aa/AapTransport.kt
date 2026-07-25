@@ -35,8 +35,9 @@ class AapTransport(
 
     var ignoreNextStopRequest: Boolean = false
     /** Set when VIDEO_FOCUS_NATIVE triggers a stop (user tapped Exit on the phone). */
-    @Volatile var wasUserExit: Boolean = false
-    @Volatile var onQuit: ((Boolean) -> Unit)? = null
+   @Volatile var wasUserExit: Boolean = false
+   @Volatile var onQuit: ((Boolean) -> Unit)? = null
+    @Volatile var microphone: AaMicrophone? = null
 
     private var pollHandler: Handler? = null
     private val pollHandlerCallback = Handler.Callback {
@@ -75,6 +76,22 @@ class AapTransport(
 
     internal fun startSensor(type: Int) { startedSensors.add(type) }
 
+    @Volatile var nightMode: Boolean = false
+
+    fun sendNightMode(isNight: Boolean) {
+        nightMode = isNight
+        if (SENSOR_NIGHT in startedSensors) {
+            send(NightModeEvent(isNight))
+        } else {
+            // The AA client only reacts to a pushed NightModeEvent once it has sent its own
+            // SENSOR_STARTREQUEST for SENSOR_NIGHT (see AapControlSensor.sensorStartRequest) -
+            // until then this is a silent no-op from the client's point of view, not a bug in
+            // the send path itself. Logged so a "toggle does nothing" report can tell the two
+            // apart instead of guessing.
+            AaLog.w("Night mode set to $isNight but Android Auto never started the night sensor - not sent.")
+        }
+    }
+
     private fun sendEncryptedMessage(data: ByteArray, length: Int): Int {
         val ba = ssl.encrypt(AapMessage.HEADER_SIZE, length - AapMessage.HEADER_SIZE, data) ?: return -1
         ba.data[0] = data[0]
@@ -96,7 +113,9 @@ class AapTransport(
     internal fun quit(clean: Boolean = false) {
         val callback = onQuit
         onQuit = null
-        AaLog.i("AapTransport quitting (clean=$clean)")
+       AaLog.i("AapTransport quitting (clean=$clean)")
+        microphone?.stop("AAP transport stopped")
+        microphone = null
         pollThread?.quit()
         sendThread?.quit()
         aapVideo.release()
@@ -242,6 +261,7 @@ class AapTransport(
     internal fun setSessionId(channel: Int, sessionId: Int) = sessionIds.put(channel, sessionId)
 
     companion object {
+        private const val SENSOR_NIGHT = 10
         private const val MSG_POLL = 1
         private const val MSG_SEND = 2
         private const val HANDSHAKE_TIMEOUT_MS = 10_000L

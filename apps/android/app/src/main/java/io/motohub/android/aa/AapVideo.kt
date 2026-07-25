@@ -69,6 +69,14 @@ internal class AapVideo(
                     messageBuffer.put(message.data, 2, message.size - 2)
                     return true
                 }
+                // Neither offset had a start code: this fragment's head is unusable, but
+                // isFrameCorrupt is still false from the reset above. Without marking it
+                // corrupt here, the flag 8/10 continuation fragments for this same access
+                // unit would still be accepted and appended onto a buffer missing its head,
+                // then handed to the decoder as-is on the last fragment - silent garbage
+                // instead of a requested recovery.
+                AaLog.w("AapVideo: Dropped Flag 9 packet (no start code). len=$len")
+                markCorruptAndRequestRecovery()
             }
             8 -> { // Middle fragment
                 if (isFrameCorrupt) return true

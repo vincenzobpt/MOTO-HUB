@@ -40,10 +40,11 @@ internal class AapControlMedia(private val aapTransport: AapTransport) : AapCont
                 }
                 return 0
             }
-            Media.MsgType.MEDIA_MESSAGE_MICROPHONE_REQUEST_VALUE -> {
-                // Mic not implemented (video-only). Acknowledge by ignoring.
-                AaLog.d("RX: Microphone request (ignored — mic not implemented)")
-                return 0
+           Media.MsgType.MEDIA_MESSAGE_MICROPHONE_REQUEST_VALUE -> {
+                val request = message.parse(Media.MicrophoneRequest.newBuilder()).build()
+                AaLog.i("RX: Microphone request open=%s", request.open)
+                aapTransport.microphone?.onRequest(request.open, message.channel)
+               return 0
             }
             Media.MsgType.MEDIA_MESSAGE_UPDATE_UI_CONFIG_REPLY_VALUE -> {
                 AaLog.i("RX: Update UI Config Reply received.")
@@ -57,8 +58,11 @@ internal class AapControlMedia(private val aapTransport: AapTransport) : AapCont
 
     private fun mediaStartRequest(request: Media.Start, channel: Int): Int {
         AaLog.i("Media Start Request %s: session=%d, config_index=%d", Channel.name(channel), request.sessionId, request.configurationIndex)
-        aapTransport.setSessionId(channel, request.sessionId)
-        return 0
+       aapTransport.setSessionId(channel, request.sessionId)
+        if (channel == Channel.ID_MIC) {
+            aapTransport.microphone?.setSessionId(request.sessionId)
+        }
+       return 0
     }
 
     private fun mediaSinkSetupRequest(request: Media.MediaSetupRequest, channel: Int): Int {
@@ -139,7 +143,14 @@ internal class AapControlSensor(private val aapTransport: AapTransport) : AapCon
             )
         )
         aapTransport.startSensor(request.type.number)
+        if (request.type.number == SENSOR_NIGHT) {
+            aapTransport.send(NightModeEvent(aapTransport.nightMode))
+        }
         return 0
+    }
+
+    private companion object {
+        const val SENSOR_NIGHT = 10
     }
 }
 

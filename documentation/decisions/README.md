@@ -25,3 +25,5 @@ Index:
   transport adapter.
 - [ADR-004](ADR-004-direct-surface-first.md): direct surface in the MVP, EGL
   only after hardware evidence.
+- [ADR-005](ADR-005-native-navigation-over-google-maps.md): native OSM
+  turn-by-turn navigation instead of embedding Google Maps.

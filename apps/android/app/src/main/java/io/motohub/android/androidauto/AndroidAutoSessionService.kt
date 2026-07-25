@@ -17,12 +17,18 @@ import androidx.core.content.ContextCompat
 import io.motohub.android.MainActivity
 import io.motohub.android.R
 import io.motohub.android.aa.AaReceiver
+import io.motohub.android.aa.AaInputBridge
 import io.motohub.android.aa.SingleKeyKeyManager
 import io.motohub.android.encoding.AdaptiveVideoController
 import io.motohub.android.encoding.AvcEncoder
 import io.motohub.android.encoding.EncoderProfile
+import io.motohub.android.feature.controls.HandlebarControlStore
+import io.motohub.android.feature.controls.MediaButtonBridge
+import io.motohub.android.feature.controls.SimulatorHandlebarBridge
 import io.motohub.android.feature.settings.MotoHubSettings
 import io.motohub.android.feature.settings.AndroidAutoAspectMatchingMode
+import io.motohub.android.feature.trips.TripRecordingService
+import io.motohub.android.feature.trips.TripRecordingSource
 import io.motohub.android.session.MotorcycleProfile
 import io.motohub.android.session.ProjectionEventLog
 import io.motohub.android.session.ProjectionRuntime
@@ -69,6 +75,8 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
     private var networkLossJob: Job? = null
     private var wakeLock: PowerManager.WakeLock? = null
     private val streamingLocks = TBoxStreamingLocks(this, "Android Auto")
+    private var mediaButtonBridge: MediaButtonBridge? = null
+    private var simulatorHandlebarBridge: SimulatorHandlebarBridge? = null
     private val displayGeometryStore by lazy { TBoxDisplayGeometryStore(this) }
     private val screenMarginsStore by lazy { TBoxScreenMarginsStore(this) }
     private val capabilityStore by lazy { TBoxCapabilityStore(this) }
@@ -104,6 +112,13 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
             createNotification(),
             ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE
         )
+        if (mediaButtonBridge == null) {
+            mediaButtonBridge = MediaButtonBridge(
+                context = applicationContext,
+                log = ::log,
+                targetName = MediaButtonBridge.TARGET_ANDROID_AUTO
+            ).also { it.start() }
+        }
         acquireWakeLock()
         streamingLocks.acquire()
         AndroidAutoRuntime.publish(AndroidAutoRuntimeState.Preparing)
@@ -116,6 +131,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
         val handle = TBoxSessionRegistry.current()
             ?: return fail("No T-Box is ready. Connect and find the T-Box before starting Android Auto.")
         tBoxHandle = handle
+        startSimulatorHandlebarBridgeIfNeeded(handle)
         val cachedCapabilities = capabilityStore.load(handle.motorcycle)?.capabilities
         val modelProfile = TBoxModelProfile.resolve(
             handle.motorcycle.modelId,
@@ -255,9 +271,13 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
                         bikeStreamJob = serviceScope.launch { startBikeStream(handle) }
                     }
                 },
-                onSessionEnded = { clean ->
+                onSessionEnded = { clean, userExit ->
                     if (!stopping) {
                         serviceScope.launch {
+                            if (userExit) {
+                                stopSession("Android Auto exited by user.")
+                                return@launch
+                            }
                             val reason = if (clean) {
                                 "Android Auto ended the AAP session before projection completed."
                             } else {
@@ -456,6 +476,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
             hasReachedStreaming = true
             markWatchdogProgress()
             startWatchdog()
+            mediaButtonBridge?.setCaptureActive(HandlebarControlStore.isEnabled(this))
             ProjectionEventLog.record("ANDROID AUTO", "Android Auto streaming active on the TFT.")
         } catch (failure: Throwable) {
             fail("Android Auto pipeline did not start: ${failure.message}")
@@ -563,7 +584,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
                 "Normalised raw=(${event.x},${event.y}) to AVC=(${mapped.first},${mapped.second})."
             )
         }
-        receiver?.sendTouch(event.action, mapped.first, mapped.second)
+        receiver?.sendTouch(event.action, event.pointerId, mapped.first, mapped.second)
     }
 
     private fun startWatchdog() {
@@ -618,9 +639,11 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
     /**
      * Retries [recoverTBoxStream] within a [RECOVERY_GIVE_UP_MILLIS] budget before giving
      * up and tearing the session down, instead of failing the whole Android Auto session
-     * on the first transient error (a discovery timeout, a momentary Wi-Fi hiccup), matching
-     * the "Reconnecting" retry-budget state ARCHITECTURE.md documents. [recoveryRequested]
-     * stays true for the whole multi-attempt
+     * on the first transient error (a discovery timeout, a momentary Wi-Fi hiccup). This
+     * mirrors [io.motohub.android.feature.ridedashboard.RideDashboardSessionService]'s
+     * `requestRecovery`, which already retries this way - Android Auto's own recovery was
+     * previously a single attempt, contradicting the "Reconnecting" retry-budget state
+     * ARCHITECTURE.md documents. [recoveryRequested] stays true for the whole multi-attempt
      * run so the watchdog does not start a second concurrent recovery.
      */
     private fun requestTBoxRecovery(reason: String) {
@@ -751,6 +774,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
         touchFilter = null
         if (stopping) return
         stopping = true
+        TripRecordingService.stopAuto(this, TripRecordingSource.ANDROID_AUTO)
         ProjectionEventLog.record(
             "ANDROID AUTO",
             "Stopping session: reason=$reason, framesSent=${framesAccepted.get()}."
@@ -773,6 +797,10 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
         networkLossJob = null
         receiver?.stop()
         receiver = null
+        simulatorHandlebarBridge?.stop()
+        simulatorHandlebarBridge = null
+        mediaButtonBridge?.stop()
+        mediaButtonBridge = null
         AndroidAutoPreviewRuntime.clear(this)
         screenMarginsListener?.let { screenMarginsStore.removeListener(it) }
         screenMarginsListener = null
@@ -815,6 +843,14 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
             setReferenceCounted(false)
             acquire(WAKE_LOCK_TIMEOUT_MS)
         }
+    }
+
+    private fun startSimulatorHandlebarBridgeIfNeeded(handle: TBoxSessionHandle) {
+        if (TBoxModelProfile.fromModelId(handle.motorcycle.modelId) != TBoxModelProfile.MOTO_HUB_SIMULATOR) return
+        simulatorHandlebarBridge = SimulatorHandlebarBridge(
+            targetName = MediaButtonBridge.TARGET_ANDROID_AUTO,
+            logTag = "ANDROID AUTO"
+        ).also { it.start() }
     }
 
     private fun releaseWakeLock() {
@@ -876,14 +912,18 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
 
     override fun sendPreviewTouch(action: Int, pointerId: Int, x: Int, y: Int) {
         val mapped = compositor?.mapPreviewToUi(x, y) ?: return
-        receiver?.sendSourceTouch(action, mapped.first, mapped.second)
+        receiver?.sendSourceTouch(action, pointerId, mapped.first, mapped.second)
     }
 
-    override fun sendPreviewKey(keycode: Int): Boolean = false
+    override fun sendPreviewKey(keycode: Int): Boolean = AaInputBridge.sendKey(keycode)
 
-    override fun sendPreviewScroll(delta: Int): Boolean = false
+    override fun sendPreviewScroll(delta: Int): Boolean = AaInputBridge.sendScroll(delta)
 
-    override fun setPreviewNightMode(isNight: Boolean): Boolean = false
+    override fun setPreviewNightMode(isNight: Boolean): Boolean {
+        val applied = receiver?.setNightMode(isNight) == true
+        if (applied) AndroidAutoNightModeStore(this).save(isNight)
+        return applied
+    }
 
     companion object {
         private const val CHANNEL_ID = "android_auto_session_v1"
@@ -902,6 +942,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
         private const val WAKE_LOCK_TIMEOUT_MS = 4 * 60 * 60 * 1_000L
 
         fun start(context: Context) {
+            if (io.motohub.android.proFeatureUnavailable(context, "Android Auto")) return
             ContextCompat.startForegroundService(
                 context,
                 Intent(context, AndroidAutoSessionService::class.java)

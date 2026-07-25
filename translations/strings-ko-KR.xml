@@ -66,6 +66,12 @@
     <string name="route_preference_scenic">풍경화</string>
     <string name="route_preference_scenic_description">뒷길을 향하고 고속도로에서 멀리 떨어져 있습니다.</string>
 
+    <!-- Core/Pro bridge -->
+    <string name="core_bridge_channel_name">MOTO-HUB Core 브리지</string>
+    <string name="core_bridge_channel_description">MOTO-HUB Pro가 사용 중일 때 T-Box 연결을 유지합니다</string>
+    <string name="core_bridge_notification_title">MOTO-HUB Core 활성화됨</string>
+    <string name="core_bridge_notification_text">MOTO-HUB Pro에 서비스 제공 중입니다.</string>
+
     <!-- Projection notifications -->
     <string name="projection_channel_name">MOTO-HUB 프로젝션</string>
     <string name="projection_channel_description">오토바이 디스플레이의 스트리밍 상태</string>

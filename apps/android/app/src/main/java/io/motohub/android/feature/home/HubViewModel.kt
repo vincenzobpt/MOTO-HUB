@@ -14,10 +14,11 @@ import io.motohub.android.session.ProjectionEventLog
 import io.motohub.android.session.TBoxConnectionMode
 import io.motohub.android.session.withMotorcycle
 import io.motohub.android.feature.pairing.TBoxQrPayload
+import io.motohub.android.feature.ridedashboard.RideDashboardRuntime
+import io.motohub.android.feature.ridedashboard.RideDashboardRuntimeState
 import io.motohub.android.androidauto.AndroidAutoRuntime
-import io.motohub.android.tbox.RideDaemonTransport
+import io.motohub.android.tbox.createTBoxSessionEstablisher
 import io.motohub.android.tbox.TBoxCapabilityStore
-import io.motohub.android.tbox.TBoxLinkResolver
 import io.motohub.android.tbox.TBoxModelProfile
 import io.motohub.android.tbox.ProfileOverride
 import io.motohub.android.tbox.TBoxNetworkConnector
@@ -56,8 +57,11 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
         )
     )
     val uiState: StateFlow<HubUiState> = mutableUiState.asStateFlow()
-    private val networkConnector = TBoxNetworkConnector(application)
-    private val transport = RideDaemonTransport(application)
+    // The T-Box connection engine: CORE flavor connects locally via the GPL hudlib transport;
+    // PRO flavor delegates the whole connect to CORE over AIDL and holds no GPL code.
+    private val establisher = createTBoxSessionEstablisher(application)
+    private val networkConnector get() = establisher.networkConnector
+    private val transport get() = establisher.transport
     private val capabilityStore = TBoxCapabilityStore(application)
     private var connectJob: Job? = null
 
@@ -106,6 +110,26 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
                     )
                     is ProjectionRuntimeState.Failed -> showError(runtime.message)
                     ProjectionRuntimeState.Idle -> Unit
+                }
+            }
+        }
+        viewModelScope.launch {
+            RideDashboardRuntime.state.collect { runtime ->
+                when (runtime) {
+                    RideDashboardRuntimeState.Starting -> updateProjectionState(
+                        SessionPhase.REQUESTING_PROJECTION,
+                        motoHubText("Starting the Ride Dashboard pipeline.")
+                    )
+                    RideDashboardRuntimeState.Streaming -> updateProjectionState(
+                        SessionPhase.CAPTURING,
+                        motoHubText("Ride Dashboard streaming is active on the motorcycle TFT.")
+                    )
+                    is RideDashboardRuntimeState.Stopped -> updateProjectionState(
+                        SessionPhase.NETWORK_SETUP_REQUIRED,
+                        runtime.reason
+                    )
+                    is RideDashboardRuntimeState.Failed -> showError(runtime.message)
+                    RideDashboardRuntimeState.Idle -> Unit
                 }
             }
         }
@@ -319,7 +343,6 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
             )
         )
         connectJob = viewModelScope.launch {
-            var establishedLink: io.motohub.android.tbox.TBoxLink? = null
             var sessionInstalled = false
             try {
                 // The official CFMOTO app can keep its EasyConn/PXC service alive after logout
@@ -333,69 +356,44 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
                     )
                     delay(300)
                 }
-                val connected = TBoxLinkResolver.connect(getApplication(), networkConnector, profile)
-                val networkFailure = connected.exceptionOrNull()
-                if (networkFailure != null) {
-                    ProjectionEventLog.error("NETWORK", "T-Box AP connection failed.", networkFailure)
-                    // activeVpnLabel omitted: see TBoxNetworkConnector.connect() for why merely having a VPN active isn't evidence.
-                    showError(
-                        TBoxVpnDiagnostics.userFacingMessage(
-                            error = networkFailure,
-                            activeVpnLabel = null
-                        ) ?: "Unable to connect to the T-Box network: ${networkFailure.message}"
+                // CORE flavor: the establisher joins Wi-Fi + runs hudlib discovery locally.
+                // PRO flavor: the establisher delegates the whole connect to CORE over AIDL.
+                // The callbacks keep this screen's exact phases/error messages either way.
+                sessionInstalled = establisher.connectAndInstall(
+                    profile = profile,
+                    onNetworkConnected = {
+                        ProjectionEventLog.record("NETWORK", "T-Box link established.")
+                        mutableUiState.value = mutableUiState.value.copy(
+                            session = mutableUiState.value.session.copy(
+                                phase = SessionPhase.DISCOVERING_TBOX,
+                                message = motoHubText("Network connected. Searching for the EasyConn service.")
+                            )
+                        )
+                    },
+                    onNetworkError = { networkFailure ->
+                        ProjectionEventLog.error("NETWORK", "T-Box AP connection failed.", networkFailure)
+                        showError(
+                            TBoxVpnDiagnostics.userFacingMessage(
+                                error = networkFailure,
+                                activeVpnLabel = null
+                            ) ?: "Unable to connect to the T-Box network: ${networkFailure.message}"
+                        )
+                    },
+                    onDiscoveryError = { discoveryFailure ->
+                        ProjectionEventLog.error("DISCOVERY", "EasyConn service discovery failed.", discoveryFailure)
+                        showError(motoHubText("T-Box not found: %1\$s", discoveryFailure.message.orEmpty()))
+                    }
+                )
+                if (sessionInstalled) {
+                    mutableUiState.value = mutableUiState.value.copy(
+                        session = mutableUiState.value.session.copy(
+                            phase = SessionPhase.READY,
+                            message = motoHubText("T-Box found. You can now choose an app or screen to share.")
+                        )
                     )
-                    return@launch
                 }
-
-                establishedLink = connected.getOrThrow()
-                ProjectionEventLog.record("NETWORK", "T-Box link established (${establishedLink.label}).")
-
-                mutableUiState.value = mutableUiState.value.copy(
-                    session = mutableUiState.value.session.copy(
-                        phase = SessionPhase.DISCOVERING_TBOX,
-                        message = motoHubText("Network connected. Searching for the EasyConn service.")
-                    )
-                )
-                transport.configureProtocolProfile(
-                    TBoxModelProfile.resolve(
-                        profile.modelId,
-                        null,
-                        ProfileOverride.byKey(profile.profileOverrideKey)
-                    )
-                )
-                val discovered = transport.discover(establishedLink, profile.modelId)
-                val discoveryFailure = discovered.exceptionOrNull()
-                if (discoveryFailure != null) {
-                    ProjectionEventLog.error("DISCOVERY", "EasyConn service discovery failed.", discoveryFailure)
-                    transport.stop()
-                    establishedLink.disconnect()
-                    networkConnector.disconnect()
-                    TBoxSessionRegistry.clear()
-                    showError(motoHubText("T-Box not found: %1\$s", discoveryFailure.message.orEmpty()))
-                    return@launch
-                }
-                val host = discovered.getOrThrow()
-                capabilityStore.recordDiscovery(profile, host)
-                ProjectionEventLog.record(
-                    "DISCOVERY",
-                    "EasyConn service found at ${host.ipAddress}:${host.port}; package=${host.packageName}."
-                )
-                TBoxSessionRegistry.install(
-                    TBoxSessionHandle(transport, host, networkConnector, profile, establishedLink)
-                )
-                sessionInstalled = true
-                ProjectionEventLog.record("SESSION", "T-Box session handle installed; state is READY.")
-
-                mutableUiState.value = mutableUiState.value.copy(
-                    session = mutableUiState.value.session.copy(
-                        phase = SessionPhase.READY,
-                        message = motoHubText("T-Box found. You can now choose an app or screen to share.")
-                    )
-                )
             } finally {
-                // Cancellation after a P2P join but before registry installation otherwise leaves
-                // the group alive because it has no ConnectivityManager callback to release it.
-                if (!sessionInstalled) establishedLink?.disconnect()
+                if (!sessionInstalled) establisher.networkConnector.disconnect()
                 connectJob = null
                 ProjectionEventLog.debug("CONNECTION", "Connection coroutine completed.")
             }
@@ -408,6 +406,10 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
             return
         }
         ProjectionEventLog.record("CONNECTION", "User cancelled the connection attempt.")
+        // Must run before cancelAndJoin(): PRO's connect is blocked inside a synchronous AIDL
+        // call with no suspension point for Job cancellation to interrupt, so it needs Core
+        // actively told to abort before the caller's Job can actually finish cancelling.
+        establisher.cancelPendingConnect()
         viewModelScope.launch {
             activeJob.cancelAndJoin()
             transport.stop()
@@ -464,6 +466,16 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
         )
     }
 
+    fun onRideDashboardRequested() {
+        ProjectionEventLog.record("RIDE_DASHBOARD", "User selected Ride Dashboard mode.")
+        mutableUiState.value = mutableUiState.value.copy(
+            session = mutableUiState.value.session.copy(
+                phase = SessionPhase.REQUESTING_PROJECTION,
+                message = motoHubText("Starting the native Ride Dashboard.")
+            )
+        )
+    }
+
     fun onNearbyWifiPermissionDenied() {
         ProjectionEventLog.warning("PERMISSION", "Nearby Wi-Fi or Location permission denied.")
         showError(motoHubText("Allow Nearby devices and Location to detect the T-Box Wi-Fi network."))
@@ -514,6 +526,8 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
     private fun isNativeStreamActive(): Boolean =
         ProjectionRuntime.state.value is ProjectionRuntimeState.Starting ||
             ProjectionRuntime.state.value is ProjectionRuntimeState.Streaming ||
+            RideDashboardRuntime.state.value is RideDashboardRuntimeState.Starting ||
+            RideDashboardRuntime.state.value is RideDashboardRuntimeState.Streaming ||
             AndroidAutoRuntime.isActive()
 }
 

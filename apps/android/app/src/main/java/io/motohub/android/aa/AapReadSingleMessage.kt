@@ -40,6 +40,17 @@ internal class AapReadSingleMessage(connection: AccessoryConnection, ssl: AapSsl
             if (recvHeader.flags == 0x09) {
                 val readSize = connection.recvBlocking(fragmentSizeBuffer, 4, 10000, true)
                 if (readSize != 4) {
+                    if (isSocket) {
+                        // DataInputStream.readFully() can consume some of these 4 bytes
+                        // from the TCP stream before a mid-read SocketTimeoutException;
+                        // those bytes cannot be put back. Treating this as "skip, try
+                        // again" would read the next frame's bytes as if they were a
+                        // fresh header, permanently desyncing AAP framing for the rest of
+                        // the session. Disconnect instead, same as the header-timeout path
+                        // above; the recovery watchdog reconnects.
+                        AaLog.w("AapRead: WiFi timeout/error reading fragment size - disconnecting to avoid desync.")
+                        return -1
+                    }
                     AaLog.e("AapRead: Failed to read fragment total size. Skipping.")
                     return 0
                 }
@@ -54,6 +65,14 @@ internal class AapReadSingleMessage(connection: AccessoryConnection, ssl: AapSsl
             if (msgSize != recvHeader.enc_len) {
                 if (msgSize == -1) {
                     AaLog.i("AapRead: Connection closed during body read.")
+                    return -1
+                }
+                if (isSocket) {
+                    // Same rationale as the fragment-size read above: a mid-read timeout
+                    // has already consumed part of the body from the stream, so "skip and
+                    // read a fresh header next time" would desync framing instead of
+                    // recovering. Disconnect and let the watchdog reconnect.
+                    AaLog.w("AapRead: WiFi timeout/error reading message body - disconnecting to avoid desync.")
                     return -1
                 }
                 AaLog.e("AapRead: Failed to read full message body. Expected ${recvHeader.enc_len}, got $msgSize. Skipping.")

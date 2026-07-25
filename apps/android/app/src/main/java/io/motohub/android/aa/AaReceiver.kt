@@ -14,13 +14,14 @@ import io.motohub.android.androidauto.AndroidAutoCapabilityProfile
 import java.net.ServerSocket
 import java.net.Socket
 import kotlin.concurrent.thread
+import io.motohub.android.androidauto.AndroidAutoNightModeStore
 
 class AaReceiver(
     private val context: Context,
     private val encoderSurface: Surface,
     private val log: (String) -> Unit,
     private val onVideoReady: () -> Unit,
-    private val onSessionEnded: (clean: Boolean) -> Unit,
+    private val onSessionEnded: (clean: Boolean, userExit: Boolean) -> Unit,
     private val mapTouchToSource: (Int, Int) -> Pair<Int, Int>?,
     private val capabilityProfile: AndroidAutoCapabilityProfile,
 ) {
@@ -85,6 +86,7 @@ class AaReceiver(
 
     fun stop() {
         running = false
+        AaInputBridge.clear(input)
         input = null
         try { transport?.stop() } catch (_: Exception) {
             try { transport?.quit() } catch (_: Exception) {}
@@ -128,15 +130,19 @@ class AaReceiver(
             context = context,
             androidAutoCapabilityProfile = capabilityProfile
         )
+        t.nightMode = AndroidAutoNightModeStore(context).load()
         t.onQuit = { clean ->
-            log("[AA] transport quit (clean=$clean, userExit=${t.wasUserExit})")
+            val userExit = t.wasUserExit
+            log("[AA] transport quit (clean=$clean, userExit=$userExit)")
+            AaInputBridge.clear(input)
             input = null
             transport = null
             try { conn.disconnect() } catch (_: Exception) {}
             connection = null
-            onSessionEnded(clean)
+            onSessionEnded(clean, userExit)
         }
-        transport = t
+       transport = t
+        t.microphone = AaMicrophone(context, t, log)
 
         // Bike touchscreen → Android Auto: EasyConnProber decodes dash touches (PXC cmdType 32) and
         // calls this sink with raw bike-canvas coords + a normalised action. Letterbox-map into AA
@@ -146,29 +152,43 @@ class AaReceiver(
         log("[AA] starting AAP handshake (version + SSL)…")
         if (!t.startHandshake(conn)) {
             log("[AA] handshake FAILED")
+            AaInputBridge.clear(input)
+            input = null
             transport = null
             try { conn.disconnect() } catch (_: Exception) {}
             connection = null
             return
         }
+        AaInputBridge.install(checkNotNull(input))
         log("[AA] handshake OK — pointing decoder at encoder surface and starting read loop")
         videoDecoder.setSurface(encoderSurface)
         t.startReading()
         log("[AA] read loop started — expecting ServiceDiscovery then video")
     }
 
-    fun sendTouch(action: Int, canvasX: Int, canvasY: Int) {
+    fun sendTouch(action: Int, pointerId: Int, canvasX: Int, canvasY: Int) {
         val activeInput = input ?: return
         val mapped = mapTouchToSource(canvasX, canvasY) ?: return
         if (action != AaInput.ACTION_MOVE) {
-            log("[AA] touch action=$action bike=($canvasX,$canvasY) → AA=(${mapped.first},${mapped.second})")
+            log("[AA] touch action=$action p$pointerId canvas=($canvasX,$canvasY) → AA=(${mapped.first},${mapped.second})")
         }
-        activeInput.sendTouch(action, mapped.first, mapped.second)
+        activeInput.sendTouch(action, pointerId, mapped.first, mapped.second)
     }
 
-    fun sendSourceTouch(action: Int, sourceX: Int, sourceY: Int) {
+    fun sendTouch(action: Int, canvasX: Int, canvasY: Int) = sendTouch(action, 0, canvasX, canvasY)
+
+    fun sendSourceTouch(action: Int, pointerId: Int, sourceX: Int, sourceY: Int) {
         val activeInput = input ?: return
-        activeInput.sendTouch(action, sourceX, sourceY)
+        activeInput.sendTouch(action, pointerId, sourceX, sourceY)
+    }
+
+    fun sendSourceTouch(action: Int, sourceX: Int, sourceY: Int) =
+        sendSourceTouch(action, 0, sourceX, sourceY)
+
+    fun setNightMode(isNight: Boolean): Boolean {
+        val activeTransport = transport ?: return false
+        activeTransport.sendNightMode(isNight)
+        return true
     }
 
     private fun registerNsd() {

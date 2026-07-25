@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- CORE-only: defines the signature permission and hosts the AIDL bridge service (which
+         contains the GPL transport + AA receiver). PRO binds to this over IPC. -->
+    <permission
+        android:name="io.motohub.android.permission.BIND_CORE_SERVICE"
+        android:protectionLevel="signature" />
+
+    <application>
+        <!-- Invisible trampoline that lets IpcBridgeService start RideDashboardSessionService's
+             location-typed foreground service on Android 14+ — see the class doc for why this
+             exists. Never shown to the user: no history, excluded from recents, no display. -->
+        <activity
+            android:name=".ipc.RideDashboardTrampolineActivity"
+            android:exported="false"
+            android:theme="@style/TrampolineTheme"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:launchMode="singleInstance" />
+        <service
+            android:name=".ipc.IpcBridgeService"
+            android:exported="true"
+            android:foregroundServiceType="connectedDevice"
+            android:permission="io.motohub.android.permission.BIND_CORE_SERVICE">
+            <!-- Two distinct actions, not one action + an extra: onBind()'s returned IBinder is
+                 cached per Intent.filterEquals(), which ignores extras - see IpcBridgeContract. -->
+            <intent-filter>
+                <action android:name="io.motohub.android.ipc.BIND_TBOX_TRANSPORT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="io.motohub.android.ipc.BIND_ANDROID_AUTO_RECEIVER" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

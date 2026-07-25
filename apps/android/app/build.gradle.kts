@@ -42,6 +42,27 @@ android {
         versionName = "0.9.0-beta.10-build.86-r1"
     }
 
+    // One codebase, two editions ("identica bit by bit ... con tutte le funzionalità
+    // abilitate"): CORE = the open, reduced app (Home/Connessioni/Mirroring/Android Auto/
+    // Settings); PRO = the same code with every feature enabled (adds Ride Dashboard,
+    // Navigation, Trips). The only difference at runtime is BuildConfig.IS_PRO, which gates
+    // the extra tabs/modes — see HubBottomNavigation and ModeSelectionContent.
+    flavorDimensions += "edition"
+    productFlavors {
+        create("core") {
+            dimension = "edition"
+            applicationId = "io.motohub.android"
+            buildConfigField("boolean", "IS_PRO", "false")
+            manifestPlaceholders["appLabel"] = "MOTO-HUB"
+        }
+        create("pro") {
+            dimension = "edition"
+            applicationId = "io.motohub.android.pro"
+            buildConfigField("boolean", "IS_PRO", "true")
+            manifestPlaceholders["appLabel"] = "MOTO-HUB Pro"
+        }
+    }
+
     signingConfigs {
         if (hasLocalReleaseSigning) {
             create("localRelease") {
@@ -197,7 +218,10 @@ val exportPrivateAndroidAutoApk by tasks.registering(Copy::class) {
 }
 
 dependencies {
-    implementation(files("libs/hudlib.aar"))
+    implementation(project(":ipc-contract"))
+    // hudlib.aar is GPL-3.0 (the EasyConn/T-Box transport). CORE-only: PRO must not link it, so
+    // PRO can be distributed closed-source. PRO reaches the transport through Core via AIDL.
+    "coreImplementation"(files("libs/hudlib.aar"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
