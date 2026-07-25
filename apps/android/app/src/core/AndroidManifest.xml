@@ -32,6 +32,20 @@
                 <action android:name="io.motohub.android.ipc.BIND_ANDROID_AUTO_RECEIVER" />
             </intent-filter>
         </service>
+
+        <!-- AGPL AA receiver (aa/) is CORE-only, so these services live here, not in the shared
+             manifest. -->
+        <service
+            android:name=".androidauto.AndroidAutoSessionService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice|microphone" />
+
+        <!-- exported=true only so `adb shell am start-foreground-service` can trigger this
+             diagnostic-only probe directly; no UI wiring, no external intent data consumed. -->
+        <service
+            android:name=".externaldisplay.AapAccessoryProbeService"
+            android:exported="true"
+            android:foregroundServiceType="connectedDevice" />
     </application>
 
 </manifest>

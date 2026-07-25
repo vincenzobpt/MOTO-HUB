@@ -13,7 +13,7 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.view.Surface
 import io.motohub.android.aa.AaInput
-import io.motohub.android.aa.AaInputBridge
+import io.motohub.android.androidauto.AaInputBridge
 import io.motohub.android.aa.AaReceiver
 import io.motohub.android.aa.SingleKeyKeyManager
 import io.motohub.android.androidauto.AaCompositor
@@ -30,8 +30,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 class EmbeddedAndroidAutoSource(
     context: Context,
     private val capabilityProfile: AndroidAutoCapabilityProfile,
-    val displayMode: AndroidAutoDisplayMode
-) : AndroidAutoPreviewController {
+    override val displayMode: AndroidAutoDisplayMode
+) : AndroidAutoPreviewController, EmbeddedAndroidAutoVideoSource {
     private val applicationContext = context.applicationContext
     private val frameLock = Any()
     private val framePaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
@@ -45,10 +45,10 @@ class EmbeddedAndroidAutoSource(
     private var compositor: AaCompositor? = null
     private var receiver: AaReceiver? = null
 
-    val width: Int get() = capabilityProfile.video.width
-    val height: Int get() = capabilityProfile.video.height
+    override val width: Int get() = capabilityProfile.video.width
+    override val height: Int get() = capabilityProfile.video.height
 
-    fun start(): Boolean {
+    override fun start(): Boolean {
         RideDashboardAndroidAutoRuntime.publish(RideDashboardAndroidAutoState.Preparing)
         if (!SingleKeyKeyManager.isAvailable(applicationContext)) {
             fail("Android Auto identity is not included in this build.")
@@ -118,7 +118,7 @@ class EmbeddedAndroidAutoSource(
         }
     }
 
-    fun draw(canvas: Canvas, destination: RectF): Boolean {
+    override fun draw(canvas: Canvas, destination: RectF): Boolean {
         if (!hasFrame.get()) return false
         synchronized(frameLock) {
             val bitmap = frameBitmap ?: return false
@@ -128,7 +128,7 @@ class EmbeddedAndroidAutoSource(
         return true
     }
 
-   fun sendSourceTouch(action: Int, pointerId: Int, x: Int, y: Int) {
+   override fun sendSourceTouch(action: Int, pointerId: Int, x: Int, y: Int) {
         val mapped = compositor?.mapSourceToUi(x, y) ?: return
        receiver?.sendSourceTouch(
             action = when (action) {
@@ -143,11 +143,11 @@ class EmbeddedAndroidAutoSource(
     }
 
     /** Applies a screen-margin change to the running compositor without restarting the source. */
-    fun refreshMargins(margins: TBoxScreenMargins) {
+    override fun refreshMargins(margins: TBoxScreenMargins) {
         compositor?.refreshMargins(margins)
     }
 
-    fun stop() {
+    override fun stop() {
         acceptingFrames.set(false)
         AndroidAutoPreviewRuntime.clear(this)
         val activeReceiver = receiver

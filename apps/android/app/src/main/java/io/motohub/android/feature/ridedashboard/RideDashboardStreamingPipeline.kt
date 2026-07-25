@@ -14,7 +14,7 @@ class RideDashboardStreamingPipeline(
     private val motorcyclePhotoPath: String?,
     private val layoutController: RideDashboardLayoutController,
     private val mapSource: RideDashboardMapSource,
-    private val embeddedAndroidAuto: EmbeddedAndroidAutoSource?,
+    private val embeddedAndroidAuto: EmbeddedAndroidAutoVideoSource?,
     private val cellularOnlyMaps: Boolean,
     private val leftWidget: DashboardWidget,
     private val rightWidget: DashboardWidget,

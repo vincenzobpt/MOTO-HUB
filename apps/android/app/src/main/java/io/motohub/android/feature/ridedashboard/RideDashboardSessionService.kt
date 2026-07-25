@@ -82,7 +82,7 @@ class RideDashboardSessionService : Service() {
     private var renderer: RideDashboardRenderer? = null
     private var dashboardLayoutStore: DashboardLayoutStore? = null
     private var dashboardLayoutListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
-    private var embeddedAndroidAuto: EmbeddedAndroidAutoSource? = null
+    private var embeddedAndroidAuto: EmbeddedAndroidAutoVideoSource? = null
     private var screenMarginsStoreForListener: TBoxScreenMarginsStore? = null
     private var screenMarginsListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
     private var telemetryProvider: RideTelemetryProvider? = null
@@ -270,13 +270,11 @@ class RideDashboardSessionService : Service() {
             } ?: handle.host.packageName.substringAfterLast('.').ifBlank { handle.motorcycle.ssid }
             val androidAutoDisplayMode = AndroidAutoDisplayModeStore(this).load(handle.motorcycle)
             val androidAutoResolutionMode = MotoHubSettings.androidAutoResolution(this)
-            // Embedded Android Auto as the dashboard map panel runs the AGPL AA receiver in-process.
-            // PRO holds none of that code (AA runs in CORE), so this stays CORE-only; in PRO an
-            // ANDROID_AUTO map source simply renders without the embedded AA panel.
-            val activeEmbeddedAndroidAuto = if (
-                mapSource == RideDashboardMapSource.ANDROID_AUTO && !io.motohub.android.BuildConfig.IS_PRO
-            ) {
-                EmbeddedAndroidAutoSource(
+            // Embedded Android Auto as the dashboard map panel runs the AGPL AA receiver in-process
+            // — createEmbeddedAndroidAutoSource resolves to the real thing in CORE and to null in
+            // PRO (which holds no AGPL code), so this call site doesn't need a flavor check itself.
+            val activeEmbeddedAndroidAuto = if (mapSource == RideDashboardMapSource.ANDROID_AUTO) {
+                createEmbeddedAndroidAutoSource(
                     context = this,
                     capabilityProfile = AndroidAutoCapabilityProfiles.select(
                         target = DisplayGeometry(profile.width, profile.height),

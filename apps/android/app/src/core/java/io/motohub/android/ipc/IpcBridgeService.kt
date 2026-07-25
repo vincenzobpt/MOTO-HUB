@@ -14,7 +14,7 @@ import android.os.RemoteCallbackList
 import android.view.Surface
 import androidx.core.app.NotificationCompat
 import io.motohub.android.R
-import io.motohub.android.aa.AaInputBridge
+import io.motohub.android.androidauto.AaInputBridge
 import io.motohub.android.aa.AaReceiver
 import io.motohub.android.aa.AaSelfMode
 import io.motohub.android.aa.SingleKeyKeyManager

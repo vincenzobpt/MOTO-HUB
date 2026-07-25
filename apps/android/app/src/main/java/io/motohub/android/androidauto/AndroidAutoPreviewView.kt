@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import io.motohub.android.aa.AaInput
+import io.motohub.android.androidauto.AndroidAutoInputCodes
 
 class AndroidAutoPreviewView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     init {
@@ -30,7 +30,7 @@ class AndroidAutoPreviewView(context: Context) : SurfaceView(context), SurfaceHo
             MotionEvent.ACTION_POINTER_DOWN -> {
                 val index = event.actionIndex
                 AndroidAutoPreviewRuntime.sendTouch(
-                    AaInput.ACTION_DOWN,
+                    AndroidAutoInputCodes.ACTION_DOWN,
                     event.getPointerId(index),
                     event.getX(index).toInt(),
                     event.getY(index).toInt()
@@ -39,7 +39,7 @@ class AndroidAutoPreviewView(context: Context) : SurfaceView(context), SurfaceHo
             MotionEvent.ACTION_MOVE -> {
                 for (index in 0 until event.pointerCount) {
                     AndroidAutoPreviewRuntime.sendTouch(
-                        AaInput.ACTION_MOVE,
+                        AndroidAutoInputCodes.ACTION_MOVE,
                         event.getPointerId(index),
                         event.getX(index).toInt(),
                         event.getY(index).toInt()
@@ -55,7 +55,7 @@ class AndroidAutoPreviewView(context: Context) : SurfaceView(context), SurfaceHo
                 }
                 if (index >= 0) {
                     AndroidAutoPreviewRuntime.sendTouch(
-                        AaInput.ACTION_UP,
+                        AndroidAutoInputCodes.ACTION_UP,
                         event.getPointerId(index),
                         event.getX(index).toInt(),
                         event.getY(index).toInt()
@@ -65,7 +65,7 @@ class AndroidAutoPreviewView(context: Context) : SurfaceView(context), SurfaceHo
             MotionEvent.ACTION_CANCEL -> {
                 for (index in 0 until event.pointerCount) {
                     AndroidAutoPreviewRuntime.sendTouch(
-                        AaInput.ACTION_UP,
+                        AndroidAutoInputCodes.ACTION_UP,
                         event.getPointerId(index),
                         event.getX(index).toInt(),
                         event.getY(index).toInt()

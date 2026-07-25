@@ -54,8 +54,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import io.motohub.android.aa.AaInput
-import io.motohub.android.aa.AaInputBridge
+import io.motohub.android.androidauto.AndroidAutoInputCodes
+import io.motohub.android.androidauto.AaInputBridge
 import io.motohub.android.feature.ridedashboard.RideDashboardControlBridge
 import io.motohub.android.feature.ridedashboard.RideDashboardMapSource
 import io.motohub.android.feature.ridedashboard.RideDashboardMapSourceStore
@@ -650,19 +650,19 @@ private fun Dpad(
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
             OutlinedButton(onClick = { onScroll(-1) }, enabled = enabled, modifier = Modifier.height(66.dp)) { Text(motoHubText("Scroll −")) }
-            ControlButton("▲", enabled, buttonModifier) { onKey(AaInput.KEY_UP) }
+            ControlButton("▲", enabled, buttonModifier) { onKey(AndroidAutoInputCodes.KEY_UP) }
             OutlinedButton(onClick = { onScroll(+1) }, enabled = enabled, modifier = Modifier.height(66.dp)) { Text(motoHubText("Scroll +")) }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            ControlButton("◀", enabled, buttonModifier) { onKey(AaInput.KEY_LEFT) }
-            ControlButton("OK", enabled, buttonModifier) { onKey(AaInput.KEY_ENTER) }
-            ControlButton("▶", enabled, buttonModifier) { onKey(AaInput.KEY_RIGHT) }
+            ControlButton("◀", enabled, buttonModifier) { onKey(AndroidAutoInputCodes.KEY_LEFT) }
+            ControlButton("OK", enabled, buttonModifier) { onKey(AndroidAutoInputCodes.KEY_ENTER) }
+            ControlButton("▶", enabled, buttonModifier) { onKey(AndroidAutoInputCodes.KEY_RIGHT) }
         }
-        ControlButton("▼", enabled, buttonModifier) { onKey(AaInput.KEY_DOWN) }
+        ControlButton("▼", enabled, buttonModifier) { onKey(AndroidAutoInputCodes.KEY_DOWN) }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(onClick = { onKey(AaInput.KEY_BACK) }, enabled = enabled) { Text(motoHubText("Back")) }
-            OutlinedButton(onClick = { onKey(AaInput.KEY_ASSISTANT) }, enabled = enabled) { Text(motoHubText("Voice")) }
-            OutlinedButton(onClick = { onKey(AaInput.KEY_HOME) }, enabled = enabled) { Text(motoHubText("Home")) }
+            OutlinedButton(onClick = { onKey(AndroidAutoInputCodes.KEY_BACK) }, enabled = enabled) { Text(motoHubText("Back")) }
+            OutlinedButton(onClick = { onKey(AndroidAutoInputCodes.KEY_ASSISTANT) }, enabled = enabled) { Text(motoHubText("Voice")) }
+            OutlinedButton(onClick = { onKey(AndroidAutoInputCodes.KEY_HOME) }, enabled = enabled) { Text(motoHubText("Home")) }
         }
     }
 }
@@ -707,23 +707,23 @@ private fun FullscreenDpad(
             }
             Row(modifier = Modifier.weight(1f).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 FullscreenButton("Scroll −", enabled, Modifier.weight(1f).fillMaxHeight()) { onScroll(-1) }
-                FullscreenButton("▲", enabled, Modifier.weight(1f).fillMaxHeight()) { onKey(AaInput.KEY_UP) }
+                FullscreenButton("▲", enabled, Modifier.weight(1f).fillMaxHeight()) { onKey(AndroidAutoInputCodes.KEY_UP) }
                 FullscreenButton("Scroll +", enabled, Modifier.weight(1f).fillMaxHeight()) { onScroll(+1) }
             }
             Row(modifier = Modifier.weight(1f).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                FullscreenButton("◀", enabled, Modifier.weight(1f).fillMaxHeight()) { onKey(AaInput.KEY_LEFT) }
-                FullscreenButton("OK", enabled, Modifier.weight(1f).fillMaxHeight()) { onKey(AaInput.KEY_ENTER) }
-                FullscreenButton("▶", enabled, Modifier.weight(1f).fillMaxHeight()) { onKey(AaInput.KEY_RIGHT) }
+                FullscreenButton("◀", enabled, Modifier.weight(1f).fillMaxHeight()) { onKey(AndroidAutoInputCodes.KEY_LEFT) }
+                FullscreenButton("OK", enabled, Modifier.weight(1f).fillMaxHeight()) { onKey(AndroidAutoInputCodes.KEY_ENTER) }
+                FullscreenButton("▶", enabled, Modifier.weight(1f).fillMaxHeight()) { onKey(AndroidAutoInputCodes.KEY_RIGHT) }
             }
             Row(modifier = Modifier.weight(1f).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Spacer(Modifier.weight(1f))
-                FullscreenButton("▼", enabled, Modifier.weight(1f).fillMaxHeight()) { onKey(AaInput.KEY_DOWN) }
+                FullscreenButton("▼", enabled, Modifier.weight(1f).fillMaxHeight()) { onKey(AndroidAutoInputCodes.KEY_DOWN) }
                 Spacer(Modifier.weight(1f))
             }
             Row(modifier = Modifier.weight(1f).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                FullscreenButton("Back", enabled, Modifier.weight(1f).fillMaxHeight()) { onKey(AaInput.KEY_BACK) }
-                FullscreenButton("Voice", enabled, Modifier.weight(1f).fillMaxHeight()) { onKey(AaInput.KEY_ASSISTANT) }
-                FullscreenButton("Home", enabled, Modifier.weight(1f).fillMaxHeight()) { onKey(AaInput.KEY_HOME) }
+                FullscreenButton("Back", enabled, Modifier.weight(1f).fillMaxHeight()) { onKey(AndroidAutoInputCodes.KEY_BACK) }
+                FullscreenButton("Voice", enabled, Modifier.weight(1f).fillMaxHeight()) { onKey(AndroidAutoInputCodes.KEY_ASSISTANT) }
+                FullscreenButton("Home", enabled, Modifier.weight(1f).fillMaxHeight()) { onKey(AndroidAutoInputCodes.KEY_HOME) }
             }
         }
     }

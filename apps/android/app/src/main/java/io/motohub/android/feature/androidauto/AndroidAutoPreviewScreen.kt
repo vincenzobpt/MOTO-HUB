@@ -43,8 +43,8 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import io.motohub.android.aa.AaInput
-import io.motohub.android.aa.AaInputBridge
+import io.motohub.android.androidauto.AndroidAutoInputCodes
+import io.motohub.android.androidauto.AaInputBridge
 import io.motohub.android.androidauto.AndroidAutoPreviewRuntime
 import io.motohub.android.androidauto.AndroidAutoPreviewView
 import io.motohub.android.androidauto.AndroidAutoRuntime
@@ -306,19 +306,19 @@ private fun InlineAaControls(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                AaButton("Up", enabled, Modifier.weight(1f)) { onKey(AaInput.KEY_UP) }
-                AaButton("Left", enabled, Modifier.weight(1f)) { onKey(AaInput.KEY_LEFT) }
-                AaButton("OK", enabled, Modifier.weight(1f)) { onKey(AaInput.KEY_ENTER) }
-                AaButton("Right", enabled, Modifier.weight(1f)) { onKey(AaInput.KEY_RIGHT) }
-                AaButton("Down", enabled, Modifier.weight(1f)) { onKey(AaInput.KEY_DOWN) }
+                AaButton("Up", enabled, Modifier.weight(1f)) { onKey(AndroidAutoInputCodes.KEY_UP) }
+                AaButton("Left", enabled, Modifier.weight(1f)) { onKey(AndroidAutoInputCodes.KEY_LEFT) }
+                AaButton("OK", enabled, Modifier.weight(1f)) { onKey(AndroidAutoInputCodes.KEY_ENTER) }
+                AaButton("Right", enabled, Modifier.weight(1f)) { onKey(AndroidAutoInputCodes.KEY_RIGHT) }
+                AaButton("Down", enabled, Modifier.weight(1f)) { onKey(AndroidAutoInputCodes.KEY_DOWN) }
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                AaButton("Back", enabled, Modifier.weight(1f)) { onKey(AaInput.KEY_BACK) }
-                AaButton("Home", enabled, Modifier.weight(1f)) { onKey(AaInput.KEY_HOME) }
-                AaButton("Assistant", enabled, Modifier.weight(1f)) { onKey(AaInput.KEY_ASSISTANT) }
+                AaButton("Back", enabled, Modifier.weight(1f)) { onKey(AndroidAutoInputCodes.KEY_BACK) }
+                AaButton("Home", enabled, Modifier.weight(1f)) { onKey(AndroidAutoInputCodes.KEY_HOME) }
+                AaButton("Assistant", enabled, Modifier.weight(1f)) { onKey(AndroidAutoInputCodes.KEY_ASSISTANT) }
                 AaButton("Scroll -", enabled, Modifier.weight(1f)) { onScroll(-1) }
                 AaButton("Scroll +", enabled, Modifier.weight(1f)) { onScroll(+1) }
                 AaButton(if (nightMode) "Day" else "Night", enabled, Modifier.weight(1f), onToggleNight)

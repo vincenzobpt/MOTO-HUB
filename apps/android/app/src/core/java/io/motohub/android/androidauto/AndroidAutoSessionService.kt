@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat
 import io.motohub.android.MainActivity
 import io.motohub.android.R
 import io.motohub.android.aa.AaReceiver
-import io.motohub.android.aa.AaInputBridge
+import io.motohub.android.androidauto.AaInputBridge
 import io.motohub.android.aa.SingleKeyKeyManager
 import io.motohub.android.encoding.AdaptiveVideoController
 import io.motohub.android.encoding.AvcEncoder
@@ -956,17 +956,6 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
         }
     }
 }
-
-internal fun shouldAutoRecoverAndroidAuto(
-    hasReachedStreaming: Boolean,
-    enabled: Boolean
-): Boolean = hasReachedStreaming && enabled
-
-internal fun isAndroidAutoWatchdogStalled(
-    nowElapsed: Long,
-    lastProgressElapsed: Long,
-    thresholdMillis: Long
-): Boolean = lastProgressElapsed > 0L && nowElapsed - lastProgressElapsed >= thresholdMillis
 
 private fun alignedCanvasGeometry(geometry: DisplayGeometry): DisplayGeometry {
     val profile = EncoderProfile.forTBoxArea(geometry.width, geometry.height)

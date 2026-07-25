@@ -66,7 +66,7 @@ class RideDashboardRenderer(
     private val telemetryProvider: RideTelemetryProvider,
     private val layoutController: RideDashboardLayoutController,
     private val mapSource: RideDashboardMapSource,
-    private val embeddedAndroidAuto: EmbeddedAndroidAutoSource?,
+    private val embeddedAndroidAuto: EmbeddedAndroidAutoVideoSource?,
     cellularOnlyMaps: Boolean = true,
     /**
      * false (default, real T-Box streaming): stretch the design to fill the

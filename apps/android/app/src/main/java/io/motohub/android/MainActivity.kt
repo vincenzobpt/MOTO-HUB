@@ -42,10 +42,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import io.motohub.android.aa.AaSelfMode
 import io.motohub.android.androidauto.AndroidAutoRuntime
 import io.motohub.android.androidauto.AndroidAutoRuntimeState
-import io.motohub.android.androidauto.AndroidAutoSessionService
 import io.motohub.android.androidauto.AndroidAutoDisplayMode
 import io.motohub.android.androidauto.AndroidAutoDisplayModeStore
 import io.motohub.android.androidauto.TBoxDisplayGeometryStore
@@ -125,7 +123,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
-import java.util.concurrent.atomic.AtomicBoolean
 
 private val TBoxScreenMarginsSaver = listSaver<TBoxScreenMargins, Int>(
     save = { margins -> listOf(margins.top, margins.bottom, margins.left, margins.right) },
@@ -142,9 +139,7 @@ private val TBoxScreenMarginsSaver = listSaver<TBoxScreenMargins, Int>(
 class MainActivity : ComponentActivity() {
     private val viewModel: HubViewModel by viewModels()
     private val diagnosticsViewModel: NetworkDiagnosticsViewModel by viewModels()
-   private val androidAutoLaunchPending = AtomicBoolean(false)
-   private val rideDashboardAndroidAutoLaunchPending = AtomicBoolean(false)
-   // CORE runs Android Auto locally (no-op bridge); PRO delegates it to CORE over AIDL.
+   // CORE runs Android Auto locally; PRO delegates it to CORE over AIDL.
    private val androidAutoCoreBridge by lazy {
        io.motohub.android.androidauto.createAndroidAutoCoreBridge(applicationContext)
    }
@@ -153,6 +148,11 @@ class MainActivity : ComponentActivity() {
    // androidAutoCoreBridge above (the AGPL receiver can only run in Core).
    private val rideDashboardEmbeddedAaBridge by lazy {
        io.motohub.android.feature.ridedashboard.createRideDashboardEmbeddedAaBridge(applicationContext)
+   }
+   // CORE's local self-mode trigger for Ride Dashboard's embedded AA panel (see
+   // RideDashboardLocalAndroidAutoTrigger doc — a no-op in PRO, which never runs it locally).
+   private val rideDashboardLocalAndroidAutoTrigger by lazy {
+       io.motohub.android.feature.ridedashboard.createRideDashboardLocalAndroidAutoTrigger(applicationContext)
    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -1181,11 +1181,7 @@ class MainActivity : ComponentActivity() {
                         },
                         onStopAndroidAuto = {
                             ProjectionEventLog.record("ANDROID_AUTO", "User requested Android Auto stop.")
-                            if (androidAutoCoreBridge.delegatesToCore) {
-                                androidAutoCoreBridge.stop()
-                            } else {
-                                AndroidAutoSessionService.stop(context)
-                            }
+                            androidAutoCoreBridge.stop()
                             reconnectAfterModeStop("Android Auto")
                         },
                         onOpenAndroidAutoPreview = {
@@ -1452,102 +1448,21 @@ class MainActivity : ComponentActivity() {
     }
 
   private fun startAndroidAuto() {
-      // PRO holds no AGPL AA code and no GPL transport, so it can't run the AA pipeline locally.
-      // It asks CORE to run its own full AA session over AIDL — the video is produced and pushed
-      // to the T-Box entirely inside CORE, never touching this process.
+      // CORE runs the AGPL AA receiver locally; PRO holds no AGPL/GPL code and asks CORE to run
+      // its own full AA session over AIDL instead — the video is produced and pushed to the
+      // T-Box entirely inside CORE, never touching PRO's process. Either way this Activity only
+      // talks to the flavor-resolved bridge, never to AndroidAutoSessionService/AaSelfMode
+      // directly (both Core-only now).
       if (androidAutoCoreBridge.delegatesToCore) {
           ProjectionEventLog.record("ANDROID_AUTO", "Delegating Android Auto startup to Core.")
-          androidAutoCoreBridge.start { message ->
-              android.widget.Toast.makeText(this, message, android.widget.Toast.LENGTH_LONG).show()
-          }
-          return
       }
-      if (!androidAutoLaunchPending.compareAndSet(false, true)) {
-            ProjectionEventLog.warning("ANDROID_AUTO", "Start request ignored because another launch is pending.")
-            return
-        }
-        ProjectionEventLog.record("ANDROID_AUTO", "User requested Android Auto startup.")
-        if (MotoHubSettings.autoRecordTrips(this)) {
-            TripRecordingService.startAuto(
-                this,
-                MotorcycleProfileStore(this).load()?.id,
-                TripRecordingSource.ANDROID_AUTO
-            )
-        }
-        AndroidAutoSessionService.start(this)
-        lifecycleScope.launch {
-            val state = withTimeoutOrNull(10_000L) {
-                // A foreground service is started asynchronously.  Ignore terminal state left
-                // by the previous launch; otherwise `first` can consume that old failure before
-                // the new service has published Preparing and no self-mode trigger is sent.
-                AndroidAutoRuntime.state
-                    .dropWhile {
-                        it is AndroidAutoRuntimeState.Idle ||
-                            it is AndroidAutoRuntimeState.Stopped ||
-                            it is AndroidAutoRuntimeState.Failed
-                    }
-                    .first {
-                    it is AndroidAutoRuntimeState.ReceiverReady ||
-                        it is AndroidAutoRuntimeState.Failed
-                    }
-            }
-            when (state) {
-                AndroidAutoRuntimeState.ReceiverReady -> {
-                    ProjectionEventLog.record("ANDROID_AUTO", "AAP receiver is ready; waiting before self-mode trigger.")
-                    delay(ANDROID_AUTO_RECEIVER_SETTLE_MS)
-                    if (AndroidAutoRuntime.state.value is AndroidAutoRuntimeState.ReceiverReady) {
-                        AaSelfMode.trigger(
-                            context = this@MainActivity,
-                            log = { ProjectionEventLog.record("AAP", it) }
-                        )
-                    }
-                }
-                is AndroidAutoRuntimeState.Failed -> Unit
-                else -> {
-                    ProjectionEventLog.error("ANDROID_AUTO", "Timed out while preparing Android Auto.")
-                    AndroidAutoSessionService.stop(this@MainActivity)
-                }
-            }
-            androidAutoLaunchPending.set(false)
-            ProjectionEventLog.debug("ANDROID_AUTO", "Launch coordinator released.")
-        }
+      androidAutoCoreBridge.start { message ->
+          android.widget.Toast.makeText(this, message, android.widget.Toast.LENGTH_LONG).show()
+      }
     }
 
   private fun startRideDashboardAndroidAuto() {
-      if (!rideDashboardAndroidAutoLaunchPending.compareAndSet(false, true)) {
-            ProjectionEventLog.warning("RIDE_AA", "Embedded Android Auto launch is already pending.")
-            return
-        }
-        lifecycleScope.launch {
-            val state = withTimeoutOrNull(10_000L) {
-                RideDashboardAndroidAutoRuntime.state
-                    .dropWhile {
-                        it is RideDashboardAndroidAutoState.Idle ||
-                            it is RideDashboardAndroidAutoState.Failed
-                    }
-                    .first {
-                    it is RideDashboardAndroidAutoState.ReceiverReady ||
-                        it is RideDashboardAndroidAutoState.Failed
-                    }
-            }
-            when (state) {
-                RideDashboardAndroidAutoState.ReceiverReady -> {
-                    ProjectionEventLog.record("RIDE_AA", "Embedded AAP receiver ready; triggering Android Auto.")
-                    delay(ANDROID_AUTO_RECEIVER_SETTLE_MS)
-                    if (RideDashboardAndroidAutoRuntime.state.value is
-                        RideDashboardAndroidAutoState.ReceiverReady
-                    ) {
-                        AaSelfMode.trigger(
-                            context = this@MainActivity,
-                            log = { ProjectionEventLog.record("RIDE_AA", it) }
-                        )
-                    }
-                }
-                is RideDashboardAndroidAutoState.Failed -> Unit
-                else -> ProjectionEventLog.error("RIDE_AA", "Timed out while preparing embedded Android Auto.")
-            }
-            rideDashboardAndroidAutoLaunchPending.set(false)
-        }
+      rideDashboardLocalAndroidAutoTrigger.trigger()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -1599,7 +1514,6 @@ class MainActivity : ComponentActivity() {
     }
 
     private companion object {
-        const val ANDROID_AUTO_RECEIVER_SETTLE_MS = 900L
        const val AUTO_CONNECT_START_DELAY_MS = 600L
         const val AUTO_CONNECT_RETRY_COOLDOWN_MS = 5_000L
         const val AUTO_CONNECT_AFTER_STOP_DELAY_MS = 900L

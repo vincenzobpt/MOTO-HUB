@@ -4,6 +4,7 @@ package io.motohub.android.aa
 
 import android.os.SystemClock
 import io.motohub.android.aa.proto.Input
+import io.motohub.android.androidauto.AaInputSink
 
 /**
  * Sends touch events to Android Auto over the INPUT channel (declared as a touchscreen in
@@ -13,7 +14,7 @@ import io.motohub.android.aa.proto.Input
 class AaInput(
     private val transport: AapTransport,
     private val log: (String) -> Unit,
-) {
+) : AaInputSink {
     /** Normalised actions from the bike decoder. */
     companion object {
         const val ACTION_DOWN = 0
@@ -103,7 +104,7 @@ class AaInput(
 
     fun sendTouch(action: Int, x: Int, y: Int) = sendTouch(action, 0, x, y)
 
-    fun sendKey(keycode: Int) {
+    override fun sendKey(keycode: Int) {
         try {
             sendKeyReport(keycode, down = true)
             sendKeyReport(keycode, down = false)
@@ -113,7 +114,7 @@ class AaInput(
         }
     }
 
-    fun sendScroll(delta: Int) {
+    override fun sendScroll(delta: Int) {
         if (delta == 0) return
         try {
             val relative = Input.RelativeEvent.newBuilder()

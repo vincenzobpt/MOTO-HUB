@@ -22,8 +22,8 @@ import android.os.SystemClock
 import android.provider.Settings
 import android.view.KeyEvent
 import io.motohub.android.R
-import io.motohub.android.aa.AaInput
-import io.motohub.android.aa.AaInputBridge
+import io.motohub.android.androidauto.AndroidAutoInputCodes
+import io.motohub.android.androidauto.AaInputBridge
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.abs
 
@@ -335,14 +335,14 @@ class MediaButtonBridge(
             HandlebarAction.NONE -> Unit
             HandlebarAction.SCROLL_FORWARD -> sendScroll(+1)
             HandlebarAction.SCROLL_BACK -> sendScroll(-1)
-            HandlebarAction.DPAD_UP -> sendKey(AaInput.KEY_UP)
-            HandlebarAction.DPAD_DOWN -> sendKey(AaInput.KEY_DOWN)
-            HandlebarAction.DPAD_LEFT -> sendKey(AaInput.KEY_LEFT)
-            HandlebarAction.DPAD_RIGHT -> sendKey(AaInput.KEY_RIGHT)
-            HandlebarAction.SELECT -> sendKey(AaInput.KEY_ENTER)
-            HandlebarAction.BACK -> sendKey(AaInput.KEY_BACK)
-            HandlebarAction.HOME -> sendKey(AaInput.KEY_HOME)
-            HandlebarAction.ASSISTANT -> sendKey(AaInput.KEY_ASSISTANT)
+            HandlebarAction.DPAD_UP -> sendKey(AndroidAutoInputCodes.KEY_UP)
+            HandlebarAction.DPAD_DOWN -> sendKey(AndroidAutoInputCodes.KEY_DOWN)
+            HandlebarAction.DPAD_LEFT -> sendKey(AndroidAutoInputCodes.KEY_LEFT)
+            HandlebarAction.DPAD_RIGHT -> sendKey(AndroidAutoInputCodes.KEY_RIGHT)
+            HandlebarAction.SELECT -> sendKey(AndroidAutoInputCodes.KEY_ENTER)
+            HandlebarAction.BACK -> sendKey(AndroidAutoInputCodes.KEY_BACK)
+            HandlebarAction.HOME -> sendKey(AndroidAutoInputCodes.KEY_HOME)
+            HandlebarAction.ASSISTANT -> sendKey(AndroidAutoInputCodes.KEY_ASSISTANT)
             HandlebarAction.NAV_1 -> navToSavedPlace(context, 0)
             HandlebarAction.NAV_2 -> navToSavedPlace(context, 1)
             HandlebarAction.NAV_3 -> navToSavedPlace(context, 2)
