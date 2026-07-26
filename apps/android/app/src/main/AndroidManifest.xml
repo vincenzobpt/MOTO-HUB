@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <permission
+        android:name="io.motohub.android.permission.BIND_CORE_SERVICE"
+        android:protectionLevel="signature" />
+
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.usb.accessory" android:required="false" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -70,6 +74,24 @@
             android:name=".externaldisplay.AoaExternalService"
             android:exported="false"
             android:foregroundServiceType="mediaProjection" />
+
+        <!-- Core/Pro AIDL boundary: exposes T-Box transport and the Android Auto receiver to a
+             separately-signed companion app over Binder IPC. android:exported is required for a
+             second app to bind; the signature-level permission restricts binders to apps signed
+             with the same key. See documentation/ARCHITECTURE.md. -->
+        <service
+            android:name=".ipc.IpcBridgeService"
+            android:exported="true"
+            android:permission="io.motohub.android.permission.BIND_CORE_SERVICE">
+            <!-- Two distinct actions, not one action + an extra: onBind()'s returned IBinder is
+                 cached per Intent.filterEquals(), which ignores extras - see IpcBridgeContract. -->
+            <intent-filter>
+                <action android:name="io.motohub.android.ipc.BIND_TBOX_TRANSPORT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="io.motohub.android.ipc.BIND_ANDROID_AUTO_RECEIVER" />
+            </intent-filter>
+        </service>
 
         <provider
             android:name="androidx.core.content.FileProvider"

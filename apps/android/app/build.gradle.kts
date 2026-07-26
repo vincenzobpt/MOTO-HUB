@@ -197,6 +197,7 @@ val exportPrivateAndroidAutoApk by tasks.registering(Copy::class) {
 }
 
 dependencies {
+    implementation(project(":ipc-contract"))
     implementation(files("libs/hudlib.aar"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
