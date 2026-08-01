@@ -6,7 +6,7 @@
 >[**You can also add the FREE ADVANCED complementary app**](https://github.com/vincenzobpt/MOTO-HUB-PRO-releases)
 
 > [!WARNING]
-> **MOTO-HUB is an experimental proof-of-concept, not a production-grade product.** It has been built and tested with a CFMOTO **700MT-ADV** dashboard and **OnePlus 13 / Galaxy Z Fold4** phones. Behavior may be unstable, require a retry, or differ on other motorcycles, T-Box firmware versions, or phones. Do not depend on it as your only source of critical navigation information. Plan your route before riding, and use the software at your own risk.
+> **MOTO-HUB is an experimental proof-of-concept, not a production-grade product.** Day-to-day development happens on a CFMOTO **700MT-ADV** dashboard with **OnePlus 13 / Galaxy Z Fold4** phones. Behavior may be unstable, require a retry, or differ on other motorcycles, T-Box firmware versions, or phones. Do not depend on it as your only source of critical navigation information. Plan your route before riding, and use the software at your own risk.
 
 <table cellpadding="0" cellspacing="0" border="0">
   <tr>
@@ -19,7 +19,25 @@
 
 MOTO-HUB is an Android 14+ application for connecting a phone to a compatible motorcycle T-Box and projecting content to the motorcycle TFT display.
 
-MOTO-HUB projects **Android Auto** and **phone screen mirroring** (whole screen or a single app) to the TFT, drives Android Auto from the **motorcycle's own handlebar buttons**, and provides local diagnostics. It is designed as a personal, local-first project and is not affiliated with or endorsed by CFMOTO, EasyConn, MotoPlay, Google, or any other vehicle or software vendor.
+MOTO-HUB projects **Android Auto** and **phone screen mirroring** (whole screen or a single app) to the TFT, drives Android Auto from the **motorcycle's own handlebar buttons**, and provides local diagnostics. It is designed as a personal, local-first project and is not affiliated with or endorsed by any vehicle or software vendor.
+
+## Supported Motorcycles
+
+MOTO-HUB is **not a CFMOTO-only app**. It talks to the EasyConn / Carbit dashboard stack that many manufacturers license, so it works across brands — among others:
+
+| Brand | Notes |
+| --- | --- |
+| **CFMOTO** | The reference hardware this project is developed against (700MT-ADV) |
+| **Voge** | |
+| **Zontes** | |
+| **Moto Morini** | Dashboards paired through the **MotoFun** companion app, whose QR code uses its own dialect |
+| **Benelli** | TRK 702 / 702X |
+| **QJ Motor** | Fort 4.0 |
+| **Morbidelli / MBP** | T1002V |
+
+Nothing in the app filters on brand: the network name always comes from the rider, through the QR code or manual pairing, and is used verbatim. A dashboard MOTO-HUB has never seen is not rejected — an unrecognized QR dialect can still be accepted after a warning, an unknown dashboard falls back to a generic profile instead of failing, and the diagnostics are built so a rider on an unfamiliar motorcycle can send a log that explains what happened.
+
+Each motorcycle model and T-Box firmware still needs its own validation before it can be called supported, and that includes CFMOTO ones.
 
 ## MOTO-HUB And MOTO-HUB ADVANCED
 
@@ -98,7 +116,7 @@ The app should continue to open normally. Only the related feature is unavailabl
 ## What It Does
 
 - Pair with a motorcycle T-Box by scanning its QR code, importing a photo of it, or entering the network manually.
-- Read non-CFMOTO QR dialects where they have been observed, and warn before trusting an unverified one.
+- Read the QR dialects other manufacturers use — such as Moto Morini's MotoFun code — and accept an unrecognized one after a warning rather than refusing it.
 - Store multiple motorcycle profiles and select the active motorcycle.
 - Store a private motorcycle photo and use it throughout the app UI.
 - Connect to the T-Box Wi-Fi access point without requiring manual SSID entry, with a separate Wi-Fi Direct path for dashboards that advertise a `DIRECT-` network.
@@ -127,7 +145,7 @@ The app should continue to open normally. Only the related feature is unavailabl
 
 The current Android client is version `1.1.33` (`127`) and targets Android 14/API 34 and newer.
 
-This build has been tested end-to-end for mirroring and Android Auto on a OnePlus 13 and a CFMOTO 700MT-ADV T-Box. Compatibility with other phones, motorcycle models, T-Box firmware versions, and Android Auto versions is not guaranteed and must be validated separately.
+This build has been tested end-to-end for mirroring and Android Auto on a OnePlus 13 and a CFMOTO 700MT-ADV T-Box, which is simply the hardware available to the maintainer. Other brands are supported by design rather than by daily testing — see [Supported Motorcycles](#supported-motorcycles) — and compatibility with a given phone, motorcycle model, T-Box firmware version, or Android Auto version is not guaranteed and must be validated separately.
 
 Mirroring, Android Auto, handlebar controls and diagnostics are implemented, but every motorcycle model and T-Box firmware still requires explicit validation before it can be considered supported. The USB external display path is newer and has had less validation than the T-Box path.
 
@@ -253,7 +271,7 @@ shown when projection fails links to them.
 
 ### Handlebar Buttons
 
-CFMOTO dashboards forward their handlebar buttons to the phone as ordinary Bluetooth media commands — a volume change, a play/pause, a next/previous track — and which physical press produces which command differs per motorcycle. MOTO-HUB therefore starts from a **calibration**: the rider performs each press once, and the app learns what that motorcycle actually sends. Nothing is assumed from the model name.
+These dashboards forward their handlebar buttons to the phone as ordinary Bluetooth media commands — a volume change, a play/pause, a next/previous track — and which physical press produces which command differs per motorcycle, and per brand. MOTO-HUB therefore starts from a **calibration**: the rider performs each press once, and the app learns what that motorcycle actually sends. Nothing is assumed from the model name.
 
 Each calibrated press (`Up`, `Down`, `Left`, `Right`, `Select`, each as press, double press or hold) can then be mapped to an Android Auto action: rotary forward/back, D-pad, Select, Back, Home, the assistant, or one-press navigation to one of three saved destinations. Mapping, calibration and the on/off switch are stored per motorcycle. The feature is on by default, and MOTO-HUB keeps the media session it needs alive so the dashboard keeps sending presses instead of handing them to another app.
 
@@ -342,7 +360,7 @@ This section is intentionally explicit because the project combines original MOT
 - `ridedaemon-lib` and the reference Android project are distributed under AGPL-3.0 according to their repositories and license files; the generated `hudlib.aar` is derived from that fork. Redistributing it (including inside this repository) must comply with the applicable AGPL obligations — the corresponding source must remain available to anyone who interacts with it, including over a network.
 - The `open-cfmoto` project used for research does not contain a license file in the reviewed source snapshot. No code from that project should be published as part of MOTO-HUB until its redistribution terms and attribution requirements are verified.
 - **MOTO-HUB ADVANCED** is a separate, closed-source companion application maintained in a private repository. It contains no GPL-3.0 or AGPL-3.0 code — it reaches this repository's T-Box transport and Android Auto receiver exclusively through a documented Binder IPC boundary (`apps/android/ipc-contract/`, `IpcBridgeService`), which is why it can be distributed under different terms. ADVANCED requires MOTO-HUB to be installed to function; MOTO-HUB does not require ADVANCED.
-- CFMOTO, EasyConn, MotoPlay, Android Auto, Google, and related names remain the property of their respective owners. MOTO-HUB is an independent project and must not imply official support.
+- CFMOTO, Voge, Zontes, Moto Morini, MotoFun, Benelli, QJ Motor, Morbidelli, MBP, EasyConn, Carbit, MotoPlay, Android Auto, Google, and related names remain the property of their respective owners. MOTO-HUB is an independent project and must not imply official support from any of them.
 
 This README documents the project's licensing rationale; it is not a substitute for legal advice.
 
