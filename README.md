@@ -267,7 +267,7 @@ Music volume is expressed in **presses**, not steps, because that is how the das
 
 `Connection & automation` holds auto-connect, which requests the saved motorcycle network and discovers EasyConn on app launch and after deliberate projection stops, and the optional recovery watchdog, which monitors outgoing TFT frame progress and rebuilds the T-Box network, discovery, handshake, and encoder path after a post-start stall while keeping the local Android Auto receiver alive. Seamless resume can park a projection across a longer T-Box interruption and resume when the motorcycle network returns.
 
-`Diagnostics` provides network tests (T-Box discovery, Wi-Fi binding, cellular routes), the application log with copy/share/clear, a master switch that stops all logging, and verbose T-Box logging for protocol-level troubleshooting.
+`Diagnostics` provides network tests (T-Box discovery, Wi-Fi binding, cellular routes), the application log with copy/share/clear, a master switch that stops all logging — and with it the error reports described under [Crash and error reporting](#crash-and-error-reporting) — and verbose T-Box logging for protocol-level troubleshooting.
 
 The general section holds the app language, launch-time update checks, and seamless resume.
 
@@ -328,6 +328,7 @@ These services are not contacted by this app. They are used by MOTO-HUB ADVANCED
 ### Vendor and platform references
 
 - [EasyConn](https://www.easyconn.net/) - vendor context for the T-Box ecosystem.
+- [Sentry](https://sentry.io/) - crash and error reporting in official release builds; see [Crash and error reporting](#crash-and-error-reporting).
 - [Android MediaProjection](https://developer.android.com/media/grow/media-projection) - Android screen capture API.
 - [Android MediaCodec](https://developer.android.com/reference/android/media/MediaCodec) - hardware video encoding and decoding API.
 - [Android Open Accessory](https://developer.android.com/develop/connectivity/usb/accessory) - USB accessory protocol used by the external display mode.
@@ -349,7 +350,24 @@ This README documents the project's licensing rationale; it is not a substitute 
 
 MOTO-HUB is designed to operate without an account or proprietary telemetry service. It handles screen content, T-Box credentials, and diagnostic data on the phone. Wi-Fi passwords are encrypted with Android Keystore. Screen frames are processed in memory for the active projection and are not intentionally recorded to disk.
 
-The only Internet host this app contacts on its own is `api.github.com`, to check for a newer release when you ask it to or when launch-time update checks are enabled. It has no maps, geocoding, routing or weather features, requests no location updates, and sends no ride or position data anywhere. Anything Android Auto itself does over the network is Android Auto's own traffic, under your Google account, not MOTO-HUB's.
+This app contacts two Internet hosts on its own: GitHub, to check for a newer release when you ask it to or when launch-time update checks are enabled, and Sentry, for crash and error reporting (see below). It has no maps, geocoding, routing or weather features, requests no location updates, and sends no ride or position data anywhere. Anything Android Auto itself does over the network is Android Auto's own traffic, under your Google account, not MOTO-HUB's.
+
+### Crash and error reporting
+
+Official MOTO-HUB release APKs report crashes and connection failures to [Sentry](https://sentry.io/), in its EU region. This exists because the failures that matter here — a dashboard that will not associate, a stream that dies mid-ride — take a motorcycle and a rider to reproduce, and a single rider's report rarely says whether it is one bike or one model.
+
+What is sent:
+
+- Crashes, and why a previous process of the app ended.
+- Errors already written to the in-app diagnostic log, **redacted** and capped at 50 per app run. They are sent as plain messages, never as raw exception objects, precisely because the local log can contain connection details that must not leave the phone.
+- Coarse tags used to group reports across riders — for example whether the dashboard's Wi-Fi network was visible at all in the moment before a failed join. Values are deliberately kept low-cardinality, so they describe a situation rather than a rider.
+- The app version and build number, so a report can be attributed to a release.
+
+What is not sent: Sentry's "default PII" collection is switched off, so no account, contact, device identifier or IP-derived user data is attached. Screen content, T-Box passwords, trips and position are never sent — the app has no position data to begin with.
+
+Turning off `Settings ▸ Diagnostics ▸ Enable logging` stops the diagnostic log entirely, and with it the error events described above. Crash reports are handled by the Sentry SDK itself and are not covered by that switch.
+
+**Builds from this source send nothing.** The Sentry DSN is supplied at build time from a private properties file or CI secret, exactly like the Android Auto identity. A source build without it has telemetry disabled outright, not merely unconfigured.
 
 Review [Security and Privacy](documentation/SECURITY_AND_PRIVACY.md) before distributing an APK outside personal use.
 
