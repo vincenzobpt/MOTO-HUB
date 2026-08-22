@@ -212,7 +212,8 @@ val syncTranslationResources by tasks.registering {
             "pt-PT" to "values-pt-rPT",
             "ko-KR" to "values-ko-rKR",
             "fr-FR" to "values-fr",
-            "es-ES" to "values-es"
+            "es-ES" to "values-es",
+            "de-DE" to "values-de"
         )
         sourceDir.listFiles()
             ?.filter { it.isFile && it.name.startsWith("strings-") && it.name.endsWith(".xml") }
