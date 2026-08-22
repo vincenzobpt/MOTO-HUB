@@ -12,6 +12,7 @@
     <string name="language_korean">한국어 (대한민국)</string>
     <string name="language_french">Français</string>
     <string name="language_spanish">Español</string>
+    <string name="language_german">Deutsch</string>
     <string name="language_title">Langue</string>
     <string name="language_description">Choisissez la langue utilisée par MOTO-HUB</string>
     <string name="language_detail_description">MOTO-HUB suit la langue du téléphone par défaut. Choisissez une langue ci-dessous pour la remplacer dans cette application.</string>

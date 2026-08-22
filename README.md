@@ -10,7 +10,7 @@
 [![Downloads](https://img.shields.io/github/downloads/vincenzobpt/MOTO-HUB/total?color=44cc11)](https://github.com/vincenzobpt/MOTO-HUB/releases)
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue)](LICENSE)
 [![Android 12+](https://img.shields.io/badge/Android-12%2B-3DDC84?logo=android&logoColor=white)](#requirements)
-[![6 languages](https://img.shields.io/badge/languages-6-orange)](#what-moto-hub-does)
+[![7 languages](https://img.shields.io/badge/languages-7-orange)](#what-moto-hub-does)
 [![Discord](https://img.shields.io/badge/Discord-join%20the%20community-5865F2?logo=discord&logoColor=white)](https://discord.gg/jYv7Z2chtP)
 
 <img src="media/hero-bike.jpg" alt="A motorcycle TFT dashboard running MOTO-HUB on the road" width="820">
@@ -204,7 +204,7 @@ The open-source core is a complete product on its own:
 - **Bulletproof sessions** — auto-connect on launch, a recovery watchdog that rebuilds a stalled stream, and seamless resume across longer dropouts.
 - **Diagnostics that respect you** — network tests, a full local log you can share as a file, and a master switch that turns all logging off.
 - **In-app updates** — the app checks GitHub releases and shows the notes before installing.
-- **6 languages** — English, Italian, Spanish, French, Portuguese, Korean.
+- **7 languages** — English, Italian, Spanish, French, Portuguese, Korean, German.
 
 <a id="requirements"></a>**Requirements:** Android 12 or newer and a motorcycle with a compatible dashboard (see below). ADVANCED additionally requires Android 14+.
 
@@ -297,7 +297,7 @@ The same instructions are in the app under `Settings ▸ Android Auto does not s
 - Optionally recover or seamlessly resume a stalled or dropped TFT stream when the T-Box returns.
 - Show persistent diagnostics, run network tests, and share application logs as an exported file for troubleshooting.
 - Check GitHub releases and pre-releases from inside the app, showing release notes before installing a newer APK.
-- Run in English, Italian, Spanish, French, Portuguese or Korean, or follow the phone language.
+- Run in English, Italian, Spanish, French, Portuguese, Korean or German, or follow the phone language.
 
 ### Motorcycle Garage
 

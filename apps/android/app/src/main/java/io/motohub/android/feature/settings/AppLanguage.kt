@@ -24,7 +24,8 @@ enum class AppLanguage(
     PORTUGUESE("pt-PT", R.string.language_portuguese),
     KOREAN("ko-KR", R.string.language_korean),
     FRENCH("fr-FR", R.string.language_french),
-    SPANISH("es-ES", R.string.language_spanish)
+    SPANISH("es-ES", R.string.language_spanish),
+    GERMAN("de-DE", R.string.language_german)
 }
 
 object AppLanguageManager {
