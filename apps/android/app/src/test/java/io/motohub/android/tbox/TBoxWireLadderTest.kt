@@ -149,6 +149,33 @@ class TBoxWireLadderTest {
         assertEquals(0, progress.rungIndex)
     }
 
+    /**
+     * The walk is a ladder, not a ring. Rider bffd0679's QJ reached EXHAUSTED, was put back on
+     * rung 0 by design, streamed there, and was asked to judge a format they had already denied
+     * days before - and a "no" started the whole climb over. Rung 0 is all-intra and that dash
+     * drops its own AP on all-intra, so the loop did not merely repeat a question, it kept
+     * re-breaking a link that had been holding.
+     */
+    @Test
+    fun anExhaustedLadderIsNotWalkedAgainByAnotherDenial() {
+        val exhausted = TBoxLadderProgress(rungIndex = 0, state = TBoxLadderState.EXHAUSTED)
+        val next = TBoxWireLadder.nextProgressAfterRider(exhausted, projectionSeen = false)
+        assertEquals(TBoxLadderState.EXHAUSTED, next.state)
+        assertEquals(0, next.rungIndex)
+    }
+
+    /**
+     * A "yes" still lands, though. If an exhausted walk ever does produce a picture, that answer
+     * is the most valuable one this mechanism can collect and must not be swallowed by the guard.
+     */
+    @Test
+    fun anExhaustedLadderStillAcceptsAConfirmation() {
+        val exhausted = TBoxLadderProgress(rungIndex = 0, state = TBoxLadderState.EXHAUSTED)
+        val next = TBoxWireLadder.nextProgressAfterRider(exhausted, projectionSeen = true)
+        assertEquals(TBoxLadderState.CONFIRMED, next.state)
+        assertEquals(0, next.rungIndex)
+    }
+
     /** A confirmed motorcycle is never walked again, whatever a later session looks like. */
     @Test
     fun aConfirmedRungSurvivesALaterBadSession() {

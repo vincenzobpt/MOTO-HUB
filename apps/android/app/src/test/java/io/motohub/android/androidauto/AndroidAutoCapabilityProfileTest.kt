@@ -175,6 +175,76 @@ class AndroidAutoCapabilityProfileTest {
     }
 
     @Test
+    fun `auto never selects a source that no dashboard has been validated on`() {
+        // 1920x1080 is an exact pixel match for a source the protocol defines, so before
+        // autoSelectable this geometry would have been enough to put an unproven 1080p stream
+        // on a dash whose only evidence for it is its own CLIENT_INFO.
+        val profile = AndroidAutoCapabilityProfiles.select(DisplayGeometry(1920, 1080))
+
+        assertEquals(AndroidAutoVideoPreset.LANDSCAPE_800X480, profile.videoPreset)
+        assertEquals(AndroidAutoCapabilitySource.SAVED_TBOX_GEOMETRY, profile.source)
+    }
+
+    @Test
+    fun `the rider can still select an unvalidated source by hand`() {
+        val profile = AndroidAutoCapabilityProfiles.select(
+            target = null,
+            overridePreset = AndroidAutoVideoPreset.PORTRAIT_2160X3840
+        )
+
+        assertEquals(AndroidAutoCapabilitySource.USER_OVERRIDE, profile.source)
+        assertEquals(DisplayGeometry(2160, 3840), profile.video)
+        assertEquals(480, profile.densityDpi)
+    }
+
+    @Test
+    fun `an explicit density replaces the preset's own on every selection path`() {
+        val fallback = AndroidAutoCapabilityProfiles.select(null, densityOverride = 320)
+        val learned = AndroidAutoCapabilityProfiles.select(
+            DisplayGeometry(800, 480),
+            densityOverride = 320
+        )
+        val manual = AndroidAutoCapabilityProfiles.select(
+            target = null,
+            overridePreset = AndroidAutoVideoPreset.PORTRAIT_720X1280,
+            densityOverride = 320
+        )
+
+        assertEquals(320, fallback.densityDpi)
+        assertEquals(320, learned.densityDpi)
+        assertEquals(320, manual.densityDpi)
+    }
+
+    @Test
+    fun `no density override leaves the preset's own density alone`() {
+        val profile = AndroidAutoCapabilityProfiles.select(
+            target = null,
+            overridePreset = AndroidAutoVideoPreset.LANDSCAPE_1280X720,
+            densityOverride = null
+        )
+
+        assertEquals(160, profile.densityDpi)
+    }
+
+    @Test
+    fun `every protocol source keeps the SD layout size in dp for its orientation`() {
+        // dp = px * 160 / dpi. The extra pixels of the bigger sources are there to be sharper,
+        // not to shrink the UI, so each orientation's family lands on one layout size.
+        AndroidAutoVideoPreset.entries.forEach { preset ->
+            val widthDp = preset.source.width * 160 / preset.densityDpi
+            val heightDp = preset.source.height * 160 / preset.densityDpi
+            val expected = when {
+                preset == AndroidAutoVideoPreset.LANDSCAPE_800X480 -> 800 to 480
+                preset.source.width >= preset.source.height -> 1280 to 720
+                preset == AndroidAutoVideoPreset.PORTRAIT_720X1280 -> 480 to 853
+                else -> 720 to 1280
+            }
+            assertEquals(preset.name, expected.first, widthDp)
+            assertEquals(preset.name, expected.second, heightDp)
+        }
+    }
+
+    @Test
     fun `manual HD portrait override exposes the supported Android Auto source`() {
         val profile = AndroidAutoCapabilityProfiles.select(
             target = null,

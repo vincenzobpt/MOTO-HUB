@@ -11,6 +11,10 @@ import android.provider.Settings
 /**
  * The one prerequisite MOTO-HUB cannot check or set for the rider.
  *
+ * Lives in src/main, not src/core, because the ADVANCED home screen reads [RiderStep] to draw the
+ * step the rider has to carry out - and src/pro cannot see src/core. Everything it touches is
+ * framework, so both flavours can carry it; core-publish keeps it in src/main for the same reason.
+ *
  * Google Android Auto only projects to a head unit it is willing to accept, and a sideloaded one
  * counts as an unknown car: until "Add new cars to Android Auto" (older wording: "Unknown
  * sources") is enabled inside Android Auto's own developer settings, the projection request is

@@ -350,6 +350,58 @@ enum class TBoxModelProfile(
         encoderPlainGopWithoutIntraRefresh = true
     ),
     /**
+     * The QJ SRK921 RR's 5-inch dash: an 800x352 video band on a Carbit-licensed EasyConn stack
+     * (`flavor 51`, `channel 37303`, `package_name linux_no_package`, `sdkVersion 0.9.23.1`) that
+     * takes every frame it is offered and paints none of them.
+     *
+     * This is the profile [TBoxWireLadder] could not find. Rider 1d316f4b/bffd0679 walked the
+     * whole ladder twice - all four rungs, both framings, all-intra and 1s GOP alike - and every
+     * rung ended the same way: the socket healthy, `frameTimeouts=0`, `frameRejections=0`, over a
+     * thousand frames accepted in seventy seconds, and a rider looking at nothing but the dash's
+     * Wi-Fi icon. Two facts narrow what is left. The blackout survives the source: Android Auto
+     * and the Ride Dashboard, which share nothing but this transport, are equally blank. And the
+     * all-intra rungs do not merely fail, they take the link down - the dash drops its own AP
+     * 4s, 27s and 46s into three consecutive sessions at -17dBm, which is not coverage, it is
+     * firmware giving up on a stream it cannot keep up with.
+     *
+     * So the delta here is the one variable the ladder never had a rung for: the *rate*. The
+     * reference fork's profile for the other Carbit `flavor 51` units sends 10 fps on a 2s GOP at
+     * 2 Mbps rather than the 30 fps all-intra [GENERIC] guesses, and a dash that acknowledges
+     * everything while painting nothing is what an over-fed decoder looks like from this side.
+     * [encoderPlainGopWithoutIntraRefresh] keeps the keyframes plain: intra refresh is the other
+     * thing this family has never been shown to decode, and pinning both at once would leave two
+     * variables in play should the next log still be black.
+     *
+     * Claimed by modelId alone, and deliberately: `37303` belongs to this one dashboard across the
+     * whole collector, while `flavor 51` also covers a Voge Valico and two further rebadges that
+     * must not be moved onto a 10 fps stream on the strength of a shared licence. [score] returns
+     * 0 for the same reason - CLIENT_INFO must never carry this profile to a dash whose QR did
+     * not name it.
+     */
+    QJ_SRK921_RR(
+        key = "qj_srk921_rr",
+        displayName = "QJ SRK921 RR (test)",
+        modelIds = setOf("37303"),
+        mapTilesRequireCellular = true,
+        supportsScreenTouch = false,
+        defaultAndroidAutoPreset = AndroidAutoVideoPreset.LANDSCAPE_800X480,
+        fallbackTBoxVideoArea = TBoxEvent.VideoArea(800, 352),
+        requiresSockAuth = false,
+        // Echo what the dash reports rather than GENERIC's 0, as the reference fork does for every
+        // unit in this family; it is the only supportFunction this firmware has ever been seen to
+        // send.
+        advertisedSupportFunction = 128,
+        // Both copied from GENERIC verbatim: the ladder already proved neither is the variable
+        // here (indexed and plain framing were each denied twice), so changing them alongside the
+        // rate would only make the next log harder to read.
+        allowsPlainVideoFraming = true,
+        requiresProactivePxcHeartbeat = true,
+        encoderKeyframeIntervalSeconds = 2,
+        encoderFrameRate = 10,
+        encoderBitRate = 2_000_000,
+        encoderPlainGopWithoutIntraRefresh = true
+    ),
+    /**
      * KOVE 800X (and, until they earn their own profiles, other ThinkerRide-family dashes): a
      * 600x1024 portrait TFT paired over BLE, reached through [TBoxTransportFamily.THINKERRIDE].
      * The ThinkerRide protocol never reports a panel size — the phone declares the stream
@@ -777,6 +829,11 @@ enum class TBoxModelProfile(
                 // Same rule for the Voge stream experiment: a Voge that streams fine today
                 // must never be moved off all-intra by detection.
                 VOGE_TEST -> 0
+                // Claimed by its modelId, never by CLIENT_INFO: the signals this dash reports
+                // (flavor 51, linux_no_package, sdk 0.9.23) are a licence and a firmware dialect
+                // that several other brands ship too, and scoring on them would put a Voge and
+                // two rebadges on a 10 fps stream meant for one QJ - see the profile's own note.
+                QJ_SRK921_RR -> 0
                 // ThinkerRide dashes never produce CLIENT_INFO (an EasyConn concept), so scoring
                 // has nothing to say; they resolve by the QR's pseudo modelId or a manual pin.
                 KOVE_800X -> 0

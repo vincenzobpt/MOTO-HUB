@@ -41,6 +41,9 @@
     <queries>
         <package android:name="com.google.android.projection.gearhead" />
         <package android:name="com.google.android.gms" />
+        <!-- MOTO-HUB ADVANCED: Core offers it on Home only while it is missing, and without
+             this entry getPackageInfo() hides it and the offer never goes away. -->
+        <package android:name="io.motohub.android.pro" />
         <!-- OEM companion apps that hold the EasyConn reverse ports; see
              CompanionAppRegistry. Without a <package> entry Android hides the app from
              getPackageInfo() and the rider gets no "force-stop it" help at all. -->

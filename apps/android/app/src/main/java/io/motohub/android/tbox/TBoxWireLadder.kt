@@ -277,7 +277,20 @@ object TBoxWireLadder {
     ): TBoxLadderProgress {
         val progress = load(context, motorcycle)
         if (modelProfile != TBoxModelProfile.GENERIC) return progress
-        if (progress.state == TBoxLadderState.CONFIRMED) return progress
+        // Both terminal states stop here, and EXHAUSTED for the harder-won reason. Without it the
+        // walk is a ring, not a ladder: advance() lands an exhausted bike back on rung 0, the next
+        // session streams there, STREAMED asks the rider the question they have already answered,
+        // the denial advances 0 -> 1 -> 2 -> 3 -> exhausted, and it begins again. Rider bffd0679
+        // rode that loop - "Staying on this rung (EXHAUSTED)" twice, then a fourth verdict on a
+        // format denied days earlier - and it costs more than a repeated question: rung 0 is
+        // all-intra, and on that dash all-intra is what makes the firmware drop its own AP, so the
+        // ring re-breaks a link that had been holding. A dash whose firmware changes is still
+        // re-walked; onDashboardIdentified resets the record on a new fingerprint.
+        if (progress.state == TBoxLadderState.CONFIRMED ||
+            progress.state == TBoxLadderState.EXHAUSTED
+        ) {
+            return progress
+        }
 
         val outcome = TBoxSessionOutcome.of(facts)
         val rung = RUNGS.getOrElse(progress.rungIndex) { RUNGS.first() }
@@ -330,12 +343,18 @@ object TBoxWireLadder {
     internal fun nextProgressAfterRider(
         progress: TBoxLadderProgress,
         projectionSeen: Boolean
-    ): TBoxLadderProgress =
-        if (projectionSeen) {
+    ): TBoxLadderProgress = when {
+        // A "yes" is always worth recording: it is the one answer that ends the search for good,
+        // and a rider who sees the picture after an exhausted walk has told us the walk was wrong.
+        projectionSeen ->
             progress.copy(state = TBoxLadderState.CONFIRMED, lastOutcome = "RIDER_CONFIRMED")
-        } else {
-            advance(progress.copy(lastOutcome = "RIDER_DENIED"), null)
-        }
+        // A "no" on an already-exhausted ladder must not restart it - see onSessionFinished. The
+        // guard there means this is normally unreachable; it holds for a verdict that was already
+        // on screen when the walk ended.
+        progress.state == TBoxLadderState.EXHAUSTED ->
+            progress.copy(lastOutcome = "RIDER_DENIED")
+        else -> advance(progress.copy(lastOutcome = "RIDER_DENIED"), null)
+    }
 
     /**
      * A session the ladder cannot read: it ran a video format the ladder did not choose.

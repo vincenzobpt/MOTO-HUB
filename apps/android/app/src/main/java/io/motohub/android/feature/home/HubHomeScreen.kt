@@ -351,6 +351,11 @@ private fun HomeTabContent(
             )
         }
         }
+
+        // Last thing in the column, so a rider connecting a motorcycle never has to step around
+        // it. Turns into a shortcut once ADVANCED is installed - see AdvancedPromoCard.
+        AdvancedPromoCard()
+
         Spacer(Modifier.height(10.dp))
     }
 }

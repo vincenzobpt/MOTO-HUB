@@ -5,6 +5,7 @@ package io.motohub.android.tbox
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 import io.motohub.android.androidauto.AndroidAutoDisplayMode
@@ -345,13 +346,17 @@ class TBoxModelProfileTest {
     @Test
     fun `only unclaimed dashboards and the framing experiment honour the ext byte`() {
         // Every recognised unit streams today on indexed framing; letting its own
-        // supportExtendProtocol byte change that would break bikes that work.
+        // supportExtendProtocol byte change that would break bikes that work. The exceptions are
+        // GENERIC, which claims nothing about the dash, and the experiments below - including the
+        // QJ, which is a rate experiment and inherits GENERIC's framing precisely so that framing
+        // is not a second variable in its next log.
         assertEquals(true, TBoxModelProfile.GENERIC.allowsPlainVideoFraming)
         val opted = TBoxModelProfile.entries.filter { it.allowsPlainVideoFraming }
         assertEquals(
             listOf(
                 TBoxModelProfile.ZONTES_368G_TEST_B,
                 TBoxModelProfile.VOGE_TEST,
+                TBoxModelProfile.QJ_SRK921_RR,
                 TBoxModelProfile.GENERIC
             ),
             opted
@@ -400,6 +405,54 @@ class TBoxModelProfileTest {
             TBoxModelProfile.VOGE_TEST,
             TBoxModelProfile.resolve("37504", voge, ProfileOverride.VOGE_TEST)
         )
+    }
+
+    @Test
+    fun `the QJ SRK921 RR profile changes the rate and nothing else`() {
+        // The ladder already denied both framings on this dash, so the profile must differ from
+        // GENERIC in the one dimension the ladder had no rung for. Anything else changed here
+        // would leave a second variable in play when the next log comes back.
+        val qj = TBoxModelProfile.QJ_SRK921_RR
+        val generic = TBoxModelProfile.GENERIC
+        assertEquals(generic.allowsPlainVideoFraming, qj.allowsPlainVideoFraming)
+        assertEquals(generic.requiresProactivePxcHeartbeat, qj.requiresProactivePxcHeartbeat)
+        assertEquals(generic.requiresSockAuth, qj.requiresSockAuth)
+        assertEquals(generic.defaultAndroidAutoDisplayMode, qj.defaultAndroidAutoDisplayMode)
+        // GENERIC guesses 30 fps all-intra; this dash gets the reference fork's 10 fps / 2s GOP.
+        assertEquals(0, generic.encoderKeyframeIntervalSeconds)
+        assertEquals(2, qj.encoderKeyframeIntervalSeconds)
+        assertEquals(10, qj.encoderFrameRate)
+        assertEquals(2_000_000, qj.encoderBitRate)
+        assertEquals(true, qj.encoderPlainGopWithoutIntraRefresh)
+        // CLIENT_INFO says supportScreenTouch=false and supportFunction=128; echo both.
+        assertEquals(false, qj.supportsScreenTouch)
+        assertEquals(128, qj.advertisedSupportFunction)
+    }
+
+    @Test
+    fun `the QJ profile is claimed by its modelId and never by a shared licence`() {
+        // 37303 is this dashboard alone across the collector, so the QR may carry the profile.
+        val qj = TBoxCapabilities(
+            versionName = "1.0.0",
+            packageName = "linux_no_package",
+            sdkVersion = "0.9.23.1",
+            supportFunction = 128,
+            screenTouch = false,
+            landscapeAdaptive = true,
+            productType = 3,
+            screenType = 1,
+            flavor = "51",
+            channel = "37303"
+        )
+        assertEquals(TBoxModelProfile.QJ_SRK921_RR, TBoxModelProfile.resolve("37303", qj))
+        // The same firmware signals on a different dashboard must not: flavor 51 also covers a
+        // Voge Valico and two further rebadges, and none of them asked for a 10 fps stream.
+        assertNotEquals(
+            TBoxModelProfile.QJ_SRK921_RR,
+            TBoxModelProfile.resolve("37504", qj.copy(channel = "37504"))
+        )
+        // ...and neither may CLIENT_INFO alone, with no modelId to lead on.
+        assertNotEquals(TBoxModelProfile.QJ_SRK921_RR, TBoxModelProfile.resolve(null, qj))
     }
 
     @Test

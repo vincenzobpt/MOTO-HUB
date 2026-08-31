@@ -41,6 +41,7 @@ import io.motohub.android.androidauto.encodeScreenMargins
 import io.motohub.android.androidauto.withFullVideoTarget
 import io.motohub.android.encoding.VideoBackpressureGuard
 import io.motohub.android.feature.settings.AndroidAutoAspectMatchingMode
+import io.motohub.android.feature.settings.AndroidAutoDensityMode
 import io.motohub.android.feature.settings.AndroidAutoResolutionMode
 import io.motohub.android.feature.settings.MotoHubSettings
 import io.motohub.android.feature.settings.VideoQuality
@@ -1027,6 +1028,13 @@ class IpcBridgeService : Service() {
                 MotoHubSettings.setAndroidAutoResolution(
                     ctx, AndroidAutoResolutionMode.valueOf(settings.resolutionMode)
                 )
+            }
+            if (settings.androidAutoDensityProvided) {
+                runCatching {
+                    MotoHubSettings.setAndroidAutoDensity(
+                        ctx, AndroidAutoDensityMode.valueOf(settings.androidAutoDensity)
+                    )
+                }
             }
             runCatching {
                 MotoHubSettings.setAndroidAutoAspectMatching(

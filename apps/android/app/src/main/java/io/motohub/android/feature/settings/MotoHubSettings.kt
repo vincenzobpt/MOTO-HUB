@@ -35,6 +35,15 @@ enum class VideoPowerMode(
     SAVER("Saver", "20 FPS for reduced heat and battery use.", R.string.video_power_saver, R.string.video_power_saver_description, 20)
 }
 
+/**
+ * Every coded source the Android Auto protocol defines, plus AUTO.
+ *
+ * The list is deliberately complete rather than curated: MOTO-HUB is the head unit, so whatever
+ * the protocol can ask the phone for is a resolution some dashboard out there could want, and a
+ * rider who knows their panel is a better judge of it than a table of the dashes we have seen.
+ * What the app does NOT do is choose the unvalidated ones by itself - see
+ * [AndroidAutoVideoPreset.autoSelectable].
+ */
 enum class AndroidAutoResolutionMode(
     val label: String,
     val description: String,
@@ -63,6 +72,27 @@ enum class AndroidAutoResolutionMode(
         R.string.android_auto_resolution_landscape_hd_description,
         AndroidAutoVideoPreset.LANDSCAPE_1280X720
     ),
+    LANDSCAPE_FHD(
+        "Landscape 1920 x 1080",
+        "Full HD landscape source. Not validated on any known dashboard.",
+        R.string.android_auto_resolution_landscape_fhd,
+        R.string.android_auto_resolution_landscape_fhd_description,
+        AndroidAutoVideoPreset.LANDSCAPE_1920X1080
+    ),
+    LANDSCAPE_QHD(
+        "Landscape 2560 x 1440",
+        "Quad HD landscape source. Heavy on the phone and not validated on any known dashboard.",
+        R.string.android_auto_resolution_landscape_qhd,
+        R.string.android_auto_resolution_landscape_qhd_description,
+        AndroidAutoVideoPreset.LANDSCAPE_2560X1440
+    ),
+    LANDSCAPE_UHD(
+        "Landscape 3840 x 2160",
+        "4K landscape source. The phone encodes and decodes 4K at once; expect heat and drops.",
+        R.string.android_auto_resolution_landscape_uhd,
+        R.string.android_auto_resolution_landscape_uhd_description,
+        AndroidAutoVideoPreset.LANDSCAPE_3840X2160
+    ),
     PORTRAIT_SD(
         "Portrait 720 x 1280",
         "Standard portrait Android Auto source.",
@@ -76,6 +106,97 @@ enum class AndroidAutoResolutionMode(
         R.string.android_auto_resolution_portrait_hd,
         R.string.android_auto_resolution_portrait_hd_description,
         AndroidAutoVideoPreset.PORTRAIT_1080X1920
+    ),
+    PORTRAIT_QHD(
+        "Portrait 1440 x 2560",
+        "Quad HD portrait source. Heavy on the phone and not validated on any known dashboard.",
+        R.string.android_auto_resolution_portrait_qhd,
+        R.string.android_auto_resolution_portrait_qhd_description,
+        AndroidAutoVideoPreset.PORTRAIT_1440X2560
+    ),
+    PORTRAIT_UHD(
+        "Portrait 2160 x 3840",
+        "4K portrait source. The phone encodes and decodes 4K at once; expect heat and drops.",
+        R.string.android_auto_resolution_portrait_uhd,
+        R.string.android_auto_resolution_portrait_uhd_description,
+        AndroidAutoVideoPreset.PORTRAIT_2160X3840
+    );
+
+    /** Whether this is a source no dashboard has been seen to accept. */
+    val experimental: Boolean get() = preset?.autoSelectable == false
+
+    /** True for the landscape sources; false for AUTO and for the portrait ones. */
+    val landscape: Boolean
+        get() = preset != null && preset.source.width >= preset.source.height
+}
+
+/**
+ * How big Android Auto draws itself on the dashboard.
+ *
+ * Resolution is pixels; density is size. Android Auto lays its UI out in dp, and
+ * dp = px * 160 / dpi - so raising the dpi makes every button, label and map icon bigger and
+ * fits less on screen, and lowering it does the opposite. The same 800x480 panel wants a
+ * different answer on a 5" TFT than on a 10" one, and until now every rider got whichever single
+ * value the resolution preset happened to carry.
+ *
+ * [AUTO] keeps exactly that value, so the default behaviour is unchanged.
+ */
+enum class AndroidAutoDensityMode(
+    val label: String,
+    val description: String,
+    val labelRes: Int,
+    val descriptionRes: Int,
+    /** The dpi to advertise, or null to keep the selected resolution's own density. */
+    val dpi: Int?
+) {
+    AUTO(
+        "Auto",
+        "Use the density that comes with the selected resolution.",
+        R.string.android_auto_density_auto,
+        R.string.android_auto_density_auto_description,
+        null
+    ),
+    DPI_120(
+        "120 dpi",
+        "Smallest interface, most map on screen. Hard to read on a small TFT.",
+        R.string.android_auto_density_120,
+        R.string.android_auto_density_120_description,
+        120
+    ),
+    DPI_160(
+        "160 dpi",
+        "Small interface. The density the landscape sources use by default.",
+        R.string.android_auto_density_160,
+        R.string.android_auto_density_160_description,
+        160
+    ),
+    DPI_213(
+        "213 dpi",
+        "Between small and standard. Useful when 160 is too tight and 240 too coarse.",
+        R.string.android_auto_density_213,
+        R.string.android_auto_density_213_description,
+        213
+    ),
+    DPI_240(
+        "240 dpi",
+        "Standard interface. The density the portrait sources use by default.",
+        R.string.android_auto_density_240,
+        R.string.android_auto_density_240_description,
+        240
+    ),
+    DPI_320(
+        "320 dpi",
+        "Large interface, easier to read and to hit with gloves. Less map on screen.",
+        R.string.android_auto_density_320,
+        R.string.android_auto_density_320_description,
+        320
+    ),
+    DPI_480(
+        "480 dpi",
+        "Largest interface. Only sensible on the high-resolution sources.",
+        R.string.android_auto_density_480,
+        R.string.android_auto_density_480_description,
+        480
     )
 }
 
@@ -148,6 +269,7 @@ object MotoHubSettings {
     private const val KEY_DISABLE_TOUCHSCREEN = "disable_touchscreen"
     private const val KEY_SEAMLESS_RESUME = "seamless_resume"
     private const val KEY_ANDROID_AUTO_RESOLUTION = "android_auto_resolution"
+    private const val KEY_ANDROID_AUTO_DENSITY = "android_auto_density"
     private const val KEY_ANDROID_AUTO_ASPECT_MATCHING = "android_auto_aspect_matching"
     private const val KEY_AUTO_CONNECT = "auto_connect"
     private const val KEY_AUTOSTART_ENABLED = "autostart_enabled"
@@ -253,6 +375,16 @@ object MotoHubSettings {
 
     fun setAndroidAutoResolution(context: Context, mode: AndroidAutoResolutionMode) {
         preferences(context).edit().putString(KEY_ANDROID_AUTO_RESOLUTION, mode.name).apply()
+    }
+
+    fun androidAutoDensity(context: Context): AndroidAutoDensityMode = enumPreference(
+        context = context,
+        key = KEY_ANDROID_AUTO_DENSITY,
+        default = AndroidAutoDensityMode.AUTO
+    )
+
+    fun setAndroidAutoDensity(context: Context, mode: AndroidAutoDensityMode) {
+        preferences(context).edit().putString(KEY_ANDROID_AUTO_DENSITY, mode.name).apply()
     }
 
     fun androidAutoAspectMatching(context: Context): AndroidAutoAspectMatchingMode = enumPreference(

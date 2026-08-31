@@ -61,6 +61,12 @@ enum class ProfileOverride(
         "Experiment for Voge dashes that reboot mid-ride: 1s plain-IDR GOP instead of all-intra",
         experimental = true
     ),
+    QJ_SRK921_RR(
+        "qj_srk921_rr",
+        "QJ SRK921 RR (test)",
+        "Experiment for a dash that takes every frame and shows none: 10 fps on a 2s GOP",
+        experimental = true
+    ),
     KOVE_800X("kove_800x", "KOVE 800X (ThinkerRide)", "BLE-paired ThinkerRide dash, 600x1024 portrait"),
     KOVE_450_RALLY(
         "kove_450_rally",
@@ -105,6 +111,7 @@ enum class ProfileOverride(
         ZONTES_368G_TEST -> TBoxModelProfile.ZONTES_368G_TEST
         ZONTES_368G_TEST_B -> TBoxModelProfile.ZONTES_368G_TEST_B
         VOGE_TEST -> TBoxModelProfile.VOGE_TEST
+        QJ_SRK921_RR -> TBoxModelProfile.QJ_SRK921_RR
         KOVE_800X -> TBoxModelProfile.KOVE_800X
         KOVE_450_RALLY -> TBoxModelProfile.KOVE_450_RALLY
         MORINI_XCAPE_1200 -> TBoxModelProfile.MORINI_XCAPE_1200

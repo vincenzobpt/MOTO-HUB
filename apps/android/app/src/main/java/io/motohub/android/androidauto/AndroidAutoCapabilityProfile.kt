@@ -3,14 +3,32 @@
 // Part of MOTO-HUB. Free software under the GNU AGPL v3; see LICENSE.
 package io.motohub.android.androidauto
 
+/**
+ * Every coded source the Android Auto protocol defines (control.proto's
+ * `VideoCodecResolutionType`), each with the density that keeps its layout the same size in dp
+ * as the SD source for the same orientation - the extra pixels buy sharpness, not more UI.
+ *
+ * [autoSelectable] is what stops that completeness from becoming a black screen. The four
+ * sources below it are the ones MOTO-HUB has actually run end to end on a dashboard; the rest
+ * are offered as a manual choice only, because AUTO picks a source from a geometry the T-Box
+ * reported about itself, and a dash that misreports 1920x1080 would have us encode 1080p into a
+ * decoder nobody has ever fed 1080p. A rider who knows their panel can still select one by hand.
+ */
 enum class AndroidAutoVideoPreset(
     val source: DisplayGeometry,
-    val densityDpi: Int
+    val densityDpi: Int,
+    /** Whether AUTO is allowed to land on this source from a learned T-Box geometry. */
+    val autoSelectable: Boolean = true
 ) {
     LANDSCAPE_800X480(DisplayGeometry(800, 480), 160),
     LANDSCAPE_1280X720(DisplayGeometry(1280, 720), 160),
+    LANDSCAPE_1920X1080(DisplayGeometry(1920, 1080), 240, autoSelectable = false),
+    LANDSCAPE_2560X1440(DisplayGeometry(2560, 1440), 320, autoSelectable = false),
+    LANDSCAPE_3840X2160(DisplayGeometry(3840, 2160), 480, autoSelectable = false),
     PORTRAIT_720X1280(DisplayGeometry(720, 1280), 240),
-    PORTRAIT_1080X1920(DisplayGeometry(1080, 1920), 240)
+    PORTRAIT_1080X1920(DisplayGeometry(1080, 1920), 240),
+    PORTRAIT_1440X2560(DisplayGeometry(1440, 2560), 320, autoSelectable = false),
+    PORTRAIT_2160X3840(DisplayGeometry(2160, 3840), 480, autoSelectable = false)
 }
 
 private val AUTO_LANDSCAPE_PRESETS = listOf(
@@ -94,10 +112,19 @@ data class AndroidAutoCapabilityProfile(
     val screenMargins: TBoxScreenMargins = TBoxScreenMargins.NONE,
     val touchEnabled: Boolean = true,
     /** See [AaAspectMargins]; added on top of [screenMargins] in the AAP margin fields. */
-    val aspectMargins: AaAspectMargins = AaAspectMargins.NONE
+    val aspectMargins: AaAspectMargins = AaAspectMargins.NONE,
+    /**
+     * The rider's explicit density, in dpi, or null to use the one the preset carries.
+     *
+     * Density is the only thing that decides how big Android Auto draws itself: the source size
+     * is pixels, and dp = px * 160 / dpi. Two dashes with the same 800x480 panel can want
+     * different answers here - a 5" TFT at arm's length and a 10" one on a tourer - and the
+     * preset's own value is a single compromise for both.
+     */
+    val densityOverride: Int? = null
 ) {
     val video: DisplayGeometry get() = videoPreset.source
-    val densityDpi: Int get() = videoPreset.densityDpi
+    val densityDpi: Int get() = densityOverride ?: videoPreset.densityDpi
     /** Android Auto's touch/UI surface after applying explicit AA content insets only. */
     val touchSurface: DisplayGeometry
         get() = screenMargins.inset(video).let { framed ->
@@ -156,7 +183,8 @@ object AndroidAutoCapabilityProfiles {
         overridePreset: AndroidAutoVideoPreset? = null,
         screenMargins: TBoxScreenMargins = TBoxScreenMargins.NONE,
         touchEnabled: Boolean = true,
-        fallbackPreset: AndroidAutoVideoPreset = AndroidAutoVideoPreset.LANDSCAPE_800X480
+        fallbackPreset: AndroidAutoVideoPreset = AndroidAutoVideoPreset.LANDSCAPE_800X480,
+        densityOverride: Int? = null
     ): AndroidAutoCapabilityProfile {
         if (overridePreset != null) {
             return AndroidAutoCapabilityProfile(
@@ -165,7 +193,8 @@ object AndroidAutoCapabilityProfiles {
                 target = target,
                 reason = "Selected by the user's resolution and orientation override.",
                 screenMargins = screenMargins,
-                touchEnabled = touchEnabled
+                touchEnabled = touchEnabled,
+                densityOverride = densityOverride
             )
         }
        if (target == null) {
@@ -173,7 +202,8 @@ object AndroidAutoCapabilityProfiles {
                reason = "No saved T-Box geometry is available.",
                screenMargins = screenMargins,
                touchEnabled = touchEnabled,
-               preset = fallbackPreset
+               preset = fallbackPreset,
+               densityOverride = densityOverride
            )
        }
         if (!target.isPlausibleTBoxGeometry()) {
@@ -181,7 +211,8 @@ object AndroidAutoCapabilityProfiles {
                reason = "Saved T-Box geometry is outside safe limits.",
                screenMargins = screenMargins,
                touchEnabled = touchEnabled,
-               preset = fallbackPreset
+               preset = fallbackPreset,
+               densityOverride = densityOverride
            )
        }
 
@@ -208,7 +239,8 @@ object AndroidAutoCapabilityProfiles {
             reason = selectionReason + "${target.width}x${target.height}: " +
                 "${preset.source.width}x${preset.source.height}.",
             screenMargins = screenMargins,
-            touchEnabled = touchEnabled
+            touchEnabled = touchEnabled,
+            densityOverride = densityOverride
         )
     }
 
@@ -216,7 +248,8 @@ object AndroidAutoCapabilityProfiles {
         reason: String = "Using the hardware-validated compatibility profile.",
         screenMargins: TBoxScreenMargins = TBoxScreenMargins.NONE,
         touchEnabled: Boolean = true,
-        preset: AndroidAutoVideoPreset = AndroidAutoVideoPreset.LANDSCAPE_800X480
+        preset: AndroidAutoVideoPreset = AndroidAutoVideoPreset.LANDSCAPE_800X480,
+        densityOverride: Int? = null
     ) =
         AndroidAutoCapabilityProfile(
             videoPreset = preset,
@@ -224,7 +257,8 @@ object AndroidAutoCapabilityProfiles {
             target = null,
             reason = reason,
             screenMargins = screenMargins,
-            touchEnabled = touchEnabled
+            touchEnabled = touchEnabled,
+            densityOverride = densityOverride
         )
 
     private fun DisplayGeometry.isPlausibleTBoxGeometry(): Boolean {
@@ -240,8 +274,11 @@ object AndroidAutoCapabilityProfiles {
         val alignedWidth = target.width and 0xFFF0
         val alignedHeight = target.height and 0xFFF0
         val candidates = AndroidAutoVideoPreset.entries.filter { preset ->
-            (preset.videoWidth() == alignedWidth && preset.videoHeight() >= alignedHeight) ||
-                (preset.videoHeight() == alignedHeight && preset.videoWidth() >= alignedWidth)
+            // autoSelectable, not entries: the sources beyond 720p exist for a rider to choose,
+            // never for a T-Box's own report to choose for them. See the enum.
+            preset.autoSelectable &&
+                ((preset.videoWidth() == alignedWidth && preset.videoHeight() >= alignedHeight) ||
+                    (preset.videoHeight() == alignedHeight && preset.videoWidth() >= alignedWidth))
         }
         return candidates.minByOrNull { preset ->
             val widthRemainder = (preset.videoWidth() - alignedWidth).coerceAtLeast(0)

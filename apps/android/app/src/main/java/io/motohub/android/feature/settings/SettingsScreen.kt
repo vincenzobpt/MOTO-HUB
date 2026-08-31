@@ -65,7 +65,7 @@ import io.motohub.android.feature.controls.HandlebarPressHud
 import io.motohub.android.ui.components.ToggleRow
 
 private enum class SettingsDetail {
-    GENERAL, LANGUAGE, AUTOSTART, VIDEO, ANDROID_AUTO, HANDLEBAR, HANDLEBAR_MAPPING, AUTOMATION,
+    GENERAL, LANGUAGE, AUTOSTART, VIDEO, ANDROID_AUTO, ANDROID_AUTO_RESOLUTION, ANDROID_AUTO_DENSITY, HANDLEBAR, HANDLEBAR_MAPPING, AUTOMATION,
     DIAGNOSTICS
 }
 
@@ -88,6 +88,8 @@ fun SettingsTabContent(
     BackHandler(enabled = detail != null) {
         detail = when (detail) {
             SettingsDetail.LANGUAGE, SettingsDetail.AUTOSTART -> SettingsDetail.GENERAL
+            SettingsDetail.ANDROID_AUTO_RESOLUTION, SettingsDetail.ANDROID_AUTO_DENSITY ->
+                SettingsDetail.ANDROID_AUTO
             else -> null
         }
     }
@@ -123,7 +125,17 @@ fun SettingsTabContent(
             SettingsDetail.LANGUAGE -> LanguageDetail(onBack = { detail = SettingsDetail.GENERAL })
             SettingsDetail.AUTOSTART -> AutostartDetail(onBack = { detail = SettingsDetail.GENERAL })
             SettingsDetail.VIDEO -> VideoQualityDetail(onBack = { detail = null })
-            SettingsDetail.ANDROID_AUTO -> AndroidAutoDetail(onBack = { detail = null })
+            SettingsDetail.ANDROID_AUTO -> AndroidAutoDetail(
+                onBack = { detail = null },
+                onOpenResolution = { detail = SettingsDetail.ANDROID_AUTO_RESOLUTION },
+                onOpenDensity = { detail = SettingsDetail.ANDROID_AUTO_DENSITY }
+            )
+            SettingsDetail.ANDROID_AUTO_RESOLUTION -> AndroidAutoResolutionDetail(
+                onBack = { detail = SettingsDetail.ANDROID_AUTO }
+            )
+            SettingsDetail.ANDROID_AUTO_DENSITY -> AndroidAutoDensityDetail(
+                onBack = { detail = SettingsDetail.ANDROID_AUTO }
+            )
             SettingsDetail.HANDLEBAR -> HandlebarControlsDetail(
                 onBack = { detail = null },
                 onOpenMapping = { detail = SettingsDetail.HANDLEBAR_MAPPING }
@@ -186,7 +198,8 @@ private fun SettingsMainList(
             MotoHubActionRow(
                 title = motoHubText("Android Auto"),
                 description = motoHubText("Resolution and display mode"),
-                value = strings.getString(MotoHubSettings.androidAutoResolution(context).labelRes),
+                value = "${strings.getString(MotoHubSettings.androidAutoResolution(context).labelRes)} · " +
+                    strings.getString(MotoHubSettings.androidAutoDensity(context).labelRes),
                 onClick = { onOpenDetail(SettingsDetail.ANDROID_AUTO) }
             )
             MotoHubActionRow(
@@ -421,24 +434,30 @@ private fun LanguageDetail(onBack: () -> Unit) {
 }
 
 @Composable
-private fun AndroidAutoDetail(onBack: () -> Unit) {
+private fun AndroidAutoDetail(
+    onBack: () -> Unit,
+    onOpenResolution: () -> Unit,
+    onOpenDensity: () -> Unit
+) {
     val context = LocalContext.current
-    var resolution by remember { mutableStateOf(MotoHubSettings.androidAutoResolution(context)) }
     var aspectMatching by remember { mutableStateOf(MotoHubSettings.androidAutoAspectMatching(context)) }
     MotoHubDetailScreen(title = motoHubText("Android Auto"), backLabel = motoHubText("‹ Settings"), onBack = onBack) {
-        MonoLabel(motoHubText("RESOLUTION"))
-        AndroidAutoResolutionMode.entries.forEach { candidate ->
-            MotoHubRadioRow(
-                title = context.getString(candidate.labelRes),
-                description = context.getString(candidate.descriptionRes),
-                selected = resolution == candidate,
-                onClick = {
-                    resolution = candidate
-                    MotoHubSettings.setAndroidAutoResolution(context, candidate)
-                    ProjectionEventLog.record("SETTINGS", "Android Auto resolution changed to ${candidate.name}.")
-                }
-            )
-        }
+        // Nine coded sources and seven densities do not belong on one scrolling page next to the
+        // insets picker: each is its own question, so each gets its own screen and this one shows
+        // the answers. Read straight from the store rather than remembered - returning from a
+        // child recomposes this screen, and a remembered copy would show the old choice.
+        MotoHubActionRow(
+            title = motoHubText("Resolution"),
+            description = motoHubText("The video source Android Auto sends to the dashboard"),
+            value = context.getString(MotoHubSettings.androidAutoResolution(context).labelRes),
+            onClick = onOpenResolution
+        )
+        MotoHubActionRow(
+            title = motoHubText("Interface size"),
+            description = motoHubText("How large Android Auto draws itself on that source"),
+            value = context.getString(MotoHubSettings.androidAutoDensity(context).labelRes),
+            onClick = onOpenDensity
+        )
         HorizontalDivider()
         MonoLabel(motoHubText("ANDROID AUTO CONTENT INSETS"))
         AndroidAutoAspectMatchingMode.entries.forEach { candidate ->
@@ -776,3 +795,85 @@ private fun HandlebarControlsDetail(onBack: () -> Unit, onOpenMapping: () -> Uni
     }
 }
 
+@Composable
+private fun AndroidAutoResolutionDetail(onBack: () -> Unit) {
+    val context = LocalContext.current
+    var resolution by remember { mutableStateOf(MotoHubSettings.androidAutoResolution(context)) }
+    val select: (AndroidAutoResolutionMode) -> Unit = { candidate ->
+        resolution = candidate
+        MotoHubSettings.setAndroidAutoResolution(context, candidate)
+        ProjectionEventLog.record("SETTINGS", "Android Auto resolution changed to ${candidate.name}.")
+    }
+    MotoHubDetailScreen(
+        title = motoHubText("Resolution"),
+        backLabel = "‹ ${motoHubText("Android Auto")}",
+        onBack = onBack
+    ) {
+        // Every source the Android Auto protocol defines, split the way a rider thinks about
+        // them - the shape of their dashboard first, the number of pixels second.
+        AndroidAutoResolutionMode.entries.filter { it.preset == null }.forEach { candidate ->
+            AndroidAutoResolutionRow(candidate, resolution == candidate) { select(candidate) }
+        }
+        HorizontalDivider()
+        MonoLabel(motoHubText("LANDSCAPE"))
+        AndroidAutoResolutionMode.entries.filter { it.preset != null && it.landscape }
+            .forEach { candidate ->
+                AndroidAutoResolutionRow(candidate, resolution == candidate) { select(candidate) }
+            }
+        HorizontalDivider()
+        MonoLabel(motoHubText("PORTRAIT"))
+        AndroidAutoResolutionMode.entries.filter { it.preset != null && !it.landscape }
+            .forEach { candidate ->
+                AndroidAutoResolutionRow(candidate, resolution == candidate) { select(candidate) }
+            }
+    }
+}
+
+@Composable
+private fun AndroidAutoResolutionRow(
+    candidate: AndroidAutoResolutionMode,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    val context = LocalContext.current
+    val description = context.getString(candidate.descriptionRes)
+    MotoHubRadioRow(
+        title = context.getString(candidate.labelRes),
+        // The warning is part of the sentence rather than a badge: these sources are not worse,
+        // they are unproven, and a rider choosing one should read why before they ride on it.
+        description = if (candidate.experimental) {
+            "${motoHubText("Experimental")} · $description"
+        } else {
+            description
+        },
+        selected = selected,
+        onClick = onClick
+    )
+}
+
+@Composable
+private fun AndroidAutoDensityDetail(onBack: () -> Unit) {
+    val context = LocalContext.current
+    var density by remember { mutableStateOf(MotoHubSettings.androidAutoDensity(context)) }
+    MotoHubDetailScreen(
+        title = motoHubText("Interface size"),
+        backLabel = "‹ ${motoHubText("Android Auto")}",
+        onBack = onBack
+    ) {
+        AndroidAutoDensityMode.entries.forEach { candidate ->
+            MotoHubRadioRow(
+                title = context.getString(candidate.labelRes),
+                description = context.getString(candidate.descriptionRes),
+                selected = density == candidate,
+                onClick = {
+                    density = candidate
+                    MotoHubSettings.setAndroidAutoDensity(context, candidate)
+                    ProjectionEventLog.record(
+                        "SETTINGS",
+                        "Android Auto density changed to ${candidate.name}."
+                    )
+                }
+            )
+        }
+    }
+}

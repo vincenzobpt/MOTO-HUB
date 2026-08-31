@@ -154,10 +154,20 @@ class ServiceDiscoveryResponse(
                 Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._800x480
             AndroidAutoVideoPreset.LANDSCAPE_1280X720 ->
                 Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._1280x720
+            AndroidAutoVideoPreset.LANDSCAPE_1920X1080 ->
+                Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._1920x1080
+            AndroidAutoVideoPreset.LANDSCAPE_2560X1440 ->
+                Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._2560x1440
+            AndroidAutoVideoPreset.LANDSCAPE_3840X2160 ->
+                Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._3840x2160
             AndroidAutoVideoPreset.PORTRAIT_720X1280 ->
                 Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._720x1280
             AndroidAutoVideoPreset.PORTRAIT_1080X1920 ->
                 Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._1080x1920
+            AndroidAutoVideoPreset.PORTRAIT_1440X2560 ->
+                Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._1440x2560
+            AndroidAutoVideoPreset.PORTRAIT_2160X3840 ->
+                Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._2160x3840
         }
 
         private const val VEHICLE_MAKE = "OpenCfMoto"

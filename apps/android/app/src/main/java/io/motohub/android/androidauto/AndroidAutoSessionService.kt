@@ -255,6 +255,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
                 "screen margins=$screenMargins (profile default ${modelProfile.defaultScreenMargins})."
         )
         val resolutionMode = MotoHubSettings.androidAutoResolution(this)
+        val densityMode = MotoHubSettings.androidAutoDensity(this)
         val aspectMatchingMode = MotoHubSettings.androidAutoAspectMatching(this)
         val advertisedMargins = if (aspectMatchingMode == AndroidAutoAspectMatchingMode.MANUAL) {
             screenMargins
@@ -266,7 +267,8 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
             overridePreset = resolutionMode.preset,
             screenMargins = advertisedMargins,
             touchEnabled = touchEnabled,
-            fallbackPreset = fallbackPreset
+            fallbackPreset = fallbackPreset,
+            densityOverride = densityMode.dpi
         ).let { selected ->
             // AUTO used to mean "advertise no margins", which is the same thing as accepting the
             // letterbox: Android Auto only offers a handful of coded sizes and none of them is
@@ -291,7 +293,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
                 "Capability profile: source=${capabilityProfile.video.width}x" +
                 "${capabilityProfile.video.height}@${capabilityProfile.densityDpi}dpi, " +
                 "selection=${capabilityProfile.source}, resolution=${resolutionMode.name}, " +
-                "aspectMatching=${aspectMatchingMode.name}; " +
+                "density=${densityMode.name}, aspectMatching=${aspectMatchingMode.name}; " +
                 capabilityProfile.reason
         )
         if (learnedGeometry == null) {

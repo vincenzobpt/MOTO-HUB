@@ -123,5 +123,15 @@ data class AndroidAutoSettingsParcel(
      * who had turned it on in Core, and the symptom would be this very bug.
      */
     val autoRecoveryProvided: Boolean = false,
-    val autoRecovery: Boolean = true
+    val autoRecovery: Boolean = true,
+    /**
+     * AndroidAutoDensityMode.name - how big Android Auto is asked to draw itself, which CORE
+     * puts in the AAP video config's `density` field when it opens the session.
+     *
+     * [androidAutoDensityProvided] gates it for the reason every gate here does, with the usual
+     * asymmetry: an old caller deserializes "", and CORE ships this picker in its own settings
+     * too, so an ungated empty string would reset a rider who set the density over there.
+     */
+    val androidAutoDensityProvided: Boolean = false,
+    val androidAutoDensity: String = ""
 ) : Parcelable
