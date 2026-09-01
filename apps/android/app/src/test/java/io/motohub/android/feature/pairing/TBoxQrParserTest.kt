@@ -205,6 +205,11 @@ class TBoxQrParserTest {
         assertTrue(message, message.contains("Ssid"))
         // The generic web-address advice must not win: it is the wrong instruction here.
         assertTrue(message, !message.contains("Scan the dash pairing"))
+        // A dash that asks the phone to host may still raise an access point on its iPhone screen
+        // (support case FD79-4FFB), and that is the easier link - but only after the instruction
+        // the scanned code actually gives, so the hotspot has to be named first.
+        assertTrue(message, message.contains("iPhone / CarPlay"))
+        assertTrue(message, message.indexOf("hotspot") < message.indexOf("iPhone / CarPlay"))
     }
 
     @Test
@@ -234,12 +239,12 @@ class TBoxQrParserTest {
 
     @Test
     fun keepsTheIphoneHintAwayFromFailuresItWouldMisdirect() {
-        // Two codes are complete as they are, and their remedy is not another code: the Moto
-        // Morini screen carries only the one, and the phone-hotspot dash prints none at all.
-        // Telling either rider to hunt for an iPhone code sends them looking for nothing.
+        // The Moto Morini screen carries one code and no other: its remedy is to open the
+        // phone-link screen, so hunting for an iPhone code sends that rider looking for nothing.
+        // The phone-hotspot dash is NOT in here any more - see the hotspot test above, where the
+        // iPhone screen is a real second topology rather than a second code.
         val misdirected = listOf(
-            "http://admin.motomorini.com/app.html?MachineID=dc0d30da",
-            "https://www.carbit.com.cn/app/download.html"
+            "http://admin.motomorini.com/app.html?MachineID=dc0d30da"
         )
         for (raw in misdirected) {
             val message = TBoxQrParser.parse(raw).exceptionOrNull()?.message.orEmpty()

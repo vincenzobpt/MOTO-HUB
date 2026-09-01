@@ -509,6 +509,17 @@ object TBoxQrParser {
             "label, it pairs Android too."
 
     /**
+     * What to add when the dash asked the phone to host, but may still host an AP of its own.
+     *
+     * The wording deliberately differs from [TRY_THE_IOS_CODE]: there the remedy is to scan the
+     * other code, here it is to change what the dash is doing. Scanning the iPhone code would give
+     * the same credentials again - what the rider needs is that screen's radio.
+     */
+    private const val OR_THE_IOS_ACCESS_POINT =
+        " If the dash also offers iPhone / CarPlay, picking that turns on an access point of its " +
+            "own - joining it is easier, and it pairs Android too."
+
+    /**
      * The QR decoded cleanly but carries no credentials. Naming the actual content is what lets a
      * rider recover on their own: the dash prints several codes and only one of them pairs, so
      * "unreadable" sends them polishing the screen instead of changing screens.
@@ -540,13 +551,18 @@ object TBoxQrParser {
             // that does not exist. Confirmed on a tester's dash 2026-08-02, whose screen reads
             // "Please open Android hotspot and set the following parameters".
             //
-            // No iPhone hint either, for the same reason: this code is complete as it is, and the
-            // rider has to set up a hotspot rather than find a better code.
+            // The iPhone hint used to be withheld here, on the grounds that this code is complete
+            // as it is. That holds only for a dash that can ONLY be a client: support case
+            // FD79-4FFB is a Benelli TRK 702X that does both, and the rider spent nine days on the
+            // hotspot before someone told him to pick iPhone/CarPlay on the dash, which raised an
+            // access point of its own. Hosting the hotspot stays the first instruction, because it
+            // is what the scanned code actually asks for; the access point is the easier road out
+            // where the dash offers one, so it is named second rather than not at all.
             hostOf(rawValue)?.lowercase()?.let(::isKnownProvisioningHost) == true ->
                 "This dash connects the other way round: it joins a hotspot your phone creates, " +
                     "so its code carries no network to join. On the dash, read the Ssid and " +
                     "Password it shows, set your Android hotspot to exactly those values, turn it " +
-                    "on, and the dash will connect by itself."
+                    "on, and the dash will connect by itself." + OR_THE_IOS_ACCESS_POINT
 
             rawValue.startsWith("http", ignoreCase = true) ->
                 "That is a web address with no network credentials in it. Scan the dash pairing " +
