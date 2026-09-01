@@ -17,7 +17,10 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
+import io.motohub.android.data.MotorcycleProfileStore
+import io.motohub.android.session.MotorcycleProfile
 import java.util.Date
+import java.util.UUID
 import java.util.TimeZone
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -102,6 +105,25 @@ internal class EcBtpClockLab(
             return
         }
 
+        val live = TBoxSessionRegistry.current()
+        if (live != null) {
+            // Support case f014ce61 (VOGE 800 Rally, 2026-08-31) is what this refusal is made of:
+            // the lab was run twice during a live projection, and 35s into the first run the
+            // dash stopped answering on its PXC control channel - 28 keepalives unanswered, the
+            // video still landing - and Android Auto was torn down. Ten RFCOMM sockets and a 20s
+            // unfiltered LE scan are exactly the kind of neighbour a dash streaming over 2.4GHz
+            // Wi-Fi Direct cannot absorb. The experiment can wait; the rider's ride cannot.
+            log(
+                "The lab will not run while MOTO-HUB is connected to " +
+                    "${live.motorcycle.displayName ?: live.motorcycle.ssid}: opening every " +
+                    "Bluetooth device and scanning for 20s has ended a live session before. " +
+                    "Disconnect the motorcycle first, leave the dash powered on, and run the " +
+                    "lab again."
+            )
+            finish()
+            return
+        }
+
         log(
             "Clock lab started. Keep the dash powered on: the lab runs for " +
                 "${LAB_DURATION_MILLIS / 1000}s, pushes the time in ${ATTEMPT_COUNT} different " +
@@ -113,7 +135,18 @@ internal class EcBtpClockLab(
         // No pre-filter: the cached UUIDs are classic SDP records and say nothing reliable about
         // an LE dash. A headset's GATT dump is a few log lines; a silently skipped dash is a
         // wasted field run.
-        bonded.take(MAX_BONDED_CONNECTS).forEach { device ->
+        //
+        // Ordered, though, because MAX_BONDED_CONNECTS is a cap on an unordered Set:
+        // getBondedDevices() promises no order at all. In support case f014ce61 the rider had 23
+        // bonded devices and the dash came up sixth by luck; with two more headsets paired the
+        // lab would have written "13 skipped" and looked like a complete run without ever having
+        // opened the motorcycle. Filtering on the SDP records would not save it either - that
+        // dash advertises A2DP, AVRCP and HFP and nothing else, exactly like the headsets.
+        val hints = dashNameHints(savedMotorcycles())
+        val ordered = bonded.sortedByDescending { device ->
+            looksLikeDash(runCatching { device.name }.getOrNull(), hints)
+        }
+        ordered.take(MAX_BONDED_CONNECTS).forEach { device ->
             val address = runCatching { device.address }.getOrNull() ?: return@forEach
             val name = runCatching { device.name }.getOrNull() ?: "?"
             val cached = runCatching { device.uuids }.getOrNull()
@@ -247,6 +280,13 @@ internal class EcBtpClockLab(
             @Volatile
             private var dataCharacteristic: BluetoothGattCharacteristic? = null
 
+            /**
+             * Where the replies arrive, which on a Carbit serial pair is the same characteristic
+             * that is written and on a dash matched by shape is a different one.
+             */
+            @Volatile
+            private var notifyCharacteristic: BluetoothGattCharacteristic? = null
+
             /** The attempt whose reply a following notification most plausibly is. */
             @Volatile
             private var lastAttempt: String = "before any write"
@@ -270,21 +310,65 @@ internal class EcBtpClockLab(
                 val service = EcBtpTimeLink.SERVICE_UUIDS.firstNotNullOfOrNull { uuid ->
                     runCatching { gatt.getService(uuid) }.getOrNull()
                 }
-                val characteristic = service?.let { dataCharacteristicOf(it) }
-                if (characteristic == null) {
-                    log("$label: no EC-BTP serial service+characteristic pair; leaving it alone.")
+                val known = service?.let { dataCharacteristicOf(it) }?.let { it to it }
+                // The seven known UUIDs come from Carbit's own app, so they name the dashes we
+                // have already met and nothing else. Support case f014ce61: the VOGE's BLE side
+                // carries 5fe695f1-fd7b-4f9b-98cc-ee6cf57a776e with one write and one notify
+                // characteristic - the shape of a serial channel, and the only writable thing on
+                // the whole motorcycle - and the lab dumped it into the log and walked away. The
+                // comment on dumpGattTable already said the fix may hide in a UUID we have never
+                // met; this is the lab acting on it.
+                val pair = known ?: shapedPair(gatt, label)
+                if (pair == null) {
+                    log("$label: no serial-shaped service+characteristic pair; leaving it alone.")
                     runCatching { gatt.disconnect() }
                     return
                 }
-                dataCharacteristic = characteristic
-                subscribe(gatt, characteristic)
+                val (writeTarget, notifyTarget) = pair
+                dataCharacteristic = writeTarget
+                notifyCharacteristic = notifyTarget
+                subscribe(gatt, notifyTarget)
                 log(
-                    "$label: experimenting on ${characteristic.uuid} " +
-                        "(${describeProperties(characteristic.properties)}). Listening " +
-                        "${LISTEN_WINDOW_MILLIS / 1000}s first - a dash that asks by itself is " +
-                        "the answer EcBtpTimeLink already handles."
+                    "$label: experimenting on ${writeTarget.uuid} " +
+                        "(${describeProperties(writeTarget.properties)})" +
+                        if (notifyTarget.uuid == writeTarget.uuid) {
+                            ""
+                        } else {
+                            ", listening on ${notifyTarget.uuid}"
+                        } +
+                        ". Listening ${LISTEN_WINDOW_MILLIS / 1000}s first - a dash that asks by " +
+                        "itself is the answer EcBtpTimeLink already handles."
                 )
                 scheduleAttempts(gatt, label)
+            }
+
+            /**
+             * The first service on this peripheral shaped like a serial channel, when none of the
+             * known ones is there. Reported as the guess it is, because it is one.
+             */
+            private fun shapedPair(
+                gatt: BluetoothGatt,
+                label: String
+            ): Pair<BluetoothGattCharacteristic, BluetoothGattCharacteristic>? {
+                val services = runCatching { gatt.services }.getOrNull().orEmpty()
+                services.forEach { candidate ->
+                    val characteristics = candidate.characteristics.orEmpty()
+                    val shaped = serialShapedPair(
+                        candidate.uuid,
+                        characteristics.map { it.uuid to it.properties }
+                    ) ?: return@forEach
+                    val write = characteristics.firstOrNull { it.uuid == shaped.first }
+                    val notify = characteristics.firstOrNull { it.uuid == shaped.second }
+                    if (write == null || notify == null) return@forEach
+                    log(
+                        "$label: none of the ${EcBtpTimeLink.SERVICE_UUIDS.size} known serial " +
+                            "services is here, but ${candidate.uuid} has the shape of one - " +
+                            "${shaped.first} to write, ${shaped.second} to listen on. Trying it; " +
+                            "this is a guess, and the log below says what it answered."
+                    )
+                    return write to notify
+                }
+                return null
             }
 
             override fun onCharacteristicWrite(
@@ -418,6 +502,9 @@ internal class EcBtpClockLab(
             runCatching { service.getCharacteristic(uuid) }.getOrNull()
         }
 
+    private fun savedMotorcycles(): List<MotorcycleProfile> =
+        runCatching { MotorcycleProfileStore(appContext).loadAll() }.getOrElse { emptyList() }
+
     /** The whole table, because the fix for a dash we have never met may hide in a UUID we have never met. */
     private fun dumpGattTable(label: String, gatt: BluetoothGatt) {
         val services = runCatching { gatt.services }.getOrNull().orEmpty()
@@ -456,7 +543,79 @@ internal class EcBtpClockLab(
 
     private fun hex(bytes: ByteArray): String = bytes.joinToString(" ") { "%02X".format(it) }
 
-    private companion object {
+    internal companion object {
+
+        /**
+         * The names a bonded device could carry if it were this rider's dash.
+         *
+         * A Wi-Fi Direct group is named `DIRECT-<two chars>-<device name>` by Android's own
+         * convention, so `DIRECT-VOGE-057543` names a dash that calls itself `VOGE-057543` on
+         * Bluetooth and advertises as `BLE-VOGE-057543`. Both the group name and the stripped
+         * form go in, along with whatever the rider typed as the display name.
+         */
+        internal fun dashNameHints(profiles: List<MotorcycleProfile>): List<String> =
+            profiles.flatMap { profile ->
+                val ssid = profile.ssid.trim().removeSurrounding("\"")
+                listOfNotNull(
+                    ssid.takeIf { it.isNotBlank() },
+                    TBoxWifiDirectConnector.peerNameFromGroupSsid(ssid),
+                    profile.displayName?.trim()?.takeIf { it.isNotBlank() }
+                )
+            }.map { it.uppercase() }.distinct()
+
+        /**
+         * Whether a bonded device's name looks like one of [hints], in either direction: the
+         * dash's Bluetooth name is often a prefix or a suffix of the network it hosts.
+         */
+        internal fun looksLikeDash(deviceName: String?, hints: List<String>): Boolean {
+            val name = deviceName?.trim()?.uppercase()?.takeIf { it.isNotBlank() } ?: return false
+            return hints.any { hint -> name.contains(hint) || hint.contains(name) }
+        }
+
+        /**
+         * The write/notify characteristics of [serviceUuid] when it is shaped like a serial
+         * channel, or null.
+         *
+         * Exactly one of each, deliberately. A vendor serial channel is a pipe: one way in, one
+         * way out. A service offering three writable characteristics is something else, and
+         * writing EC-BTP frames into a guess that rich is how a lab stops being safe.
+         *
+         * Services in the Bluetooth SIG base range are skipped whatever their shape: every
+         * peripheral carries GAP, GATT and Device Information, and none of them is a dash's
+         * private channel. The two known serial services that DO live in that range
+         * (`0000ffe0-` and `0000fff0-`) never reach here - they are matched by UUID first.
+         */
+        internal fun serialShapedPair(
+            serviceUuid: UUID,
+            characteristics: List<Pair<UUID, Int>>
+        ): Pair<UUID, UUID>? {
+            if (isSigAssigned(serviceUuid)) return null
+            val writes = characteristics.filter { (_, properties) ->
+                properties and WRITE_PROPERTIES != 0
+            }
+            val notifies = characteristics.filter { (_, properties) ->
+                properties and NOTIFY_PROPERTIES != 0
+            }
+            if (writes.size != 1 || notifies.size != 1) return null
+            return writes.first().first to notifies.first().first
+        }
+
+        /** A 16-bit UUID adopted by the Bluetooth SIG, expanded onto the standard base. */
+        private fun isSigAssigned(uuid: UUID): Boolean =
+            uuid.leastSignificantBits == SIG_BASE_LEAST_SIGNIFICANT_BITS &&
+                (uuid.mostSignificantBits and SIG_BASE_HIGH_MASK) == SIG_BASE_HIGH_BITS
+
+        private val SIG_BASE_LEAST_SIGNIFICANT_BITS =
+            UUID.fromString("00000000-0000-1000-8000-00805f9b34fb").leastSignificantBits
+        private const val SIG_BASE_HIGH_MASK = 0x0000_0000_FFFF_FFFFL
+        private const val SIG_BASE_HIGH_BITS = 0x0000_1000L
+        private const val WRITE_PROPERTIES =
+            BluetoothGattCharacteristic.PROPERTY_WRITE or
+                BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE
+        private const val NOTIFY_PROPERTIES =
+            BluetoothGattCharacteristic.PROPERTY_NOTIFY or
+                BluetoothGattCharacteristic.PROPERTY_INDICATE
+
         /** Long enough for a slow dash to boot its Bluetooth after ignition; the rider is watching. */
         const val LAB_DURATION_MILLIS = 60_000L
         const val SCAN_WINDOW_MILLIS = 20_000L
