@@ -32,9 +32,15 @@ sealed interface AutoConnectDecision {
  *   and submits the request anyway.
  *
  * [dashBroadcasting] is [TBoxNetworkConnector.isDashBroadcasting]'s tri-state, and the tri-state
- * is why this is safe: null means the phone handed back no scan at all (throttled, stale, or
- * permission-gated) and convicts nobody, so it never blocks an attempt. Only a definite sighting
- * lifts a cancel, and only a definite absence stops a retry.
+ * is why this is safe: null means the phone handed back no usable scan (absent, empty, or too old
+ * to have seen the dash come up) and convicts nobody, so it never blocks an attempt. Only a
+ * definite sighting lifts a cancel, and only a definite absence stops a retry.
+ *
+ * Age is checked at the source rather than here - a list older than
+ * [SCAN_EVIDENCE_MAX_AGE_MS] arrives as null - because this function must not be able to tell a
+ * stale absence from a fresh one. Rider 36a3fd37 (2026-09-01) lost a ride to exactly that: he
+ * powered the dash up AFTER pressing start, came back to the app twice, and both retries were
+ * refused by a scan taken before the dash existed.
  *
  * The FIRST attempt of a process is never blocked by absence ([previousAttempts] == 0). A scan
  * can be minutes old at launch, and the one attempt a rider actually waits for is the one that

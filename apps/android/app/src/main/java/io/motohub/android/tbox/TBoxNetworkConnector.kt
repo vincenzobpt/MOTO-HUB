@@ -374,7 +374,9 @@ class TBoxNetworkConnector(context: Context) {
         processBindingSuspended = false
         ProjectionEventLog.record(
             "NETWORK",
-            "Requesting Android Wi-Fi network for SSID ${profile.ssid}; passwordPresent=${profile.password.isNotEmpty()}."
+            "Requesting Android Wi-Fi network for SSID ${profile.ssid}; " +
+                "passwordPresent=${profile.password.isNotEmpty()}; " +
+                "the phone is currently ${currentWifiDescription()}."
         )
         submitSpecifierRequest(profile)
         return awaitRequestedNetwork(profile)
@@ -659,6 +661,34 @@ class TBoxNetworkConnector(context: Context) {
         )
     }
 
+    /**
+     * What the phone is associated to RIGHT NOW, for the line that submits the specifier.
+     *
+     * A phone with one Wi-Fi radio has to leave whatever it is on before it can honour a
+     * [WifiNetworkSpecifier], and "I was still on my home Wi-Fi" is a completely different
+     * failure from "the dash was not broadcasting" - yet both print as a 30s timeout. Rider
+     * 36a3fd37 had to tell us in words which of the two it was, because no log line in two days
+     * of reports carried it.
+     *
+     * The SSID needs location permission and CORE does not hold it, so the name is often
+     * withheld. Whether the phone is on SOME Wi-Fi is the half that matters and
+     * [ConnectivityManager] answers it without any permission at all.
+     */
+    @SuppressLint("MissingPermission")
+    private fun currentWifiDescription(): String {
+        val onWifi = connectivityManager.activeNetwork
+            ?.let { connectivityManager.getNetworkCapabilities(it) }
+            ?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true
+        if (!onWifi) return "not on any Wi-Fi"
+        val ssid = runCatching { normalizeSsid(wifiManager.connectionInfo?.ssid.orEmpty()) }
+            .getOrDefault("")
+        return when {
+            ssid.isBlank() || ssid == "<unknown ssid>" ->
+                "on another Wi-Fi whose name Android withholds - Android has to leave it first"
+            else -> "on Wi-Fi $ssid - Android has to leave it first"
+        }
+    }
+
     private fun ScanResult.ssidText(): String =
         (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) wifiSsid?.toString() else null)
             ?.removeSurrounding("\"")
@@ -680,6 +710,15 @@ class TBoxNetworkConnector(context: Context) {
         if (target.isEmpty()) return null
         val results = runCatching { wifiManager.scanResults }.getOrNull() ?: return null
         if (results.isEmpty()) return null
+        // AGE is the fourth way this list lies, and the one that cost a rider his ride
+        // (36a3fd37, 2026-09-01). Android throttles getScanResults hard and nothing in the app
+        // refreshes it, so the list can predate the moment the dash was switched on. That rider
+        // pressed start while still on his home Wi-Fi, then powered the dash up and came back to
+        // MOTO-HUB twice - 13:32:46 and 13:33:18 - and both times the retry was vetoed by a list
+        // that had been taken before the dash existed. Ten minutes later the same dash joined in
+        // 5110ms at -40dBm. A list too old to have seen the dash come up says nothing about it.
+        val newest = results.maxOf { it.timestamp }
+        if (!scanEvidenceIsFresh(newest, SystemClock.elapsedRealtime())) return null
         return results.any { it.ssidText().equals(target, ignoreCase = true) }
     }
 
@@ -1675,6 +1714,33 @@ internal fun regulatoryReach(topFiveGhzMhz: Int?): String = when {
  * eight attempts came back with 1, 2, 2, 2, 3 and 10 networks (log 2026-08-12) - on the low
  * readings "the dash is not in the scan" says more about the scan than it does about the dash.
  */
+/**
+ * Is a Wi-Fi scan list recent enough to be evidence about the dash?
+ *
+ * [newestResultTimestampMicros] is [ScanResult.timestamp] - microseconds since boot at which that
+ * AP was last seen - so the newest entry dates the list as a whole. Compared against
+ * [SystemClock.elapsedRealtime], which shares that clock.
+ *
+ * A list older than [SCAN_EVIDENCE_MAX_AGE_MS] is not a smaller amount of evidence, it is none:
+ * the rider may have switched the dash on since it was taken. Returning false there sends
+ * [TBoxNetworkConnector.isDashBroadcasting] to null - "cannot be said" - which is the only answer
+ * that neither convicts the dash nor invents a sighting. A future timestamp (a clock the platform
+ * has stepped) is treated as fresh: it is not evidence of age either.
+ */
+internal fun scanEvidenceIsFresh(newestResultTimestampMicros: Long, nowMillis: Long): Boolean {
+    val ageMs = nowMillis - newestResultTimestampMicros / 1_000L
+    return ageMs <= SCAN_EVIDENCE_MAX_AGE_MS
+}
+
+/**
+ * How old a scan list may be and still answer "is the dash on the air?".
+ *
+ * 30s is picked off the failure it exists to stop: the gap between a rider powering the dash up
+ * and coming back to MOTO-HUB is seconds, not minutes, so anything older cannot have seen the
+ * dash come up. Long enough that a list refreshed while the rider walks to the bike still counts.
+ */
+internal const val SCAN_EVIDENCE_MAX_AGE_MS = 30_000L
+
 private const val SPARSE_SCAN_NETWORKS = 3
 
 /**

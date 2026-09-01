@@ -890,6 +890,31 @@ class MainActivity : ComponentActivity() {
                     lifecycleOwner.lifecycle.addObserver(observer)
                     onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
                 }
+                // A resume is not the only moment the bike appears. Riders power the dash up
+                // AFTER opening MOTO-HUB - rider 36a3fd37, 2026-09-01, said it plainly: "I
+                // thought, OK, I'll open MotoPlay on the motorcycle, and when it connects to the
+                // motorcycle's Wi-Fi the transmission will happen. But it didn't." Nothing was
+                // watching: his app sat on NETWORK_SETUP_REQUIRED for ten minutes while the dash
+                // broadcast, and joined in 5110ms the instant he brought it back to the front.
+                //
+                // So: keep asking while the app is alive on screen. attemptAutoConnect() is the
+                // same function the resume path calls and carries every brake - the phase check
+                // stops it re-entering an attempt already running, the cooldown stops bursts, and
+                // the rider's cancel still outranks it.
+                //
+                // Gated on STARTED deliberately. A specifier request submitted from a backgrounded
+                // process is refused by Android in ~70ms (see the foreground race), so polling
+                // while stopped would burn attempts and fill the log without ever joining.
+                LaunchedEffect(lifecycleOwner) {
+                    while (true) {
+                        delay(AUTO_CONNECT_WATCH_INTERVAL_MS)
+                        if (lifecycleOwner.lifecycle.currentState
+                                .isAtLeast(Lifecycle.State.STARTED)
+                        ) {
+                            attemptAutoConnect()
+                        }
+                    }
+                }
                 // ── Autostart on connect ────────────────────────────────────────────────────
                 //
                 // Fires at most once per app launch, the first time a T-Box link comes up (phase
@@ -1874,6 +1899,15 @@ class MainActivity : ComponentActivity() {
         const val ANDROID_AUTO_RECEIVER_SETTLE_MS = 900L
        const val AUTO_CONNECT_START_DELAY_MS = 600L
         const val AUTO_CONNECT_RETRY_COOLDOWN_MS = 5_000L
+
+        /**
+         * How often the app re-asks for the bike while it sits on screen with nothing connected.
+         *
+         * One attempt can occupy 30s of Android's own timeout, so this is the pause BETWEEN
+         * attempts, not their period: a failing cycle lands at roughly 45s. Short enough that a
+         * rider who switches the dash on and looks at the phone sees it go by itself.
+         */
+        const val AUTO_CONNECT_WATCH_INTERVAL_MS = 15_000L
         const val AUTO_CONNECT_AFTER_STOP_DELAY_MS = 900L
         const val AUTO_CONNECT_AFTER_STOP_POLL_MS = 200L
         const val AUTO_CONNECT_AFTER_STOP_MAX_ATTEMPTS = 25
