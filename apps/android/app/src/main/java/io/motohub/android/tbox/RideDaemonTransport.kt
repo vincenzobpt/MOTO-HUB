@@ -26,8 +26,6 @@ import java.net.Inet4Address
 import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Socket
-import java.io.IOException
-import java.net.ServerSocket
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.concurrent.ArrayBlockingQueue
@@ -52,8 +50,6 @@ import kotlinx.coroutines.withTimeout
 
 private const val MOTO_HUB_SIMULATOR_MODEL_ID = "MOTO-HUB-SIMULATOR"
 internal const val RIDE_DAEMON_STARTUP_TIMEOUT_SEC = 25L
-private const val REVERSE_PORT_WAIT_MS = 12_000L
-private const val REVERSE_PORT_POLL_MS = 400L
 private const val PXC_STALL_WARNING_MS = 6_000L
 /**
  * How long the dash may say nothing at all on the PXC control link, while we are still feeding it
@@ -89,7 +85,6 @@ private const val PUSH_FRAME_TIMEOUT_MS = 5_000L
 private const val PUSH_FRAME_SUBMIT_WAIT_MS = 1_000L
 private const val PUSH_FRAME_SUBMIT_RETRY_DELAY_MS = 5L
 private const val REJECTED_FRAME_LOG_INTERVAL = 100L
-private val REVERSE_PORTS = intArrayOf(10920, 10921, 10922)
 
 internal fun isCurrentRideDaemonSession(callbackGeneration: Long, activeGeneration: Long): Boolean =
     callbackGeneration != 0L && callbackGeneration == activeGeneration
@@ -137,6 +132,12 @@ class RideDaemonTransport(
     private var motorcycleProfile: MotorcycleProfile? = null
     /** Elapsed-time mark for the running session, so its length can be judged when it ends. */
     private val sessionStartedElapsed = AtomicLong(0L)
+    /**
+     * Set the instant before the socket is handed to Go, cleared when the stop is recorded. It is
+     * the only reliable way to tell "our sockets are closing" from "we never opened any" - see
+     * [markNativeSessionStopped].
+     */
+    private val nativeStartAttempted = AtomicBoolean(false)
     /** One ladder verdict per session, whoever ends it first. */
     private val ladderVerdictFiled = AtomicBoolean(false)
     private val pxcEvents = AtomicLong(0L)
@@ -288,6 +289,7 @@ class RideDaemonTransport(
                     .onFailure { stopFailure ->
                         ProjectionEventLog.warning("TBOX", "Failed to clean up the failed native session.", stopFailure)
                     }
+                markNativeSessionStopped()
                 ProjectionEventLog.error("TBOX", "EasyConn handshake failed.", it)
             }
         }
@@ -301,26 +303,45 @@ class RideDaemonTransport(
      * connected normally. killBackgroundProcesses() cannot touch a foreground service and the
      * kernel releases the sockets asynchronously either way, so the only correct behaviour is to
      * wait a bounded time and only then report the conflict.
+     *
+     * How long that bounded time is, though, depends on who can possibly be holding them. The
+     * hand-off story above only applies when a native session of OURS was just stopped; when none
+     * was, the sockets belong to another app and no amount of waiting will change that. Support
+     * case 36A3-FD37-1DD7 is the proof: eight full waits in eight minutes, not one release, 86
+     * seconds spent re-learning something the first probe already knew.
      */
     private suspend fun ensureReversePortsAvailable() {
-        var busy = busyReversePorts()
+        var busy = ReversePortProbe.busyPorts()
         if (busy.isEmpty()) return
         // Nothing can close another app's sockets on Android 14+; the bounded wait below is the
         // part that actually resolves the routine hand-off case (kernel releases asynchronously).
+        // One clock reading for both, so the log line can never explain a budget it did not get.
+        val decidedAt = SystemClock.elapsedRealtime()
+        val budgetMs = ReversePortProbe.waitBudgetMs(decidedAt)
+        val because = if (ReversePortProbe.waitingOnOurOwnHandoff(decidedAt)) {
+            "a MOTO-HUB session was stopped moments ago, so these are probably its own sockets " +
+                "still closing"
+        } else {
+            "no MOTO-HUB session of ours has stopped recently, so another app is holding them " +
+                "and waiting cannot change that"
+        }
         ProjectionEventLog.warning(
             "TBOX",
-            "Local reverse ports ${busy.joinToString()} are still held; waiting up to " +
-                "${REVERSE_PORT_WAIT_MS}ms for them to be released."
+            "Local reverse ports ${busy.joinToString()} are still held; $because - waiting up to " +
+                "${budgetMs}ms for them to be released."
         )
-        val deadline = SystemClock.elapsedRealtime() + REVERSE_PORT_WAIT_MS
+        val deadline = SystemClock.elapsedRealtime() + budgetMs
         while (busy.isNotEmpty() && SystemClock.elapsedRealtime() < deadline) {
-            delay(REVERSE_PORT_POLL_MS)
-            busy = busyReversePorts()
+            delay(ReversePortProbe.POLL_MS)
+            busy = ReversePortProbe.busyPorts()
         }
         if (busy.isNotEmpty()) {
+            // Wording matters beyond the log: TBoxConflictDiagnostics.isPortConflict() reads this
+            // message to decide whether the rider gets the force-stop help, so "still holds",
+            // the port numbers and "address already in use" all have to survive any edit here.
             throw IllegalStateException(
                 "Another EasyConn session still holds local reverse ports " +
-                    "${busy.joinToString()} after ${REVERSE_PORT_WAIT_MS}ms " +
+                    "${busy.joinToString()} after ${budgetMs}ms " +
                     "(address already in use). Force-stop your motorcycle's own companion app " +
                     "and retry."
             )
@@ -328,29 +349,19 @@ class RideDaemonTransport(
         ProjectionEventLog.record("TBOX", "Local reverse ports 10920-10922 were released; continuing.")
     }
 
-    /** Probes 10920-10922 exactly as the native reverse server will bind them. */
-    private fun busyReversePorts(): List<Int> {
-        val probes = mutableListOf<ServerSocket>()
-        val busy = mutableListOf<Int>()
-        try {
-            REVERSE_PORTS.forEach { port ->
-                val probe = ServerSocket()
-                try {
-                    // SO_REUSEADDR before bind, like the Go listener: sockets the previous
-                    // session left in TIME_WAIT are ours to reuse and must not read as a
-                    // foreign conflict. A live listener in another process still fails here.
-                    probe.reuseAddress = true
-                    probe.bind(InetSocketAddress(port), 1)
-                    probes += probe
-                } catch (_: IOException) {
-                    runCatching { probe.close() }
-                    busy += port
-                }
-            }
-        } finally {
-            probes.forEach { runCatching { it.close() } }
+    /**
+     * Tells [ReversePortProbe] that a session which really did own the reverse ports has been
+     * asked to stop, so the next attempt gets the patient hand-off wait.
+     *
+     * Guarded by [nativeStartAttempted] because the failure paths that call this also run when
+     * [ensureReversePortsAvailable] itself threw - a handshake that never reached Go opened no
+     * ports, and marking that as a hand-off would re-arm the long wait for sockets that were
+     * never ours.
+     */
+    private fun markNativeSessionStopped() {
+        if (nativeStartAttempted.getAndSet(false)) {
+            ReversePortProbe.onNativeSessionStopped()
         }
-        return busy
     }
 
     override fun offerAccessUnit(avcc: ByteArray): Boolean {
@@ -441,6 +452,7 @@ class RideDaemonTransport(
         }
         sessionToStop?.runCatching { stopSession() }
             ?.onFailure { ProjectionEventLog.warning("TBOX", "RideDaemon stopSession failed.", it) }
+        markNativeSessionStopped()
     }
 
     /**
@@ -534,6 +546,7 @@ class RideDaemonTransport(
                             stopFailure
                         )
                     }
+                markNativeSessionStopped()
             },
             onBudgetSpent = { failedAttempt, spentMillis, _ ->
                 ProjectionEventLog.warning(
@@ -567,6 +580,10 @@ class RideDaemonTransport(
                         // ParcelFileDescriptor duplicates the socket descriptor. Go owns and
                         // closes the detached duplicate; the outer use{} closes the original
                         // Java socket.
+                        // Marked before the call, not after: a start that times out may well have
+                        // opened the reverse ports before giving up, and that case is exactly the
+                        // hand-off the patient wait exists for.
+                        nativeStartAttempted.set(true)
                         activeSession.startSessionWithSocketFd(fd)
                     }
                 }

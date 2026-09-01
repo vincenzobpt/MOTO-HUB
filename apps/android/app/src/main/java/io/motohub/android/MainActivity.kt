@@ -80,7 +80,8 @@ import io.motohub.android.feature.home.WireNeedsAndroidAutoDialog
 import io.motohub.android.feature.home.WireVerdictDialog
 import io.motohub.android.feature.androidauto.AndroidAutoHelpScreen
 import io.motohub.android.feature.androidauto.AndroidAutoPreviewScreen
-import io.motohub.android.feature.androidauto.CompanionAppWarningDialog
+import io.motohub.android.feature.androidauto.CompanionConflictGateDialog
+import io.motohub.android.feature.androidauto.rememberCompanionConflictGate
 import io.motohub.android.feature.controls.HandlebarTeachPrerequisiteRequest
 import io.motohub.android.feature.diagnostics.BleExplorerScreen
 import io.motohub.android.feature.diagnostics.ClockLabScreen
@@ -553,11 +554,10 @@ class MainActivity : ComponentActivity() {
                 }
                 var projectionPermissionPending by rememberSaveable { mutableStateOf(false) }
                 var androidAutoPermissionPending by rememberSaveable { mutableStateOf(false) }
-                // The app itself, not a flag: the dialog has to name it, and re-deriving it at
-                // render time would ask the package manager again on every recomposition.
-                var conflictingCompanionApp by remember {
-                    mutableStateOf<CompanionAppRegistry.CompanionApp?>(null)
-                }
+                // Asked, not assumed: the gate probes the three EasyConn reverse ports at the
+                // moment a projection is about to start, so what the rider is shown is the state
+                // of their phone right now rather than the fact that a companion app exists.
+                val companionConflictGate = rememberCompanionConflictGate()
                 var externalDisplayPermissionPending by rememberSaveable { mutableStateOf(false) }
                 // Mirrors androidAutoPermissionPending for the phone-only path (see
                 // startPhoneOnlyBridge below) - a real T-Box session and a phone-only one both
@@ -697,30 +697,24 @@ class MainActivity : ComponentActivity() {
                 // sequence a tap does - permission checks included - instead of a second, subtly
                 // different copy of it.
                 val startMirroring: () -> Unit = {
-                    val notificationGranted = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-                        ContextCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.POST_NOTIFICATIONS
-                        ) == PackageManager.PERMISSION_GRANTED
-                    if (notificationGranted) {
-                        projectionLauncher.launch(projectionManager.createScreenCaptureIntent())
-                    } else {
-                        projectionPermissionPending = true
-                        notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    // Mirroring needs the same reverse ports Android Auto does, and used to walk
+                    // into the conflict with nothing said at all - only the AA path warned.
+                    companionConflictGate.gate("Mirroring") {
+                        val notificationGranted = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+                            ContextCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.POST_NOTIFICATIONS
+                            ) == PackageManager.PERMISSION_GRANTED
+                        if (notificationGranted) {
+                            projectionLauncher.launch(projectionManager.createScreenCaptureIntent())
+                        } else {
+                            projectionPermissionPending = true
+                            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        }
                     }
                 }
                 val startAndroidAutoWithWarning: () -> Unit = {
-                    val companion = CompanionAppRegistry.installed(context)
-                    if (companion != null && !MotoHubSettings.motoPlayWarningSuppressed(context)) {
-                        ProjectionEventLog.record(
-                            "ANDROID_AUTO",
-                            "${companion.displayName} (${companion.packageName}) is installed; " +
-                                "showing the companion-app conflict warning before launch."
-                        )
-                        conflictingCompanionApp = companion
-                    } else {
-                        continueAndroidAutoStart()
-                    }
+                    companionConflictGate.gate("Android Auto") { continueAndroidAutoStart() }
                 }
                 val wifiPermissionLauncher = rememberLauncherForActivityResult(
                     ActivityResultContracts.RequestMultiplePermissions()
@@ -1660,42 +1654,7 @@ class MainActivity : ComponentActivity() {
                 state.wireNeedsAndroidAutoFor?.let {
                     WireNeedsAndroidAutoDialog(onDismiss = { viewModel.dismissWireAndroidAutoNudge() })
                 }
-                conflictingCompanionApp?.let { companion ->
-                    var doNotShowMotoPlayWarningAgain by rememberSaveable { mutableStateOf(false) }
-                    CompanionAppWarningDialog(
-                        companionAppName = companion.displayName,
-                        doNotShowAgain = doNotShowMotoPlayWarningAgain,
-                        onDoNotShowAgainChanged = { doNotShowMotoPlayWarningAgain = it },
-                        onDismiss = {
-                            if (doNotShowMotoPlayWarningAgain) {
-                                MotoHubSettings.setMotoPlayWarningSuppressed(context, true)
-                            }
-                            conflictingCompanionApp = null
-                        },
-                        onOpenCompanionAppSettings = {
-                            if (!CompanionAppRegistry.openAppSettings(context, companion)) {
-                                Toast.makeText(
-                                    context,
-                                    motoHubText("Unable to open the companion app settings"),
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        },
-                        onContinue = {
-                            if (doNotShowMotoPlayWarningAgain) {
-                                MotoHubSettings.setMotoPlayWarningSuppressed(context, true)
-                            }
-                            conflictingCompanionApp = null
-                            ProjectionEventLog.record(
-                                "ANDROID_AUTO",
-                                "User continued Android Auto launch after the " +
-                                    "${companion.displayName} conflict warning; " +
-                                    "doNotShowAgain=$doNotShowMotoPlayWarningAgain."
-                            )
-                            continueAndroidAutoStart()
-                        }
-                    )
-                }
+                CompanionConflictGateDialog(companionConflictGate)
                 // Asked only of riders who never opted in; the scheduler raises this after a
                 // crash and clears it on either answer. Queued behind the safety disclaimer,
                 // which cannot be dismissed and would otherwise sit under it.

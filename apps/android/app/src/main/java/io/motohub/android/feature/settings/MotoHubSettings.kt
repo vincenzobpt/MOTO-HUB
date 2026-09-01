@@ -289,7 +289,6 @@ object MotoHubSettings {
     private const val KEY_LAST_AUTO_UPDATE_CHECK_AT = "last_auto_update_check_at_millis"
     private const val KEY_LAST_AUTO_UPDATE_CHECK_VERSION = "last_auto_update_check_version"
     private const val KEY_SAFETY_DISCLAIMER_ACKNOWLEDGED = "safety_disclaimer_acknowledged"
-    private const val KEY_MOTOPLAY_WARNING_SUPPRESSED = "motoplay_warning_suppressed"
     private const val KEY_VERBOSE_TBOX_LOGGING = "verbose_tbox_logging"
     private const val KEY_LOGGING_ENABLED = "logging_enabled"
 
@@ -563,17 +562,6 @@ object MotoHubSettings {
         preferences(context).edit().putBoolean(KEY_SAFETY_DISCLAIMER_ACKNOWLEDGED, acknowledged).apply()
     }
 
-    /**
-     * True after the rider chose not to see the MotoPlay conflict warning again before
-     * every Android Auto launch. The warning is a pre-flight reminder, not a blocker, so
-     * a rider who has already force-stopped MotoPlay - or who never runs it - can silence it.
-     */
-    fun motoPlayWarningSuppressed(context: Context): Boolean =
-        preferences(context).getBoolean(KEY_MOTOPLAY_WARNING_SUPPRESSED, false)
-
-    fun setMotoPlayWarningSuppressed(context: Context, suppressed: Boolean) {
-        preferences(context).edit().putBoolean(KEY_MOTOPLAY_WARNING_SUPPRESSED, suppressed).apply()
-    }
 
     private inline fun <reified T : Enum<T>> enumPreference(
         context: Context,
