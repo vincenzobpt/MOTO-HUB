@@ -30,11 +30,12 @@ class TBoxTouchFilter(
     private var pendingTask: ScheduledFuture<*>? = null
     private var ghostsDropped = 0
     private var stitches = 0
+    private var lastMoveLogAt = 0L
 
     @Synchronized
     fun onTouch(event: TBoxEvent.Touch) {
         val now = System.currentTimeMillis()
-        removeStaleContacts(now)
+        removeStaleContacts(now, event.pointerId)
 
         when (event.action) {
             ACTION_UP -> {
@@ -75,6 +76,7 @@ class TBoxTouchFilter(
         }
 
         contacts[event.pointerId] = Contact(event.x, event.y, now)
+        if (event.action == ACTION_MOVE) logMoveThrottled(event, now)
         downstream(event)
     }
 
@@ -110,9 +112,18 @@ class TBoxTouchFilter(
         }
     }
 
-    private fun removeStaleContacts(now: Long) {
+    /**
+     * Releases fingers whose UP frame was lost. [activePointerId] is exempt: it is the contact the
+     * frame being processed belongs to, and a dash that samples a slow drag sparsely - or a link
+     * that hiccups - routinely leaves more than [TBoxTouchPolicy.staleContactMillis] between two of
+     * its own MOVEs. Releasing it here injected an UP into the middle of the gesture; Android Auto
+     * then promoted the next MOVE back to a DOWN, so every drag reached it as a string of taps.
+     * Tapping an icon worked, scrolling the Android Auto task bar and pinching never did. The
+     * OpenCfMoto reference excludes the active pointer for exactly this reason.
+     */
+    private fun removeStaleContacts(now: Long, activePointerId: Int) {
         val stale = contacts.entries
-            .filter { now - it.value.at > policy.staleContactMillis }
+            .filter { it.key != activePointerId && now - it.value.at > policy.staleContactMillis }
             .toList()
         stale.forEach { (pointerId, contact) ->
             contacts.remove(pointerId)
@@ -163,6 +174,18 @@ class TBoxTouchFilter(
         pendingUp = null
     }
 
+    /**
+     * A drag is the one gesture whose frames are never logged individually - a single swipe is
+     * dozens of them. With no trace at all, a rider log cannot say whether a scroll failed because
+     * the dash sent nothing or because we dropped it, which is precisely the question a "touch does
+     * not scroll" report asks. One line every [MOVE_LOG_INTERVAL_MS] answers it without flooding.
+     */
+    private fun logMoveThrottled(event: TBoxEvent.Touch, now: Long) {
+        if (now - lastMoveLogAt < MOVE_LOG_INTERVAL_MS) return
+        lastMoveLogAt = now
+        log("[TOUCH] move p${event.pointerId} (${event.x},${event.y}); ${contacts.size} down")
+    }
+
     private fun near(x1: Int, y1: Int, x2: Int, y2: Int, distance: Int): Boolean =
         kotlin.math.abs(x1 - x2) <= distance && kotlin.math.abs(y1 - y2) <= distance
 
@@ -170,5 +193,6 @@ class TBoxTouchFilter(
         const val ACTION_DOWN = 0
         const val ACTION_UP = 1
         const val ACTION_MOVE = 2
+        const val MOVE_LOG_INTERVAL_MS = 400L
     }
 }

@@ -64,6 +64,30 @@ class TBoxTouchFilterTest {
         assertTrue(events.any { it.action == 0 && it.pointerId == 2 })
     }
 
+    /**
+     * Regression for the Android Auto task bar that would not scroll: the finger doing the dragging
+     * used to be released by the stale sweep whenever the dash left a gap between two of its MOVE
+     * frames, turning one drag into a run of taps.
+     */
+    @Test
+    fun slowDragKeepsTheSameFingerDownInsteadOfRestartingIt() {
+        val events = mutableListOf<TBoxEvent.Touch>()
+        TBoxTouchFilter(
+            log = {},
+            downstream = events::add,
+            policy = TBoxTouchPolicy(staleContactMillis = 1)
+        ).use { filter ->
+            filter.onTouch(TBoxEvent.Touch(0, 1, 100, 200))
+            Thread.sleep(10)
+            filter.onTouch(TBoxEvent.Touch(2, 1, 140, 200))
+            Thread.sleep(10)
+            filter.onTouch(TBoxEvent.Touch(2, 1, 180, 200))
+        }
+
+        assertEquals(listOf(0, 2, 2), events.map { it.action })
+        assertTrue(events.none { it.action == 1 })
+    }
+
     @Test
     fun keepsAtMostTwoActivePointers() {
         val events = mutableListOf<TBoxEvent.Touch>()
