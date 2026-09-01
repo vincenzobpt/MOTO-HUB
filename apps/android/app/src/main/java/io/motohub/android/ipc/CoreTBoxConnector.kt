@@ -9,6 +9,7 @@
 package io.motohub.android.ipc
 
 import android.content.Context
+import io.motohub.android.data.MotorcycleProfileStore
 import io.motohub.android.session.MotorcycleProfile
 import io.motohub.android.session.ProjectionEventLog
 import io.motohub.android.session.TBoxConnectionMode
@@ -61,7 +62,14 @@ class CoreTBoxConnector(private val context: Context) {
     private val networkConnector = TBoxNetworkConnectors.shared(context)
     private val transport = SelectingTBoxTransport(context)
     private val capabilityStore = TBoxCapabilityStore(context)
-    private var installed = false
+
+    /**
+     * The session THIS connector put in the registry, or null while it has none. Held as the
+     * handle rather than a bare flag because every teardown here has to be able to name what it
+     * owns: the registry's `clear()` with no argument ends whatever session happens to be
+     * installed, which on this path is routinely somebody else's.
+     */
+    private var installedHandle: TBoxSessionHandle? = null
 
     /**
      * Whether an AIDL retry for [ssid] can keep using this connector instead of being handed a
@@ -71,7 +79,8 @@ class CoreTBoxConnector(private val context: Context) {
      * mid Wi-Fi join, or one whose join already failed - is exactly what a retry should keep
      * using, so the WifiNetworkSpecifier hunt it holds does not get torn down and restarted.
      */
-    fun isReusableFor(ssid: String): Boolean = !installed && networkConnector.isHuntingFor(ssid)
+    fun isReusableFor(ssid: String): Boolean =
+        installedHandle == null && networkConnector.isHuntingFor(ssid)
 
     /**
      * @param formedGroup set when the caller has already formed the Wi-Fi Direct group and is
@@ -79,7 +88,7 @@ class CoreTBoxConnector(private val context: Context) {
      *   join the framework refuses a backgrounded Core anyway.
      */
     suspend fun connect(
-        profile: MotorcycleProfile,
+        requested: MotorcycleProfile,
         formedGroup: FormedP2pGroup? = null
     ): Boolean {
         // A session CORE started for itself outlives the activity on purpose - a projection has to
@@ -92,19 +101,39 @@ class CoreTBoxConnector(private val context: Context) {
         // then eleven rejoin attempts refused by Android in 2-10ms before it gave up 3.5 minutes
         // later. Refusing here costs that rider one clear sentence instead.
         CoreConnectFailureRecord.clear()
+        // Asked of the CONSUMERS, not of the connector identity. The first version of this guard
+        // compared holder.networkConnector against ours, which can never differ: both come from
+        // TBoxNetworkConnectors.shared(), one instance per process. So the refusal never fired -
+        // in exactly the case it was written for. Field log adb68a95 (Pixel 7, KOVE 450 Rally,
+        // 2026-08-31): the rider's Android Auto session was streaming to the TFT when a companion
+        // connect walked straight past this guard, ran EasyConn discovery underneath it, and on
+        // failing took the session's registry entry with it.
         val holder = TBoxSessionRegistry.current()
-        val consumers = TBoxSessionRegistry.activeConsumers()
-        if (holder != null && holder.networkConnector !== networkConnector && consumers.isNotEmpty()) {
+        val consumers = TBoxSessionRegistry.activeConsumersOtherThan(BRIDGE_SESSION_CONSUMER)
+        if (holder != null && consumers.isNotEmpty()) {
             val refusal = "MOTO-HUB Core is already using this dash for $consumers. Stop that " +
                 "session first, then connect again."
             ProjectionEventLog.error(
                 "IPC_TBOX",
                 "AIDL connect refused: MOTO-HUB Core is already using this dash for $consumers. " +
-                    "Two connectors would compete for the same Wi-Fi association and drop each " +
-                    "other's network. Stop that session first, then connect again."
+                    "Connecting again would re-run discovery underneath a session that is " +
+                    "already streaming, and the dash only holds one. Stop that session first, " +
+                    "then connect again."
             )
             CoreConnectFailureRecord.record(IpcBridgeContract.CONNECT_STAGE_REFUSED, refusal)
             return false
+        }
+        // Before the Wi-Fi join, not after: the completed connectionMode decides which transport
+        // TBoxLinkResolver takes, so filling it in once the link is already up would only ever
+        // half-fix the problem.
+        val profile = requested.completedFrom(storedProfileFor(requested.ssid))
+        if (profile != requested) {
+            ProjectionEventLog.record(
+                "PROFILE",
+                "AIDL connect: the companion app knows this dash only as a network name. Core's " +
+                    "own garage entry for ${profile.ssid} fills the rest in: " +
+                    "modelId=${profile.modelId ?: "none"}, connectionMode=${profile.connectionMode}."
+            )
         }
         TBoxNetworkConnectors.acquire(context, AIDL_NETWORK_OWNER)
         val connected = TBoxLinkResolver.connect(context, networkConnector, profile, formedGroup)
@@ -176,7 +205,13 @@ class CoreTBoxConnector(private val context: Context) {
             }
             transport.stop()
             link.disconnect()
-            TBoxSessionRegistry.clear()
+            // Deliberately NOT TBoxSessionRegistry.clear(): this attempt never reached install, so
+            // it has nothing of its own in there, and the argument-less clear() ends whatever
+            // session IS installed. That is how a failing companion connect used to disarm one of
+            // Core's own running sessions - it dropped the session's interest in the shared
+            // network connector, and the release() below then found itself the last holder and
+            // took the Wi-Fi down under a live stream (field log adb68a95, 2026-08-31: registry
+            // cleared 20:47:44, network dropped 20:49:05.755, dash video aborted 48ms later).
             TBoxNetworkConnectors.release(AIDL_NETWORK_OWNER)
             return false
         }
@@ -187,10 +222,9 @@ class CoreTBoxConnector(private val context: Context) {
             TBoxProtocolMemory(context).remember(profile.ssid, discoveredProfile.transportFamily)
         }
         capabilityStore.recordDiscovery(profile, host)
-        TBoxSessionRegistry.install(
-            TBoxSessionHandle(transport, host, networkConnector, profile, link)
-        )
-        installed = true
+        val handle = TBoxSessionHandle(transport, host, networkConnector, profile, link)
+        TBoxSessionRegistry.install(handle)
+        installedHandle = handle
         ProjectionEventLog.record("IPC_TBOX", "AIDL connect: session installed; READY.")
         return true
     }
@@ -201,9 +235,24 @@ class CoreTBoxConnector(private val context: Context) {
      * needed because cancellation can land before TBoxSessionRegistry.install() ever ran, when
      * the registry wouldn't yet reference this attempt's (possibly half-open) link.
      */
+    /**
+     * Core's own garage entry for [ssid], or null when it has none. A blank SSID matches nothing:
+     * a dash reached over Wi-Fi Direct or Bluetooth is keyed by id, and letting two blanks find
+     * each other would hand one bike's model to another.
+     */
+    private fun storedProfileFor(ssid: String): MotorcycleProfile? {
+        if (ssid.isBlank()) return null
+        return runCatching { MotorcycleProfileStore(context).loadAll() }
+            .getOrElse { emptyList() }
+            .firstOrNull { it.ssid.equals(ssid, ignoreCase = true) }
+    }
+
     suspend fun cancel() {
         transport.stop()
-        TBoxSessionRegistry.clear()
+        // Only ever this connector's own session, for the reason spelled out on the failure
+        // branch of connect(): a cancel that lands before install has nothing in the registry,
+        // and clearing it regardless would end a session that belongs to somebody else.
+        installedHandle?.let { TBoxSessionRegistry.clear(it) }
         TBoxNetworkConnectors.release(AIDL_NETWORK_OWNER)
     }
 
@@ -212,6 +261,16 @@ class CoreTBoxConnector(private val context: Context) {
     companion object {
         /** The AIDL bridge's name in [TBoxNetworkConnectors]' interest ledger. */
         private const val AIDL_NETWORK_OWNER = "aidl-bridge"
+
+        /**
+         * The bridge's name in [TBoxSessionRegistry]'s consumer list ([IpcBridgeService] claims
+         * the session under it on the companion's behalf).
+         *
+         * Declared here, and used by the bridge from here, because [connect]'s refusal has to
+         * tell the companion's own claim apart from a mode running inside Core - and a name only
+         * one of the two files can see cannot answer that question.
+         */
+        const val BRIDGE_SESSION_CONSUMER = "companion-app"
 
         /**
          * Tears down whatever session the registry holds, whoever established it.
@@ -233,6 +292,41 @@ class CoreTBoxConnector(private val context: Context) {
             TBoxSessionRegistry.clear(handle)
         }
     }
+}
+
+/**
+ * Fills in what a companion app could not know about this dashboard from Core's own garage entry
+ * for the same network.
+ *
+ * MOTO-HUB has two garages - Core keeps one, the companion app keeps another - and only Core's
+ * has ever been through a pairing that identifies the dash. A profile the rider typed into
+ * ADVANCED by hand carries no [MotorcycleProfile.modelId] at all
+ * ([io.motohub.android.feature.home.HubViewModel.saveMotorcycle] does not mint one), so a connect
+ * arriving over the bridge resolved to the generic EasyConn profile even for a dash Core itself
+ * routes over BLE. Field log adb68a95 (Pixel 7, KOVE 450 Rally, 2026-08-31): Core, asked directly,
+ * logged `modelId=THINKERRIDE, connectionMode=THINKERRIDE` and was READY in two seconds; asked over
+ * the bridge for the same SSID in the same minute, `modelId=none, connectionMode=AUTO` sent it
+ * hunting for an `_EasyConn._tcp.` advertisement a ThinkerRide dash never makes - two 15s NSD
+ * windows, three wake probes, an empty port sweep, six times over.
+ *
+ * Keyed on the SSID, for the reason [io.motohub.android.tbox.TBoxWireLadder.keyFor] already
+ * documents: the profile id is a UUID minted per garage, so the two entries for one physical
+ * dashboard never share it.
+ *
+ * Only ever fills blanks. A companion that pinned a profile has said something deliberate and is
+ * left alone entirely, and a field it did populate is never overwritten - the credentials and the
+ * choices belong to the caller.
+ */
+internal fun MotorcycleProfile.completedFrom(stored: MotorcycleProfile?): MotorcycleProfile {
+    if (stored == null) return this
+    if (ProfileOverride.byKey(profileOverrideKey) != ProfileOverride.AUTO) return this
+    val knownModelId = modelId?.takeIf { it.isNotBlank() }
+    val modeIsUnset = connectionMode == TBoxConnectionMode.AUTO
+    if (knownModelId != null && !modeIsUnset) return this
+    return copy(
+        modelId = knownModelId ?: stored.modelId?.takeIf { it.isNotBlank() },
+        connectionMode = if (modeIsUnset) stored.connectionMode else connectionMode
+    )
 }
 
 /** Builds a MotorcycleProfile from an AIDL connect request (the caller owns these credentials). */

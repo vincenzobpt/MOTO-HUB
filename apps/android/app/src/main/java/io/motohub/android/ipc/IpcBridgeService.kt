@@ -1485,7 +1485,7 @@ class IpcBridgeService : Service() {
     }
 
     private companion object {
-        const val SESSION_CONSUMER = "companion-app"
+        const val SESSION_CONSUMER = CoreTBoxConnector.BRIDGE_SESSION_CONSUMER
         const val VIDEO_PIPE_BUFFER_BYTES = 64 * 1024
         const val MAX_VIDEO_ACCESS_UNIT_BYTES = 2 * 1024 * 1024
         const val SESSION_POLL_INTERVAL_MS = 1_000L

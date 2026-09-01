@@ -56,4 +56,33 @@ class TBoxSessionRegistryClaimTest {
         assertTrue(consumers.releaseIsLast("ride-dashboard"))
         assertEquals("", consumers.describe())
     }
+
+    /**
+     * What the AIDL connect guard asks before it takes the dash: a companion reconnecting on the
+     * session it already holds is not a conflict, a mode inside Core is. Field log adb68a95
+     * (2026-08-31) is the case where the question was never asked at all.
+     */
+    @Test
+    fun `the companion's own claim does not count as somebody else holding the dash`() {
+        consumers.claim("companion-app")
+
+        assertEquals("", consumers.describeOthers("companion-app"))
+    }
+
+    @Test
+    fun `a mode inside Core does count, even beside the companion's own claim`() {
+        consumers.claim("companion-app")
+        consumers.claim("android-auto")
+
+        assertEquals("android-auto", consumers.describeOthers("companion-app"))
+    }
+
+    @Test
+    fun `every other holder is named, in the order they claimed`() {
+        consumers.claim("android-auto")
+        consumers.claim("companion-app")
+        consumers.claim("mirroring")
+
+        assertEquals("android-auto, mirroring", consumers.describeOthers("companion-app"))
+    }
 }

@@ -45,6 +45,10 @@ internal class SessionConsumers {
     fun clear() = consumers.clear()
 
     fun describe(): String = consumers.joinToString()
+
+    /** Everyone holding the session except [consumer], in the same order [describe] uses. */
+    fun describeOthers(consumer: String): String =
+        consumers.filterNot { it == consumer }.joinToString()
 }
 
 /**
@@ -132,6 +136,18 @@ object TBoxSessionRegistry {
      */
     @Synchronized
     fun activeConsumers(): String = if (activeHandle == null) "" else consumers.describe()
+
+    /**
+     * The same answer as [activeConsumers], minus [consumer] itself - for a caller asking "is
+     * anyone ELSE on this dash?" before it does something a live session would not survive.
+     *
+     * The distinction is the whole point: a companion app reconnecting on the session it already
+     * holds is not a conflict, while a mode running inside Core is. Empty when nobody else holds
+     * it, including when there is no session at all.
+     */
+    @Synchronized
+    fun activeConsumersOtherThan(consumer: String): String =
+        if (activeHandle == null) "" else consumers.describeOthers(consumer)
 
     /** Registers [consumer] as a user of the active session. No-op when there is none. */
     @Synchronized
