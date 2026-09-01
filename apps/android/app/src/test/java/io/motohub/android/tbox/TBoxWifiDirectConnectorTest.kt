@@ -7,6 +7,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import android.app.ActivityManager.RunningAppProcessInfo
 import org.junit.Test
 
 class TBoxWifiDirectConnectorTest {
@@ -167,5 +168,92 @@ class TBoxWifiDirectConnectorTest {
                 roundCostMillis = 3_000L
             )
         )
+    }
+
+    @Test
+    fun `a foreground service is not a window on screen`() {
+        // The regression this whole change exists for. TBoxNetworkConnector's specifier gate
+        // accepts IMPORTANCE_FOREGROUND_SERVICE, so reusing that threshold here would have
+        // called support case f014ce61's refusals "foreground" and changed nothing.
+        assertFalse(
+            TBoxWifiDirectConnector.hasNoVisibleWindow(RunningAppProcessInfo.IMPORTANCE_FOREGROUND)
+        )
+        assertTrue(
+            TBoxWifiDirectConnector.hasNoVisibleWindow(
+                RunningAppProcessInfo.IMPORTANCE_FOREGROUND_SERVICE
+            )
+        )
+        assertTrue(
+            TBoxWifiDirectConnector.hasNoVisibleWindow(RunningAppProcessInfo.IMPORTANCE_VISIBLE)
+        )
+        assertTrue(
+            TBoxWifiDirectConnector.hasNoVisibleWindow(RunningAppProcessInfo.IMPORTANCE_CACHED)
+        )
+    }
+
+    @Test
+    fun `a join that never had a window tells the rider to open the app`() {
+        val advice = TBoxWifiDirectConnector.joinRefusalAdvice(
+            ssid = "DIRECT-VOGE-057543",
+            appName = "MOTO-HUB",
+            peerSeen = false,
+            peerListClearedOnStop = false,
+            everHadAWindow = false
+        )
+        assertTrue(advice.contains("Open MOTO-HUB"))
+        // The advice that cannot apply must be absent, not merely outranked: a rider who reads
+        // "turn Wi-Fi off and on" does it, and then investigates the wrong thing.
+        assertFalse(advice.contains("Turn Wi-Fi off"))
+    }
+
+    @Test
+    fun `a stack that scanned and found the dash keeps its own advice`() {
+        // peerSeen means the framework worked, whatever the window was doing, so the window
+        // branch must not steal a case it cannot explain.
+        val advice = TBoxWifiDirectConnector.joinRefusalAdvice(
+            ssid = "DIRECT-VOGE-057543",
+            appName = "MOTO-HUB",
+            peerSeen = true,
+            peerListClearedOnStop = false,
+            everHadAWindow = false
+        )
+        assertTrue(advice.contains("connection page"))
+        assertFalse(advice.contains("Open MOTO-HUB"))
+
+        val cleared = TBoxWifiDirectConnector.joinRefusalAdvice(
+            ssid = "DIRECT-VOGE-057543",
+            appName = "MOTO-HUB",
+            peerSeen = true,
+            peerListClearedOnStop = true,
+            everHadAWindow = false
+        )
+        assertTrue(cleared.contains("peer list"))
+    }
+
+    @Test
+    fun `a join refused with the app on screen still blames the stack`() {
+        val advice = TBoxWifiDirectConnector.joinRefusalAdvice(
+            ssid = "DIRECT-VOGE-057543",
+            appName = "MOTO-HUB",
+            peerSeen = false,
+            peerListClearedOnStop = false,
+            everHadAWindow = true
+        )
+        assertTrue(advice.contains("Turn Wi-Fi off"))
+    }
+
+    @Test
+    fun `the importance reading is named, not left as a number`() {
+        assertEquals(
+            "foreground service only",
+            TBoxWifiDirectConnector.importanceName(
+                RunningAppProcessInfo.IMPORTANCE_FOREGROUND_SERVICE
+            )
+        )
+        assertEquals(
+            "on screen",
+            TBoxWifiDirectConnector.importanceName(RunningAppProcessInfo.IMPORTANCE_FOREGROUND)
+        )
+        assertEquals("importance 7", TBoxWifiDirectConnector.importanceName(7))
     }
 }

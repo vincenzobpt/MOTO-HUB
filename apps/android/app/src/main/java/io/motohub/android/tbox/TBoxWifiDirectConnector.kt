@@ -4,6 +4,8 @@
 package io.motohub.android.tbox
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
+import android.app.AppOpsManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -16,6 +18,7 @@ import android.net.wifi.p2p.WifiP2pInfo
 import android.net.wifi.p2p.WifiP2pManager
 import android.os.Build
 import android.os.Looper
+import android.os.Process
 import io.motohub.android.feature.settings.MotoHubSettings
 import io.motohub.android.session.MotorcycleProfile
 import io.motohub.android.session.ProjectionEventLog
@@ -332,8 +335,10 @@ class TBoxWifiDirectConnector(
     ) {
         val startedAt = System.nanoTime()
         var round = 1
+        var waitingForWindow = false
         while (true) {
             if (outcome.isCompleted) return
+            if (!hasNoVisibleWindow(processImportance())) footprint.everHadAWindow = true
             val reason = attemptJoin(manager, channel, profile, outcome, footprint)
                 ?: return // Accepted, pending, or a failure this round already published.
             val elapsedMillis = (System.nanoTime() - startedAt) / 1_000_000
@@ -361,19 +366,13 @@ class TBoxWifiDirectConnector(
                 // which is that the phone refuses to join this dash by address. Advice that
                 // cannot apply is not neutral: it becomes the thing investigated instead of
                 // the cause.
-                val diagnosis = if (footprint.peerSeen) {
-                    "The phone found ${profile.ssid} but refused every request to join it" +
-                        if (footprint.peerListClearedOnStop) {
-                            ", dropping it from its Wi-Fi Direct peer list each time. Try " +
-                                "joining the dash from the phone's own Wi-Fi Direct screen " +
-                                "first, then reconnect here."
-                        } else {
-                            ". Make sure the dash is showing its connection page, then retry."
-                        }
-                } else {
-                    "The phone's Wi-Fi Direct stack refused every attempt of this join. Turn " +
-                        "Wi-Fi off and on again on the phone, then reconnect."
-                }
+                val diagnosis = joinRefusalAdvice(
+                    ssid = profile.ssid,
+                    appName = appName(),
+                    peerSeen = footprint.peerSeen,
+                    peerListClearedOnStop = footprint.peerListClearedOnStop,
+                    everHadAWindow = footprint.everHadAWindow
+                )
                 outcome.complete(
                     Result.failure(
                         IllegalStateException(
@@ -384,6 +383,28 @@ class TBoxWifiDirectConnector(
                 return
             }
             round++
+            // A process with no window on screen is refused for a reason no settle can change,
+            // and sleeping 6s before asking again only spends the budget that the rider opening
+            // the app would have used. Waiting for the window IS the retry here - see
+            // [hasNoVisibleWindow] for why a foreground service does not count as one.
+            if (hasNoVisibleWindow(processImportance())) {
+                if (!waitingForWindow) {
+                    waitingForWindow = true
+                    log(
+                        "The phone refused this join while ${appName()} had no window on " +
+                            "screen; every round so far was rejected in milliseconds. Waiting " +
+                            "for the app to come back on screen instead of settling - open " +
+                            "${appName()} to reconnect now (round $round)."
+                    )
+                }
+                val remaining = CONNECT_TIMEOUT_MS - (System.nanoTime() - startedAt) / 1_000_000
+                if (awaitVisibleWindow(remaining - WEDGE_ROUND_COST_MS)) {
+                    waitingForWindow = false
+                    footprint.everHadAWindow = true
+                    log("${appName()} is back on screen; asking for the Wi-Fi Direct join again.")
+                }
+                continue
+            }
             log(
                 "The phone's Wi-Fi Direct stack refused this join outright; letting it settle " +
                     "for ${WEDGE_SETTLE_MS / 1_000}s and trying again (round $round)."
@@ -391,6 +412,53 @@ class TBoxWifiDirectConnector(
             delay(WEDGE_SETTLE_MS)
         }
     }
+
+    /**
+     * Polls until this process has a window on screen again, or until [budgetMillis] runs out.
+     *
+     * Polled rather than observed: the connector has no lifecycle owner of its own and runs on
+     * behalf of a companion process too, where there is no activity of ours to listen to.
+     */
+    private suspend fun awaitVisibleWindow(budgetMillis: Long): Boolean {
+        if (budgetMillis <= 0) return false
+        val deadline = System.nanoTime() + budgetMillis * 1_000_000
+        while (System.nanoTime() < deadline) {
+            delay(WINDOW_POLL_INTERVAL_MS)
+            if (!hasNoVisibleWindow(processImportance())) return true
+        }
+        return false
+    }
+
+    /**
+     * How close to the rider this process is, on Android's own scale (smaller is closer). The
+     * same reading [TBoxNetworkConnector] takes for its specifier requests, for the same reason:
+     * a refusal cannot say by itself whether the dash was missing or the asker was.
+     */
+    private fun processImportance(): Int {
+        val state = ActivityManager.RunningAppProcessInfo()
+        ActivityManager.getMyMemoryState(state)
+        return state.importance
+    }
+
+    /**
+     * The app-op MODE behind a permission, which is not the same thing as the grant.
+     *
+     * The grant is what the rider sees in Settings and what [WifiDirectGate] already reports; the
+     * mode is what the framework actually consults, and it flips to `MODE_IGNORED` on its own for
+     * a process the platform considers backgrounded. That difference is invisible in every log we
+     * have: they all say "granted" next to a refusal.
+     */
+    private fun appOpMode(op: String): String = runCatching {
+        val ops = appContext.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+        when (ops.unsafeCheckOpNoThrow(op, Process.myUid(), appContext.packageName)) {
+            AppOpsManager.MODE_ALLOWED -> "allowed"
+            AppOpsManager.MODE_IGNORED -> "IGNORED"
+            AppOpsManager.MODE_ERRORED -> "ERRORED"
+            AppOpsManager.MODE_DEFAULT -> "default"
+            AppOpsManager.MODE_FOREGROUND -> "foreground-only"
+            else -> "unknown"
+        }
+    }.getOrElse { "unreadable" }
 
     /**
      * One round of the join the OEM EasyConn app performs, which is the counterpart the dash was
@@ -667,11 +735,20 @@ class TBoxWifiDirectConnector(
         // Appended even when the framework went silent: these two are what it consults before
         // answering at all, and reading them costs no framework call. Without them a bare ERROR
         // is indistinguishable from a hardware fault in a mailed-in log.
+        val importance = processImportance()
         log(
             "$line Permission gate: nearbyDevices=" +
                 (if (WifiDirectGate.hasNearbyDevicesPermission(appContext)) "granted" else "DENIED") +
                 ", locationServices=" +
-                (if (WifiDirectGate.isLocationEnabled(appContext)) "on" else "OFF") + "."
+                (if (WifiDirectGate.isLocationEnabled(appContext)) "on" else "OFF") +
+                // Grants alone have never explained one of these refusals. What the framework
+                // consults is the app-op mode and how close to the rider this process is, and
+                // both change without the grant changing - which is why they are read here and
+                // not left to be inferred from a log that only ever says "granted".
+                ", app=${importanceName(importance)} ($importance)" +
+                ", window=${if (hasNoVisibleWindow(importance)) "NONE" else "on screen"}" +
+                ", nearbyDevicesOp=${appOpMode(OPSTR_NEARBY_WIFI_DEVICES)}" +
+                ", fineLocationOp=${appOpMode(AppOpsManager.OPSTR_FINE_LOCATION)}."
         )
     }
 
@@ -1076,6 +1153,16 @@ class TBoxWifiDirectConnector(
         var peerListClearedOnStop = false
 
         /**
+         * This process had a window on screen at least once while this join was running.
+         *
+         * False is the whole finding of support case f014ce61 (VOGE 800 Rally, 2026-08-31): five
+         * joins in one ride, and the three that were refused are exactly the three made after
+         * `Main activity destroyed`. What the rider must do about that is open the app, which is
+         * the opposite of the advice a wedged stack earns.
+         */
+        var everHadAWindow = false
+
+        /**
          * The group was already up and this attempt adopted it instead of forming one.
          *
          * Nothing here may then remove it. Whoever formed it - the companion app, or an earlier
@@ -1114,6 +1201,84 @@ class TBoxWifiDirectConnector(
          * 35s budget, so a dash that is merely slow to answer is not starved of attempts.
          */
         private const val WEDGE_SETTLE_MS = 6_000L
+
+        /**
+         * How often a join that is waiting for the app to come back on screen looks again.
+         *
+         * The rider is tapping a notification or the launcher icon, so seconds is the resolution
+         * that matters; polling faster would only wake the CPU on a phone strapped to a bike.
+         */
+        private const val WINDOW_POLL_INTERVAL_MS = 1_000L
+
+        /**
+         * `AppOpsManager.OPSTR_NEARBY_WIFI_DEVICES`, which the public SDK does not export.
+         *
+         * Passed as a literal on purpose: [appOpMode] reads it through `runCatching`, so on a
+         * platform that does not know this op the log says "unreadable" rather than failing.
+         */
+        private const val OPSTR_NEARBY_WIFI_DEVICES = "android:nearby_wifi_devices"
+
+        /**
+         * The importance a process has while one of its activities is the app the rider is
+         * looking at. Anything larger is further away.
+         *
+         * NOT [TBoxNetworkConnector.FOREGROUND_SERVICE_IMPORTANCE], and the difference is the
+         * whole point. A specifier request is accepted from a foreground service (125), so that
+         * connector's gate passes for a projection that is running with its UI closed - and in
+         * support case f014ce61 the Wi-Fi Direct join made from exactly that state was refused in
+         * four milliseconds, five rounds running, while `nearbyDevices=granted` and
+         * `locationServices=on`. Wi-Fi Direct wants a window, not a service.
+         */
+        private const val TOP_APP_IMPORTANCE =
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+
+        /** True when this process has no activity on screen. See [TOP_APP_IMPORTANCE]. */
+        internal fun hasNoVisibleWindow(importance: Int): Boolean = importance > TOP_APP_IMPORTANCE
+
+        internal fun importanceName(importance: Int): String = when (importance) {
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND -> "on screen"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND_SERVICE ->
+                "foreground service only"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE -> "visible"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_PERCEPTIBLE -> "perceptible"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_SERVICE -> "service"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_CACHED -> "cached"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_GONE -> "gone"
+            else -> "importance $importance"
+        }
+
+        /**
+         * What to tell the rider when a whole join was refused - the one sentence they will act
+         * on, so the branch that owns it is decided here and tested rather than inlined.
+         *
+         * Order is deliberate. A stack that ran a scan and named the dash is working, whatever
+         * else went wrong, so [peerSeen] keeps the first two branches it already had. Only then
+         * comes the window: a join that never once ran with the app on screen is the case where
+         * every framework call is rejected in milliseconds, and telling that rider to restart
+         * Wi-Fi sends them to do something that cannot help - support case f014ce61, where four
+         * recovery attempts spent the whole 120s watchdog on a phone whose Wi-Fi was fine.
+         */
+        internal fun joinRefusalAdvice(
+            ssid: String,
+            appName: String,
+            peerSeen: Boolean,
+            peerListClearedOnStop: Boolean,
+            everHadAWindow: Boolean
+        ): String = when {
+            peerSeen && peerListClearedOnStop ->
+                "The phone found $ssid but refused every request to join it, dropping it from " +
+                    "its Wi-Fi Direct peer list each time. Try joining the dash from the " +
+                    "phone's own Wi-Fi Direct screen first, then reconnect here."
+            peerSeen ->
+                "The phone found $ssid but refused every request to join it. Make sure the dash " +
+                    "is showing its connection page, then retry."
+            !everHadAWindow ->
+                "The phone refused every attempt of this join while $appName had no window on " +
+                    "screen, which is when it refuses them. Open $appName and it will reconnect."
+            else ->
+                "The phone's Wi-Fi Direct stack refused every attempt of this join. Turn Wi-Fi " +
+                    "off and on again on the phone, then reconnect."
+        }
 
         /** What one refused round costs, measured on the field logs: discovery refusal, the
          * preparation calls, two instant rejections and the retry delay between them. */
