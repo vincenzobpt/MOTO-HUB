@@ -94,6 +94,8 @@ import io.motohub.android.feature.pairing.ManualPairingScreen
 import io.motohub.android.feature.pairing.TBoxQrOrigin
 import io.motohub.android.feature.pairing.TBoxQrPayload
 import io.motohub.android.feature.pairing.TBoxQrPhotoDecoder
+import io.motohub.android.feature.pairing.QrImageSource
+import io.motohub.android.feature.pairing.QrImageSourceDialog
 import io.motohub.android.feature.pairing.TBoxQrPhotoProcessingDialog
 import io.motohub.android.feature.pairing.TBoxQrScannerScreen
 import io.motohub.android.feature.pairing.UnverifiedQrDialog
@@ -305,6 +307,7 @@ class MainActivity : ComponentActivity() {
                 var updateReleases by remember { mutableStateOf<List<GithubRelease>>(emptyList()) }
                 var installingUpdateTag by remember { mutableStateOf<String?>(null) }
                 var installingUpdateProgress by remember { mutableStateOf<DownloadProgress?>(null) }
+                var showQrImageSource by remember { mutableStateOf(false) }
                 var qrPhotoProcessing by remember { mutableStateOf(false) }
                 var qrPhotoProgress by remember { mutableStateOf(0 to 0) }
                 var pendingUnverifiedQr by remember { mutableStateOf<TBoxQrPayload?>(null) }
@@ -963,12 +966,13 @@ class MainActivity : ComponentActivity() {
                         viewModel.onCameraPermissionDenied()
                     }
                 }
-                val qrPhotoLauncher = rememberLauncherForActivityResult(
-                    ActivityResultContracts.PickVisualMedia()
-                ) { uri ->
+                // One decoder behind two doors. The photo picker indexes the gallery and nothing
+                // else, so a pairing code saved to Downloads or pulled out of a chat was
+                // unreachable; OpenDocument reaches those, and the rider picks which on the way in.
+                val decodeQrImage: (Uri?) -> Unit = decode@{ uri ->
                     if (uri == null) {
                         ProjectionEventLog.debug("PAIRING", "QR photo picker closed without a selection.")
-                        return@rememberLauncherForActivityResult
+                        return@decode
                     }
                     ProjectionEventLog.record("PAIRING", "QR photo selected; starting ML Kit decoding.")
 
@@ -1008,6 +1012,14 @@ class MainActivity : ComponentActivity() {
                             }
                     }
                 }
+                val qrPhotoLauncher = rememberLauncherForActivityResult(
+                    ActivityResultContracts.PickVisualMedia()
+                ) { uri -> decodeQrImage(uri) }
+                // Reaches Downloads, SD cards and cloud providers the media picker hides - the
+                // same second door the motorcycle photo has had since it was asked for there.
+                val qrPhotoFileLauncher = rememberLauncherForActivityResult(
+                    ActivityResultContracts.OpenDocument()
+                ) { uri -> decodeQrImage(uri) }
 
                 // Which full-screen destination is on top, derived from the same state the old
                 // if/else chain read. The chain replaced the whole tree in a single frame; the
@@ -1336,9 +1348,7 @@ class MainActivity : ComponentActivity() {
                         },
                         onImportQrPhoto = {
                             ProjectionEventLog.record("UI", "User requested QR decoding from a photo.")
-                            qrPhotoLauncher.launch(
-                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                            )
+                            showQrImageSource = true
                         },
                         onManualPairing = {
                             ProjectionEventLog.record("UI", "User requested manual (no-QR) pairing.")
@@ -1611,6 +1621,21 @@ class MainActivity : ComponentActivity() {
                                 }
                                 installingUpdateTag = null
                                 installingUpdateProgress = null
+                            }
+                        }
+                    )
+                }
+                if (showQrImageSource) {
+                    QrImageSourceDialog(
+                        onDismiss = { showQrImageSource = false },
+                        onSelect = { source ->
+                            showQrImageSource = false
+                            ProjectionEventLog.record("PAIRING", "QR image source chosen: $source.")
+                            when (source) {
+                                QrImageSource.GALLERY -> qrPhotoLauncher.launch(
+                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                )
+                                QrImageSource.FILES -> qrPhotoFileLauncher.launch(arrayOf("image/*"))
                             }
                         }
                     )
