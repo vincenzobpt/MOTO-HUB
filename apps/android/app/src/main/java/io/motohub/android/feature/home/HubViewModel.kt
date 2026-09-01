@@ -8,6 +8,7 @@ import io.motohub.android.i18n.motoHubText
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import io.motohub.android.data.MotorcycleProfileStore
+import io.motohub.android.feature.pairing.withModelIdForConnectionMode
 import io.motohub.android.session.ConnectionProgressNotification
 import io.motohub.android.session.HubSessionState
 import io.motohub.android.session.MotorcycleProfile
@@ -232,13 +233,15 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
 
         // Keeps the stored spelling rather than the typed one: this name has been connected with,
         // and a rider retyping it in another case is correcting nothing.
-        val profile = current.motorcycles.bySsidIgnoringCase(normalizedSsid)
-            ?.copy(password = current.password, connectionMode = current.connectionMode)
-            ?: MotorcycleProfile(
-                ssid = normalizedSsid,
-                password = current.password,
-                connectionMode = current.connectionMode
-            )
+        val profile = (
+            current.motorcycles.bySsidIgnoringCase(normalizedSsid)
+                ?.copy(password = current.password, connectionMode = current.connectionMode)
+                ?: MotorcycleProfile(
+                    ssid = normalizedSsid,
+                    password = current.password,
+                    connectionMode = current.connectionMode
+                )
+            ).withModelIdForConnectionMode()
         val persistenceFailure = profileStore.save(profile).exceptionOrNull()
         if (persistenceFailure != null) {
             ProjectionEventLog.error("PAIRING", "Unable to save manual profile.", persistenceFailure)
@@ -255,7 +258,8 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
         )
         ProjectionEventLog.record(
             "PAIRING",
-            "Manual motorcycle profile saved for SSID $normalizedSsid; mode=${current.connectionMode}; " +
+            "Manual motorcycle profile saved for SSID $normalizedSsid; " +
+                "mode=${profile.connectionMode}; modelId=${profile.modelId ?: "none"}; " +
                 "passwordPresent=${current.password.isNotEmpty()}."
         )
         return true
@@ -318,20 +322,24 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
                 "dashMac=${payload.dashMacAddress ?: "not provided"}."
         )
         val existing = mutableUiState.value.motorcycles.bySsidIgnoringCase(payload.ssid)
-        val profile = existing?.copy(
-            // Unlike the typed path, the spelling here comes from the dash's own QR, so it wins.
-            ssid = payload.ssid,
-            password = payload.password,
-            modelId = payload.modelId ?: existing.modelId,
-            displayName = payload.displayName ?: existing.displayName,
-            connectionMode = payload.suggestedConnectionMode ?: existing.connectionMode
-        ) ?: MotorcycleProfile(
-            ssid = payload.ssid,
-            password = payload.password,
-            modelId = payload.modelId,
-            displayName = payload.displayName,
-            connectionMode = payload.suggestedConnectionMode ?: TBoxConnectionMode.AUTO
-        )
+        val profile = (
+            existing?.copy(
+                // Unlike the typed path, the spelling here comes from the dash's own QR, so it wins.
+                ssid = payload.ssid,
+                password = payload.password,
+                modelId = payload.modelId ?: existing.modelId,
+                displayName = payload.displayName ?: existing.displayName,
+                connectionMode = payload.suggestedConnectionMode ?: existing.connectionMode
+            ) ?: MotorcycleProfile(
+                ssid = payload.ssid,
+                password = payload.password,
+                modelId = payload.modelId,
+                displayName = payload.displayName,
+                connectionMode = payload.suggestedConnectionMode ?: TBoxConnectionMode.AUTO
+            )
+            // A rider who had guessed the ThinkerRide chip by hand and then scanned a code that
+            // moves the dash to another mode must not keep the pseudo modelId that guess stamped.
+            ).withModelIdForConnectionMode()
         val persistenceFailure = profileStore.save(profile).exceptionOrNull()
         mutableUiState.value = mutableUiState.value.copy(
             motorcycles = mutableUiState.value.motorcycles.replaceProfile(profile),
