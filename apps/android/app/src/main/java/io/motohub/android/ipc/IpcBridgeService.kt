@@ -16,6 +16,7 @@ import android.net.ConnectivityManager
 import android.os.IBinder
 import android.os.ParcelFileDescriptor
 import android.os.RemoteCallbackList
+import android.os.SystemClock
 import android.view.Surface
 import androidx.core.app.NotificationCompat
 import io.motohub.android.R
@@ -843,13 +844,25 @@ class IpcBridgeService : Service() {
      * Starts forwarding once someone is watching, and only then. The feed is a StateFlow that
      * runs whether or not anyone listens; collecting it for the service's whole life would keep
      * a coroutine alive through every ride for the few minutes a rider spends teaching.
+     *
+     * Only presses made from this moment on are forwarded. The feed retains its last value and
+     * nothing ever clears it, so a collector starting up replayed the previous session's final
+     * press to whoever had just subscribed. The wizard survived that by comparing timestamps;
+     * the companion's mode-switch listener did not, so an Android Auto session whose last press
+     * had been the switch button immediately switched itself back out again.
+     *
+     * Synchronized because binder threads register in parallel: two of them racing this check
+     * started two collectors, and every press was then broadcast — and acted on — twice.
      */
+    @Synchronized
     private fun ensureHandlebarGestureForwarding() {
         if (handlebarGestureJob?.isActive == true) return
+        val startedAt = SystemClock.elapsedRealtime()
         handlebarGestureJob = serviceScope.launch {
             io.motohub.android.feature.controls.HandlebarGestureFeed.lastGesture
                 .filterNotNull()
                 .collect { event ->
+                    if (event.atElapsedRealtimeMillis < startedAt) return@collect
                     if (handlebarGestureListeners.registeredCallbackCount == 0) return@collect
                     val count = handlebarGestureListeners.beginBroadcast()
                     for (i in 0 until count) {

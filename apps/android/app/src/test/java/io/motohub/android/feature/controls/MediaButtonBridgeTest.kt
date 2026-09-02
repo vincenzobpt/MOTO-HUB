@@ -159,6 +159,80 @@ class MediaButtonBridgeTest {
         )
     }
 
+    /**
+     * Regression: the eager marker used to promote ANY second press inside the double-tap
+     * window, so scrolling a list at the ordinary two clicks a second dispatched scroll,
+     * scroll, then the double gesture - HOME by default on the up rocker, BACK on the down
+     * one. Riders read that as the wheel throwing them out of the menu.
+     */
+    @Test
+    fun `a repeatable single is not promoted to a double by the eager marker`() {
+        assertEquals(
+            TapDispatch.SINGLE_NOW,
+            resolveTapDispatch(
+                forceDouble = false,
+                eagerSingle = true,
+                hasPending = true,
+                gapMillis = 200,
+                repeatableSingle = true
+            )
+        )
+    }
+
+    @Test
+    fun `a repeatable single still pairs into a double when the rider defers singles`() {
+        // Nothing has fired yet in deferred mode, so pairing runs exactly one command - which
+        // is what that switch is for.
+        assertEquals(
+            TapDispatch.DOUBLE,
+            resolveTapDispatch(
+                forceDouble = false,
+                eagerSingle = false,
+                hasPending = true,
+                gapMillis = 200,
+                repeatableSingle = true
+            )
+        )
+        // And a dash that coalesced two presses into one write is still saying "double", which
+        // is how BACK and HOME stay reachable from a volume-only handlebar.
+        assertEquals(
+            TapDispatch.DOUBLE,
+            resolveTapDispatch(
+                forceDouble = true,
+                eagerSingle = true,
+                hasPending = false,
+                gapMillis = 200,
+                repeatableSingle = true
+            )
+        )
+    }
+
+    @Test
+    fun `repeatable actions are the ones a rider performs in a row`() {
+        listOf(
+            HandlebarAction.SCROLL_FORWARD,
+            HandlebarAction.SCROLL_BACK,
+            HandlebarAction.DPAD_UP,
+            HandlebarAction.DPAD_DOWN,
+            HandlebarAction.DPAD_LEFT,
+            HandlebarAction.DPAD_RIGHT,
+            HandlebarAction.MEDIA_VOLUME_UP,
+            HandlebarAction.MEDIA_VOLUME_DOWN
+        ).forEach { assertTrue(it.name, isRepeatableAction(it)) }
+
+        // The one-shot verbs keep their doubles: pressing these twice quickly IS the idiom a
+        // double mapping exists for.
+        listOf(
+            HandlebarAction.NONE,
+            HandlebarAction.SELECT,
+            HandlebarAction.BACK,
+            HandlebarAction.HOME,
+            HandlebarAction.ASSISTANT,
+            HandlebarAction.MEDIA_PLAY_PAUSE,
+            HandlebarAction.DASH_NEXT_PANEL
+        ).forEach { assertFalse(it.name, isRepeatableAction(it)) }
+    }
+
     @Test
     fun `a same-press echo inside the refractory window is suppressed`() {
         assertEquals(

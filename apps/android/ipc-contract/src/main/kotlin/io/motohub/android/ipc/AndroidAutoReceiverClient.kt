@@ -32,10 +32,25 @@ class AndroidAutoReceiverClient(
             this@AndroidAutoReceiverClient.onStateChanged(state, message)
     }
 
+    /**
+     * Counts the connections this client has made, so callers can tell "still the same Core" from
+     * "Core died and came back".
+     *
+     * The binding itself survives a Core restart — Android re-connects it — but everything the
+     * caller registered ON that binder does not: the remote callback lists live in Core's process
+     * and the new one starts empty. A listener registered once at session start therefore went
+     * quiet for the rest of the ride, with nothing anywhere saying so. Watching this value is how
+     * a caller knows to register again.
+     */
+    @Volatile
+    var connectionGeneration: Int = 0
+        private set
+
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, binder: IBinder) {
             val bound = IAndroidAutoReceiverService.Stub.asInterface(binder)
             service = bound
+            connectionGeneration++
             bound.registerStateListener(stateListener)
         }
 
