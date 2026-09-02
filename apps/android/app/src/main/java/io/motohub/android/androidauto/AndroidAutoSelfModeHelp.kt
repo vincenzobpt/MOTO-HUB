@@ -122,13 +122,30 @@ object AndroidAutoSelfModeHelp {
     /** Wanted while the release still has self-mode and Android Auto simply does not trust us. */
     val ADD_NEW_CARS_STEP = RiderStep(
         action = "Enable \"Add new cars to Android Auto\"",
-        where = "Android Auto ▸ Developer settings"
+        where = "Android Auto, then Developer settings"
     )
 
     /** The path that works on every release, including the ones that closed self-mode. */
     val HEAD_UNIT_SERVER_STEP = RiderStep(
         action = "Start \"head unit server\"",
-        where = "Android Auto ▸ Developer settings ▸ ⋮ menu"
+        where = "Android Auto, then Developer settings, then the three-dot menu at the top right"
+    )
+
+    /**
+     * The wording these steps used to carry, kept only so [riderStepOf] still recognises it.
+     *
+     * The path was written with "▸" and "⋮", which the rider cannot read: at a glance the arrows
+     * are specks and the overflow glyph is a colon, and the line broke after the last arrow so
+     * "menu" sat alone. It is words now - but the flat line travels from Core to ADVANCED over
+     * AIDL as a plain string, so a phone whose two halves are not on the same release would
+     * publish the old text and match nothing, dropping the card back to the grey caption that
+     * cost field case FF3D-A418 an hour. These entries are what stops that.
+     */
+    private val LEGACY_FLAT_STEPS: Map<String, RiderStep> = mapOf(
+        "Start \"head unit server\" in Android Auto ▸ Developer settings ▸ ⋮ menu…"
+            to HEAD_UNIT_SERVER_STEP,
+        "Enable \"Add new cars to Android Auto\" in Android Auto ▸ Developer settings…"
+            to ADD_NEW_CARS_STEP
     )
 
     /**
@@ -139,6 +156,7 @@ object AndroidAutoSelfModeHelp {
      */
     fun riderStepOf(detail: String?): RiderStep? =
         listOf(ADD_NEW_CARS_STEP, HEAD_UNIT_SERVER_STEP).firstOrNull { it.flat == detail }
+            ?: LEGACY_FLAT_STEPS[detail]
 
     /**
      * Which acceptance-then-silence message the installed Android Auto has earned.

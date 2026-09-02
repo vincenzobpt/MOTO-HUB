@@ -102,12 +102,32 @@ class AndroidAutoSelfModeHelpTest {
         // string with no way back to the object - so rewording either half here silently drops
         // the card and leaves the rider staring at the grey caption again.
         assertEquals(
-            "Start \"head unit server\" in Android Auto ▸ Developer settings ▸ ⋮ menu…",
+            "Start \"head unit server\" in Android Auto, then Developer settings, then the " +
+                "three-dot menu at the top right…",
             AndroidAutoSelfModeHelp.HEAD_UNIT_SERVER_STEP.flat
         )
         assertEquals(
-            "Enable \"Add new cars to Android Auto\" in Android Auto ▸ Developer settings…",
+            "Enable \"Add new cars to Android Auto\" in Android Auto, then Developer settings…",
             AndroidAutoSelfModeHelp.ADD_NEW_CARS_STEP.flat
+        )
+    }
+
+    @Test
+    fun `the wording this step used to publish still resolves`() {
+        // Core and ADVANCED are two installs, and the flat line crosses between them over AIDL as
+        // a plain string. A phone carrying one release of each would otherwise publish the old
+        // arrow-and-overflow text, match nothing, and lose the card the reword was for.
+        assertEquals(
+            AndroidAutoSelfModeHelp.HEAD_UNIT_SERVER_STEP,
+            AndroidAutoSelfModeHelp.riderStepOf(
+                "Start \"head unit server\" in Android Auto ▸ Developer settings ▸ ⋮ menu…"
+            )
+        )
+        assertEquals(
+            AndroidAutoSelfModeHelp.ADD_NEW_CARS_STEP,
+            AndroidAutoSelfModeHelp.riderStepOf(
+                "Enable \"Add new cars to Android Auto\" in Android Auto ▸ Developer settings…"
+            )
         )
     }
 
