@@ -1461,7 +1461,31 @@ class IpcBridgeService : Service() {
                 NotificationManager.IMPORTANCE_MIN
             ).apply { description = getString(R.string.core_bridge_channel_description) }
         )
-        startForeground(NOTIFICATION_ID, createNotification())
+        // Going foreground can be refused outright, and this service is bound from another
+        // process - so the refusal arrives on someone else's schedule, not ours. A companion
+        // binding from the background is exactly when Android throws
+        // ForegroundServiceStartNotAllowedException here, and uncaught it takes CORE down: the
+        // companion then reports "Core is taking too long to respond" and the rider is told
+        // nothing at all. AndroidAutoSessionService already names this hazard and this same
+        // caller in its own comment.
+        //
+        // Unlike a session service, this one does NOT give up when refused. Being foreground is
+        // what keeps the process out of the cached bucket and lets it submit a Wi-Fi request;
+        // the AIDL door itself works either way, and staying bound but demoted is far better
+        // than not answering at all. The line goes in the log because it explains, later, why a
+        // join was refused or the process was killed while a companion was waiting on it.
+        val foreground = runCatching {
+            startForeground(NOTIFICATION_ID, createNotification())
+        }
+        foreground.exceptionOrNull()?.let { failure ->
+            ProjectionEventLog.warning(
+                "IPC",
+                "The Core bridge could not go foreground " +
+                    "(${failure.javaClass.simpleName}: ${failure.message}); it stays bound and " +
+                    "answers as usual, but the process can be reclaimed and a Wi-Fi request from " +
+                    "it may be refused."
+            )
+        }
     }
 
     private fun createNotification(): android.app.Notification =
