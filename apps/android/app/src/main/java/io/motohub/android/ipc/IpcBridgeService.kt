@@ -59,6 +59,7 @@ import io.motohub.android.tbox.TBoxTransport
 import io.motohub.android.tbox.TBoxCapabilityStore
 import io.motohub.android.tbox.TBoxWireLadder
 import io.motohub.android.tbox.SelectingTBoxTransport
+import io.motohub.android.tbox.TBoxNetworkConnectors
 import io.motohub.android.tbox.TBoxSessionRegistry
 import io.motohub.android.tbox.TBoxVpnDiagnostics
 import io.motohub.android.tbox.negotiateVideoConfiguration
@@ -95,6 +96,33 @@ class IpcBridgeService : Service() {
     private var sessionPollJob: Job? = null
     @Volatile private var lastKnownHandle: TBoxSessionHandle? = null
     @Volatile private var activeConnect: Pair<CoreTBoxConnector, Deferred<Boolean>>? = null
+
+    /**
+     * Keeps the T-Box Wi-Fi association alive for a moment after the companion disconnects, so a
+     * reconnect that follows immediately reuses it instead of asking Android for a new one.
+     *
+     * The failure this exists for is the Ride Dashboard -> Android Auto switch, which is a stop
+     * followed by a reconnect a second later. The stop reached [disconnect] below, the last
+     * interest in the ledger went with it, and the association was released - so the reconnect had
+     * to submit a fresh `WifiNetworkSpecifier` from a phone whose screen is off by definition on a
+     * bike. That request is where it died: with the screen off this process is frozen while it
+     * waits, and the road test of 2026-09-02 has six consecutive attempts timing out with
+     * "the wait itself took 94873ms / 140614ms / 223546ms: this process was frozen while it ran".
+     * Every one of them was made at process importance 125; every join that DID succeed that
+     * evening was made at 100, with the screen on - which is exactly what the rider found by hand,
+     * turning the screen on to make it connect.
+     *
+     * So the cure is not to ask again more cleverly, it is not to have to ask at all: both modes
+     * ride on the same AP, and [io.motohub.android.tbox.TBoxNetworkConnector.connect] already
+     * reuses a live network for the same SSID ("Reusing the active T-Box network"). Holding one
+     * extra interest across the gap is what keeps that network live enough to be reused.
+     *
+     * A plain lease in the existing ledger rather than a special case inside the connector: the
+     * teardown below then runs exactly as it always has, and the only thing that changes is that
+     * it is not the last one out of the room.
+     */
+    @Volatile private var networkLingerJob: Job? = null
+    @Volatile private var networkLingerHeld = false
 
     /**
      * Why the last [ITBoxTransportService.startVideoSession] answered null, kept for the caller
@@ -467,6 +495,12 @@ class IpcBridgeService : Service() {
             formedGroup: FormedP2pGroup?
         ): Boolean =
             kotlinx.coroutines.runBlocking {
+                // Stop the clock, but keep the interest: CoreTBoxConnectors.acquire() may release
+                // the previous connector on its way to handing out a replacement, and that release
+                // drops the bridge's own lease. Letting the linger expire anywhere in here would
+                // put the association back in exactly the window this attempt is trying to reuse.
+                networkLingerJob?.cancel()
+                networkLingerJob = null
                 val connector = CoreTBoxConnectors.acquire(applicationContext, request.ssid)
                 val deferred = serviceScope.async { connector.connect(request.toProfile(), formedGroup) }
                 activeConnect = connector to deferred
@@ -476,6 +510,9 @@ class IpcBridgeService : Service() {
                     false
                 }
                 if (activeConnect?.second === deferred) activeConnect = null
+                // Released only now, once connect() has taken the bridge's own lease - which it
+                // does before it ever touches the radio, so this is right on the failing paths too.
+                endNetworkLinger()
                 result
             }
 
@@ -496,6 +533,10 @@ class IpcBridgeService : Service() {
 
         override fun disconnect() {
             closeVideoStreamPipe()
+            // Taken BEFORE the teardown, or it would have nothing left to hold: the releases
+            // below are what empty the ledger, and an interest registered after that has already
+            // lost the association it was meant to keep.
+            beginNetworkLinger()
             kotlinx.coroutines.runBlocking {
                 // Tear down the registry's session first (it may belong to Core's own UI rather
                 // than to this bridge), then release our connector - which also closes the Wi-Fi
@@ -1503,8 +1544,42 @@ class IpcBridgeService : Service() {
         else -> null
     }
 
+    /** Registers the linger interest and starts the clock on it. See [networkLingerJob]. */
+    private fun beginNetworkLinger() {
+        networkLingerJob?.cancel()
+        // Idempotent in the ledger, so re-arming over a linger already running holds one interest
+        // rather than a pile - and the flag stays an honest record of whether one is held at all.
+        TBoxNetworkConnectors.acquire(applicationContext, NETWORK_LINGER_OWNER)
+        networkLingerHeld = true
+        networkLingerJob = serviceScope.launch {
+            delay(NETWORK_LINGER_MS)
+            ProjectionEventLog.debug(
+                "IPC_TBOX",
+                "No reconnect within ${NETWORK_LINGER_MS / 1_000L}s of the companion disconnect; " +
+                    "letting the T-Box Wi-Fi go."
+            )
+            endNetworkLinger()
+        }
+    }
+
+    /**
+     * Drops the linger interest, if one is held. Guarded by [networkLingerHeld] rather than left
+     * to the ledger's own idempotence: an unmatched release is a no-op there, but a logged one,
+     * and this runs on every connect.
+     */
+    private fun endNetworkLinger() {
+        networkLingerJob?.cancel()
+        networkLingerJob = null
+        if (!networkLingerHeld) return
+        networkLingerHeld = false
+        TBoxNetworkConnectors.release(NETWORK_LINGER_OWNER)
+    }
+
     override fun onDestroy() {
         closeVideoStreamPipe()
+        // Before serviceScope.cancel() below, which would otherwise kill the timer holding this
+        // interest and leave the association pinned for as long as the process lives.
+        endNetworkLinger()
         sessionPollJob?.cancel()
         fullSessionForwardingJob?.cancel()
         selfModeJob?.cancel()
@@ -1523,6 +1598,20 @@ class IpcBridgeService : Service() {
 
     private companion object {
         const val SESSION_CONSUMER = CoreTBoxConnector.BRIDGE_SESSION_CONSUMER
+
+        /** The linger's name in the network interest ledger. See [networkLingerJob]. */
+        const val NETWORK_LINGER_OWNER = "aidl-linger"
+
+        /**
+         * How long the T-Box association is held after the companion disconnects.
+         *
+         * Sized off the reconnect it exists to cover, with room to spare: the companion's
+         * after-stop reconnect waits 900ms and then polls for at most 25 x 200ms before it asks,
+         * so ~6s is its worst case and this is three times that. Bounded because the request is
+         * exclusive - past the window it would only be taking the Wi-Fi radio away from a rider
+         * who disconnected on purpose and wants their own network back.
+         */
+        const val NETWORK_LINGER_MS = 20_000L
         const val VIDEO_PIPE_BUFFER_BYTES = 64 * 1024
         const val MAX_VIDEO_ACCESS_UNIT_BYTES = 2 * 1024 * 1024
         const val SESSION_POLL_INTERVAL_MS = 1_000L
