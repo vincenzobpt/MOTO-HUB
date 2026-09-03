@@ -597,7 +597,7 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
                 val protocolMemory = TBoxProtocolMemory(getApplication())
                 val learnedProfile = if (requestedOverride == ProfileOverride.AUTO) {
                     protocolMemory.learnedFamily(profile.ssid)
-                        ?.let { family -> TBoxModelProfile.entries.firstOrNull { it.transportFamily == family } }
+                        ?.let { family -> TBoxModelProfile.shortcutFor(family, profile.modelId) }
                 } else {
                     null
                 }

@@ -18,7 +18,8 @@ class YunmoProfileRoutingTest {
     private val yunmoProfiles = setOf(
         TBoxModelProfile.MORINI_XCAPE_1200,
         TBoxModelProfile.MORINI_XCAPE_1200_MIRROR,
-        TBoxModelProfile.MORINI_XCAPE_1200_JPEG
+        TBoxModelProfile.MORINI_XCAPE_1200_JPEG,
+        TBoxModelProfile.KOVE_625X
     )
 
     @Test
@@ -120,11 +121,15 @@ class YunmoProfileRoutingTest {
     }
 
     @Test
-    fun onlyTheJpegProfileEverCapturesStills() {
+    fun onlyTheTwoStillsProfilesEverCaptureStills() {
         // The guarantee that matters for every other motorcycle: this flag is what diverts a
-        // session away from the AVC encoder, so exactly one profile may carry it.
+        // session away from the AVC encoder, so only the two profiles whose dashes were
+        // proven to paint stills (X-Cape 1200, KOVE 625X) may carry it.
         val jpegProfiles = TBoxModelProfile.entries.filter { it.yunmoJpegVideo }
-        assertEquals(listOf(TBoxModelProfile.MORINI_XCAPE_1200_JPEG), jpegProfiles)
+        assertEquals(
+            setOf(TBoxModelProfile.MORINI_XCAPE_1200_JPEG, TBoxModelProfile.KOVE_625X),
+            jpegProfiles.toSet()
+        )
     }
 
     @Test

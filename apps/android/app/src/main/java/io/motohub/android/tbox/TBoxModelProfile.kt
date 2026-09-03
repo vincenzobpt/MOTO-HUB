@@ -15,6 +15,13 @@ import io.motohub.android.androidauto.TBoxScreenMargins
 private const val KOVE_450_RALLY_VIDEO_WIDTH = 1280
 private const val KOVE_450_RALLY_VIDEO_HEIGHT = 640
 
+/**
+ * Pseudo modelId of the KOVE 625X. Its QR carries no model information, so the id is stamped
+ * from the dash's network name ([TBoxModelProfile.modelIdForSsid]) rather than read from a code.
+ * Top-level like the 450 Rally geometry above: an enum entry cannot reach its own companion.
+ */
+internal const val KOVE_625X_PROVISIONING_MODEL_ID = "KOVE-625X"
+
 /** Tunings that can be applied after the transport has decoded a touch frame. */
 data class TBoxTouchPolicy(
     val ghostMergePx: Int = 48,
@@ -130,7 +137,14 @@ enum class TBoxModelProfile(
      * still-unconfirmed compatibility experiment for the X-Cape 1200, so it stays off unless a
      * profile opts in — a plain mirror is the safe default for any Yunmo dash.
      */
-    val yunmoMapNavExperiment: Boolean = false
+    val yunmoMapNavExperiment: Boolean = false,
+    /**
+     * Network-name prefixes that identify this dashboard when nothing else does. Only for a
+     * dash whose QR carries no modelId and whose SSID is the one stable thing about it (the
+     * KOVE 625X's `KY_ADV_…`); a prefix earns the profile's first [modelIds] entry through
+     * [modelIdForSsid]. Empty for every profile a code or CLIENT_INFO can name.
+     */
+    val ssidPrefixes: Set<String> = emptySet()
 ) {
     MOTO_HUB_SIMULATOR(
         key = "moto_hub_simulator",
@@ -607,9 +621,68 @@ enum class TBoxModelProfile(
         encoderKeyframeIntervalSeconds = 2,
         transportFamily = TBoxTransportFamily.YUNMO,
         yunmoMapNavExperiment = false
+    ),
+
+    /**
+     * KOVE 625X (2026) — a Wi-Fi SoftAP dash (`KY_ADV_…`) that speaks Yunmo on :8200 like the
+     * X-Cape 1200, NOT the BLE-provisioned ThinkerRide chip of the 800X / 450 Rally. Field-proven
+     * 2026-09-03 (HONOR MBH-N49, 1.1.110): the dash reports a 640x480 canvas, confirms map-nav,
+     * never acknowledges one H.264 frame in four sessions (93% refused) and acknowledges EVERY
+     * JPEG still at 7-8 fps in both Android Auto and the Ride Dashboard — it keeps up with the
+     * 10 fps tick at quality 60, where the X-Cape takes 2-5 stills a second.
+     *
+     * Its QR carries no modelId, so the pseudo id is stamped from the network name
+     * ([ssidPrefixes] via [modelIdForSsid]) at pairing time and when the garage is loaded.
+     * Without it the dash resolved to GENERIC, spent 33 s in EasyConn discovery, and then fell
+     * back to the X-Cape's H.264 profile that paints nothing here. Geometry comes from the
+     * dash's own dim-query, so [fallbackTBoxVideoArea] only matters before the first reply.
+     * The dpi is the X-Cape's, because the profile the rider proved this on carried it.
+     */
+    KOVE_625X(
+        key = "kove_625x",
+        displayName = "KOVE 625X (Yunmo, JPEG)",
+        modelIds = setOf(KOVE_625X_PROVISIONING_MODEL_ID),
+        mapTilesRequireCellular = true,
+        supportsScreenTouch = false,
+        defaultAndroidAutoPreset = AndroidAutoVideoPreset.LANDSCAPE_800X480,
+        fallbackTBoxVideoArea = TBoxEvent.VideoArea(640, 480),
+        requiresSockAuth = false,
+        advertisedSupportFunction = 0,
+        encoderFrameRate = 10,
+        virtualDisplayDpi = 187,
+        transportFamily = TBoxTransportFamily.YUNMO,
+        yunmoMapNavExperiment = true,
+        yunmoJpegVideo = true,
+        ssidPrefixes = setOf("KY_ADV_")
     );
 
     companion object {
+        /**
+         * The pseudo modelId a dashboard earns from its network name alone, or null when no
+         * profile claims that prefix. For a dash whose QR carries no modelId (the KOVE 625X)
+         * the SSID is the only thing that names the model before the first connect.
+         * Case-insensitive, as every SSID comparison in the app already is.
+         */
+        fun modelIdForSsid(ssid: String?): String? {
+            val name = ssid?.trim().orEmpty()
+            if (name.isEmpty()) return null
+            return entries.firstOrNull { profile ->
+                profile.ssidPrefixes.any { name.startsWith(it, ignoreCase = true) }
+            }?.modelIds?.firstOrNull()
+        }
+
+        /**
+         * The profile a remembered transport family routes to. A profile the modelId itself
+         * recognises wins when it belongs to that family — the KOVE 625X must not be handed
+         * the X-Cape's H.264 settings just because both speak Yunmo — otherwise the family's
+         * first entry, which is what the shortcut always picked.
+         */
+        fun shortcutFor(family: TBoxTransportFamily, modelId: String?): TBoxModelProfile? {
+            val recognised = fromModelId(modelId)
+            if (recognised != GENERIC && recognised.transportFamily == family) return recognised
+            return entries.firstOrNull { it.transportFamily == family }
+        }
+
         /**
          * The profile whose [key] is [key], or null for an unknown one.
          *
@@ -847,7 +920,7 @@ enum class TBoxModelProfile(
                 // shared with the EasyConn X-Cape 649/700 and the Seiemmezzo, so letting any
                 // of them win on capabilities would route those bikes to the wrong wire.
                 // They are reachable only by a rider pinning them.
-                MORINI_XCAPE_1200, MORINI_XCAPE_1200_MIRROR, MORINI_XCAPE_1200_JPEG -> 0
+                MORINI_XCAPE_1200, MORINI_XCAPE_1200_MIRROR, MORINI_XCAPE_1200_JPEG, KOVE_625X -> 0
                 GENERIC -> 0
             }
         }

@@ -161,7 +161,7 @@ class CoreTBoxConnector(private val context: Context) {
         // and only non-EasyConn families are ever remembered.
         val learnedProfile = if (requestedOverride == ProfileOverride.AUTO) {
             TBoxProtocolMemory(context).learnedFamily(profile.ssid)
-                ?.let { family -> TBoxModelProfile.entries.firstOrNull { it.transportFamily == family } }
+                ?.let { family -> TBoxModelProfile.shortcutFor(family, profile.modelId) }
         } else {
             null
         }

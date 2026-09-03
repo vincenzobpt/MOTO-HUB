@@ -5,6 +5,7 @@ package io.motohub.android.feature.pairing
 
 import io.motohub.android.session.MotorcycleProfile
 import io.motohub.android.session.TBoxConnectionMode
+import io.motohub.android.tbox.KOVE_625X_PROVISIONING_MODEL_ID
 import io.motohub.android.tbox.ProfileOverride
 import io.motohub.android.tbox.TBoxModelProfile
 import io.motohub.android.tbox.TBoxTransportFamily
@@ -99,6 +100,45 @@ class ManualPairingProfileTest {
             .withModelIdForConnectionMode()
 
         assertEquals(ThinkerRideProtocol.PROVISIONING_MODEL_ID, stamped.modelId)
+    }
+
+    @Test
+    fun `a KOVE 625X network name earns its pseudo model id on the automatic mode`() {
+        val stamped = MotorcycleProfile(ssid = "KY_ADV_90f6d3be4cc2", password = "secret")
+            .withModelIdForConnectionMode()
+        assertEquals(KOVE_625X_PROVISIONING_MODEL_ID, stamped.modelId)
+        assertEquals(
+            TBoxModelProfile.KOVE_625X,
+            TBoxModelProfile.resolve(stamped.modelId, null, ProfileOverride.AUTO)
+        )
+    }
+
+    @Test
+    fun `a real model id is never replaced by the one the network name suggests`() {
+        val kept = MotorcycleProfile(ssid = "KY_ADV_90f6d3be4cc2", password = "secret", modelId = "00297")
+            .withModelIdForConnectionMode()
+        assertEquals("00297", kept.modelId)
+    }
+
+    @Test
+    fun `the ThinkerRide chip still wins over the network name because the rider chose it`() {
+        val stamped = MotorcycleProfile(
+            ssid = "KY_ADV_90f6d3be4cc2",
+            password = "secret",
+            connectionMode = TBoxConnectionMode.THINKERRIDE
+        ).withModelIdForConnectionMode()
+        assertEquals(ThinkerRideProtocol.PROVISIONING_MODEL_ID, stamped.modelId)
+    }
+
+    @Test
+    fun `moving off the ThinkerRide chip falls back to what the network name says`() {
+        val corrected = MotorcycleProfile(
+            ssid = "KY_ADV_90f6d3be4cc2",
+            password = "secret",
+            modelId = ThinkerRideProtocol.PROVISIONING_MODEL_ID,
+            connectionMode = TBoxConnectionMode.AUTO
+        ).withModelIdForConnectionMode()
+        assertEquals(KOVE_625X_PROVISIONING_MODEL_ID, corrected.modelId)
     }
 
     @Test

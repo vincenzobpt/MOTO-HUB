@@ -9,6 +9,7 @@ import android.security.keystore.KeyProperties
 import android.util.Base64
 import io.motohub.android.session.MotorcycleProfile
 import io.motohub.android.session.TBoxConnectionMode
+import io.motohub.android.tbox.TBoxModelProfile
 import java.security.KeyStore
 import java.util.UUID
 import javax.crypto.Cipher
@@ -122,7 +123,11 @@ class MotorcycleProfileStore(context: Context) {
                         item.getString(KEY_PASSWORD_IV),
                         item.getString(KEY_PASSWORD_CIPHERTEXT)
                     ),
-                    modelId = item.optNullableString(KEY_MODEL_ID),
+                    // A profile saved before its dash had a profile of its own (the KOVE 625X's
+                    // QR names no model) earns the id its network name carries, on every
+                    // load, so an existing rider is recognised without pairing again.
+                    modelId = item.optNullableString(KEY_MODEL_ID)
+                        ?: TBoxModelProfile.modelIdForSsid(ssid),
                     displayName = item.optNullableString(KEY_DISPLAY_NAME),
                     photoPath = item.optNullableString(KEY_PHOTO_PATH),
                     fuelTankRangeKm = item.optDouble(KEY_FUEL_TANK_RANGE_KM, 0.0).takeIf { it > 0 },

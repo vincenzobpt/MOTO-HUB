@@ -231,6 +231,7 @@ MOTO-HUB is **not a CFMOTO-only app**. It speaks to the EasyConn / Carbit dashbo
 | **Morbidelli T502X / T352X** | ⚪ Untested | No reports yet |
 | **KOVE 450 Rally** | ✅ Works | SiQi firmware: projection is started **from the dash**, not from the phone — press and hold **UP** on the dash while MOTO-HUB is connecting. No app can trigger it over the wire, which is why it otherwise just waits and then times out |
 | **KOVE 800X** | ⚪ Untested | ThinkerRide (BLE-provisioned) dashboard; pairing not confirmed working yet |
+| **KOVE 625X** | ✅ Works | A different dashboard from the other KOVEs: Wi-Fi only, speaking the X-Cape 1200 (Yunmo) protocol with still images. Recognised from its `KY_ADV_…` network name, so pairing by QR is enough; Android Auto and the Ride Dashboard confirmed, mirroring from ADVANCED not yet |
 
 <sub>✅ riders confirmed it working &middot; 🟡 works in part, or not on every path &middot; ⚪ nobody has reported back yet</sub>
 

@@ -90,6 +90,11 @@ enum class ProfileOverride(
         "Sends still images instead of video, the way the bike's own app does. Try this if the dash stays black.",
         experimental = true
     ),
+    KOVE_625X(
+        "kove_625x",
+        "KOVE 625X (JPEG)",
+        "Wi-Fi dash speaking the X-Cape 1200 protocol with still images; recognised by its KY_ADV_ network name, so Auto normally finds it by itself"
+    ),
     MOTO_HUB_SIMULATOR(
         "moto_hub_simulator",
         "MOTO-HUB Simulator",
@@ -117,6 +122,7 @@ enum class ProfileOverride(
         MORINI_XCAPE_1200 -> TBoxModelProfile.MORINI_XCAPE_1200
         MORINI_XCAPE_1200_MIRROR -> TBoxModelProfile.MORINI_XCAPE_1200_MIRROR
         MORINI_XCAPE_1200_JPEG -> TBoxModelProfile.MORINI_XCAPE_1200_JPEG
+        KOVE_625X -> TBoxModelProfile.KOVE_625X
         MOTO_HUB_SIMULATOR -> TBoxModelProfile.MOTO_HUB_SIMULATOR
     }
 

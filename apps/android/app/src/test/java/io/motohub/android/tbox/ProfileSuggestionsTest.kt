@@ -26,8 +26,8 @@ class ProfileSuggestionsTest {
         val offered = suggest(activeProfileKey = "morini_xcape_1200", modelId = "00297")
         val yunmo = offered.filter { it.override.resolve()?.transportFamily == TBoxTransportFamily.YUNMO }
         assertEquals(
-            "both remaining Yunmo entries must be offered",
-            2,
+            "every remaining Yunmo entry must be offered (mirror, JPEG, KOVE 625X)",
+            3,
             yunmo.size
         )
         assertTrue(
