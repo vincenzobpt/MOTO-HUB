@@ -80,9 +80,15 @@ never broadcast an `_EasyConn._tcp.` advertisement on their own; they only
 respond once directly asked. `RideDaemonTransport.sendEasyConnWakeProbe()`
 sends this request (`CMD_MDNS_RESPOND`, `0x70000010`, on the well-known port
 `10930`) to the `.1`-derived peer as a last resort, after both regular NSD
-discovery windows time out. This does not supply the EC host/port: an ack
-only re-arms one more real NSD window on an infrastructure link, so the "no
-invented port/package" rule above still holds there.
+discovery windows time out. On an infrastructure link an ack first re-arms one
+more real NSD window (a resolved advertisement also carries the service
+package); when that window stays empty too, the acknowledged peer at `10930` is
+adopted as the EC endpoint with the acknowledged client identity as package.
+That is a completed `CMD_MDNS_RESPOND` handshake, so the "no invented
+port/package" rule above still holds there. Field case that forced this
+(Zontes 368G, 2026-09-03): five acks out of five, zero advertisements, and the
+fallback sweep skips `10930` by construction, so a dash that had answered every
+time was reported as "not found".
 
 On a **Wi-Fi Direct group** there is no bindable `Network`, so NSD cannot
 resolve the service even after the wake probe. In that case only, a completed

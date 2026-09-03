@@ -642,13 +642,30 @@ class RideDaemonTransport(
             )
         }
 
-        // Infrastructure fallback: a probe ACK on an AP link is preferably spent re-arming one more
-        // NSD window, because a resolved advertisement carries the package name too.
-        if (sendEasyConnWakeProbe(link) != null) {
+        // Infrastructure fallback: a probe ACK on an AP link is first spent re-arming one more
+        // NSD window, because a resolved advertisement carries the package name too. When that
+        // window stays empty as well, the ACK itself is the endpoint: a completed CMD_MDNS_RESPOND
+        // handshake is the same proof the Wi-Fi Direct and phone-hotspot paths accept, and the
+        // identity the dash acknowledged is the name the EC init command would carry anyway.
+        // Field case (Zontes 368G, 2026-09-03): the dash acknowledged 10930 five times out of five
+        // while never advertising, and the sweep below skips 10930 by construction - so a dash that
+        // had answered every single time was reported as "not found".
+        val peerIp = peerIpv4For(link)
+        val peerAddress = peerIp?.hostAddress
+        val acknowledged = sendEasyConnWakeProbe(link)
+        if (acknowledged != null) {
             try {
                 return withTimeout(DISCOVERY_TIMEOUT_MS) { discoverWithAndroidNsd(link, expectedModelId) }
             } catch (timeout: TimeoutCancellationException) {
                 kotlinx.coroutines.currentCoroutineContext().ensureActive()
+            }
+            if (peerAddress != null) {
+                ProjectionEventLog.record(
+                    "DISCOVERY",
+                    "EasyConn endpoint confirmed by the wake probe at $peerAddress:$WAKE_PROBE_PORT " +
+                        "(acknowledged as \"$acknowledged\") after NSD stayed empty; using it directly."
+                )
+                return TBoxHost(peerAddress, WAKE_PROBE_PORT, acknowledged)
             }
         }
 
@@ -659,8 +676,6 @@ class RideDaemonTransport(
         // The endpoint is used ONLY when the full CMD_MDNS_RESPOND handshake completes on it - an
         // open TCP port alone is never promoted to an EC endpoint, so the "no invented port"
         // rule in TBOX_STREAMING_CONTRACT.md still holds.
-        val peerIp = peerIpv4For(link)
-        val peerAddress = peerIp?.hostAddress
         if (peerIp != null && peerAddress != null) {
             val fallback = probeFallbackEasyConnPort(link, peerIp)
             if (fallback != null) {
@@ -1479,7 +1494,7 @@ class RideDaemonTransport(
                     // handshake is fine, and a rider who turns verbose off still gets the
                     // whitelisted subset from the unrecognised-dashboard branch below.
                     if (verbose) {
-                        val rawJson = payload.toString(Charsets.UTF_8).trim().trimEnd(' ')
+                        val rawJson = payload.toString(Charsets.UTF_8).trim().trimEnd('\u0000')
                         ProjectionEventLog.debug("TBOX", "CLIENT_INFO raw (verbose): $rawJson")
                     }
                     ProjectionEventLog.record(
