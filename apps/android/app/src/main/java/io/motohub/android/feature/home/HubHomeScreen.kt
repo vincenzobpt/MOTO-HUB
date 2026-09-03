@@ -602,8 +602,12 @@ private fun ErrorBanner(
                     )
                 }
             }
+            // Through the catalogue, like every other line here. The failure text is a plain
+            // string by the time it arrives - a constant compared by identity along the way,
+            // and forwarded over AIDL from the other install - so it cannot be localized where
+            // it is produced. Anything with no catalogue entry falls back to itself.
             Text(
-                message,
+                motoHubText(message),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -1013,6 +1017,11 @@ private fun ActiveSessionHero(
  * instruction rather than a report, so it gets the accent panel, full onSurface contrast, the
  * thing to tap on its own line above the menu path it is buried in, and the way into the full
  * guide for the rider who has never opened Android Auto's developer settings.
+ *
+ * Every line goes through the catalogue. The step itself stays English wherever it is stored:
+ * [AndroidAutoSelfModeHelp.RiderStep.flat] is IPC payload matched by identity, so it cannot be
+ * translated at the source - it is translated here, at the one point where it is read rather
+ * than compared. tools/i18n/extract.py collects the literals from the RiderStep declarations.
  */
 @Composable
 private fun RiderStepCard(
@@ -1037,16 +1046,26 @@ private fun RiderStepCard(
                 fontWeight = FontWeight.SemiBold
             )
             Text(
-                step.action,
+                motoHubText(step.action),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                step.where,
+                motoHubText(step.where),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
+            // The menu above only exists once Android Auto's developer options are unlocked, so
+            // the rider who has not done that opens it and finds nothing. Muted: it is the one
+            // line here that is background rather than the thing to do.
+            step.prerequisite?.let { prerequisite ->
+                Text(
+                    motoHubText(prerequisite),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
             if (onOpenHelp != null) {
                 SecondaryAction(motoHubText("Show me how"), onOpenHelp)
             }

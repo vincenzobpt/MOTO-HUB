@@ -44,7 +44,8 @@ class AaReceiver(
         const val PORT = 5288
 
         /**
-         * Android Auto's own "head unit server" (Developer settings ▸ Start head unit server),
+         * Android Auto's own "head unit server" (its settings ▸ three-dot menu ▸ Start head unit
+         * server; NOT inside Developer settings, which only has to be unlocked for the menu),
          * the port the Desktop Head Unit connects to. Here the roles are reversed from self-mode:
          * Android Auto listens and the head unit dials in, so nothing has to ask Android Auto to
          * start — which is the whole point, since 17.4 removed every way of asking.
@@ -126,6 +127,13 @@ class AaReceiver(
     /** Rate-limits the process-pin diagnosis to one line per receiver, not one per poll. */
     @Volatile private var headUnitPinLogged = false
     val hasAndroidAutoConnected: Boolean get() = androidAutoConnected
+
+    /**
+     * True while an AAP session is actually running, as opposed to merely having been accepted
+     * once. What the session service waits on when it holds a dropped session open instead of
+     * tearing it down - see AndroidAutoSessionService.handleAndroidAutoDrop.
+     */
+    val hasLiveSession: Boolean get() = transport != null
     @Volatile private var input: AaInput? = null
     private val videoDecoder = VideoDecoder().apply {
         fallbackWidth = capabilityProfile.video.width
@@ -337,7 +345,18 @@ class AaReceiver(
             androidAutoConnected = true
             androidAutoConnectedSinceStart = true
             runSession(socket)
-            return
+            // Deliberately NOT a return. A session that ends - Android Auto restarting, the phone
+            // going to sleep, the bike's Wi-Fi taking the process route down with it - leaves this
+            // receiver running with `transport` back to null, and on a release that exports no
+            // startup component this poller is the ONLY way back in: 17.4 answers "no head unit
+            // server component" to every discovery there is. Returning here is why a rider's
+            // Android Auto never came back after the second drop of a ride, with the receiver
+            // still listening and nothing left to dial it (field log 2026-09-02, from 15:27:12).
+            //
+            // `announced` is reset with the session so the next dry spell is reported once more:
+            // "the server is not running" is a different fact each time the rider stops it.
+            announced = false
+            if (!awaitNextPoll()) return
         }
     }
 

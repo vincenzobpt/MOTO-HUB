@@ -1323,7 +1323,10 @@ class IpcBridgeService : Service() {
             // re-launch Google Android Auto, making the stop look like it "didn't work".
             selfModeJob?.cancel()
             selfModeJob = null
-            AndroidAutoSessionService.stop(this@IpcBridgeService)
+            AndroidAutoSessionService.stop(
+                this@IpcBridgeService,
+                "A companion app asked for the Android Auto session to stop."
+            )
         }
 
         override fun registerStateListener(listener: IAndroidAutoStateListener) {

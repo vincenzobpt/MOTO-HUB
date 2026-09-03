@@ -102,8 +102,8 @@ class AndroidAutoSelfModeHelpTest {
         // string with no way back to the object - so rewording either half here silently drops
         // the card and leaves the rider staring at the grey caption again.
         assertEquals(
-            "Start \"head unit server\" in Android Auto, then Developer settings, then the " +
-                "three-dot menu at the top right…",
+            "Start \"head unit server\" in the three-dot menu at the top right of Android Auto's " +
+                "own settings…",
             AndroidAutoSelfModeHelp.HEAD_UNIT_SERVER_STEP.flat
         )
         assertEquals(
@@ -123,12 +123,66 @@ class AndroidAutoSelfModeHelpTest {
                 "Start \"head unit server\" in Android Auto ▸ Developer settings ▸ ⋮ menu…"
             )
         )
+        // The wording in between, which put the server inside Developer settings.
+        assertEquals(
+            AndroidAutoSelfModeHelp.HEAD_UNIT_SERVER_STEP,
+            AndroidAutoSelfModeHelp.riderStepOf(
+                "Start \"head unit server\" in Android Auto, then Developer settings, then the " +
+                    "three-dot menu at the top right…"
+            )
+        )
         assertEquals(
             AndroidAutoSelfModeHelp.ADD_NEW_CARS_STEP,
             AndroidAutoSelfModeHelp.riderStepOf(
                 "Enable \"Add new cars to Android Auto\" in Android Auto ▸ Developer settings…"
             )
         )
+    }
+
+    @Test
+    fun `the head unit server is never placed inside Developer settings`() {
+        // It is in the three-dot menu on Android Auto's ordinary settings screen; Developer
+        // settings only has to be unlocked for that menu to appear. A rider sent into the
+        // Developer settings list scrolls it forever - which is what these texts used to do.
+        val texts = listOf(
+            AndroidAutoSelfModeHelp.NEVER_CONNECTED_MESSAGE,
+            AndroidAutoSelfModeHelp.ACCEPTED_BUT_SILENT_MESSAGE,
+            AndroidAutoSelfModeHelp.ACCEPTED_BUT_SILENT_ON_CLOSED_RELEASE_MESSAGE,
+            AndroidAutoSelfModeHelp.HEAD_UNIT_SERVER_STEP.flat
+        )
+        texts.filter { it.contains("head unit server") }.forEach { text ->
+            assertTrue(text, text.contains("three-dot menu"))
+        }
+        assertTrue(
+            AndroidAutoSelfModeHelp.HEAD_UNIT_SERVER_STEP.where.contains("three-dot menu")
+        )
+        assertFalse(
+            AndroidAutoSelfModeHelp.HEAD_UNIT_SERVER_STEP.where.contains("Developer settings")
+        )
+        // And the unlock that reveals it is still named, or the menu is empty for a new rider.
+        assertTrue(
+            AndroidAutoSelfModeHelp.HEAD_UNIT_SERVER_STEP.prerequisite
+                .orEmpty().contains("ten times")
+        )
+    }
+
+    @Test
+    fun `the rider-facing steps carry no arrow or overflow glyphs`() {
+        // Rendered small on a bike, "▸" is a speck and "⋮" reads as a colon. Only the legacy
+        // map may still contain them, and it is private.
+        val texts = listOf(
+            AndroidAutoSelfModeHelp.NEVER_CONNECTED_MESSAGE,
+            AndroidAutoSelfModeHelp.ACCEPTED_BUT_SILENT_MESSAGE,
+            AndroidAutoSelfModeHelp.ACCEPTED_BUT_SILENT_ON_CLOSED_RELEASE_MESSAGE,
+            AndroidAutoSelfModeHelp.HEAD_UNIT_SERVER_STEP.flat,
+            AndroidAutoSelfModeHelp.ADD_NEW_CARS_STEP.flat,
+            AndroidAutoSelfModeHelp.HEAD_UNIT_SERVER_STEP.prerequisite.orEmpty(),
+            AndroidAutoSelfModeHelp.ADD_NEW_CARS_STEP.prerequisite.orEmpty()
+        )
+        texts.forEach { text ->
+            assertFalse(text, text.contains("▸"))
+            assertFalse(text, text.contains("⋮"))
+        }
     }
 
     @Test

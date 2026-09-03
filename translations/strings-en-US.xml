@@ -1839,10 +1839,33 @@
     <string name="legacy_motorcycle_handlebar_dc90fcfc">MOTORCYCLE HANDLEBAR</string>
     <string name="legacy_android_auto_17_4_removed_the_way_an_app_can_ask_217ec1b2">Android Auto 17.4 removed the way an app can ask it to project. MOTO-HUB still tries, and on older versions it works — but when it does not, the four steps below start Android Auto from its own developer menu instead. This is the part that works when nothing else does, and you do not need to install anything.</string>
     <string name="legacy_start_android_auto_yourself_3b0dffe1">START ANDROID AUTO YOURSELF</string>
-    <string name="legacy_open_the_android_auto_app_scroll_to_the_bottom_a_c3e99276">Open the Android Auto app, scroll to the bottom and tap \"Version\" ten times. Developer settings appear — you only have to unlock them once.</string>
-    <string name="legacy_in_developer_settings_open_the_menu_at_the_top_r_bc6818f7">In Developer settings, open the ⋮ menu at the top right and choose \"Start head unit server\". It is in that menu, not in the list of settings below it. This is the step that does it.</string>
+    <string name="legacy_open_the_android_auto_app_s_settings_scroll_to_t_4ef36207">Open the Android Auto app\'s settings, scroll to the bottom and tap \"Version\" ten times. That unlocks its developer options — you only have to do it once.</string>
+    <string name="legacy_stay_on_that_same_android_auto_settings_screen_o_2c08cebc">Stay on that same Android Auto settings screen, open the three-dot menu at the top right and choose \"Start head unit server\". It is in that menu, not inside Developer settings. This is the step that does it.</string>
     <string name="legacy_while_you_are_in_there_629f07a5">WHILE YOU ARE IN THERE</string>
-    <string name="legacy_in_that_same_developer_settings_list_turn_on_add_3c96c7df">In that same Developer settings list, turn on \"Add new cars to Android Auto\" (older versions call it \"Unknown sources\"). On Android Auto 17.2 and older that switch on its own is often enough. From 17.3 on it is not — step 2 is — so do not stop here if Android Auto still will not start.</string>
+    <string name="legacy_open_developer_settings_from_that_same_screen_an_4629699">Open Developer settings from that same screen and turn on \"Add new cars to Android Auto\" (older versions call it \"Unknown sources\"). On Android Auto 17.2 and older that switch on its own is often enough. From 17.3 on it is not — step 2 is — so do not stop here if Android Auto still will not start.</string>
+
+    <!-- Source: androidauto/AndroidAutoSelfModeHelp — the step the home screen and the
+         Android Auto preview draw when projection needs the rider to do something -->
+    <string name="legacy_start_head_unit_server_da7b299f">Start \"head unit server\"</string>
+    <string name="legacy_the_three_dot_menu_at_the_top_right_of_android_a_d6625ac7">the three-dot menu at the top right of Android Auto\'s own settings</string>
+    <string name="legacy_unlock_android_auto_s_developer_options_first_op_2865efda">Unlock Android Auto\'s developer options first: open its settings, scroll to the bottom and tap \"Version\" ten times.</string>
+    <string name="legacy_enable_add_new_cars_to_android_auto_75bf90fa">Enable \"Add new cars to Android Auto\"</string>
+    <string name="legacy_android_auto_then_developer_settings_f55db1c8">Android Auto, then Developer settings</string>
+
+    <!-- Source: feature/androidauto/AndroidAutoPreviewScreen — the preview's own status line -->
+    <string name="legacy_android_auto_is_not_running_start_a_session_from_e803c9ee">Android Auto is not running. Start a session from Home.</string>
+    <string name="legacy_preparing_android_auto_db146bea">Preparing Android Auto…</string>
+    <string name="legacy_waiting_for_android_auto_to_start_projecting_b7646bd0">Waiting for Android Auto to start projecting…</string>
+    <string name="legacy_live_preview_touch_enabled_73752c4b">Live preview · touch enabled</string>
+
+    <!-- Source: failure text the home screen's error banner draws. Declared as constants and compared by
+         identity on the way there, so the catalogue is the only place they can be translated -->
+    <string name="legacy_google_android_auto_never_connected_to_moto_hub__bd46b5a3">Google Android Auto never connected to MOTO-HUB. Newer Android Auto releases removed the way apps ask it to project, so start it from Android Auto itself. Open the Android Auto app\'s settings, scroll to the bottom and tap \"Version\" ten times to unlock its developer options. Then, on that same settings screen, open the three-dot menu at the top right and choose \"Start head unit server\" - the menu is on Android Auto\'s normal settings screen, not inside Developer settings. Leave MOTO-HUB running: it connects on its own within a couple of seconds, and you can leave the server running for next time.</string>
+    <string name="legacy_google_android_auto_took_moto_hub_s_request_and__ae0978d0">Google Android Auto took MOTO-HUB\'s request and then ignored it. That is what it does with a head unit it has not been told to trust. Open the Android Auto app\'s settings, scroll to the bottom and tap \"Version\" ten times to unlock its developer options, open Developer settings and turn on \"Add new cars to Android Auto\" (older builds call it \"Unknown sources\"), then start Android Auto from MOTO-HUB again. If it still does nothing, go back to the Android Auto settings screen and use the three-dot menu at the top right: \"Start head unit server\".</string>
+    <string name="legacy_google_android_auto_took_moto_hub_s_request_and__3e12afc0">Google Android Auto took MOTO-HUB\'s request and then ignored it, which is all this release does with it: Android Auto 17.3 and newer removed the way an app can ask it to project. Start it from Android Auto instead. Open the Android Auto app\'s settings, scroll to the bottom and tap \"Version\" ten times to unlock its developer options, then open the three-dot menu at the top right of that same settings screen and choose \"Start head unit server\". Leave MOTO-HUB running: it connects on its own within a couple of seconds. While you are in there, \"Add new cars to Android Auto\" in Developer settings should be on too.</string>
+    <string name="legacy_another_easyconn_session_is_already_using_the_lo_fa50b26f">Another EasyConn session is already using the local connection ports (10920-10922). Stop any active MOTO-HUB session, or force-stop your motorcycle\'s own companion app (CFMOTO, Zontes Smart, Carbit Ride and the equivalents other brands ship), then retry the connection.</string>
+    <string name="legacy_phone_wi_fi_is_off_turn_it_on_then_tap_connect_a_5fd21cc0">Phone Wi-Fi is off. Turn it on, then tap Connect again.</string>
+    <string name="legacy_phone_hotspot_is_off_turn_it_on_then_tap_connect_683a58f1">Phone hotspot is off. Turn it on, then tap Connect again.</string>
     <string name="legacy_action_needed_a446e8df">ACTION NEEDED</string>
     <string name="legacy_do_this_in_android_auto_9a49aaee">DO THIS IN ANDROID AUTO</string>
     <string name="legacy_show_me_how_73baf02b">Show me how</string>

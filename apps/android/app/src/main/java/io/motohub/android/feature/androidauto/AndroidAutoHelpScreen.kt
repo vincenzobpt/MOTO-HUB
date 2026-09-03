@@ -41,6 +41,13 @@ import io.motohub.android.ui.components.MotoHubDetailScreen
  * 17.4.663054 turned the switch on, took it for the whole fix because it was named first, and
  * spent an hour retrying a path his release had already closed.
  *
+ * The two live in different places, which this page used to get wrong: tapping "Version" ten
+ * times unlocks Android Auto's developer options, and "Add new cars" is then a switch inside
+ * the Developer settings list - but "Start head unit server" is not in that list at all. It is
+ * in the three-dot menu at the top right of Android Auto's ordinary settings screen. Step 2
+ * says so in as many words, because the rider who scrolls Developer settings looking for it
+ * finds nothing and concludes the whole page is wrong.
+ *
  * Shown as a full-screen overlay straight from MainActivity, not inside the hub, so it has to
  * bring its own background and its own back handling the way the About and diagnostics screens
  * do. Without [MotoHubBackground] the theme never provides a content colour and every
@@ -76,16 +83,17 @@ fun AndroidAutoHelpScreen(onBack: () -> Unit) {
             HelpStep(
                 number = "1",
                 text = motoHubText(
-                    "Open the Android Auto app, scroll to the bottom and tap \"Version\" ten times. " +
-                        "Developer settings appear — you only have to unlock them once."
+                    "Open the Android Auto app's settings, scroll to the bottom and tap " +
+                        "\"Version\" ten times. That unlocks its developer options — you only have " +
+                        "to do it once."
                 )
             )
             HelpStep(
                 number = "2",
                 text = motoHubText(
-                    "In Developer settings, open the ⋮ menu at the top right and choose \"Start " +
-                        "head unit server\". It is in that menu, not in the list of settings below " +
-                        "it. This is the step that does it."
+                    "Stay on that same Android Auto settings screen, open the three-dot menu at " +
+                        "the top right and choose \"Start head unit server\". It is in that menu, " +
+                        "not inside Developer settings. This is the step that does it."
                 )
             )
             HelpStep(
@@ -108,10 +116,11 @@ fun AndroidAutoHelpScreen(onBack: () -> Unit) {
             HelpStep(
                 number = "5",
                 text = motoHubText(
-                    "In that same Developer settings list, turn on \"Add new cars to Android Auto\" " +
-                        "(older versions call it \"Unknown sources\"). On Android Auto 17.2 and " +
-                        "older that switch on its own is often enough. From 17.3 on it is not — " +
-                        "step 2 is — so do not stop here if Android Auto still will not start."
+                    "Open Developer settings from that same screen and turn on \"Add new cars to " +
+                        "Android Auto\" (older versions call it \"Unknown sources\"). On Android " +
+                        "Auto 17.2 and older that switch on its own is often enough. From 17.3 on " +
+                        "it is not — step 2 is — so do not stop here if Android Auto still will " +
+                        "not start."
                 )
             )
 

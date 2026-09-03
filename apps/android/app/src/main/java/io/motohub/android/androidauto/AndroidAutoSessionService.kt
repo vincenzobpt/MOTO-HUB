@@ -85,6 +85,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
     private var videoReadyTimeoutJob: Job? = null
     private var watchdogJob: Job? = null
     private var recoveryJob: Job? = null
+    private var androidAutoReattachJob: Job? = null
     private var networkLossJob: Job? = null
     private var wakeLock: PowerManager.WakeLock? = null
     private val streamingLocks = TBoxStreamingLocks(this, "Android Auto")
@@ -121,6 +122,9 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
     /** When the dash last took a still. The stills path's liveness signal; see the offer below. */
     private val lastStillAcceptedAt = AtomicLong(0)
     private val recoveryRequested = AtomicBoolean(false)
+
+    /** True while a dropped AAP session is being held open for Android Auto to come back. */
+    private val androidAutoReattachRequested = AtomicBoolean(false)
     /**
      * True for exactly as long as [startBikeStream] is inside the EasyConn handshake, both
      * attempts included. A `Stopped`/`FatalError` arriving in that window is that handshake's own
@@ -146,9 +150,14 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == ACTION_STOP) {
-            stopSession("Android Auto stopped by the user.")
+            // Reached either from the notification's Stop action, which sets no reason of its
+            // own, or as [stop]'s fallback when the service was still starting up - there the
+            // caller's reason is waiting for us.
+            stopSession(AndroidAutoStopReason.take() ?: "Android Auto stopped by the user.")
             return START_NOT_STICKY
         }
+        // A stop that never reached a running service must not name the session about to start.
+        AndroidAutoStopReason.clear()
         if (AndroidAutoRuntime.isActive()) return START_STICKY
 
         ProjectionEventLog.record("ANDROID AUTO", "Preparing local AAP receiver.")
@@ -388,7 +397,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
                             } else {
                                 "Android Auto connection closed unexpectedly."
                             }
-                            fail(reason)
+                            handleAndroidAutoDrop(reason)
                         }
                     }
                 },
@@ -1267,6 +1276,65 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
         ProjectionEventLog.record("WATCHDOG", "Android Auto TFT stream recovered successfully.")
     }
 
+    /**
+     * An AAP session that ended without the rider asking for it.
+     *
+     * Deliberately not [fail]. Tearing the whole projection down here is what left riders looking
+     * at the picker with the motorcycle still connected and nothing retrying: field log
+     * 2026-09-02 caught it twice, at 15:11:59 and 15:27:12, and after the second one the session
+     * was gone for the rest of the ride.
+     *
+     * The receiver SURVIVES a transport quit - `AaReceiver.stop` is only called from
+     * [stopSession] - so it is still listening on :5288 and still dialling Android Auto's own
+     * head unit server on :5277, which on 17.4 is the only way back in. Everything is therefore
+     * left standing and Android Auto is given a window to reattach on its own; the T-Box session
+     * and the bike stream are never touched, because nothing about them failed.
+     *
+     * The session is still torn down when that window closes, so a rider who has genuinely
+     * finished with Android Auto gets a session that ends rather than one that hangs.
+     */
+    private fun handleAndroidAutoDrop(reason: String) {
+        if (stopping) return
+        if (!MotoHubSettings.autoRecovery(this)) {
+            ProjectionEventLog.warning(
+                "WATCHDOG",
+                "Not holding the Android Auto session open: automatic reconnection is switched off."
+            )
+            fail(reason)
+            return
+        }
+        if (!androidAutoReattachRequested.compareAndSet(false, true)) return
+        ProjectionEventLog.warning(
+            "WATCHDOG",
+            "$reason The receiver is still up; holding the session open for " +
+                "${AA_REATTACH_GIVE_UP_MILLIS / 1_000L}s while Android Auto reattaches."
+        )
+        // Out of Streaming for the duration, which also stops the frame watchdog from opening a
+        // second, concurrent recovery over the same gap: its stall check only runs while Streaming.
+        AndroidAutoRuntime.publish(AndroidAutoRuntimeState.ReceiverReady)
+        androidAutoReattachJob = serviceScope.launch {
+            val deadline = SystemClock.elapsedRealtime() + AA_REATTACH_GIVE_UP_MILLIS
+            while (!stopping && SystemClock.elapsedRealtime() < deadline) {
+                delay(AA_REATTACH_POLL_MILLIS)
+                if (receiver?.hasLiveSession != true) continue
+                androidAutoReattachRequested.set(false)
+                // The bike stream never stopped, so this is Streaming again the moment the
+                // transport is: there is no hand-off to redo and no frame to wait for.
+                markWatchdogProgress()
+                AndroidAutoRuntime.publish(AndroidAutoRuntimeState.Streaming)
+                ProjectionEventLog.record("WATCHDOG", "Android Auto attached again.")
+                return@launch
+            }
+            androidAutoReattachRequested.set(false)
+            if (!stopping) {
+                fail(
+                    "$reason Android Auto did not come back within " +
+                        "${AA_REATTACH_GIVE_UP_MILLIS / 1_000L} seconds."
+                )
+            }
+        }
+    }
+
     private fun fail(message: String) {
         if (stopping) return
         ProjectionEventLog.error("ANDROID AUTO", message)
@@ -1308,6 +1376,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
         videoReadyTimeoutJob?.cancel()
         watchdogJob?.cancel()
         recoveryJob?.cancel()
+        androidAutoReattachJob?.cancel()
         networkLossJob?.cancel()
         transportEventsJob = null
         networkEventsJob = null
@@ -1316,6 +1385,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
         videoReadyTimeoutJob = null
         watchdogJob = null
         recoveryJob = null
+        androidAutoReattachJob = null
         networkLossJob = null
         p2pGroupWatcher?.close()
         p2pGroupWatcher = null
@@ -1381,7 +1451,9 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
 
     override fun onDestroy() {
         ProjectionEventLog.record("ANDROID AUTO", "Android Auto foreground service onDestroy called.")
-        stopSession("Android Auto service stopped by Android.")
+        // Whoever asked for this stop left its reason behind; only a destroy nobody in the app
+        // asked for still reads as Android's doing.
+        stopSession(AndroidAutoStopReason.take() ?: AndroidAutoStopReason.STOPPED_BY_ANDROID)
         super.onDestroy()
     }
 
@@ -1490,6 +1562,17 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
         private const val NETWORK_REJOIN_WAIT_MILLIS = 75_000L
         private const val RECOVERY_RETRY_MILLIS = 5_000L
         private const val RECOVERY_GIVE_UP_MILLIS = 120_000L
+
+        /**
+         * How long a dropped AAP session is held open before the session is given up on.
+         *
+         * Generous on purpose: the receiver polls Android Auto's head unit server every 1.5s and
+         * the usual causes of a drop - the phone sleeping, Android Auto restarting itself - clear
+         * in seconds, while the expensive alternative is a rider stopping to rebuild a session
+         * that was about to come back on its own.
+         */
+        private const val AA_REATTACH_GIVE_UP_MILLIS = 90_000L
+        private const val AA_REATTACH_POLL_MILLIS = 1_000L
         private const val WAKE_LOCK_TIMEOUT_MS = 4 * 60 * 60 * 1_000L
 
         /**
@@ -1507,7 +1590,16 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
             )
         }
 
-        fun stop(context: Context) {
+        /**
+         * @param reason what the log should say this stop was, in the same voice as every other
+         *   session-stop reason - it is what a rider's diagnostic report will name as the cause.
+         *   Required on purpose: a caller that cannot say why it is stopping the session is the
+         *   caller that used to leave Android holding the blame.
+         */
+        fun stop(context: Context, reason: String) {
+            // Carried to onDestroy(), which is all Android gives an explicit stop; see
+            // AndroidAutoStopReason for why the blame used to land on the system.
+            AndroidAutoStopReason.publish(reason)
             // Stop the already-running foreground service explicitly. The previous implementation
             // started the service again with ACTION_STOP; that request could be ignored when it
             // came through the PRO AIDL bridge or the notification action. Android calls

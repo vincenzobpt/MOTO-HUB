@@ -121,7 +121,8 @@ object AaSelfMode {
         if (headUnitServers.isEmpty()) {
             log(
                 "[AA] Android Auto exports no head unit server component; it can only be started " +
-                    "by hand from Developer settings ▸ overflow menu ▸ Start head unit server."
+                    "by hand from the three-dot menu at the top right of Android Auto's settings " +
+                    "(visible once developer options are unlocked), not from Developer settings."
             )
         } else {
             log("[AA] Head unit server candidates: ${headUnitServers.joinToString { it.describe() }}")

@@ -1459,7 +1459,10 @@ class MainActivity : ComponentActivity() {
                                 androidAutoPhoneOnlyBridge.stop()
                                 androidAutoPreviewIsPhoneOnly = false
                             } else {
-                                AndroidAutoSessionService.stop(context)
+                                AndroidAutoSessionService.stop(
+                                    context,
+                                    "Android Auto stopped by the user."
+                                )
                                 reconnectAfterModeStop("Android Auto")
                             }
                         },
@@ -1791,7 +1794,10 @@ class MainActivity : ComponentActivity() {
                 is AndroidAutoRuntimeState.Failed -> Unit
                 else -> {
                     ProjectionEventLog.error("ANDROID_AUTO", "Timed out while preparing Android Auto.")
-                    AndroidAutoSessionService.stop(this@MainActivity)
+                    AndroidAutoSessionService.stop(
+                        this@MainActivity,
+                        "Android Auto did not become ready in time."
+                    )
                 }
             }
             androidAutoLaunchPending.set(false)

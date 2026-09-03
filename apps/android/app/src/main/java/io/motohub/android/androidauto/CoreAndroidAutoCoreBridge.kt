@@ -66,7 +66,10 @@ class CoreAndroidAutoCoreBridge(private val context: Context) : AndroidAutoCoreB
                 is AndroidAutoRuntimeState.Failed -> Unit
                 else -> {
                     ProjectionEventLog.error("ANDROID_AUTO", "Timed out while preparing Android Auto.")
-                    AndroidAutoSessionService.stop(context)
+                    AndroidAutoSessionService.stop(
+                        context,
+                        "Android Auto did not become ready in time."
+                    )
                 }
             }
             launchPending.set(false)
@@ -75,7 +78,7 @@ class CoreAndroidAutoCoreBridge(private val context: Context) : AndroidAutoCoreB
     }
 
     override fun stop() {
-        AndroidAutoSessionService.stop(context)
+        AndroidAutoSessionService.stop(context, "Android Auto stopped by the user.")
     }
 
     override fun release() = Unit

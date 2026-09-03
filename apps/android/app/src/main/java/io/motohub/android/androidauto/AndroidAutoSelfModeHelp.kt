@@ -54,10 +54,13 @@ object AndroidAutoSelfModeHelp {
      */
     const val NEVER_CONNECTED_MESSAGE =
         "Google Android Auto never connected to MOTO-HUB. Newer Android Auto releases removed the " +
-            "way apps ask it to project, so start it from Android Auto itself: open Android Auto ▸ " +
-            "tap Version ten times ▸ Developer settings ▸ the ⋮ menu at the top right ▸ \"Start head " +
-            "unit server\". Leave MOTO-HUB running: it connects on its own within a couple of " +
-            "seconds, and you can leave the server running for next time."
+            "way apps ask it to project, so start it from Android Auto itself. Open the Android " +
+            "Auto app's settings, scroll to the bottom and tap \"Version\" ten times to unlock its " +
+            "developer options. Then, on that same settings screen, open the three-dot menu at " +
+            "the top right and choose \"Start head unit server\" - the menu is on Android Auto's " +
+            "normal settings screen, not inside Developer settings. Leave MOTO-HUB running: it " +
+            "connects on its own within a couple of seconds, and you can leave the server running " +
+            "for next time."
 
     /**
      * Shown instead of [NEVER_CONNECTED_MESSAGE] when Android Auto *took* the request and then did
@@ -77,10 +80,12 @@ object AndroidAutoSelfModeHelp {
      */
     const val ACCEPTED_BUT_SILENT_MESSAGE =
         "Google Android Auto took MOTO-HUB's request and then ignored it. That is what it does " +
-            "with a head unit it has not been told to trust: open Android Auto ▸ tap Version ten " +
-            "times ▸ Developer settings ▸ turn on \"Add new cars to Android Auto\" (older builds " +
-            "call it \"Unknown sources\"), then start Android Auto from MOTO-HUB again. If it " +
-            "still does nothing, use the ⋮ menu on that same screen ▸ \"Start head unit server\"."
+            "with a head unit it has not been told to trust. Open the Android Auto app's " +
+            "settings, scroll to the bottom and tap \"Version\" ten times to unlock its developer " +
+            "options, open Developer settings and turn on \"Add new cars to Android Auto\" (older " +
+            "builds call it \"Unknown sources\"), then start Android Auto from MOTO-HUB again. If " +
+            "it still does nothing, go back to the Android Auto settings screen and use the " +
+            "three-dot menu at the top right: \"Start head unit server\"."
 
     /**
      * The same acceptance-then-silence, on a release that has closed self-mode
@@ -98,14 +103,16 @@ object AndroidAutoSelfModeHelp {
     const val ACCEPTED_BUT_SILENT_ON_CLOSED_RELEASE_MESSAGE =
         "Google Android Auto took MOTO-HUB's request and then ignored it, which is all this " +
             "release does with it: Android Auto 17.3 and newer removed the way an app can ask it " +
-            "to project. Start it from Android Auto instead: open Android Auto ▸ tap Version ten " +
-            "times ▸ Developer settings ▸ the ⋮ menu at the top right ▸ \"Start head unit " +
-            "server\". Leave MOTO-HUB running: it connects on its own within a couple of seconds. " +
-            "While you are on that screen, \"Add new cars to Android Auto\" should be on too."
+            "to project. Start it from Android Auto instead. Open the Android Auto app's " +
+            "settings, scroll to the bottom and tap \"Version\" ten times to unlock its developer " +
+            "options, then open the three-dot menu at the top right of that same settings screen " +
+            "and choose \"Start head unit server\". Leave MOTO-HUB running: it connects on its own " +
+            "within a couple of seconds. While you are in there, \"Add new cars to Android Auto\" " +
+            "in Developer settings should be on too."
 
     /**
-     * A remedy the rider has to carry out by hand, kept in the two halves it reads best in: the
-     * thing to tap, and the menu path it is buried in.
+     * A remedy the rider has to carry out by hand, kept in the parts it reads best in: the thing
+     * to tap, the menu path it is buried in, and what has to be unlocked before that path exists.
      *
      * [AaSelfMode] publishes it flattened into the one-line startup detail, because that is all
      * the AIDL state channel and the preview screen's status line can carry. The home screen
@@ -114,21 +121,51 @@ object AndroidAutoSelfModeHelp {
      * not. Field case FF3D-A418 is what that cost: ten attempts across an hour, by a rider the
      * one workable step was in front of the whole time.
      */
-    data class RiderStep(val action: String, val where: String) {
-        /** The single line published as the startup detail. Do not reword without [riderStepOf]. */
+    data class RiderStep(
+        val action: String,
+        val where: String,
+        /**
+         * The one thing that has to be true before [where] even exists, or null when there is
+         * none. Android Auto hides both of these behind its developer options, and a rider who
+         * has not unlocked them opens the menu named here and simply does not find the entry.
+         */
+        val prerequisite: String? = null
+    ) {
+        /**
+         * The single line published as the startup detail. Do not reword without [riderStepOf].
+         *
+         * Carries [action] and [where] only: it is the AIDL payload and the preview screen's
+         * one-line status, and the prerequisite is a sentence neither has room for. The home
+         * screen recovers the whole step from this line and draws all three parts.
+         */
         val flat: String get() = "$action in $where…"
     }
+
+    /**
+     * The path that works on every release, including the ones that closed self-mode.
+     *
+     * Where it actually is, since getting that wrong is the whole cost of this file: tapping
+     * "Version" ten times unlocks Android Auto's developer options, and "Add new cars to Android
+     * Auto" is a switch inside the Developer settings list that then appears - but "Start head
+     * unit server" is NOT. It lives in the three-dot menu at the top right of Android Auto's
+     * ordinary settings screen, which the unlock reveals. A rider sent into Developer settings
+     * to look for it scrolls a list that will never contain it.
+     *
+     * Declared before [ADD_NEW_CARS_STEP] because that one borrows its prerequisite: the unlock
+     * is one sentence, and written out twice it would be two catalogue entries to keep in step.
+     */
+    val HEAD_UNIT_SERVER_STEP = RiderStep(
+        action = "Start \"head unit server\"",
+        where = "the three-dot menu at the top right of Android Auto's own settings",
+        prerequisite = "Unlock Android Auto's developer options first: open its settings, scroll " +
+            "to the bottom and tap \"Version\" ten times."
+    )
 
     /** Wanted while the release still has self-mode and Android Auto simply does not trust us. */
     val ADD_NEW_CARS_STEP = RiderStep(
         action = "Enable \"Add new cars to Android Auto\"",
-        where = "Android Auto, then Developer settings"
-    )
-
-    /** The path that works on every release, including the ones that closed self-mode. */
-    val HEAD_UNIT_SERVER_STEP = RiderStep(
-        action = "Start \"head unit server\"",
-        where = "Android Auto, then Developer settings, then the three-dot menu at the top right"
+        where = "Android Auto, then Developer settings",
+        prerequisite = HEAD_UNIT_SERVER_STEP.prerequisite
     )
 
     /**
@@ -144,6 +181,12 @@ object AndroidAutoSelfModeHelp {
     private val LEGACY_FLAT_STEPS: Map<String, RiderStep> = mapOf(
         "Start \"head unit server\" in Android Auto ▸ Developer settings ▸ ⋮ menu…"
             to HEAD_UNIT_SERVER_STEP,
+        // The wording in between, which put the head unit server inside Developer settings. It
+        // is not there, so this text was wrong as well as long - but a phone whose two halves
+        // are on different releases still publishes it, and a step drawn from the wrong words
+        // still beats the grey caption it falls back to.
+        "Start \"head unit server\" in Android Auto, then Developer settings, then the three-dot " +
+            "menu at the top right…" to HEAD_UNIT_SERVER_STEP,
         "Enable \"Add new cars to Android Auto\" in Android Auto ▸ Developer settings…"
             to ADD_NEW_CARS_STEP
     )

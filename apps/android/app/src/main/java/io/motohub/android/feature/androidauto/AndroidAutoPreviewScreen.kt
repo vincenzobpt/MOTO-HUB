@@ -55,6 +55,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.motohub.android.androidauto.AndroidAutoRuntime
 import io.motohub.android.androidauto.AndroidAutoRuntimeState
 import io.motohub.android.androidauto.AndroidAutoPreviewView
+import io.motohub.android.androidauto.AndroidAutoSelfModeHelp
 import io.motohub.android.i18n.motoHubText
 import io.motohub.android.ui.components.LivePill
 import io.motohub.android.ui.components.MotoHubHeader
@@ -87,16 +88,27 @@ fun AndroidAutoPreviewScreen(onBack: () -> Unit, startFullscreen: Boolean = fals
     val sessionActive = runtimeState is AndroidAutoRuntimeState.Preparing ||
         runtimeState is AndroidAutoRuntimeState.ReceiverReady || streaming
     val startupDetail by AndroidAutoRuntime.startupDetail.collectAsStateWithLifecycle()
+    // The startup detail is usually narration, but two of its values are an instruction the
+    // rider has to carry out. Those two are stored in English - the flat line is IPC payload
+    // matched by identity - so they are recognised here and drawn from the catalogue instead of
+    // being passed through raw, which left them English on a phone set to any other language.
+    val riderStep = AndroidAutoSelfModeHelp.riderStepOf(startupDetail)
+    val riderStepLine = riderStep?.let { "${motoHubText(it.action)} · ${motoHubText(it.where)}" }
+    // motoHubText on the runtime branches too: the stop reason and the failure message reach
+    // this screen as plain strings, so the catalogue is the only place they can be translated,
+    // and one with no entry falls back to itself.
     val status = when (val state = runtimeState) {
-        AndroidAutoRuntimeState.Idle -> "Android Auto is not running. Start a session from Home."
-        AndroidAutoRuntimeState.Preparing -> "Preparing Android Auto…"
+        AndroidAutoRuntimeState.Idle ->
+            motoHubText("Android Auto is not running. Start a session from Home.")
+        AndroidAutoRuntimeState.Preparing -> motoHubText("Preparing Android Auto…")
         // Not "connected": at this point MOTO-HUB is only listening, and is still asking Google
         // Android Auto to project here — which can take several seconds and several attempts.
         AndroidAutoRuntimeState.ReceiverReady ->
-            startupDetail ?: "Waiting for Android Auto to start projecting…"
-        AndroidAutoRuntimeState.Streaming -> "Live preview · touch enabled"
-        is AndroidAutoRuntimeState.Stopped -> state.reason
-        is AndroidAutoRuntimeState.Failed -> state.message
+            riderStepLine ?: startupDetail?.let(::motoHubText)
+                ?: motoHubText("Waiting for Android Auto to start projecting…")
+        AndroidAutoRuntimeState.Streaming -> motoHubText("Live preview · touch enabled")
+        is AndroidAutoRuntimeState.Stopped -> motoHubText(state.reason)
+        is AndroidAutoRuntimeState.Failed -> motoHubText(state.message)
     }
 
     val preview: @Composable () -> Unit = {
