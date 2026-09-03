@@ -1,0 +1,82 @@
+MOTO-HUB
+========
+
+Copyright (C) 2026 Vincenzo Buonomano and the MOTO-HUB contributors.
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License, version 3, as published by
+the Free Software Foundation. See the LICENSE file for the full text.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+--------------------------------------------------------------------------------
+Why AGPL-3.0
+--------------------------------------------------------------------------------
+
+MOTO-HUB's Android Auto receiver is ported from AGPLv3-licensed code, and the
+bundled hudlib library is GPLv3 (see "Incorporated code" below). Under the terms
+of those licenses the combined work is distributed under the AGPL-3.0. Anyone
+who redistributes MOTO-HUB, or runs a modified version as a network-accessible
+service, must make the complete corresponding source available under the same
+license and preserve the copyright and attribution notices in this file.
+
+--------------------------------------------------------------------------------
+Copyright holders
+--------------------------------------------------------------------------------
+
+Copyright is held by the respective authors of each contribution:
+
+  * MOTO-HUB original code (UI, T-Box/EasyConn transport and dashboard profiles,
+    Ride Dashboard, trips and telemetry, handlebar and remote control handling,
+    navigation, diagnostics, CORE/ADVANCED IPC bridge, documentation):
+    Copyright (C) 2026 Vincenzo Buonomano and the MOTO-HUB contributors.
+
+  * Android Auto Projection receiver (the `io.motohub.android.aa` package):
+    portions Copyright (C) their original authors, ported from headunit-revived
+    (see below).
+
+  * hudlib (`apps/android/app/libs/`): Copyright (C) its original authors,
+    see below.
+
+Holding copyright on your own contributions does not grant MOTO-HUB the right to
+relicense the incorporated AGPLv3 and GPLv3 code under any other terms.
+
+--------------------------------------------------------------------------------
+Incorporated code (bundled in this repository)
+--------------------------------------------------------------------------------
+
+headunit-revived ("Open Headunit") — AGPL-3.0
+  The `io.motohub.android.aa` package — AAP transport, TLS/SSL handshake,
+  message reading and handling, video decoder, the generated protobuf message
+  classes under `aa/proto/`, and related helpers — is ported and adapted from
+  the headunit-revived project by Andre Knieriem, itself described by its author
+  as a revived version of the original "headunit" by Michael Reid.
+  Original work Copyright (C) the headunit lineage authors and their respective
+  contributors. Licensed under AGPL-3.0.
+    Upstream: https://github.com/andreknieriem/headunit-revived
+    Original: https://github.com/mikereidis/headunit
+
+  The port is adapted rather than verbatim: it is trimmed to a video-only,
+  headless projection path (no audio decoder, audio manager, microphone
+  recorder or settings UI) and driven over a loopback "self mode" socket.
+  Individual ported files carry MOTO-HUB's own SPDX headers alongside this
+  attribution; the underlying AGPLv3 obligations are unchanged by that.
+
+ridedaemon / hudlib — GPL-3.0
+  `apps/android/app/libs/hudlib.aar` and `hudlib-sources.jar` are built from
+  ridedaemon-lib, whose implementation originates with charliecharlieO-o
+  ("Charles"). Licensed under GPL-3.0.
+    Upstream: https://github.com/vincenzobpt/ridedaemon-lib
+    Related:  https://github.com/charliecharlieO-o/ridedaemon-android
+
+--------------------------------------------------------------------------------
+Third-party dependencies (fetched at build time, not vendored)
+--------------------------------------------------------------------------------
+
+Everything else MOTO-HUB builds against — the AndroidX and Jetpack Compose
+libraries, Kotlin and its coroutines, Conscrypt, and the other declared Gradle
+dependencies — is resolved at build time from public repositories and is not
+redistributed in this repository. Those components remain under their own
+licenses, which are not affected by this file.
