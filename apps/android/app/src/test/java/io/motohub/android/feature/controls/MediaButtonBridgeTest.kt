@@ -281,4 +281,37 @@ class MediaButtonBridgeTest {
             assertEquals(press to HandlebarCalibration.MISSING, parseCalibrationEntry("${press.id}=${HandlebarCalibration.MISSING}"))
         }
     }
+
+    @Test
+    fun `an AVRCP command with nothing connected cannot be a handlebar press`() {
+        // Field case a346ec76 (QJ 5", 2026-09-04): zero Bluetooth devices connected, and the
+        // bridge still pressed OK and scrolled inside Android Auto.
+        assertTrue(avrcpInputIsPhantom(peerConnected = false, hidMode = false))
+        // Unknown is not absent: while the profile proxies are still binding, behave as before.
+        assertFalse(avrcpInputIsPhantom(peerConnected = null, hidMode = false))
+        assertFalse(avrcpInputIsPhantom(peerConnected = true, hidMode = false))
+        // A HID remote never shows up in the audio profile lists this answer is built from.
+        assertFalse(avrcpInputIsPhantom(peerConnected = false, hidMode = true))
+    }
+
+    @Test
+    fun `a jump to silence is a mute, not a rocker step`() {
+        assertTrue(volumeChangeIsMute(observed = 0, pinned = 100))
+        assertFalse(volumeChangeIsMute(observed = 1, pinned = 100))
+        assertFalse(volumeChangeIsMute(observed = 99, pinned = 100))
+        // No pin held: there is no reference level to have been muted away from.
+        assertFalse(volumeChangeIsMute(observed = 0, pinned = -1))
+    }
+
+    @Test
+    fun `the mute that produced the phantom scroll would otherwise read as a confident tap`() {
+        // 100 -> 0 on a 0..150 stream: past the absolute-overwrite floor, so the delta alone
+        // is indistinguishable from a dash that writes its rocker as an absolute level.
+        assertEquals(
+            VolumeDeltaRead.Tap(HandlebarGesture.VOLUME_DOWN, HandlebarGesture.VOLUME_DOWN_DOUBLE, forceDouble = false),
+            interpretVolumeDelta(-100, HandlebarAction.SCROLL_FORWARD, streamMax = 150)
+        )
+        // Which is why the level, not the delta, is what settles it.
+        assertTrue(volumeChangeIsMute(observed = 0, pinned = 100))
+    }
 }

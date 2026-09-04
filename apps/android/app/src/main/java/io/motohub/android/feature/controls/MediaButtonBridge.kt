@@ -9,6 +9,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -103,6 +104,24 @@ class MediaButtonBridge(
      * then is re-requesting the focus the right thing to do - see [requestMediaFocus].
      */
     @Volatile private var focusHeld = false
+    /**
+     * Whether a Bluetooth peer that could press anything is connected RIGHT NOW.
+     *
+     * `null` until the profile proxies answer, and unknown is deliberately not "absent": a
+     * bridge that starts while the stack is still binding must behave exactly as it always
+     * did, and only a positive "nothing is connected" is allowed to suppress anything.
+     *
+     * This is the question [BluetoothStatus.canReceiveHandlebarKeys] refuses to ask, and for a
+     * good reason: a dash that is merely off or out of range turns up mid-ride, so capture must
+     * start and wait for it. But CAPTURE waiting and ACTING are different things. Field case
+     * a346ec76 (QJ 5", 2026-09-04) is what this exists for: zero Bluetooth devices connected and
+     * an uncalibrated handlebar, so the pin was taken on the assumption that a rocker existed;
+     * another app then took the stream to silence, the pin read that as a rocker press, and
+     * Android Auto was scrolled and OK'd by nobody - on a dash reporting no touchscreen, which
+     * left the rider nothing to undo it with. Seven sessions, all ended by hand within a minute.
+     */
+    @Volatile private var avrcpPeerConnected: Boolean? = null
+    private var bluetoothPeerReceiver: BroadcastReceiver? = null
     private val volumePoll = object : Runnable {
         override fun run() {
             if (!captureActive) return
@@ -130,6 +149,12 @@ class MediaButtonBridge(
                 }
                 bridges[targetName] = this
                 registerVolumeObserver()
+                // Asked here rather than at enableCapture: the answer arrives over profile
+                // proxies, and capture starts within a hundred milliseconds of the first frame.
+                // In a346ec76's log the first phantom press landed 92ms after capture opened -
+                // an answer only started then would have arrived far too late to prevent it.
+                watchBluetoothPeers()
+                refreshBluetoothPeerPresence()
                 log("[BTN] AVRCP bridge registered for $targetName; capture is disabled until it streams")
                 if (pendingCapture) {
                     pendingCapture = false
@@ -187,6 +212,7 @@ class MediaButtonBridge(
             cancelPendingTaps()
             disableCapture()
             unregisterVolumeObserver()
+            stopWatchingBluetoothPeers()
             try { session?.isActive = false } catch (_: Throwable) {}
             try { session?.release() } catch (_: Throwable) {}
             session = null
@@ -382,6 +408,78 @@ class MediaButtonBridge(
         }.onFailure { log("[BTN] could not watch for Bluetooth coming back: ${it.message}") }
     }
 
+    /**
+     * Re-reads which Bluetooth audio devices are connected and, when the answer changes, lets
+     * [refreshVolumeGestureUse] take or release the volume pin accordingly.
+     */
+    private fun refreshBluetoothPeerPresence() {
+        runCatching {
+            BluetoothStatus.query(context) { status ->
+                handler.post {
+                    val connected = status.connected
+                    if (avrcpPeerConnected == connected) return@post
+                    avrcpPeerConnected = connected
+                    log(
+                        if (connected) {
+                            "[BTN] Bluetooth peer connected: ${status.connectedNames.joinToString(", ")}"
+                        } else {
+                            "[BTN] no Bluetooth device is connected; nothing can press the " +
+                                "handlebar, so presses are neither pinned for nor acted on"
+                        }
+                    )
+                    refreshVolumeGestureUse()
+                }
+            }
+        }.onFailure { log("[BTN] could not read the Bluetooth peer list: ${it.message}") }
+    }
+
+    /**
+     * Watches for a peer arriving or leaving mid-ride.
+     *
+     * ACL rather than the A2DP/HEADSET profile actions: this only needs to know that SOMETHING
+     * changed, and [refreshBluetoothPeerPresence] then asks the authoritative question.
+     */
+    private fun watchBluetoothPeers() {
+        if (bluetoothPeerReceiver != null) return
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(receiverContext: Context, intent: Intent) {
+                when (intent.action) {
+                    BluetoothDevice.ACTION_ACL_CONNECTED,
+                    BluetoothDevice.ACTION_ACL_DISCONNECTED -> refreshBluetoothPeerPresence()
+                }
+            }
+        }
+        val filter = IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED).apply {
+            addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED)
+        }
+        runCatching {
+            ContextCompat.registerReceiver(context, receiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
+            bluetoothPeerReceiver = receiver
+        }.onFailure { log("[BTN] could not watch Bluetooth connections: ${it.message}") }
+    }
+
+    private fun stopWatchingBluetoothPeers() {
+        bluetoothPeerReceiver?.let { receiver ->
+            runCatching { context.unregisterReceiver(receiver) }
+        }
+        bluetoothPeerReceiver = null
+    }
+
+    /**
+     * True when a media command cannot have come off the handlebar, because no Bluetooth device
+     * is connected to have sent one.
+     *
+     * AVRCP only. A HID remote's presses arrive as ordinary key events through the Accessibility
+     * Service and need no audio profile at all, so a BLE remote that this list never shows would
+     * be silenced by a check it has no way to satisfy.
+     */
+    private fun avrcpCommandIsPhantom(what: String): Boolean {
+        val hidMode = HandlebarControlStore.inputMode(context) == HandlebarInputMode.HID
+        if (!avrcpInputIsPhantom(avrcpPeerConnected, hidMode)) return false
+        log("[BTN] $what ignored: no Bluetooth device is connected, so no handlebar sent it")
+        return true
+    }
+
     private fun cancelBluetoothWait() {
         bluetoothWaitReceiver?.let { receiver ->
             runCatching { context.unregisterReceiver(receiver) }
@@ -429,6 +527,13 @@ class MediaButtonBridge(
         // wheel looked dead, which is exactly what a CFMOTO 800MT-X rider saw before pressing
         // Skip on all fifteen steps (field log 7c7e9e44, 2026-08-28).
         if (calibrationCapturing) return true
+        // Nothing is connected over Bluetooth, so no AVRCP peer exists that could move this
+        // phone's volume - which makes every drift the pin would read someone else's by
+        // definition. Holding the volume here buys a press that cannot arrive and costs the
+        // rider both their own volume keys and, through [consumeVolumeChange], phantom
+        // navigation in Android Auto (a346ec76). Re-evaluated live the moment a peer connects,
+        // so a dash that turns up mid-ride still gets its pin.
+        if (avrcpInputIsPhantom(avrcpPeerConnected, hidMode = false)) return false
         // An uncalibrated handlebar assumes a rocker, which is right for most dashboards and
         // wrong forever for the ones that never send one. The silence probe settles it without
         // asking the rider (see [scheduleVolumeSilenceProbe]).
@@ -481,6 +586,8 @@ class MediaButtonBridge(
         cancelBluetoothWait()
         captureActive = true
         focusLossVolumeGuard = false
+        // Cheap, and the previous session's answer may be stale by a whole ride.
+        refreshBluetoothPeerPresence()
         // Pinning the media volume is how a volume-key press becomes readable as a gesture -
         // the app holds the level and treats any drift as the rider pressing up or down. On a
         // dashboard that never sends those presses to the phone (a CFDL16 keeps its rocker's
@@ -976,6 +1083,19 @@ class MediaButtonBridge(
         } finally {
             handler.postDelayed({ ignoreVolumeChanges = false }, REPIN_IGNORE_MILLIS)
         }
+        // A move that lands exactly on silence is a mute written by something else - the OEM's
+        // own player, a notification policy, Android Auto taking the stream - never a rocker
+        // step, which walks the level down click by click. Read as a press it became a full
+        // -100 delta, past the absolute-overwrite floor in [interpretVolumeDelta], and so a
+        // confident single tap (a346ec76: 100 -> 0 -> 100 -> 0, one phantom scroll per cycle).
+        // The pin above is still restored, so a rocker stays readable; only the verdict is
+        // dropped, and with it the [noteVolumePressObserved] below - which would otherwise have
+        // cancelled the silence probe and taught the app that this phantom rocker was real.
+        // The cost is a genuine press that happens to end at zero, which the next press undoes.
+        if (volumeChangeIsMute(current, pinnedVolume)) {
+            log("[BTN] media volume taken to silence (pin $pinnedVolume -> 0); that is a mute, not a rocker step - pin restored, nothing performed")
+            return
+        }
         val single = if (delta > 0) HandlebarGesture.VOLUME_UP else HandlebarGesture.VOLUME_DOWN
         log("[BTN] volume ${if (delta > 0) "UP" else "DOWN"}; pinned=$pinnedVolume, delta=$delta")
         // Reached only past every guard above (ignore window, focus-loss duck, unchanged level),
@@ -1175,6 +1295,7 @@ class MediaButtonBridge(
                     if (captureActive) "" else " (capture inactive; ignored)"
             )
             if (!captureActive) return false
+            if (avrcpCommandIsPhantom(KeyEvent.keyCodeToString(event.keyCode))) return false
             if (isSelfInjected(event.keyCode)) {
                 log("[BTN] ignoring ${KeyEvent.keyCodeToString(event.keyCode)} - this app dispatched it")
                 return true
@@ -1191,11 +1312,18 @@ class MediaButtonBridge(
             return handled
         }
 
+        // Not a raw key event but a semantic transport command, and the path that produced the
+        // phantom OK in a346ec76: [reassertCaptureAfterTransportReady] flips the session
+        // inactive and active again to give an AVRCP peer a transition to notice, and 22-27ms
+        // later something on the phone answered that transition with a play - which arrived
+        // here, was read as the handlebar's select button, and pressed OK inside Android Auto.
         override fun onPlay() {
+            if (avrcpCommandIsPhantom("play")) return
             if (captureActive && selectDownAt == 0L) dispatchSelectTap()
         }
 
         override fun onPause() {
+            if (avrcpCommandIsPhantom("pause")) return
             if (captureActive && selectDownAt == 0L) dispatchSelectTap()
         }
     }
@@ -1821,6 +1949,25 @@ internal sealed interface VolumeDeltaRead {
  * OnePlus CPH2653 runs 0-160 and moves ten (road test 2026-07-29) - and against a fixed
  * 3-step threshold every single press on that phone was read as a double.
  */
+/**
+ * Whether a media command claiming to be a handlebar press cannot possibly be one.
+ *
+ * [peerConnected] is `null` while the answer is still unknown, and unknown never suppresses:
+ * only a positive "nothing is connected" does. HID remotes are exempt - their presses arrive as
+ * ordinary key events through the Accessibility Service and never appear in the Bluetooth audio
+ * profile lists this answer is built from.
+ */
+internal fun avrcpInputIsPhantom(peerConnected: Boolean?, hidMode: Boolean): Boolean =
+    peerConnected == false && !hidMode
+
+/**
+ * Whether a volume change that landed on [observed] is a mute written by something other than a
+ * rocker. A rocker walks the level down click by click and stops where the rider stops; only
+ * software takes it to silence in one write, and reading that as a press produced a full-scale
+ * delta that [interpretVolumeDelta] confidently called a tap.
+ */
+internal fun volumeChangeIsMute(observed: Int, pinned: Int): Boolean = observed == 0 && pinned > 0
+
 internal fun interpretVolumeDelta(
     delta: Int,
     singleAction: HandlebarAction,
