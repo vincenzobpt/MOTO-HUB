@@ -5,6 +5,7 @@ package io.motohub.android.tbox
 
 import android.content.Context
 import android.net.ConnectivityManager
+import io.motohub.android.data.MotorcycleProfileStore
 import io.motohub.android.session.MotorcycleProfile
 import io.motohub.android.session.ProjectionEventLog
 import io.motohub.android.session.TBoxConnectionMode
@@ -49,7 +50,9 @@ object TBoxLinkResolver {
                 // network over on Bluetooth instead. It only costs a scan, and it creates nothing
                 // unless a dash actually answers and asks for a network.
                 bluetoothProvisionedLink(context, FALLBACK_SCAN_MILLIS)
-                    .recoverCatching { accessPointFallback(networkConnector, profile, hostedFailure).getOrThrow() }
+                    .recoverCatching {
+                        accessPointFallback(context, networkConnector, profile, hostedFailure).getOrThrow()
+                    }
                     .getOrThrow()
             }
         } else if (usesWifiDirect(profile)) {
@@ -190,6 +193,18 @@ object TBoxLinkResolver {
      */
     private const val FALLBACK_SCAN_MILLIS = 6_000L
 
+    private const val FALLBACK_PREFERENCES = "tbox_access_point_fallback"
+    private const val FALLBACK_KEY_PREFIX = "streak_"
+
+    /**
+     * Consecutive access-point joins won by the fallback before the saved PHONE_HOTSPOT mode is
+     * corrected. Two, not one: a single win can be a dash that happened to be in the middle of a
+     * mode change, and a mode the rider chose deserves more than one sample before it is
+     * overwritten. Not more than two either - every extra one is another ride spent looking for
+     * a hotspot that is never going to be there.
+     */
+    private const val AP_FALLBACKS_BEFORE_REWRITE = 2
+
     private fun hostedLink(context: Context): Result<TBoxLink> {
         // Passing what the phone is *using* is not optional, though it was for a long time: the
         // parameter existed and the only production caller left it empty, so the rider's home
@@ -241,11 +256,20 @@ object TBoxLinkResolver {
      *
      * Deliberately narrow. It runs only when the scan actually SAW the dash: an unknown answer
      * leaves the original hotspot message standing, because "turn your hotspot on" is the right
-     * advice for the rider whose dash really is a Wi-Fi client. This changes what a connect does,
-     * never what the profile says - a mode the rider chose is theirs to keep, and a fallback that
-     * silently rewrote it would take away the only setting that works for hotspot-only dashes.
+     * advice for the rider whose dash really is a Wi-Fi client.
+     *
+     * It used to stop there, on the rule that a mode the rider chose is theirs to keep. That rule
+     * cost field log 6662-E47B-06D0 three weeks: a CFMOTO 800MT-X saved as PHONE_HOTSPOT on
+     * 2026-08-21 after one timed-out join, still saved that way on 2026-09-04, with every single
+     * connect in between taking this fallback and reaching the dash's access point. The advice
+     * to change it back was written into a log the rider never reads, and there is no screen that
+     * can act on it either - see [io.motohub.android.feature.home.HubViewModel]'s one-way
+     * phone-hotspot offer. So the streak below rewrites the mode, and the rule survives where it
+     * was actually protecting someone: a hotspot-only dash has no access point to join, so it can
+     * never produce even one success here, let alone [AP_FALLBACKS_BEFORE_REWRITE] in a row.
      */
     private suspend fun accessPointFallback(
+        context: Context,
         networkConnector: TBoxNetworkConnector,
         profile: MotorcycleProfile,
         hostedFailure: Throwable
@@ -277,7 +301,69 @@ object TBoxLinkResolver {
                 "instead. This motorcycle is saved as \"My phone hosts the hotspot\"; if the " +
                 "access point keeps working, change the mode in manual pairing to skip this step."
         )
-        return networkConnector.connect(profile).map { TBoxLink.Infrastructure(it) }
+        return networkConnector.connect(profile)
+            .onFailure { forgetAccessPointFallback(context, profile) }
+            .onSuccess { noteAccessPointFallback(context, profile) }
+            .map { TBoxLink.Infrastructure(it) }
+    }
+
+    /**
+     * Counts the access-point joins this fallback has won in a row for one motorcycle and, once
+     * they amount to proof rather than a coincidence, moves the saved profile off PHONE_HOTSPOT.
+     *
+     * [TBoxConnectionMode.AUTO], not ACCESS_POINT: it is what scanning the dash's own QR would
+     * have written, and it keeps the DIRECT- detection a bare ACCESS_POINT would throw away.
+     *
+     * Saved with `makeActive = false`, because being reached over the bridge does not make a
+     * motorcycle the one the rider is looking at. The rewrite lands in storage, so it takes
+     * effect on the next load rather than in this session's in-memory profile - the mode is only
+     * read when a connect starts, and this connect has already made its choice.
+     */
+    private fun noteAccessPointFallback(context: Context, profile: MotorcycleProfile) {
+        val preferences = context.applicationContext
+            .getSharedPreferences(FALLBACK_PREFERENCES, Context.MODE_PRIVATE)
+        val key = FALLBACK_KEY_PREFIX + profile.id
+        val streak = preferences.getInt(key, 0) + 1
+        if (streak < AP_FALLBACKS_BEFORE_REWRITE) {
+            preferences.edit().putInt(key, streak).apply()
+            ProjectionEventLog.record(
+                "NETWORK",
+                "${profile.ssid} answered on its access point while saved as \"My phone hosts " +
+                    "the hotspot\" ($streak of $AP_FALLBACKS_BEFORE_REWRITE in a row). One more " +
+                    "and MOTO-HUB will correct the saved mode by itself."
+            )
+            return
+        }
+        val corrected = profile.copy(connectionMode = TBoxConnectionMode.AUTO)
+        val failure = MotorcycleProfileStore(context)
+            .save(corrected, makeActive = false)
+            .exceptionOrNull()
+        if (failure != null) {
+            // Left counting: a storage failure is not a reason to stop believing the evidence,
+            // and the next successful join tries the same correction again.
+            ProjectionEventLog.warning(
+                "NETWORK",
+                "Could not correct the saved connection mode for ${profile.ssid}: ${failure.message}"
+            )
+            return
+        }
+        preferences.edit().remove(key).apply()
+        ProjectionEventLog.record(
+            "NETWORK",
+            "${profile.ssid} has now been reached on its own access point " +
+                "$AP_FALLBACKS_BEFORE_REWRITE times in a row while saved as \"My phone hosts " +
+                "the hotspot\". Correcting the saved mode to Auto, so future connections stop " +
+                "looking for a hotspot first."
+        )
+    }
+
+    /** One failed access-point join ends the streak: only consecutive wins are evidence. */
+    private fun forgetAccessPointFallback(context: Context, profile: MotorcycleProfile) {
+        context.applicationContext
+            .getSharedPreferences(FALLBACK_PREFERENCES, Context.MODE_PRIVATE)
+            .edit()
+            .remove(FALLBACK_KEY_PREFIX + profile.id)
+            .apply()
     }
 
     /** Moved to [TBoxHotspotScan.addressesInUse], which the Bluetooth setup path needs as well. */

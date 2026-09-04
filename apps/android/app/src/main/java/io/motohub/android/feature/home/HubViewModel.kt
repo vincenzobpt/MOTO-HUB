@@ -170,6 +170,9 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
         }
         viewModelScope.launch {
             networkConnector.events.collect { event ->
+                if (event is TBoxNetworkEvent.ArrivedLate) {
+                    resumeAfterLateGrant(event.ssid)
+                }
                 if (event is TBoxNetworkEvent.Lost) {
                     ProjectionEventLog.warning("NETWORK", "Android reported that the T-Box network was lost.")
                     val projectionActive = isNativeStreamActive()
@@ -688,6 +691,49 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
                 ProjectionEventLog.debug("CONNECTION", "Connection coroutine completed.")
             }
         }
+    }
+
+    /**
+     * Picks the connection back up when Android grants the dash's network after this app has
+     * already told the rider it failed - see [TBoxNetworkEvent.ArrivedLate].
+     *
+     * The alternative was doing nothing, and doing nothing is what field log 6662-E47B-06D0 is:
+     * a phone associated to the bike at -28dBm, process-bound to it, with "the phone never
+     * joined CFMOTO8436" on screen. The rider cannot see the difference between that and a dash
+     * that is switched off, so the failure is not just wrong, it is unrecoverable by hand -
+     * tapping Connect again is exactly what he had already done.
+     *
+     * Deliberately not a blind retry. It runs only for the motorcycle whose join was abandoned,
+     * only while the failure it would replace is still the thing on screen, and never after the
+     * rider cancelled: a resume they did not ask for would re-open the network they just closed.
+     * [connectAndDiscover] reuses the granted network rather than re-requesting it, so this
+     * costs a discovery, not another join.
+     */
+    private fun resumeAfterLateGrant(ssid: String) {
+        val state = mutableUiState.value
+        val phase = state.session.phase
+        val reason = when {
+            state.session.motorcycle?.ssid != ssid ->
+                "the active motorcycle is ${state.session.motorcycle?.ssid ?: "none"}"
+            riderCancelledConnect -> "the rider cancelled this connection"
+            connectJob?.isActive == true -> "a connection attempt is already running"
+            phase != SessionPhase.NETWORK_SETUP_REQUIRED && phase != SessionPhase.ERROR ->
+                "the session has moved on to $phase"
+            else -> null
+        }
+        if (reason != null) {
+            ProjectionEventLog.debug(
+                "CONNECTION",
+                "Not resuming after the late grant for $ssid: $reason."
+            )
+            return
+        }
+        ProjectionEventLog.record(
+            "CONNECTION",
+            "Resuming the connection to $ssid: Android granted its network after the join had " +
+                "already been reported as failed."
+        )
+        connectAndDiscover()
     }
 
     fun cancelConnection() {

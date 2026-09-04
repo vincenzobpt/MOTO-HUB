@@ -958,6 +958,10 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
                 if (stopping) return@collect
                 when (event) {
                     is TBoxNetworkEvent.Lost -> handleTBoxNetworkLost(handle)
+                    // A join this session never waited on: by the time there is a handle to
+                    // collect events from, the network is long since granted. Resuming an
+                    // abandoned connect is the hub's business, not a running stream's.
+                    is TBoxNetworkEvent.ArrivedLate -> Unit
                     is TBoxNetworkEvent.Reacquired -> {
                         networkLossJob?.cancel()
                         networkLossJob = null

@@ -43,6 +43,21 @@ import kotlinx.coroutines.launch
 sealed interface TBoxNetworkEvent {
     data class Lost(val network: Network) : TBoxNetworkEvent
     data class Reacquired(val network: Network) : TBoxNetworkEvent
+
+    /**
+     * Android granted the requested network AFTER [TBoxNetworkConnector.awaitRequestedNetwork]
+     * had already reported the join as failed. The request outlives the wait on purpose, so this
+     * is not an edge case: the wait's budget runs from the moment the specifier was submitted,
+     * while Android's own runs from the moment the rider approves the picker, and a rider who
+     * takes a few seconds to find that dialog spends them inside our budget rather than theirs.
+     *
+     * Field log 6662-E47B-06D0 (samsung SM-A556B, CFMOTO8436, 2026-08-21): the wait gave up at
+     * 21:56:01.292 and Android granted the network at 21:56:03.235 - 1.9s later. The phone was
+     * then associated, validated and process-bound to the dash's access point at -28dBm while
+     * the app showed "the phone never joined". Nothing re-drove the connection, and the rider
+     * went off to change his profile to a transport his bike does not use.
+     */
+    data class ArrivedLate(val network: Network, val ssid: String) : TBoxNetworkEvent
 }
 
 /** What the T-Box Wi-Fi rejoin ladder does next. */
@@ -250,6 +265,15 @@ class TBoxNetworkConnector(context: Context) {
     private var specifierAssociatedAt = 0L
 
     /**
+     * SSID whose join [awaitRequestedNetwork] reported as failed while its specifier request was
+     * still registered - so Android can still answer it, and [markConnected] has to say so
+     * instead of connecting in silence behind a failure banner. Null whenever nothing has been
+     * abandoned: set on give-up, cleared the moment it is announced or a new wait begins.
+     */
+    @Volatile
+    private var abandonedJoinSsid: String? = null
+
+    /**
      * Whether the join this request produced has already been timed. Link properties change again
      * during a session (DHCP renewals, an IPv6 address arriving late) and every one of them
      * re-enters the same branch: without this the log would carry a fresh "joined in" line, each
@@ -412,6 +436,7 @@ class TBoxNetworkConnector(context: Context) {
         pendingRequestSsid = null
         pendingFailure = null
         networkGranted = false
+        abandonedJoinSsid = null
         pendingGiveUpJob?.cancel()
         pendingGiveUpJob = null
         if (processBoundNetwork != null) {
@@ -1167,6 +1192,10 @@ class TBoxNetworkConnector(context: Context) {
 
     /** Success bookkeeping shared by both callback paths (bound and deliberately unbound). */
     private fun markConnected(network: Network) {
+        // Read and cleared before anything else: this runs again on every routine link update of
+        // an already-connected network, and the announcement below must happen exactly once.
+        val abandoned = abandonedJoinSsid
+        abandonedJoinSsid = null
         activeNetwork = network
         connectedOnce = true
         pendingFailure = null
@@ -1175,6 +1204,19 @@ class TBoxNetworkConnector(context: Context) {
         // The registration deliberately outlives the join, but nothing needs to give it up any
         // more - and an alarm left armed would fire mid-ride.
         pendingRequestSsid?.let { TBoxRequestGiveUpAlarm.disarm(appContext, it) }
+        if (abandoned != null) {
+            val late = specifierSubmittedAt
+                .takeIf { it > 0L }
+                ?.let { " ${SystemClock.elapsedRealtime() - it}ms after the request was submitted" }
+                .orEmpty()
+            ProjectionEventLog.record(
+                "NETWORK",
+                "Android granted $abandoned$late, after this app had already reported the join " +
+                    "as failed. The phone is on the motorcycle network now; resuming the " +
+                    "connection instead of leaving the failure on screen."
+            )
+            mutableEvents.tryEmit(TBoxNetworkEvent.ArrivedLate(network, abandoned))
+        }
     }
 
     /**
@@ -1188,6 +1230,9 @@ class TBoxNetworkConnector(context: Context) {
      * nothing has been granted - the window exists to catch Android's own late verdict.
      */
     private suspend fun awaitRequestedNetwork(profile: MotorcycleProfile): Result<Network> {
+        // A wait that is starting owns the outcome; whatever an earlier one abandoned is answered
+        // by this one, and leaving the flag set would make its success read as a late arrival.
+        abandonedJoinSsid = null
         try {
             pollForOutcome(SystemClock.elapsedRealtime() + CONNECTION_TIMEOUT_MS)?.let { return it }
             if (!networkGranted) {
@@ -1217,6 +1262,9 @@ class TBoxNetworkConnector(context: Context) {
             ?.let { SystemClock.elapsedRealtime() - it }
         val frozen = elapsed != null && elapsed > (CONNECTION_TIMEOUT_MS + UNAVAILABLE_GRACE_MS) * 2
         ProjectionEventLog.setTelemetryFacts(mapOf("tbox.wait_frozen" to if (frozen) "yes" else "no"))
+        // Only while the registration survives. A released request can never be answered, so
+        // arming the late-arrival path for it would leave a flag nothing ever clears.
+        abandonedJoinSsid = profile.ssid.takeIf { stillPending }
         ProjectionEventLog.error(
             "NETWORK",
             "Wi-Fi setup timed out after ${CONNECTION_TIMEOUT_MS}ms with " +
