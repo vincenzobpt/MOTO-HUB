@@ -105,6 +105,16 @@
             android:exported="false"
             android:foregroundServiceType="connectedDevice|microphone" />
 
+        <!-- Awake while the rider waits for the dashboard to come up with the phone in a
+             pocket. `connectedDevice` because what it is waiting on is the join to the dash's
+             access point - and because Android only accepts a WifiNetworkSpecifier request from
+             a process at foreground-service importance or better. Holds no connection code; the
+             retry stays in the activity, where the rider's cancel and the cooldown live. -->
+        <service
+            android:name=".session.BikeWatchService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice" />
+
         <service
             android:name=".externaldisplay.AoaExternalService"
             android:exported="false"

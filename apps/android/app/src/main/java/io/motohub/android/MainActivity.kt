@@ -65,6 +65,8 @@ import io.motohub.android.data.MotorcyclePhotoStore
 import io.motohub.android.data.MotorcycleProfileStore
 import io.motohub.android.session.AutoConnectDecision
 import io.motohub.android.session.autoConnectDecision
+import io.motohub.android.session.BikeWatch
+import io.motohub.android.session.shouldWatchForBike
 import io.motohub.android.session.MotorcycleProfile
 import io.motohub.android.tbox.ThinkerRideGate
 import io.motohub.android.feature.about.AboutScreen
@@ -139,6 +141,8 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.dropWhile
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -832,8 +836,14 @@ class MainActivity : ComponentActivity() {
                         ProjectionEventLog.debug("AUTO_CONNECT", "Auto-connect on launch is disabled.")
                         return
                     }
-                    val profile = state.session.motorcycle
-                    val phase = state.session.phase
+                    // Read from the ViewModel, not from the composition's `state`: below STARTED
+                    // collectAsStateWithLifecycle stops collecting, so `state` freezes at whatever
+                    // was true when the rider left the screen. The watch loop now runs in exactly
+                    // that situation, and a frozen phase would have it re-attempting against a
+                    // link that came up a minute ago.
+                    val session = viewModel.uiState.value.session
+                    val profile = session.motorcycle
+                    val phase = session.phase
                     if (profile == null ||
                         (phase != SessionPhase.NETWORK_SETUP_REQUIRED && phase != SessionPhase.ERROR)
                     ) {
@@ -902,16 +912,41 @@ class MainActivity : ComponentActivity() {
                 // stops it re-entering an attempt already running, the cooldown stops bursts, and
                 // the rider's cancel still outranks it.
                 //
-                // Gated on STARTED deliberately. A specifier request submitted from a backgrounded
-                // process is refused by Android in ~70ms (see the foreground race), so polling
-                // while stopped would burn attempts and fill the log without ever joining.
+                // The gate is the one Android itself applies, not the lifecycle state. A
+                // specifier request from a process that is neither a foreground app nor a
+                // foreground service is refused in ~70ms, so asking from there would only burn
+                // attempts - but the same rider's next message showed the loop was gated on the
+                // wrong thing: "I open the CFMoto app to start the motorcycle and put my phone in
+                // my pocket... hoping that Moto Hub will open automatically. But it never does."
+                // With the phone in a pocket a STARTED gate is closed by definition, and the one
+                // moment the bike appears is the one moment nothing is allowed to ask.
+                //
+                // [BikeWatch] is what opens this gate there: while its foreground service runs,
+                // the process sits at IMPORTANCE_FOREGROUND_SERVICE and the request is accepted
+                // with no screen on at all.
                 LaunchedEffect(lifecycleOwner) {
                     while (true) {
                         delay(AUTO_CONNECT_WATCH_INTERVAL_MS)
-                        if (lifecycleOwner.lifecycle.currentState
-                                .isAtLeast(Lifecycle.State.STARTED)
-                        ) {
+                        if (isForegroundEnoughForWifiRequest()) {
                             attemptAutoConnect()
+                        }
+                    }
+                }
+                // Ends the watch as soon as it has done its job - or as soon as it no longer can.
+                // Without it a link that came up in the rider's pocket would leave "Waiting for
+                // the motorcycle" on the lock screen until the watch window expired. Only ever
+                // stops the service: starting one is not allowed from the background, which is
+                // why arming happens on the way out, in onPause.
+                LaunchedEffect(Unit) {
+                    viewModel.uiState.collect { ui ->
+                        val stillWaiting = shouldWatchForBike(
+                            autoConnectEnabled = MotoHubSettings.autoConnect(context),
+                            hasSavedMotorcycle = ui.session.motorcycle != null,
+                            phase = ui.session.phase,
+                            riderCancelled = viewModel.riderCancelledConnect
+                        )
+                        if (!stillWaiting) {
+                            BikeWatch.disarm(context, "phase is now ${ui.session.phase}")
                         }
                     }
                 }
@@ -922,30 +957,42 @@ class MainActivity : ComponentActivity() {
                 // reconnects by itself when auto-connect is on, and re-arming there would restart
                 // the very screen the rider just stopped, leaving no way back to the picker.
                 var autostartArmed by rememberSaveable { mutableStateOf(true) }
-                LaunchedEffect(state.session.phase) {
-                    if (state.session.phase != SessionPhase.READY) return@LaunchedEffect
-                    if (!autostartArmed) return@LaunchedEffect
-                    if (!MotoHubSettings.autostartEnabled(context)) return@LaunchedEffect
-                    val service = MotoHubSettings.autostartService(context)
-                    autostartArmed = false
-                    if (service.advancedOnly) {
-                        ProjectionEventLog.warning(
-                            "AUTOSTART",
-                            "${service.label} is configured but this edition cannot run it; nothing started."
-                        )
-                        return@LaunchedEffect
-                    }
-                    ProjectionEventLog.record(
-                        "AUTOSTART",
-                        "T-Box link is up; starting ${service.label} automatically."
-                    )
-                    // Let the mode screen settle before a system consent dialog lands on top of it.
-                    delay(AUTOSTART_ON_CONNECT_DELAY_MS)
-                    when (service) {
-                        AutostartService.MIRRORING -> startMirroring()
-                        AutostartService.ANDROID_AUTO -> startAndroidAutoWithWarning()
-                        AutostartService.RIDE_DASHBOARD -> Unit
-                    }
+                // Collected from the ViewModel rather than keyed on the composition's snapshot,
+                // for the reason attemptAutoConnect reads it there too: with [BikeWatch] running,
+                // the link now comes up while the activity is stopped, and a stopped activity
+                // neither recomposes nor re-keys this effect. Keyed on the phase alone it would
+                // have connected in the rider's pocket and then sat there, started nothing, and
+                // waited to be looked at.
+                LaunchedEffect(Unit) {
+                    viewModel.uiState
+                        .map { it.session.phase }
+                        .distinctUntilChanged()
+                        .collect { phase ->
+                            if (phase != SessionPhase.READY) return@collect
+                            if (!autostartArmed) return@collect
+                            if (!MotoHubSettings.autostartEnabled(context)) return@collect
+                            val service = MotoHubSettings.autostartService(context)
+                            autostartArmed = false
+                            if (service.advancedOnly) {
+                                ProjectionEventLog.warning(
+                                    "AUTOSTART",
+                                    "${service.label} is configured but this edition cannot run it; nothing started."
+                                )
+                                return@collect
+                            }
+                            ProjectionEventLog.record(
+                                "AUTOSTART",
+                                "T-Box link is up; starting ${service.label} automatically."
+                            )
+                            // Let the mode screen settle before a system consent dialog lands on
+                            // top of it.
+                            delay(AUTOSTART_ON_CONNECT_DELAY_MS)
+                            when (service) {
+                                AutostartService.MIRRORING -> startMirroring()
+                                AutostartService.ANDROID_AUTO -> startAndroidAutoWithWarning()
+                                AutostartService.RIDE_DASHBOARD -> Unit
+                            }
+                        }
                 }
                 val overlayPermissionLauncher = rememberLauncherForActivityResult(
                     ActivityResultContracts.StartActivityForResult()
@@ -1830,6 +1877,10 @@ class MainActivity : ComponentActivity() {
         ProjectionEventLog.record("UI", "Main activity destroyed. changingConfigurations=$isChangingConfigurations")
         if (!isChangingConfigurations) {
             androidAutoPhoneOnlyBridge.stop()
+            // The retry loop lives in this activity's composition and dies with it, so a watch
+            // left running past here would hold a notification promising something nothing is
+            // doing any more.
+            BikeWatch.disarm(this, "MOTO-HUB was closed")
         }
         super.onDestroy()
     }
@@ -1881,6 +1932,40 @@ class MainActivity : ComponentActivity() {
     override fun onStart() {
         super.onStart()
         ProjectionEventLog.debug("UI", "Main activity started.")
+        // Back on screen: this activity is foreground itself, so the loop can ask without help,
+        // and a "waiting for the motorcycle" notification beside the screen that already says so
+        // is noise.
+        BikeWatch.disarm(this, "MOTO-HUB is back on screen")
+    }
+
+    /**
+     * Hands the wait over to [BikeWatch] as the rider leaves the app.
+     *
+     * Here, in onPause, because this is the last moment MOTO-HUB is still allowed to start a
+     * foreground service: Android refuses one started from the background, so a watch not armed
+     * on the way out cannot be armed later, when the attempt in flight finally fails. That is not
+     * a hypothetical - rider 36a3fd37 left the app five seconds into an attempt that timed out
+     * thirty seconds after he had gone.
+     *
+     * onPause rather than onStop for the same reason with less margin still: by onStop the app
+     * has arguably already left the foreground on some builds. A rider who only glanced away
+     * comes straight back, and onStart takes the watch down again.
+     */
+    private fun armOrDisarmBikeWatch() {
+        val session = viewModel.uiState.value.session
+        val watching = shouldWatchForBike(
+            autoConnectEnabled = MotoHubSettings.autoConnect(this),
+            hasSavedMotorcycle = session.motorcycle != null,
+            phase = session.phase,
+            riderCancelled = viewModel.riderCancelledConnect
+        )
+        val name = session.motorcycle?.displayName?.takeIf { it.isNotBlank() }
+            ?: session.motorcycle?.ssid
+        if (watching && name != null) {
+            BikeWatch.arm(this, name)
+        } else {
+            BikeWatch.disarm(this, "nothing to wait for (phase=${session.phase})")
+        }
     }
 
     override fun onResume() {
@@ -1893,6 +1978,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onPause() {
         ProjectionEventLog.debug("UI", "Main activity paused.")
+        armOrDisarmBikeWatch()
         super.onPause()
     }
 
