@@ -166,6 +166,26 @@ class RideDaemonTransportTest {
         assertTrue(beats >= PXC_STREAMING_CADENCE_MIN_BEATS)
     }
 
+    @Test
+    fun `reads the pull count the daemon reports for the dashboard`() {
+        // [phase, 8 bytes big-endian]. That count is the only number in a whole session that the
+        // DASHBOARD produced; every other counter the transport prints describes this phone.
+        val payload = byteArrayOf(1, 0, 0, 0, 0, 0, 0, 1, 0x2C)
+        assertEquals(300L, decodeVideoPullCount(payload))
+    }
+
+    @Test
+    fun `a dash that pulled nothing reads as zero, not as missing`() {
+        val closed = byteArrayOf(3, 0, 0, 0, 0, 0, 0, 0, 0)
+        assertEquals(0L, decodeVideoPullCount(closed))
+    }
+
+    @Test
+    fun `a truncated pull event costs a number in the log, never the session`() {
+        assertEquals(0L, decodeVideoPullCount(null))
+        assertEquals(0L, decodeVideoPullCount(byteArrayOf(1, 0, 0)))
+    }
+
     private fun captureRequest(width: Int, height: Int): ByteArray = ByteBuffer
         .allocate(204)
         .order(ByteOrder.LITTLE_ENDIAN)

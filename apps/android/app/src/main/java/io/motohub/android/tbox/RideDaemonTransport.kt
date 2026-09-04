@@ -151,6 +151,19 @@ class RideDaemonTransport(
     /** Streaming-time PXC beats seen so far (see [isStreamingPxcBeat]); the silence watchdog's
      *  fatal verdict is gated on this reaching [PXC_STREAMING_CADENCE_MIN_BEATS]. */
     private val pxcStreamingBeats = AtomicLong(0L)
+    /**
+     * How many video frames the DASHBOARD has asked for, reported by the daemon.
+     *
+     * The only counter in this class that describes the far end. [framesOffered],
+     * [framesTimedOut] and [framesRejected] all describe the pipe from the encoder into the
+     * daemon's ring buffer, and every one of them looks perfect while a dash sits there never
+     * asking for a byte - which is exactly the state several riders have reported for months as
+     * "it connects and the screen stays black". The daemon counts the 0x0072 pulls on :10920 and
+     * now forwards them; without this the two faults cannot be told apart from a rider's log.
+     */
+    private val dashVideoPulls = AtomicLong(0L)
+    /** Whether the dash ever opened the video socket at all - the case before the one above. */
+    private val dashVideoSocketOpened = AtomicBoolean(false)
     private val pxcWatchdogExecutor = Executors.newSingleThreadScheduledExecutor { runnable ->
         Thread(runnable, "MotoHubPxcWatchdog").apply { isDaemon = true }
     }
@@ -1372,6 +1385,46 @@ class RideDaemonTransport(
                 // The daemon's own decisions, not dash traffic. Logged at INFO because a field
                 // log must be able to say which video frame format was on the wire - a framing
                 // experiment whose outcome only exists in the daemon's stdout cannot be read.
+                if (command == TRANSPORT_VIDEO_PULLS_COMMAND) {
+                    val phase = payload?.getOrNull(0)?.toInt() ?: -1
+                    val pulls = decodeVideoPullCount(payload)
+                    dashVideoPulls.set(pulls)
+                    when (phase) {
+                        VIDEO_PULL_SOCKET_OPEN -> {
+                            dashVideoSocketOpened.set(true)
+                            ProjectionEventLog.record(
+                                "TBOX",
+                                "The dashboard opened the video socket."
+                            )
+                        }
+                        VIDEO_PULL_FIRST -> ProjectionEventLog.record(
+                            "TBOX",
+                            "The dashboard asked for its first video frame; it is consuming the " +
+                                "stream. Anything wrong from here is what it does with the " +
+                                "picture, not whether it is being sent one."
+                        )
+                        // Running totals only keep the counter fresh for [protocolSnapshot];
+                        // logging every one of them would spend the rider's whole log ring on a
+                        // number that is printed with every snapshot anyway.
+                        VIDEO_PULL_PROGRESS -> Unit
+                        VIDEO_PULL_SOCKET_CLOSED -> if (pulls == 0L) {
+                            ProjectionEventLog.warning(
+                                "TBOX",
+                                "The dashboard opened the video socket and closed it without " +
+                                    "ever asking for a single frame. Everything we send is being " +
+                                    "queued and dropped on this side, so no video format, " +
+                                    "bitrate or frame rate can change what the rider sees - the " +
+                                    "dash is not reading the stream at all."
+                            )
+                        } else {
+                            ProjectionEventLog.record(
+                                "TBOX",
+                                "The dashboard pulled $pulls video frames on this socket."
+                            )
+                        }
+                    }
+                    return
+                }
                 if (command == TRANSPORT_VIDEO_FRAMING_COMMAND) {
                     val extendByte = payload?.getOrNull(0)?.toInt() ?: -1
                     val plainApplied = payload?.getOrNull(1)?.toInt() == 1
@@ -1716,6 +1769,8 @@ class RideDaemonTransport(
         lastMediaControlEventElapsed.set(0L)
         lastFrameOfferedElapsed.set(0L)
         pxcStreamingBeats.set(0L)
+        dashVideoPulls.set(0L)
+        dashVideoSocketOpened.set(false)
         pxcStallReported.set(false)
         pxcQuietDashReported.set(false)
         unknownCommandsLogged.clear()
@@ -1771,7 +1826,11 @@ class RideDaemonTransport(
             "streamingBeats=${pxcStreamingBeats.get()}), " +
             "mediaCtrlRx=${mediaControlEvents.get()} (last=${age(lastMediaControlEventElapsed)}), " +
             "framesOffered=${framesOffered.get()} (last=${age(lastFrameOfferedElapsed)}), " +
-            "frameTimeouts=${framesTimedOut.get()}, frameRejections=${framesRejected.get()}"
+            "frameTimeouts=${framesTimedOut.get()}, frameRejections=${framesRejected.get()}, " +
+            // Last on purpose: it is the only number here the dashboard produced, so it is the
+            // one to read first when everything else looks healthy and the screen is black.
+            "dashPulls=${dashVideoPulls.get()}" +
+            if (dashVideoSocketOpened.get()) "" else " (the dash never opened the video socket)"
     }
 
     private companion object {
@@ -1831,6 +1890,12 @@ class RideDaemonTransport(
         // its own decisions, currently only the negotiated video frame format.
         const val TRANSPORT_EVENT_SOURCE = 4L
         const val TRANSPORT_VIDEO_FRAMING_COMMAND = 1L
+        /** Payload: [phase, 8 bytes big-endian pull count]; phases below. */
+        const val TRANSPORT_VIDEO_PULLS_COMMAND = 2L
+        const val VIDEO_PULL_SOCKET_OPEN = 0
+        const val VIDEO_PULL_FIRST = 1
+        const val VIDEO_PULL_PROGRESS = 2
+        const val VIDEO_PULL_SOCKET_CLOSED = 3
         /** Bounds for the always-on first-occurrence dump of unknown protocol commands. */
         const val UNKNOWN_COMMAND_LOG_LIMIT = 32
         const val UNKNOWN_COMMAND_PREVIEW_BYTES = 64
@@ -2116,3 +2181,18 @@ internal fun isMotoHubSimulatorAdvertisement(serviceName: String?, modelId: Stri
 
 /** Space-separated lowercase hex, e.g. "7b 0a 20 20" - only ever used behind verbose logging. */
 private fun ByteArray.toDiagnosticHex(): String = joinToString(" ") { byte -> "%02x".format(byte) }
+
+/**
+ * Reads the daemon's 8-byte big-endian pull count, which follows the one-byte phase.
+ *
+ * Returns 0 for a payload that is too short rather than throwing: a truncated event must cost a
+ * number in a log line, never a live projection session.
+ */
+internal fun decodeVideoPullCount(payload: ByteArray?): Long {
+    if (payload == null || payload.size < 9) return 0L
+    var value = 0L
+    for (index in 1 until 9) {
+        value = (value shl 8) or (payload[index].toLong() and 0xFF)
+    }
+    return value
+}

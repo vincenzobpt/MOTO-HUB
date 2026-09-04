@@ -66,14 +66,23 @@ object DashboardDeliveryMonitor {
         when (verdict) {
             VideoDeliveryProbe.Verdict.FAILING -> ProjectionEventLog.warning(
                 "DELIVERY",
-                "The dashboard refused $rejected of the first $total frames on profile " +
-                    "$profileKey. The link is up, so this is the profile not matching the " +
-                    "dashboard rather than a connection fault - offering the rider a different one."
+                "$rejected of the first $total frames could not be handed to the transport on " +
+                    "profile $profileKey. The link is up, so this is the profile not matching " +
+                    "the dashboard rather than a connection fault - offering the rider a " +
+                    "different one."
             )
             VideoDeliveryProbe.Verdict.HEALTHY -> ProjectionEventLog.record(
                 "DELIVERY",
-                "The dashboard accepted $accepted of the first $total frames on profile " +
-                    "$profileKey; the picture is landing."
+                // Deliberately no longer says "the picture is landing". Both counters come
+                // from offerAccessUnit(), which reports whether the frame entered the daemon's
+                // ring buffer on THIS phone - the dashboard is never consulted, and a dash that
+                // never pulls a byte produces exactly this line. Saying otherwise sent two
+                // investigations down the wrong road (ticket a346ec76, a rider who has never
+                // seen a picture at all). dashPulls in the session's protocol stats is the
+                // counter that answers the question this one only looks like it answers.
+                "$accepted of the first $total frames were handed to the transport on profile " +
+                    "$profileKey without a refusal; the phone's side of the pipe is healthy. " +
+                    "Whether the dashboard asked for any of them is dashPulls."
             )
         }
         state.value = DashboardDeliveryReport(
