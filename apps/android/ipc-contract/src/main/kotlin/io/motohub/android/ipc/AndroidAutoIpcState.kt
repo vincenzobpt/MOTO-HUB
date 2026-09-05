@@ -56,7 +56,7 @@ object IpcBridgeContract {
      * 15: getHandlebarState(). The other half of 13: that one says whether a press can reach Core,
      *     this one says what Core would do with it.
      */
-    const val CONTRACT_VERSION = 15
+    const val CONTRACT_VERSION = 16
 
     /** First [CONTRACT_VERSION] whose Core implements connectOverFormedGroup(). */
     const val CONTRACT_VERSION_FORMED_GROUP = 2
@@ -242,6 +242,7 @@ object IpcBridgeContract {
      * empty reply parcel is indistinguishable from a Core that answered "nothing configured".
      */
     const val CONTRACT_VERSION_HANDLEBAR_STATE = 15
+    const val CONTRACT_VERSION_PROJECTION_AUDIO = 16
 
     /**
      * Which half of Core's connect produced the last failure, answered by

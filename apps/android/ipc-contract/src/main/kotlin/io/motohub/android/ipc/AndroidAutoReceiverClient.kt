@@ -150,6 +150,22 @@ class AndroidAutoReceiverClient(
         runCatching { service?.unregisterHandlebarGestureListener(listener) }
     }
 
+    /**
+     * Asks Core to claim Android Auto's audio streams and hand them over, or to stop. False
+     * against a Core that predates the call, or when nothing is bound - the same tolerance as
+     * the listeners above, so a companion on a newer contract degrades to hearing nothing.
+     */
+    fun setProjectionAudioWanted(wanted: Boolean): Boolean =
+        runCatching { service?.setProjectionAudioWanted(wanted) }.getOrNull() ?: false
+
+    /** The audio pipe, framed by [ProjectionAudioFraming]; null when Core cannot provide one. */
+    fun openProjectionAudioStream(): android.os.ParcelFileDescriptor? =
+        runCatching { service?.openProjectionAudioStream() }.getOrNull()
+
+    fun closeProjectionAudioStream() {
+        runCatching { service?.closeProjectionAudioStream() }
+    }
+
     private companion object {
         const val TAG = "AndroidAutoReceiverClient"
     }

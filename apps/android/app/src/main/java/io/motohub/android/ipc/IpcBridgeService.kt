@@ -21,6 +21,7 @@ import android.view.Surface
 import androidx.core.app.NotificationCompat
 import io.motohub.android.R
 import io.motohub.android.androidauto.AaInputBridge
+import io.motohub.android.aa.AaAudioTap
 import io.motohub.android.aa.AaNavigationGuidance
 import io.motohub.android.aa.AaReceiver
 import io.motohub.android.aa.AaSelfMode
@@ -86,6 +87,12 @@ class IpcBridgeService : Service() {
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val videoStreamLock = Any()
+    /**
+     * Android Auto's audio, on its way to the companion. Installed on the tap for as long as the
+     * companion wants it - that is what makes the next discovery claim the streams - and torn
+     * down with the service, so a companion that dies takes its want with it.
+     */
+    private val projectionAudioPipe = ProjectionAudioPipe()
     @Volatile private var videoStreamInput: ParcelFileDescriptor? = null
     @Volatile private var videoStreamJob: Job? = null
     @Volatile private var transportWatchJob: Job? = null
@@ -1349,6 +1356,25 @@ class IpcBridgeService : Service() {
             navigationListeners.unregister(listener)
         }
 
+        override fun setProjectionAudioWanted(wanted: Boolean): Boolean {
+            if (wanted) {
+                AaAudioTap.install(projectionAudioPipe)
+            } else {
+                AaAudioTap.install(null)
+                projectionAudioPipe.close()
+            }
+            ProjectionEventLog.record(
+                "IPC_AA",
+                if (wanted) "Companion wants Android Auto audio; claimed at the next session start."
+                else "Companion no longer wants Android Auto audio."
+            )
+            return true
+        }
+
+        override fun openProjectionAudioStream(): ParcelFileDescriptor? = projectionAudioPipe.open()
+
+        override fun closeProjectionAudioStream() = projectionAudioPipe.close()
+
         override fun registerHandlebarGestureListener(listener: IHandlebarGestureListener) {
             handlebarGestureListeners.register(listener)
             ensureHandlebarGestureForwarding()
@@ -1580,6 +1606,8 @@ class IpcBridgeService : Service() {
 
     override fun onDestroy() {
         closeVideoStreamPipe()
+        AaAudioTap.install(null)
+        projectionAudioPipe.close()
         // Before serviceScope.cancel() below, which would otherwise kill the timer holding this
         // interest and leave the association pinned for as long as the process lives.
         endNetworkLinger()

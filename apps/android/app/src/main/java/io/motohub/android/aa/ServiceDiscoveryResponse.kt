@@ -16,15 +16,23 @@ import io.motohub.android.aa.proto.Media
 import io.motohub.android.aa.proto.Sensors
 
 class ServiceDiscoveryResponse(
-    profile: AndroidAutoCapabilityProfile = AndroidAutoCapabilityProfiles.fallback()
+    profile: AndroidAutoCapabilityProfile = AndroidAutoCapabilityProfiles.fallback(),
+    /**
+     * Whether to ask Android Auto for its music and speech as well as its picture.
+     *
+     * False keeps the phone playing them itself. True is only right when something on our side
+     * will actually play what arrives - Android Auto stops routing those streams to the phone's
+     * own output the moment a head unit claims them.
+     */
+    audioSinks: Boolean = false
 ) : AapMessage(
     Channel.ID_CTR,
     Control.ControlMsgType.MESSAGE_SERVICE_DISCOVERY_RESPONSE_VALUE,
-    makeProto(profile)
+    makeProto(profile, audioSinks)
 ) {
 
     companion object {
-        private fun makeProto(profile: AndroidAutoCapabilityProfile): Message {
+        private fun makeProto(profile: AndroidAutoCapabilityProfile, audioSinks: Boolean): Message {
             val services = mutableListOf<Control.Service>()
 
             // --- Sensor service (driving status + night) ---
@@ -91,6 +99,42 @@ class ServiceDiscoveryResponse(
                     )
                 }.build()
             }.build())
+
+            // --- Media and speech sinks, only when the companion has somewhere to put them. ---
+            //     Claiming these is what moves Spotify, YouTube Music and the navigator's voice off
+            //     the phone's own output and onto the AAP link as plain PCM - no capture consent,
+            //     no per-app opt-out. Same formats headunit-revived negotiates: media 48 kHz
+            //     stereo, speech 16 kHz mono.
+            if (audioSinks) {
+                services.add(Control.Service.newBuilder().also { service ->
+                    service.id = Channel.ID_AUD
+                    service.mediaSinkService = Control.Service.MediaSinkService.newBuilder().also { sink ->
+                        sink.availableType = Media.MediaCodecType.MEDIA_CODEC_AUDIO_PCM
+                        sink.audioType = Media.AudioStreamType.MEDIA
+                        sink.addAudioConfigs(
+                            Media.AudioConfiguration.newBuilder().apply {
+                                sampleRate = AaAudioTap.MEDIA_SAMPLE_RATE
+                                numberOfBits = 16
+                                numberOfChannels = AaAudioTap.MEDIA_CHANNELS
+                            }.build()
+                        )
+                    }.build()
+                }.build())
+                services.add(Control.Service.newBuilder().also { service ->
+                    service.id = Channel.ID_AU1
+                    service.mediaSinkService = Control.Service.MediaSinkService.newBuilder().also { sink ->
+                        sink.availableType = Media.MediaCodecType.MEDIA_CODEC_AUDIO_PCM
+                        sink.audioType = Media.AudioStreamType.SPEECH
+                        sink.addAudioConfigs(
+                            Media.AudioConfiguration.newBuilder().apply {
+                                sampleRate = AaAudioTap.SPEECH_SAMPLE_RATE
+                                numberOfBits = 16
+                                numberOfChannels = AaAudioTap.SPEECH_CHANNELS
+                            }.build()
+                        )
+                    }.build()
+                }.build())
+            }
 
             // --- Microphone service (required for AA connection / Assistant) ---
             services.add(Control.Service.newBuilder().also { service ->

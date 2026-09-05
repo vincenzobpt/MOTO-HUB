@@ -65,6 +65,7 @@ internal class AapControlMedia(private val aapTransport: AapTransport) : AapCont
         if (channel == Channel.ID_MIC) {
             aapTransport.microphone?.setSessionId(request.sessionId)
         }
+        AaAudioTap.started(channel)
        return 0
     }
 
@@ -90,6 +91,7 @@ internal class AapControlMedia(private val aapTransport: AapTransport) : AapCont
 
     private fun mediaSinkStopRequest(channel: Int): Int {
         AaLog.i("Media Sink Stop Request: " + Channel.name(channel))
+        AaAudioTap.stopped(channel)
         if (channel == Channel.ID_VID) {
             if (aapTransport.ignoreNextStopRequest) {
                 AaLog.i("Video Sink Stopped -> Ignored (Forced Keyframe Request)")
@@ -208,7 +210,7 @@ internal class AapControlService(private val aapTransport: AapTransport) : AapCo
             profile.densityDpi,
             profile.source.name
         )
-        aapTransport.send(ServiceDiscoveryResponse(profile))
+        aapTransport.send(ServiceDiscoveryResponse(profile, audioSinks = AaAudioTap.wantsAudio))
         return 0
     }
 

@@ -4,6 +4,7 @@
 package io.motohub.android.aa
 
 import io.motohub.android.aa.proto.Control
+import io.motohub.android.aa.proto.Media
 import io.motohub.android.androidauto.AndroidAutoCapabilityProfiles
 import io.motohub.android.androidauto.AndroidAutoCapabilitySource
 import io.motohub.android.androidauto.AndroidAutoVideoPreset
@@ -13,6 +14,41 @@ import org.junit.Assert.assertFalse
 import org.junit.Test
 
 class ServiceDiscoveryResponseTest {
+    private fun Control.ServiceDiscoveryResponse.audioSink(channel: Int) = servicesList
+        .firstOrNull { it.id == channel }
+        ?.takeIf { it.hasMediaSinkService() }
+        ?.mediaSinkService
+
+    @Test
+    fun claimsNoMusicOrSpeechUnlessTheCompanionHasSomewhereToPutThem() {
+        val response = ServiceDiscoveryResponse()
+            .parse(Control.ServiceDiscoveryResponse.newBuilder())
+            .build()
+
+        assertEquals(null, response.audioSink(Channel.ID_AUD))
+        assertEquals(null, response.audioSink(Channel.ID_AU1))
+        // The system-sounds sink is the one Android Auto insists on; always there.
+        assertEquals(Media.AudioStreamType.SYSTEM, response.audioSink(Channel.ID_AU2)?.audioType)
+    }
+
+    @Test
+    fun claimsMusicAndSpeechAsPcmWhenAsked() {
+        val response = ServiceDiscoveryResponse(audioSinks = true)
+            .parse(Control.ServiceDiscoveryResponse.newBuilder())
+            .build()
+
+        val media = response.audioSink(Channel.ID_AUD)!!
+        assertEquals(Media.AudioStreamType.MEDIA, media.audioType)
+        assertEquals(Media.MediaCodecType.MEDIA_CODEC_AUDIO_PCM, media.availableType)
+        assertEquals(48_000, media.audioConfigsList.single().sampleRate)
+        assertEquals(2, media.audioConfigsList.single().numberOfChannels)
+
+        val speech = response.audioSink(Channel.ID_AU1)!!
+        assertEquals(Media.AudioStreamType.SPEECH, speech.audioType)
+        assertEquals(16_000, speech.audioConfigsList.single().sampleRate)
+        assertEquals(1, speech.audioConfigsList.single().numberOfChannels)
+    }
+
     @Test
     fun usesTheKnownCompatibleOpenCfMotoHeadUnitProfile() {
         val message = ServiceDiscoveryResponse()

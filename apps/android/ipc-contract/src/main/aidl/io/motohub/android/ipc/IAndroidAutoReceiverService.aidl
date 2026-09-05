@@ -1,5 +1,6 @@
 package io.motohub.android.ipc;
 
+import android.os.ParcelFileDescriptor;
 import android.view.Surface;
 import io.motohub.android.ipc.IAndroidAutoStateListener;
 import io.motohub.android.ipc.INavigationGuidanceListener;
@@ -82,4 +83,18 @@ interface IAndroidAutoReceiverService {
      */
     void registerHandlebarGestureListener(IHandlebarGestureListener listener);
     void unregisterHandlebarGestureListener(IHandlebarGestureListener listener);
+
+    /**
+     * Android Auto's own sound - music and spoken directions - handed to the companion as plain
+     * PCM instead of left to the phone. Wanting it is decided per session: Core claims the
+     * audio streams at the next service discovery and stops claiming them at the one after the
+     * want is withdrawn. The pipe carries frames shaped by ProjectionAudioFraming; it can be
+     * reopened freely, and closing it never touches the session.
+     *
+     * Appended after every pre-existing method, like the listeners above. A Core that predates
+     * these calls answers a dead transaction, which the client surfaces as false / null.
+     */
+    boolean setProjectionAudioWanted(boolean wanted);
+    ParcelFileDescriptor openProjectionAudioStream();
+    void closeProjectionAudioStream();
 }

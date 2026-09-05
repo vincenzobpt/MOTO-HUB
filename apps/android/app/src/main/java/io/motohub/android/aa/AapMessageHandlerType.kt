@@ -23,10 +23,13 @@ internal class AapMessageHandlerType(
             }
         }
 
-        // 2. Audio: we advertise an audio sink to keep AA happy, but nav audio plays via the phone's
-        //    own output → paired BT helmet (the motorcycle audio path), NOT through us — AA keeps
-        //    audio local in self-mode. ACK data buffers so AA's unacked window never stalls, discard PCM.
+        // 2. Audio. With nobody listening we advertise one sink only to keep AA happy, and its
+        //    PCM is dropped here: music and directions keep playing through the phone's own
+        //    output → paired BT helmet. When the companion has asked for the audio, AA was asked
+        //    for the media and speech streams at discovery and they are handed over before the
+        //    ACK. ACK either way, so AA's unacked window never stalls.
         if (message.isAudio && (msgType == 0 || msgType == 1)) {
+            AaAudioTap.deliver(message)
             transport.sendMediaAck(message.channel)
             return
         }
