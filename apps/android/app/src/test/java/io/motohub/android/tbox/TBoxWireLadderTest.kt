@@ -454,6 +454,135 @@ class TBoxWireLadderTest {
         assertEquals(false, progress.lastSessionEndedByDashboard)
     }
 
+    // --- the stream had to be healthy for the rider's answer to mean anything ---
+
+    /**
+     * Rider 738a2340, 2026-09-05: the dashboard's Wi-Fi kept going away, two auto-recoveries burned
+     * their full 120s, the Android Auto decoder stalled for 20-45s at a time - and frames kept
+     * being handed to the dashboard the whole time, so the session looked like a clean STREAMED.
+     * The question that follows it reads a "no" as a verdict on the wire, and that "no" moved him
+     * onto a rung his dashboard renders green.
+     */
+    @Test
+    fun aSessionWhoseStreamWasNotHealthyDoesNotEarnTheQuestion() {
+        val outcome = TBoxSessionOutcome.of(
+            facts(durationMillis = 230_000L, framesOffered = 3_900L)
+                .copy(trouble = "Android Auto auto-recovery timed out after 2 attempt(s)")
+        )
+        assertEquals(TBoxSessionOutcome.INCONCLUSIVE, outcome)
+        val next = TBoxWireLadder.nextProgress(TBoxLadderProgress(), outcome)
+        assertEquals(TBoxLadderState.TRYING, next.state)
+        assertEquals(0, next.rungIndex)
+    }
+
+    /**
+     * Trouble silences the rider's question, not the protocol's own evidence: a dashboard that
+     * dropped the socket did so over bytes it had already received, and a stalled source still
+     * produces valid H.264.
+     */
+    @Test
+    fun troubleDoesNotExcuseADashboardThatRejectedTheStream() {
+        val outcome = TBoxSessionOutcome.of(
+            facts(durationMillis = 6_000L, endedByDashboard = true)
+                .copy(trouble = "Android Auto recovery attempt 1 failed")
+        )
+        assertEquals(TBoxSessionOutcome.REJECTED, outcome)
+    }
+
+    // --- what other riders with the same dashboard already answered ---
+
+    /** A table that points at a rung this build does not have would silently do nothing. */
+    @Test
+    fun everyCataloguedRungExists() {
+        TBoxWireCatalogue.CONFIRMED_RUNGS.forEach { (fingerprint, rung) ->
+            assertTrue(fingerprint, rung in TBoxWireLadder.RUNGS.indices)
+        }
+    }
+
+    /**
+     * The rescue this table exists for: a bike walked off the wire its dashboard's other riders
+     * confirmed is put back on it, once, by the update that adds the row.
+     */
+    @Test
+    fun aBikeWalkedOffTheConfirmedWireIsPutBackOnIt() {
+        val strayed = TBoxLadderProgress(
+            rungIndex = 1,
+            state = TBoxLadderState.TRYING,
+            fingerprint = "EASYCONN_5G/49/66660005/5.0",
+            lastOutcome = "INCONCLUSIVE"
+        )
+        val seeded = TBoxWireLadder.seededProgress(strayed, catalogueRung = 0, revision = 1)
+        assertEquals(0, seeded.rungIndex)
+        assertEquals(TBoxLadderState.TRYING, seeded.state)
+        assertEquals(1, seeded.catalogueRevision)
+        // and only once: the rider is free to walk away from the catalogue afterwards.
+        val walkedAgain = seeded.copy(rungIndex = 1)
+        assertEquals(walkedAgain, TBoxWireLadder.seededProgress(walkedAgain, 0, revision = 1))
+    }
+
+    /** A rider's own eyes outrank the table; so does an exhausted walk, which must not re-open. */
+    @Test
+    fun theCatalogueNeverOverrulesTheRiderOrReopensAnExhaustedWalk() {
+        val confirmed = TBoxLadderProgress(rungIndex = 2, state = TBoxLadderState.CONFIRMED)
+        val seededConfirmed = TBoxWireLadder.seededProgress(confirmed, catalogueRung = 0, revision = 1)
+        assertEquals(2, seededConfirmed.rungIndex)
+        assertEquals(TBoxLadderState.CONFIRMED, seededConfirmed.state)
+
+        val exhausted = TBoxLadderProgress(rungIndex = 0, state = TBoxLadderState.EXHAUSTED)
+        val seededExhausted = TBoxWireLadder.seededProgress(exhausted, catalogueRung = 0, revision = 1)
+        assertEquals(TBoxLadderState.EXHAUSTED, seededExhausted.state)
+        // Both are stamped, or the seed would run again at every load.
+        assertEquals(1, seededConfirmed.catalogueRevision)
+        assertEquals(1, seededExhausted.catalogueRevision)
+    }
+
+    /** A dashboard nobody has agreed on is left exactly as it was. */
+    @Test
+    fun aDashboardWithNoCatalogueEntryIsUntouched() {
+        val progress = TBoxLadderProgress(rungIndex = 1, fingerprint = "nobody/has/this/one")
+        assertEquals(progress, TBoxWireLadder.seededProgress(progress, catalogueRung = null))
+    }
+
+    /**
+     * One "no" against a wire other riders confirmed buys a second ride, not a move. Two "no"s
+     * mean this bike disagrees with the table, and the ladder walks exactly as it always did.
+     */
+    @Test
+    fun leavingAConfirmedWireTakesASecondOpinion() {
+        val awaiting = TBoxLadderProgress(
+            rungIndex = 0,
+            state = TBoxLadderState.AWAITING_RIDER,
+            fingerprint = "EASYCONN_5G/49/66660005/5.0"
+        )
+        val once = TBoxWireLadder.nextProgressAfterRider(awaiting, projectionSeen = false, catalogueRung = 0)
+        assertEquals(0, once.rungIndex)
+        assertEquals(TBoxLadderState.TRYING, once.state)
+        assertEquals(1, once.denialsOnRung)
+
+        val twice = TBoxWireLadder.nextProgressAfterRider(
+            once.copy(state = TBoxLadderState.AWAITING_RIDER),
+            projectionSeen = false,
+            catalogueRung = 0
+        )
+        assertEquals(1, twice.rungIndex)
+        assertEquals(0, twice.denialsOnRung)
+    }
+
+    /** The second opinion is owed to the catalogued rung only, not to whatever the bike is on. */
+    @Test
+    fun aRungTheCatalogueDoesNotVouchForStillMovesOnTheFirstNo() {
+        val awaiting = TBoxLadderProgress(rungIndex = 1, state = TBoxLadderState.AWAITING_RIDER)
+        val next = TBoxWireLadder.nextProgressAfterRider(awaiting, projectionSeen = false, catalogueRung = 0)
+        assertEquals(2, next.rungIndex)
+    }
+
+    @Test
+    fun `an old record without the catalogue fields still parses`() {
+        val progress = TBoxWireLadder.parseProgress(STORED)
+        assertEquals(0, progress.denialsOnRung)
+        assertEquals(0, progress.catalogueRevision)
+    }
+
     private companion object {
         const val BASE = 1_756_900_000_000L
         const val STORED = """{"rung":0,"state":"CONFIRMED","outcome":"RIDER_CONFIRMED"}"""

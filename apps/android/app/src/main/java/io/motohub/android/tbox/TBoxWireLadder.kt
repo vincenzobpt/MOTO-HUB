@@ -40,7 +40,18 @@ data class TBoxLadderProgress(
     val lastUptimeMillis: Long? = null,
     val lastUptimeSeenAtMillis: Long? = null,
     /** Reboots laid at the current rung's door; see [TBoxWireLadder.nextProgressAfterReboot]. */
-    val rebootsOnRung: Int = 0
+    val rebootsOnRung: Int = 0,
+    /**
+     * Riders' denials collected on the current rung. Only counted where it changes anything: a
+     * rung [TBoxWireCatalogue] says other riders confirmed asks for a second opinion before the
+     * ladder walks away from it - see [TBoxWireLadder.nextProgressAfterRider].
+     */
+    val denialsOnRung: Int = 0,
+    /**
+     * The [TBoxWireCatalogue.REVISION] this motorcycle was last seeded at, so one catalogue update
+     * re-seeds a bike exactly once and the rider stays free to walk away from it afterwards.
+     */
+    val catalogueRevision: Int = 0
 )
 
 /** Which stored record a ladder lookup should use, and whether the old one has to be adopted. */
@@ -190,7 +201,7 @@ object TBoxWireLadder {
             underLegacyKey = preferences.getString(motorcycle.id, null),
             keysDiffer = key != motorcycle.id
         )
-        return when (record) {
+        val stored = when (record) {
             is TBoxLadderRecord.Fresh -> TBoxLadderProgress()
             is TBoxLadderRecord.Current -> parseProgress(record.raw)
             is TBoxLadderRecord.AdoptLegacy -> {
@@ -203,7 +214,73 @@ object TBoxWireLadder {
                 parseProgress(record.raw)
             }
         }
+        return applyCatalogue(context, motorcycle, stored)
     }
+
+    /**
+     * Puts a motorcycle back on the wire other riders with its dashboard confirmed, once per
+     * [TBoxWireCatalogue.REVISION].
+     *
+     * Done here rather than in [onDashboardIdentified] on purpose: the fingerprint the catalogue
+     * is keyed by is already in the stored record from the previous session, so the seed reaches
+     * [configFor] and the very first session after the update runs on the right wire. Waiting for
+     * this session's CLIENT_INFO would cost the rider one more ride on the wrong one.
+     */
+    private fun applyCatalogue(
+        context: Context,
+        motorcycle: MotorcycleProfile,
+        stored: TBoxLadderProgress
+    ): TBoxLadderProgress {
+        val seeded = seededProgress(stored, TBoxWireCatalogue.rungFor(stored.fingerprint))
+        if (seeded == stored) return stored
+        save(context, motorcycle, seeded)
+        if (seeded.rungIndex != stored.rungIndex) {
+            ProjectionEventLog.record(
+                "WIRE",
+                "Other riders with this dashboard (${stored.fingerprint}) confirmed wire rung " +
+                    "${seeded.rungIndex} (${RUNGS[seeded.rungIndex].signature}); moving this " +
+                    "motorcycle back onto it from rung ${stored.rungIndex} " +
+                    "(${RUNGS.getOrElse(stored.rungIndex) { RUNGS.first() }.signature})."
+            )
+        }
+        return seeded
+    }
+
+    /**
+     * The catalogue half of the state machine, pure so the two cases that matter can be pinned.
+     *
+     * A rider's own eyes outrank the catalogue: [TBoxLadderState.CONFIRMED] keeps its rung and only
+     * takes the revision stamp. [TBoxLadderState.EXHAUSTED] is left alone as well - it already sits
+     * on rung 0 having tried everything, and re-opening it is the ring [onSessionFinished] refuses
+     * to be. Everything else is a search still in progress, which is exactly what the catalogue has
+     * better information than.
+     */
+    internal fun seededProgress(
+        progress: TBoxLadderProgress,
+        catalogueRung: Int?,
+        revision: Int = TBoxWireCatalogue.REVISION
+    ): TBoxLadderProgress {
+        if (catalogueRung == null || catalogueRung !in RUNGS.indices) return progress
+        if (progress.catalogueRevision >= revision) return progress
+        val stamped = progress.copy(catalogueRevision = revision)
+        if (progress.state == TBoxLadderState.CONFIRMED ||
+            progress.state == TBoxLadderState.EXHAUSTED ||
+            progress.rungIndex == catalogueRung
+        ) {
+            return stamped
+        }
+        return stamped.copy(
+            rungIndex = catalogueRung,
+            state = TBoxLadderState.TRYING,
+            attemptsOnRung = 0,
+            rebootsOnRung = 0,
+            denialsOnRung = 0,
+            lastOutcome = CATALOGUE_OUTCOME
+        )
+    }
+
+    /** What [lastOutcome] reads after the catalogue moved a bike; not a session verdict. */
+    internal const val CATALOGUE_OUTCOME = "CATALOGUE_SEEDED"
 
     /**
      * The stored JSON for one motorcycle, verbatim, for the companion app to be told over the
@@ -242,7 +319,9 @@ object TBoxWireLadder {
                 lastSessionEndedByDashboard = json.optBoolean("sessDashEnd", false),
                 lastUptimeMillis = json.optionalLong("hu"),
                 lastUptimeSeenAtMillis = json.optionalLong("huAt"),
-                rebootsOnRung = json.optInt("reboots", 0)
+                rebootsOnRung = json.optInt("reboots", 0),
+                denialsOnRung = json.optInt("denials", 0),
+                catalogueRevision = json.optInt("cat", 0)
             )
         }.getOrDefault(TBoxLadderProgress())
     }
@@ -262,6 +341,8 @@ object TBoxWireLadder {
         progress.lastUptimeMillis?.let { json.put("hu", it) }
         progress.lastUptimeSeenAtMillis?.let { json.put("huAt", it) }
         json.put("reboots", progress.rebootsOnRung)
+        json.put("denials", progress.denialsOnRung)
+        json.put("cat", progress.catalogueRevision)
         preferences(context).edit().putString(keyFor(motorcycle), json.toString()).apply()
     }
 
@@ -466,6 +547,10 @@ object TBoxWireLadder {
             "WIRE",
             "Wire rung ${progress.rungIndex} (${rung.signature}) after ${facts.durationMillis}ms, " +
                 "${facts.framesOffered} frames: $outcome. " +
+                (facts.trouble?.let {
+                    "The stream was not healthy for part of it ($it), so what the dashboard did " +
+                        "with the picture says nothing about this wire and the rider is not asked. "
+                } ?: "") +
                 if (next.rungIndex != progress.rungIndex) {
                     "Next session tries rung ${next.rungIndex} " +
                         "(${RUNGS.getOrElse(next.rungIndex) { RUNGS.first() }.signature})."
@@ -505,10 +590,16 @@ object TBoxWireLadder {
             )
     }
 
-    /** The rider half of the same machine, likewise pure. */
+    /**
+     * The rider half of the same machine, likewise pure.
+     *
+     * [catalogueRung] is what [TBoxWireCatalogue] says this dashboard's other riders confirmed,
+     * passed in rather than looked up so the second-opinion rule can be tested without a table.
+     */
     internal fun nextProgressAfterRider(
         progress: TBoxLadderProgress,
-        projectionSeen: Boolean
+        projectionSeen: Boolean,
+        catalogueRung: Int? = TBoxWireCatalogue.rungFor(progress.fingerprint)
     ): TBoxLadderProgress = when {
         // A "yes" is always worth recording: it is the one answer that ends the search for good,
         // and a rider who sees the picture after an exhausted walk has told us the walk was wrong.
@@ -519,8 +610,26 @@ object TBoxWireLadder {
         // on screen when the walk ended.
         progress.state == TBoxLadderState.EXHAUSTED ->
             progress.copy(lastOutcome = "RIDER_DENIED")
+        // A wire other riders with this same dashboard confirmed is worth asking twice about
+        // before walking away from it. One "no" is what moved rider 738a2340 onto a rung his
+        // dashboard shows as a green screen, and the session behind that "no" had been failing on
+        // Wi-Fi the whole time. Two says the catalogue does not fit this bike, and the ladder
+        // moves on exactly as before.
+        catalogueRung == progress.rungIndex && progress.denialsOnRung < DENIALS_TO_LEAVE_CATALOGUE_RUNG - 1 ->
+            progress.copy(
+                state = TBoxLadderState.TRYING,
+                denialsOnRung = progress.denialsOnRung + 1,
+                lastOutcome = "RIDER_DENIED"
+            )
         else -> advance(progress.copy(lastOutcome = "RIDER_DENIED"), null)
     }
+
+    /**
+     * Denials needed to leave a rung [TBoxWireCatalogue] vouches for. Two, not more: the catalogue
+     * is other people's dashboards, and a rider who says no twice about their own is telling us
+     * something the table cannot see.
+     */
+    internal const val DENIALS_TO_LEAVE_CATALOGUE_RUNG = 2
 
     /**
      * A session the ladder cannot read: it ran a video format the ladder did not choose.
@@ -563,17 +672,23 @@ object TBoxWireLadder {
     fun onRiderVerdict(context: Context, motorcycle: MotorcycleProfile, projectionSeen: Boolean) {
         val progress = load(context, motorcycle)
         val rung = RUNGS.getOrElse(progress.rungIndex) { RUNGS.first() }
+        val next = nextProgressAfterRider(progress, projectionSeen)
         ProjectionEventLog.record(
             "WIRE",
-            if (projectionSeen) {
-                "Rider confirmed the dashboard is showing rung ${progress.rungIndex} " +
-                    "(${rung.signature}); pinning it for this motorcycle."
-            } else {
-                "Rider reports rung ${progress.rungIndex} (${rung.signature}) streamed but showed " +
-                    "nothing; moving on."
+            when {
+                projectionSeen ->
+                    "Rider confirmed the dashboard is showing rung ${progress.rungIndex} " +
+                        "(${rung.signature}); pinning it for this motorcycle."
+                next.rungIndex == progress.rungIndex && next.state != TBoxLadderState.EXHAUSTED ->
+                    "Rider reports rung ${progress.rungIndex} (${rung.signature}) streamed but " +
+                        "showed nothing. Other riders with this dashboard confirmed this wire, so " +
+                        "it is worth one more ride before moving on: staying on it, and asking " +
+                        "again after the next Android Auto session."
+                else ->
+                    "Rider reports rung ${progress.rungIndex} (${rung.signature}) streamed but " +
+                        "showed nothing; moving on."
             }
         )
-        val next = nextProgressAfterRider(progress, projectionSeen)
         save(context, motorcycle, next)
     }
 
@@ -585,6 +700,8 @@ object TBoxWireLadder {
             "${progress.state}, tried ${progress.attemptsOnRung}x" +
             (progress.lastOutcome?.let { ", last $it" } ?: "") +
             (if (progress.rebootsOnRung > 0) ", reboots ${progress.rebootsOnRung}" else "") +
+            (if (progress.denialsOnRung > 0) ", denials ${progress.denialsOnRung}" else "") +
+            (TBoxWireCatalogue.rungFor(progress.fingerprint)?.let { ", catalogue rung $it" } ?: "") +
             (progress.fingerprint?.let { ", dash $it" } ?: "")
     }
 
@@ -600,6 +717,7 @@ object TBoxWireLadder {
                 state = TBoxLadderState.EXHAUSTED,
                 attemptsOnRung = 0,
                 rebootsOnRung = 0,
+                denialsOnRung = 0,
                 lastOutcome = outcome?.name ?: progress.lastOutcome
             )
         } else {
@@ -608,6 +726,7 @@ object TBoxWireLadder {
                 state = TBoxLadderState.TRYING,
                 attemptsOnRung = 0,
                 rebootsOnRung = 0,
+                denialsOnRung = 0,
                 lastOutcome = outcome?.name ?: progress.lastOutcome
             )
         }

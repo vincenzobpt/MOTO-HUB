@@ -20,6 +20,7 @@ import api.MobileSession
 import io.motohub.android.feature.settings.MotoHubSettings
 import io.motohub.android.session.MotorcycleProfile
 import io.motohub.android.session.ProjectionEventLog
+import io.motohub.android.session.ProjectionSourceHealth
 import java.io.InputStream
 import java.io.OutputStream
 import java.net.Inet4Address
@@ -1811,7 +1812,8 @@ class RideDaemonTransport(
                 framesOffered = framesOffered.get(),
                 frameTimeouts = framesTimedOut.get(),
                 frameRejections = framesRejected.get(),
-                endedByDashboard = endedByDashboard
+                endedByDashboard = endedByDashboard,
+                trouble = ProjectionSourceHealth.troubleSince(startedAt)
             )
         )
     }

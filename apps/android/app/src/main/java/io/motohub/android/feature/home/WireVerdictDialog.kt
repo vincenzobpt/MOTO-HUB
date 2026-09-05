@@ -46,8 +46,9 @@ fun WireVerdictDialog(
                 )
                 Text(
                     motoHubText(
-                        "If it stayed on the pairing screen, MOTO-HUB will try a different video " +
-                            "format on the next ride and keep going until one works."
+                        "If it stayed on the pairing screen, MOTO-HUB keeps trying video formats " +
+                            "until one works. When other riders with the same dashboard have " +
+                            "already confirmed this one, it asks you once more before moving on."
                     ),
                     style = MaterialTheme.typography.bodyMedium
                 )

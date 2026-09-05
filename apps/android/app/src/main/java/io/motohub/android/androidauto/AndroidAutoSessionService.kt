@@ -37,6 +37,7 @@ import io.motohub.android.session.MotorcycleProfile
 import io.motohub.android.encoding.VideoDeliveryProbe
 import io.motohub.android.session.DashboardDeliveryMonitor
 import io.motohub.android.session.ProjectionEventLog
+import io.motohub.android.session.ProjectionSourceHealth
 import io.motohub.android.session.ProjectionRuntime
 import io.motohub.android.session.ProjectionRuntimeState
 import io.motohub.android.tbox.TBoxEvent
@@ -1197,11 +1198,21 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
                         "WATCHDOG",
                         "Android Auto recovery attempt $attempt failed: ${failure.message}"
                     )
+                    // The wire ladder must not read this session as a verdict on the video
+                    // format: the dashboard kept being handed frames while the stream behind
+                    // them was down. A recovery that succeeds first try is a hiccup and is
+                    // deliberately not recorded - see ProjectionSourceHealth.
+                    ProjectionSourceHealth.noteTrouble(
+                        "Android Auto recovery attempt $attempt failed"
+                    )
                     delay(RECOVERY_RETRY_MILLIS)
                 }
             }
             recoveryRequested.set(false)
             if (!stopping) {
+                ProjectionSourceHealth.noteTrouble(
+                    "Android Auto auto-recovery timed out after $attempt attempt(s)"
+                )
                 fail(
                     "Android Auto auto-recovery timed out after " +
                         "${RECOVERY_GIVE_UP_MILLIS / 1_000L} seconds ($attempt attempt(s))."

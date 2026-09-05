@@ -11,7 +11,14 @@ data class TBoxSessionFacts(
     val frameTimeouts: Long,
     val frameRejections: Long,
     /** True when the dashboard ended the session; false when MOTO-HUB or the rider did. */
-    val endedByDashboard: Boolean
+    val endedByDashboard: Boolean,
+    /**
+     * Why the projection stream was not delivering a picture for part of this session, or null
+     * when it ran clean. See [io.motohub.android.session.ProjectionSourceHealth]: frames kept
+     * flowing to the dashboard while the source behind them was stalled or reconnecting, so what
+     * the rider saw - or did not - is not evidence about the wire.
+     */
+    val trouble: String? = null
 )
 
 /**
@@ -46,7 +53,7 @@ enum class TBoxSessionOutcome {
      */
     STREAMED,
 
-    /** Too short, or ended by us, to read anything into. */
+    /** Too short, ended by us, or run on a stream that was not healthy, to read anything into. */
     INCONCLUSIVE;
 
     companion object {
@@ -60,6 +67,10 @@ enum class TBoxSessionOutcome {
             facts.mediaControlEvents == 0L -> NEVER_NEGOTIATED
             facts.framesOffered == 0L -> INCONCLUSIVE
             facts.endedByDashboard && facts.durationMillis < REJECTION_CEILING_MILLIS -> REJECTED
+            // Trouble does not excuse a rejection - the dashboard closed a socket over bytes it
+            // had already received, and stalled content is still valid H.264 - but it does stop
+            // the rider being asked. STREAMED is the only outcome that leads to that question.
+            facts.trouble != null -> INCONCLUSIVE
             facts.durationMillis >= STREAMED_FLOOR_MILLIS -> STREAMED
             else -> INCONCLUSIVE
         }
