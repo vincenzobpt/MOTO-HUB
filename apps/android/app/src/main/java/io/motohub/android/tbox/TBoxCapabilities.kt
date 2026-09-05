@@ -36,6 +36,14 @@ data class TBoxCapabilities(
     val bluetoothCall: Boolean? = null,
     val bluetoothSettings: Boolean? = null,
     /**
+     * `currentHUTime`: how long the dashboard has been up, in milliseconds, as it reports at
+     * CLIENT_INFO. A Voge tracked wall time to within 10ms over 87s with it, so it is a real
+     * clock - and one that starts again from zero when the firmware reboots, which is the only
+     * direct evidence of a reboot the protocol offers. Some CFMOTO units report an epoch-like
+     * number here instead; [TBoxWireLadder] copes with either.
+     */
+    val huUptimeMillis: Long? = null,
+    /**
      * The EasyConn SDK "flavor": which manufacturer licensed this dashboard. Numeric in
      * shipped firmware (65536 CFMOTO, 65540 CFMOTO international, 65561 ZONTES, 65569 Benda,
      * …), a plain string in the MOTO-HUB simulator, so it is kept as text. The SDK pairs it
@@ -90,6 +98,7 @@ internal fun tBoxCapabilitiesFrom(fields: Map<String, Any?>): TBoxCapabilities =
         syncCorrectTime = fields["supportSyncCorrectTime"].asBoolean(),
         bluetoothCall = fields["supportBTCall"].asBoolean(),
         bluetoothSettings = fields["supportBTSetting"].asBoolean(),
+        huUptimeMillis = fields["currentHUTime"].asLong(),
         flavor = fields["flavor"].asString(),
         channel = fields["channel"].asString()
     )
@@ -103,6 +112,12 @@ private fun Any?.asString(): String? = when (this) {
 private fun Any?.asInt(): Int? = when (this) {
     is Number -> toInt()
     is String -> toIntOrNull()
+    else -> null
+}
+
+private fun Any?.asLong(): Long? = when (this) {
+    is Number -> toLong()
+    is String -> trim().toLongOrNull()
     else -> null
 }
 
@@ -142,7 +157,8 @@ private val CLIENT_INFO_KEYS = setOf(
     "supportPhoneSignal",
     "supportSyncCorrectTime",
     "supportBTCall",
-    "supportBTSetting"
+    "supportBTSetting",
+    "currentHUTime"
 )
 
 /**
@@ -181,6 +197,7 @@ internal fun encodeCapabilities(value: TBoxCapabilities): JSONObject = JSONObjec
     putNullable("syncCorrectTime", value.syncCorrectTime)
     putNullable("bluetoothCall", value.bluetoothCall)
     putNullable("bluetoothSettings", value.bluetoothSettings)
+    putNullable("huUptimeMillis", value.huUptimeMillis)
     putNullable("flavor", value.flavor)
     putNullable("channel", value.channel)
 }
@@ -214,6 +231,7 @@ internal fun decodeCapabilities(json: JSONObject) = TBoxCapabilities(
     syncCorrectTime = json.optionalBoolean("syncCorrectTime"),
     bluetoothCall = json.optionalBoolean("bluetoothCall"),
     bluetoothSettings = json.optionalBoolean("bluetoothSettings"),
+    huUptimeMillis = json.optionalLong("huUptimeMillis"),
     flavor = json.optionalString("flavor"),
     channel = json.optionalString("channel")
 )

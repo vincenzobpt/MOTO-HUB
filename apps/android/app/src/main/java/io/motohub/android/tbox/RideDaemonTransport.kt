@@ -1605,7 +1605,7 @@ class RideDaemonTransport(
                         // the observers' own write becomes a harmless second copy of the same
                         // snapshot.
                         TBoxCapabilityStore(appContext).recordCapabilities(motorcycle, capabilities)
-                        TBoxWireLadder.onDashboardIdentified(appContext, motorcycle, capabilities)
+                        TBoxWireLadder.onDashboardIdentified(appContext, motorcycle, protocolProfile, capabilities)
                     }
                     mutableEvents.tryEmit(TBoxEvent.Capabilities(capabilities))
                 }

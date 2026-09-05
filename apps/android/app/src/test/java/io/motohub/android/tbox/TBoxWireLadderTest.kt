@@ -6,6 +6,7 @@ package io.motohub.android.tbox
 import io.motohub.android.session.MotorcycleProfile
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -302,7 +303,159 @@ class TBoxWireLadderTest {
         )
     }
 
+    // ----- dashboard reboots ---------------------------------------------------------------------
+
+    private fun confirmedRungZero(
+        sessionStart: Long,
+        sessionEnd: Long,
+        endedByDashboard: Boolean = true,
+        uptimeAtStart: Long = 88_182L,
+        rungIndex: Int = 0,
+        state: TBoxLadderState = TBoxLadderState.CONFIRMED,
+        rebootsOnRung: Int = 0
+    ) = TBoxLadderProgress(
+        rungIndex = rungIndex,
+        state = state,
+        lastOutcome = "RIDER_CONFIRMED",
+        lastSessionStartedAtMillis = sessionStart,
+        lastSessionEndedAtMillis = sessionEnd,
+        lastSessionEndedByDashboard = endedByDashboard,
+        lastUptimeMillis = uptimeAtStart,
+        lastUptimeSeenAtMillis = sessionStart,
+        rebootsOnRung = rebootsOnRung
+    )
+
+    /**
+     * VOGE 800 Rally, 2026-09-03: CLIENT_INFO said 88182ms at 11:54:36.105, the dash went silent
+     * and the session was closed at 11:56:37.062, and the next CLIENT_INFO at 11:56:46.018 said
+     * 9738ms. The firmware came back up 0.8s before we closed the session it had taken down.
+     */
+    @Test
+    fun `an uptime that went backwards inside a dash-ended session is that session's reboot`() {
+        val start = BASE
+        val end = BASE + 120_957L
+        val next = BASE + 129_913L
+        assertEquals(
+            next - 9_738L,
+            TBoxWireLadder.dashboardRebootBehindLastSession(
+                confirmedRungZero(start, end), uptimeMillis = 9_738L, nowMillis = next
+            )
+        )
+    }
+
+    /** Same bike on 2026-08-31: 52154ms at 12:10:59, closed 12:12:56, 53468ms at 12:14:07 - back up 18s after the close. */
+    @Test
+    fun `a reboot shortly after the dash closed the session still belongs to it`() {
+        val start = BASE
+        val end = BASE + 117_256L
+        val next = BASE + 188_535L
+        val rebootedAt = TBoxWireLadder.dashboardRebootBehindLastSession(
+            confirmedRungZero(start, end, uptimeAtStart = 52_154L), uptimeMillis = 53_468L, nowMillis = next
+        )
+        assertEquals(next - 53_468L, rebootedAt)
+        assertTrue(rebootedAt!! > end)
+    }
+
+    @Test
+    fun `an uptime that kept counting is not a reboot`() {
+        val start = BASE
+        val next = BASE + 129_913L
+        assertNull(
+            TBoxWireLadder.dashboardRebootBehindLastSession(
+                confirmedRungZero(start, BASE + 120_957L), uptimeMillis = 88_182L + 129_913L, nowMillis = next
+            )
+        )
+    }
+
+    @Test
+    fun `a reboot after a session the rider ended is nobody's fault`() {
+        val next = BASE + 129_913L
+        assertNull(
+            TBoxWireLadder.dashboardRebootBehindLastSession(
+                confirmedRungZero(BASE, BASE + 120_957L, endedByDashboard = false), uptimeMillis = 9_738L, nowMillis = next
+            )
+        )
+    }
+
+    @Test
+    fun `the next morning's ignition cycle is not laid at last night's session`() {
+        // Dash-ended session, but the uptime says the firmware came up eight hours later.
+        val next = BASE + 8 * 3_600_000L
+        assertNull(
+            TBoxWireLadder.dashboardRebootBehindLastSession(
+                confirmedRungZero(BASE, BASE + 120_957L), uptimeMillis = 12_000L, nowMillis = next
+            )
+        )
+    }
+
+    @Test
+    fun `an epoch-like uptime can neither count up into a reboot nor jump back into one`() {
+        // Some CFMOTO units put an epoch-ish millisecond value here (1613228316255 seen in the field).
+        val epochLike = 1_613_228_316_255L
+        val progress = confirmedRungZero(BASE, BASE + 120_957L, uptimeAtStart = epochLike)
+        assertNull(TBoxWireLadder.dashboardRebootBehindLastSession(progress, epochLike + 15_129L, BASE + 15_129L))
+        assertNull(TBoxWireLadder.dashboardRebootBehindLastSession(progress, epochLike - 600_000L, BASE + 15_129L))
+    }
+
+    @Test
+    fun `one reboot is counted, two move a confirmed rung on`() {
+        val once = TBoxWireLadder.nextProgressAfterReboot(confirmedRungZero(BASE, BASE + 1L))
+        assertEquals(0, once.rungIndex)
+        assertEquals(TBoxLadderState.CONFIRMED, once.state)
+        assertEquals(1, once.rebootsOnRung)
+        assertEquals(TBoxWireLadder.REBOOT_OUTCOME, once.lastOutcome)
+
+        val twice = TBoxWireLadder.nextProgressAfterReboot(once)
+        assertEquals(1, twice.rungIndex)
+        assertEquals(TBoxLadderState.TRYING, twice.state)
+        assertEquals(0, twice.rebootsOnRung)
+        assertEquals(0, twice.attemptsOnRung)
+        assertEquals(TBoxWireLadder.REBOOT_OUTCOME, twice.lastOutcome)
+    }
+
+    @Test
+    fun `reboots on the last rung exhaust the ladder rather than wrapping it`() {
+        val last = confirmedRungZero(BASE, BASE + 1L, rungIndex = TBoxWireLadder.RUNGS.lastIndex, state = TBoxLadderState.AWAITING_RIDER, rebootsOnRung = 1)
+        val next = TBoxWireLadder.nextProgressAfterReboot(last)
+        assertEquals(TBoxLadderState.EXHAUSTED, next.state)
+        assertEquals(0, next.rungIndex)
+    }
+
+    @Test
+    fun `an exhausted ladder counts reboots and never walks again`() {
+        val exhausted = confirmedRungZero(BASE, BASE + 1L, state = TBoxLadderState.EXHAUSTED, rebootsOnRung = 5)
+        val next = TBoxWireLadder.nextProgressAfterReboot(exhausted)
+        assertEquals(TBoxLadderState.EXHAUSTED, next.state)
+        assertEquals(0, next.rungIndex)
+        assertEquals(6, next.rebootsOnRung)
+    }
+
+    @Test
+    fun `the session window and the uptime survive the round trip`() {
+        val stored = """
+            {"rung":0,"state":"CONFIRMED","outcome":"DASHBOARD_REBOOTED","sessStart":1000,"sessEnd":121957,
+             "sessDashEnd":true,"hu":88182,"huAt":1000,"reboots":1}
+        """.trimIndent()
+        val progress = TBoxWireLadder.parseProgress(stored)
+        assertEquals(1000L, progress.lastSessionStartedAtMillis)
+        assertEquals(121_957L, progress.lastSessionEndedAtMillis)
+        assertTrue(progress.lastSessionEndedByDashboard)
+        assertEquals(88_182L, progress.lastUptimeMillis)
+        assertEquals(1000L, progress.lastUptimeSeenAtMillis)
+        assertEquals(1, progress.rebootsOnRung)
+    }
+
+    @Test
+    fun `an old record without the reboot fields still parses`() {
+        val progress = TBoxWireLadder.parseProgress(STORED)
+        assertNull(progress.lastSessionStartedAtMillis)
+        assertNull(progress.lastUptimeMillis)
+        assertEquals(0, progress.rebootsOnRung)
+        assertEquals(false, progress.lastSessionEndedByDashboard)
+    }
+
     private companion object {
+        const val BASE = 1_756_900_000_000L
         const val STORED = """{"rung":0,"state":"CONFIRMED","outcome":"RIDER_CONFIRMED"}"""
     }
 }

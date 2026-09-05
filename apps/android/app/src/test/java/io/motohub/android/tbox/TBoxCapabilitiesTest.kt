@@ -126,4 +126,19 @@ class TBoxCapabilitiesTest {
         val empty = TBoxCapabilities()
         assertEquals(empty, decodeCapabilities(encodeCapabilities(empty)))
     }
+
+    @Test
+    fun `currentHUTime is the dashboard's uptime, whether it comes as a number or as text`() {
+        assertEquals(88_182L, tBoxCapabilitiesFrom(mapOf("currentHUTime" to 88182)).huUptimeMillis)
+        assertEquals(88_182L, tBoxCapabilitiesFrom(mapOf("currentHUTime" to "88182")).huUptimeMillis)
+        assertEquals(1_613_228_316_255L, tBoxCapabilitiesFrom(mapOf("currentHUTime" to 1_613_228_316_255L)).huUptimeMillis)
+        assertNull(tBoxCapabilitiesFrom(mapOf("HUName" to "SSDQ01")).huUptimeMillis)
+    }
+
+    @Test
+    fun `the uptime crosses the bridge to the companion app`() {
+        val decoded = decodeCapabilities(encodeCapabilities(TBoxCapabilities(huName = "VOGE", huUptimeMillis = 9_738L)))
+        assertEquals(9_738L, decoded.huUptimeMillis)
+        assertNull(decodeCapabilities(encodeCapabilities(TBoxCapabilities(huName = "VOGE"))).huUptimeMillis)
+    }
 }

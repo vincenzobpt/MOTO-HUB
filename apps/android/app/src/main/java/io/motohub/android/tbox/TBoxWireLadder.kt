@@ -27,7 +27,20 @@ data class TBoxLadderProgress(
      */
     val sessionsWithoutAndroidAuto: Int = 0,
     /** The "connect once with Android Auto" nudge has been shown, so it is not shown again. */
-    val androidAutoNudgeShown: Boolean = false
+    val androidAutoNudgeShown: Boolean = false,
+    /**
+     * Wall-clock window of the last Android Auto session the ladder was told about, and who ended
+     * it. Kept in every state, terminal ones included: it is what the next CLIENT_INFO's uptime is
+     * read against - see [TBoxWireLadder.dashboardRebootBehindLastSession].
+     */
+    val lastSessionStartedAtMillis: Long? = null,
+    val lastSessionEndedAtMillis: Long? = null,
+    val lastSessionEndedByDashboard: Boolean = false,
+    /** The dashboard's own uptime the last time CLIENT_INFO was read, and the wall clock then. */
+    val lastUptimeMillis: Long? = null,
+    val lastUptimeSeenAtMillis: Long? = null,
+    /** Reboots laid at the current rung's door; see [TBoxWireLadder.nextProgressAfterReboot]. */
+    val rebootsOnRung: Int = 0
 )
 
 /** Which stored record a ladder lookup should use, and whether the old one has to be adopted. */
@@ -223,7 +236,13 @@ object TBoxWireLadder {
                 attemptsOnRung = json.optInt("attempts", 0),
                 lastOutcome = json.optString("outcome").takeIf { it.isNotBlank() },
                 sessionsWithoutAndroidAuto = json.optInt("noAaSessions", 0),
-                androidAutoNudgeShown = json.optBoolean("nudged", false)
+                androidAutoNudgeShown = json.optBoolean("nudged", false),
+                lastSessionStartedAtMillis = json.optionalLong("sessStart"),
+                lastSessionEndedAtMillis = json.optionalLong("sessEnd"),
+                lastSessionEndedByDashboard = json.optBoolean("sessDashEnd", false),
+                lastUptimeMillis = json.optionalLong("hu"),
+                lastUptimeSeenAtMillis = json.optionalLong("huAt"),
+                rebootsOnRung = json.optInt("reboots", 0)
             )
         }.getOrDefault(TBoxLadderProgress())
     }
@@ -237,32 +256,167 @@ object TBoxWireLadder {
         progress.lastOutcome?.let { json.put("outcome", it) }
         json.put("noAaSessions", progress.sessionsWithoutAndroidAuto)
         json.put("nudged", progress.androidAutoNudgeShown)
+        progress.lastSessionStartedAtMillis?.let { json.put("sessStart", it) }
+        progress.lastSessionEndedAtMillis?.let { json.put("sessEnd", it) }
+        json.put("sessDashEnd", progress.lastSessionEndedByDashboard)
+        progress.lastUptimeMillis?.let { json.put("hu", it) }
+        progress.lastUptimeSeenAtMillis?.let { json.put("huAt", it) }
+        json.put("reboots", progress.rebootsOnRung)
         preferences(context).edit().putString(keyFor(motorcycle), json.toString()).apply()
     }
 
     /**
-     * Called once CLIENT_INFO has been read. A dashboard that is not the one the ladder has been
-     * walking against invalidates everything learned so far - better a fresh walk than a verdict
-     * inherited from other firmware.
+     * Called once CLIENT_INFO has been read.
+     *
+     * Two things are read out of it. A dashboard that is not the one the ladder has been walking
+     * against invalidates everything learned so far - better a fresh walk than a verdict inherited
+     * from other firmware. And the dashboard's uptime is compared with the last one seen: an uptime
+     * that went backwards means the firmware rebooted in between, and a reboot that falls inside
+     * (or just after) a session the dashboard itself ended is the one piece of evidence the ladder
+     * had no way to see. A Voge 800 Rally rider (2026-08-31 and 09-03) confirmed rung 0 because the
+     * picture appeared - and then lost the dash, and its clock, ~2 minutes into every session:
+     * `currentHUTime` 88182ms at one CLIENT_INFO, 9738ms at the next, 130s later. STREAMED, said
+     * the outcome, because 25s had passed and the frames had flowed. The rung was never moved.
      */
     fun onDashboardIdentified(
         context: Context,
         motorcycle: MotorcycleProfile,
-        capabilities: TBoxCapabilities?
+        modelProfile: TBoxModelProfile,
+        capabilities: TBoxCapabilities?,
+        nowMillis: Long = System.currentTimeMillis()
     ) {
-        val fingerprint = fingerprintOf(capabilities) ?: return
-        val progress = load(context, motorcycle)
-        if (progress.fingerprint == null) {
-            save(context, motorcycle, progress.copy(fingerprint = fingerprint))
-            return
+        var progress = load(context, motorcycle)
+        val fingerprint = fingerprintOf(capabilities)
+        if (fingerprint != null) {
+            if (progress.fingerprint == null) {
+                progress = progress.copy(fingerprint = fingerprint)
+            } else if (progress.fingerprint != fingerprint) {
+                ProjectionEventLog.record(
+                    "WIRE",
+                    "A different dashboard answered on this motorcycle (was ${progress.fingerprint}, " +
+                        "now $fingerprint); restarting the wire search from the default."
+                )
+                progress = TBoxLadderProgress(fingerprint = fingerprint)
+            }
         }
-        if (progress.fingerprint == fingerprint) return
-        ProjectionEventLog.record(
-            "WIRE",
-            "A different dashboard answered on this motorcycle (was ${progress.fingerprint}, " +
-                "now $fingerprint); restarting the wire search from the default."
+        val uptime = capabilities?.huUptimeMillis
+        if (uptime != null) {
+            dashboardRebootBehindLastSession(progress, uptime, nowMillis)?.let { rebootedAt ->
+                progress = noteDashboardReboot(progress, modelProfile, rebootedAt, nowMillis)
+            }
+            progress = progress.copy(lastUptimeMillis = uptime, lastUptimeSeenAtMillis = nowMillis)
+        }
+        save(context, motorcycle, progress)
+    }
+
+    /** Uptime may fall this far short of the wall clock before it counts as having gone backwards. */
+    internal const val REBOOT_UPTIME_SLACK_MILLIS = 30_000L
+
+    /**
+     * How long after a dashboard-ended session a reboot is still laid at that session's door. The
+     * dash stops answering, the keepalives go unanswered for ~18s, we declare the session over, and
+     * the firmware is back up some seconds after that: on 2026-08-31 the Voge came back 18s after
+     * the session it took down had been closed.
+     */
+    internal const val REBOOT_ATTRIBUTION_GRACE_MILLIS = 60_000L
+
+    /**
+     * Reboots on one rung before the ladder stops trusting it, whatever the rider said. One is a
+     * dashboard that may have died for any reason - low battery, a loose plug - and would move a
+     * bike off a wire that works; two, each ending a session the dashboard itself closed, is a
+     * pattern, and the same dash ran twenty minutes clean on an earlier build, so a reboot every
+     * ride is not the firmware's resting state.
+     */
+    internal const val REBOOTS_BEFORE_ADVANCE = 2
+
+    /** What [lastOutcome] reads after a reboot was counted; a string because it is not a session verdict. */
+    internal const val REBOOT_OUTCOME = "DASHBOARD_REBOOTED"
+
+    /**
+     * When the dashboard rebooted, if its fresh uptime says it did and the reboot belongs to the
+     * last session. Null otherwise. Pure, so the arithmetic can be checked against field logs.
+     *
+     * The uptime is expected to have grown by the wall-clock time elapsed since it was last read;
+     * one that fell short by more than [REBOOT_UPTIME_SLACK_MILLIS] was reset. The reset instant is
+     * `now - uptime`, and it is blamed on the previous session only when the dashboard ended that
+     * session and the instant falls between its start and [REBOOT_ATTRIBUTION_GRACE_MILLIS] past
+     * its end. An ignition cycle the next morning resets the uptime too, and lands nowhere near
+     * that window; a CFMOTO unit that reports an epoch-like number here cannot land in it either.
+     */
+    internal fun dashboardRebootBehindLastSession(
+        progress: TBoxLadderProgress,
+        uptimeMillis: Long,
+        nowMillis: Long
+    ): Long? {
+        val lastUptime = progress.lastUptimeMillis ?: return null
+        val lastSeenAt = progress.lastUptimeSeenAtMillis ?: return null
+        if (uptimeMillis < 0L || nowMillis < lastSeenAt) return null
+        val expected = lastUptime + (nowMillis - lastSeenAt)
+        if (uptimeMillis + REBOOT_UPTIME_SLACK_MILLIS >= expected) return null
+        if (!progress.lastSessionEndedByDashboard) return null
+        val start = progress.lastSessionStartedAtMillis ?: return null
+        val end = progress.lastSessionEndedAtMillis ?: return null
+        val rebootedAt = nowMillis - uptimeMillis
+        return rebootedAt.takeIf { it in start..(end + REBOOT_ATTRIBUTION_GRACE_MILLIS) }
+    }
+
+    /**
+     * The reboot half of the state machine, pure like the rest. Counts the reboot against the
+     * current rung and, at [REBOOTS_BEFORE_ADVANCE], moves on - from CONFIRMED and AWAITING_RIDER
+     * as much as from TRYING, because a firmware that reboots under a stream has not confirmed it,
+     * whatever the panel showed. EXHAUSTED stays exhausted: every wire has been tried, and going
+     * round again is the ring [onSessionFinished] refuses to be.
+     */
+    internal fun nextProgressAfterReboot(progress: TBoxLadderProgress): TBoxLadderProgress {
+        val counted = progress.copy(
+            rebootsOnRung = progress.rebootsOnRung + 1,
+            lastOutcome = REBOOT_OUTCOME
         )
-        save(context, motorcycle, TBoxLadderProgress(fingerprint = fingerprint))
+        if (progress.state == TBoxLadderState.EXHAUSTED) return counted
+        if (counted.rebootsOnRung < REBOOTS_BEFORE_ADVANCE) return counted
+        return advance(counted, null)
+    }
+
+    private fun noteDashboardReboot(
+        progress: TBoxLadderProgress,
+        modelProfile: TBoxModelProfile,
+        rebootedAtMillis: Long,
+        nowMillis: Long
+    ): TBoxLadderProgress {
+        val end = progress.lastSessionEndedAtMillis ?: nowMillis
+        val relative = if (rebootedAtMillis <= end) {
+            "${(end - rebootedAtMillis) / 1000}s before the last session was closed"
+        } else {
+            "${(rebootedAtMillis - end) / 1000}s after the last session was closed"
+        }
+        val rung = RUNGS.getOrElse(progress.rungIndex) { RUNGS.first() }
+        if (modelProfile != TBoxModelProfile.GENERIC) {
+            ProjectionEventLog.warning(
+                "WIRE",
+                "The dashboard rebooted $relative: its uptime went backwards, and the dashboard was " +
+                    "the one that ended that session. Noted only - the ${modelProfile.key} profile " +
+                    "was measured by hand and the wire search does not overrule it."
+            )
+            return progress
+        }
+        val next = nextProgressAfterReboot(progress)
+        val counted = progress.rebootsOnRung + 1
+        ProjectionEventLog.warning(
+            "WIRE",
+            "The dashboard rebooted $relative: its uptime went backwards, and the dashboard was the " +
+                "one that ended that session. Reboot $counted/$REBOOTS_BEFORE_ADVANCE on wire rung " +
+                "${progress.rungIndex} (${rung.signature}). " +
+                when {
+                    next.rungIndex != progress.rungIndex ->
+                        "A firmware that reboots under a stream has not confirmed it, whatever the " +
+                            "screen showed: the next session tries rung ${next.rungIndex} " +
+                            "(${RUNGS.getOrElse(next.rungIndex) { RUNGS.first() }.signature})."
+                    next.state == TBoxLadderState.EXHAUSTED ->
+                        "Every wire this app knows has already been tried; staying on the default."
+                    else -> "One more and the search moves to the next wire."
+                }
+        )
+        return next
     }
 
     /**
@@ -273,10 +427,21 @@ object TBoxWireLadder {
         context: Context,
         motorcycle: MotorcycleProfile,
         modelProfile: TBoxModelProfile,
-        facts: TBoxSessionFacts
+        facts: TBoxSessionFacts,
+        nowMillis: Long = System.currentTimeMillis()
     ): TBoxLadderProgress {
-        val progress = load(context, motorcycle)
-        if (modelProfile != TBoxModelProfile.GENERIC) return progress
+        // The window is kept whatever the state, terminal ones included: it is what the next
+        // CLIENT_INFO's uptime is read against, and a reboot is exactly the thing a CONFIRMED rung
+        // has to answer for - see onDashboardIdentified.
+        val progress = load(context, motorcycle).copy(
+            lastSessionStartedAtMillis = nowMillis - facts.durationMillis,
+            lastSessionEndedAtMillis = nowMillis,
+            lastSessionEndedByDashboard = facts.endedByDashboard
+        )
+        if (modelProfile != TBoxModelProfile.GENERIC) {
+            save(context, motorcycle, progress)
+            return progress
+        }
         // Both terminal states stop here, and EXHAUSTED for the harder-won reason. Without it the
         // walk is a ring, not a ladder: advance() lands an exhausted bike back on rung 0, the next
         // session streams there, STREAMED asks the rider the question they have already answered,
@@ -289,6 +454,7 @@ object TBoxWireLadder {
         if (progress.state == TBoxLadderState.CONFIRMED ||
             progress.state == TBoxLadderState.EXHAUSTED
         ) {
+            save(context, motorcycle, progress)
             return progress
         }
 
@@ -418,6 +584,7 @@ object TBoxWireLadder {
         return "rung ${progress.rungIndex}/${RUNGS.lastIndex} ${rung.signature}, " +
             "${progress.state}, tried ${progress.attemptsOnRung}x" +
             (progress.lastOutcome?.let { ", last $it" } ?: "") +
+            (if (progress.rebootsOnRung > 0) ", reboots ${progress.rebootsOnRung}" else "") +
             (progress.fingerprint?.let { ", dash $it" } ?: "")
     }
 
@@ -432,6 +599,7 @@ object TBoxWireLadder {
                 rungIndex = 0,
                 state = TBoxLadderState.EXHAUSTED,
                 attemptsOnRung = 0,
+                rebootsOnRung = 0,
                 lastOutcome = outcome?.name ?: progress.lastOutcome
             )
         } else {
@@ -439,6 +607,7 @@ object TBoxWireLadder {
                 rungIndex = nextRung,
                 state = TBoxLadderState.TRYING,
                 attemptsOnRung = 0,
+                rebootsOnRung = 0,
                 lastOutcome = outcome?.name ?: progress.lastOutcome
             )
         }
