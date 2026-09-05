@@ -5,6 +5,7 @@ package io.motohub.android.encoding
 
 import android.media.MediaCodec
 import android.media.MediaCodecInfo
+import android.media.MediaCodecList
 import android.media.MediaFormat
 import android.os.Bundle
 import android.view.Surface
@@ -138,158 +139,7 @@ class AvcEncoder(
                 if (profile.keyframeIntervalSeconds == 0) " (all-intra)." else " (GOP)."
         )
         try {
-            val configuredCodec = MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_VIDEO_AVC)
-            codec = configuredCodec
-            val capabilities = runCatching {
-                configuredCodec.codecInfo.getCapabilitiesForType(MediaFormat.MIMETYPE_VIDEO_AVC)
-            }.getOrNull()
-            // Periodic IDRs are the remaining burst on a GOP stream, and answering congestion
-            // drops with recovery IDRs feeds the very congestion that caused them. Intra
-            // refresh removes the burst entirely: intra macroblocks are spread over a full
-            // refresh cycle, every frame stays route-sized, and a lost frame heals itself
-            // progressively within one cycle without any recovery signaling.
-            val useIntraRefresh = profile.keyframeIntervalSeconds > 0 &&
-                !profile.plainGopWithoutIntraRefresh &&
-                runCatching {
-                    capabilities?.isFeatureSupported(
-                        MediaCodecInfo.CodecCapabilities.FEATURE_IntraRefresh
-                    )
-                }.getOrNull() == true
-            // A GOP this codec cannot repair is worse than no GOP at all.
-            val streamInterval = effectiveKeyframeIntervalSeconds(
-                requestedSeconds = profile.keyframeIntervalSeconds,
-                plainGopWithoutIntraRefresh = profile.plainGopWithoutIntraRefresh,
-                intraRefreshAvailable = useIntraRefresh
-            )
-            streamKeyframeIntervalSeconds = streamInterval
-            // GOP streams ride links with shallow queues (the CORE video pipe): VBR spikes on
-            // keyframes and fast map motion overflow them and every dropped frame smears the
-            // picture until the next IDR. CBR bounds the per-frame burst instead.
-            val useCbr = streamInterval > 0 && runCatching {
-                capabilities?.encoderCapabilities
-                    ?.isBitrateModeSupported(MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR)
-            }.getOrNull() == true
-            if (profile.keyframeIntervalSeconds > 0) {
-                if (streamInterval == 0) {
-                    ProjectionEventLog.record(
-                        "ENCODER",
-                        "This codec has no intra refresh, so nothing would repair the " +
-                            "${profile.keyframeIntervalSeconds}s GOP between keyframes when the link " +
-                            "drops a frame: encoding an all-intra stream instead, where every frame " +
-                            "decodes on its own."
-                    )
-                } else {
-                    // Report what was actually configured. This line used to say "enabled"
-                    // unconditionally, which read as a bug in the Voge experiment: that
-                    // profile disables intra refresh on purpose and the log denied it.
-                    ProjectionEventLog.record(
-                        "ENCODER",
-                        "GOP stream rate control: " +
-                            (if (useCbr) "CBR" else "codec default (CBR unsupported)") +
-                            ", intra refresh: " +
-                            if (useIntraRefresh) "enabled." else "disabled (plain periodic IDRs)."
-                    )
-                }
-            }
-            fun encoderFormat(forceBaseline: Boolean, intraRefresh: Boolean) = MediaFormat.createVideoFormat(
-                MediaFormat.MIMETYPE_VIDEO_AVC,
-                profile.width,
-                profile.height
-            ).apply {
-                setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface)
-                setInteger(MediaFormat.KEY_BIT_RATE, profile.bitRate)
-                setInteger(MediaFormat.KEY_FRAME_RATE, profile.frameRate)
-                if (intraRefresh) {
-                    // A full picture refresh every ~1s of frames; scheduled IDRs become a rare
-                    // safety net because the rolling refresh keeps the stream healthy on its own.
-                    setInteger(MediaFormat.KEY_INTRA_REFRESH_PERIOD, profile.frameRate)
-                    setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, INTRA_REFRESH_IDR_INTERVAL_SECONDS)
-                } else {
-                    setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, streamInterval)
-                }
-                if (useCbr) {
-                    setInteger(
-                        MediaFormat.KEY_BITRATE_MODE,
-                        MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR
-                    )
-                }
-                setInteger(MediaFormat.KEY_PREPEND_HEADER_TO_SYNC_FRAMES, 1)
-                // The floor under a stalled pixel source, not idle pacing. When the source stops
-                // - an Android Auto decoder stall, seconds at a time, is the common case - this
-                // interval is the only thing still feeding the dash, because the codec re-submits
-                // the last surface buffer and nothing else arrives. The compositor cannot cover
-                // the gap either: its own idle redraw is slower still.
-                //
-                // What a repeat costs depends on the stream shape, so the interval follows it:
-                //
-                //  - GOP: the repeat is a skip-macroblock P-frame, tens of bytes. 100 ms buys a
-                //    10 fps floor for nothing, and it is the value ThinkerRide, green_trip and
-                //    cn_thinkerride all ship. At 900 ms a stalled source left barely 1 fps on the
-                //    wire and a KOVE 800X reset the video socket after ~8s of it (rider log,
-                //    2026-08-20). 10 fps also stays under AdaptiveVideoController.MIN_FRAME_RATE,
-                //    so the repeat can never outpace the frame cap.
-                //
-                //  - all-intra: every frame is a full IDR, and shouldForwardFrame lets them all
-                //    through because they are all keyframes. A 100 ms repeat would mean 10 IDRs a
-                //    second of an unchanged picture - the rate controller holds the bitrate, so
-                //    each IDR just gets a ninth of the bits and the still image gets worse, at
-                //    nine times the encoding work. All-intra also tolerates arbitrary frame loss
-                //    by design, which is exactly the starvation the short interval exists to
-                //    prevent. It keeps the interval it has always had.
-                //
-                // Keyed on streamInterval, not profile.keyframeIntervalSeconds: a requested GOP
-                // degrades to all-intra on a codec without intra refresh, and it is the shape the
-                // stream really has that decides what a repeated frame costs.
-                setLong(MediaFormat.KEY_REPEAT_PREVIOUS_FRAME_AFTER, repeatFrameAfterUs(streamInterval))
-                if (forceBaseline) {
-                    setInteger(
-                        MediaFormat.KEY_PROFILE,
-                        MediaCodecInfo.CodecProfileLevel.AVCProfileBaseline
-                    )
-                    setInteger(MediaFormat.KEY_LEVEL, MediaCodecInfo.CodecProfileLevel.AVCLevel31)
-                }
-            }
-            // Preference order: Baseline is the broadly-supported profile, intra refresh the
-            // burst-free stream shape. Fall back through the combinations because a codec that
-            // advertises FEATURE_IntraRefresh can still reject the key on configure().
-            data class ConfigureAttempt(val forceBaseline: Boolean, val intraRefresh: Boolean)
-            val attempts = buildList {
-                if (useIntraRefresh) {
-                    add(ConfigureAttempt(forceBaseline = true, intraRefresh = true))
-                    add(ConfigureAttempt(forceBaseline = false, intraRefresh = true))
-                }
-                add(ConfigureAttempt(forceBaseline = true, intraRefresh = false))
-                add(ConfigureAttempt(forceBaseline = false, intraRefresh = false))
-            }
-            var configured: ConfigureAttempt? = null
-            for ((index, attempt) in attempts.withIndex()) {
-                try {
-                    configuredCodec.configure(
-                        encoderFormat(attempt.forceBaseline, attempt.intraRefresh),
-                        null,
-                        null,
-                        MediaCodec.CONFIGURE_FLAG_ENCODE
-                    )
-                    configured = attempt
-                    ProjectionEventLog.record(
-                        "ENCODER",
-                        "Configured H.264 " +
-                            (if (attempt.forceBaseline) "Baseline profile at level 3.1" else "default profile") +
-                            if (attempt.intraRefresh) " with intra refresh." else "."
-                    )
-                    break
-                } catch (failure: Throwable) {
-                    if (index == attempts.lastIndex) throw failure
-                    ProjectionEventLog.warning(
-                        "ENCODER",
-                        "AVC configure rejected (baseline=${attempt.forceBaseline}, " +
-                            "intraRefresh=${attempt.intraRefresh}); trying the next combination.",
-                        failure
-                    )
-                    configuredCodec.reset()
-                }
-            }
-            intraRefreshActive = configured?.intraRefresh == true
+            val configuredCodec = configureFirstWillingEncoder()
             inputSurface = configuredCodec.createInputSurface()
             configuredCodec.start()
             ProjectionEventLog.record("ENCODER", "AVC codec ${configuredCodec.name} started with surface input.")
@@ -300,6 +150,287 @@ class AvcEncoder(
             releaseCodec()
             onFailure(failure)
         }
+    }
+
+    /**
+     * Walks the phone's AVC encoders in [avcEncoderOrder] until one accepts a format, and rethrows
+     * the last configure() failure when none does.
+     *
+     * `createEncoderByType` hands out one encoder, and that one used to be the only one ever asked.
+     * A rider's Huawei (Kirin, `OMX.hisi.*`) refused both of its combinations with CodecException
+     * 0x80001001 on every one of ~15 sessions between 2026-08-31 and 2026-09-04 - mirroring and
+     * Android Auto alike, all-intra and 2s GOP alike - so each session died before a single frame,
+     * and the log did not even name the codec that said no. The software encoder on the same phone
+     * was never tried. Now every encoder gets the whole combination ladder, a bare format closes it,
+     * and a total failure spells out what the phone has and what each encoder claims to support.
+     */
+    private fun configureFirstWillingEncoder(): MediaCodec {
+        val defaultName = runCatching {
+            MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_VIDEO_AVC).let { probe ->
+                probe.name.also { probe.release() }
+            }
+        }.getOrNull()
+        val advertised = listAvcEncoders()
+        val order = avcEncoderOrder(defaultName, advertised)
+        ProjectionEventLog.record(
+            "ENCODER",
+            "AVC encoders on this phone (default first): " +
+                order.joinToString { name ->
+                    name + (advertised.firstOrNull { it.name == name }?.let {
+                        if (it.hardware) " (hw)" else " (sw)"
+                    } ?: "")
+                }.ifEmpty { "none advertised" } + "."
+        )
+        var lastFailure: Throwable? = null
+        for (name in order) {
+            val created = try {
+                MediaCodec.createByCodecName(name)
+            } catch (failure: Throwable) {
+                ProjectionEventLog.warning(
+                    "ENCODER",
+                    "AVC encoder $name could not be created; trying the next encoder.",
+                    failure
+                )
+                lastFailure = failure
+                continue
+            }
+            codec = created
+            val failure = configureOnCodec(created) ?: return created
+            lastFailure = failure
+            ProjectionEventLog.warning(
+                "ENCODER",
+                "AVC encoder $name rejected every configuration; trying the next encoder.",
+                failure
+            )
+            codec = null
+            runCatching { created.release() }
+        }
+        ProjectionEventLog.error(
+            "ENCODER",
+            "No AVC encoder on this phone accepted ${profile.width}x${profile.height}@" +
+                "${profile.frameRate} at ${profile.bitRate}bps. " + describeAvcEncoders()
+        )
+        throw lastFailure ?: IllegalStateException("This phone advertises no AVC encoder.")
+    }
+
+    /**
+     * Offers [configuredCodec] every combination in [avcConfigureAttempts]; returns null once one
+     * is accepted - with the stream shape recorded - or the last rejection when none is.
+     */
+    private fun configureOnCodec(configuredCodec: MediaCodec): Throwable? {
+        val capabilities = runCatching {
+            configuredCodec.codecInfo.getCapabilitiesForType(MediaFormat.MIMETYPE_VIDEO_AVC)
+        }.getOrNull()
+        // Periodic IDRs are the remaining burst on a GOP stream, and answering congestion
+        // drops with recovery IDRs feeds the very congestion that caused them. Intra
+        // refresh removes the burst entirely: intra macroblocks are spread over a full
+        // refresh cycle, every frame stays route-sized, and a lost frame heals itself
+        // progressively within one cycle without any recovery signaling.
+        val useIntraRefresh = profile.keyframeIntervalSeconds > 0 &&
+            !profile.plainGopWithoutIntraRefresh &&
+            runCatching {
+                capabilities?.isFeatureSupported(
+                    MediaCodecInfo.CodecCapabilities.FEATURE_IntraRefresh
+                )
+            }.getOrNull() == true
+        // A GOP this codec cannot repair is worse than no GOP at all.
+        val streamInterval = effectiveKeyframeIntervalSeconds(
+            requestedSeconds = profile.keyframeIntervalSeconds,
+            plainGopWithoutIntraRefresh = profile.plainGopWithoutIntraRefresh,
+            intraRefreshAvailable = useIntraRefresh
+        )
+        // GOP streams ride links with shallow queues (the CORE video pipe): VBR spikes on
+        // keyframes and fast map motion overflow them and every dropped frame smears the
+        // picture until the next IDR. CBR bounds the per-frame burst instead.
+        val useCbr = streamInterval > 0 && runCatching {
+            capabilities?.encoderCapabilities
+                ?.isBitrateModeSupported(MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR)
+        }.getOrNull() == true
+        if (profile.keyframeIntervalSeconds > 0) {
+            if (streamInterval == 0) {
+                ProjectionEventLog.record(
+                    "ENCODER",
+                    "${configuredCodec.name} has no intra refresh, so nothing would repair the " +
+                        "${profile.keyframeIntervalSeconds}s GOP between keyframes when the link " +
+                        "drops a frame: encoding an all-intra stream instead, where every frame " +
+                        "decodes on its own."
+                )
+            } else {
+                // Report what was actually configured. This line used to say "enabled"
+                // unconditionally, which read as a bug in the Voge experiment: that
+                // profile disables intra refresh on purpose and the log denied it.
+                ProjectionEventLog.record(
+                    "ENCODER",
+                    "GOP stream rate control on ${configuredCodec.name}: " +
+                        (if (useCbr) "CBR" else "codec default (CBR unsupported)") +
+                        ", intra refresh: " +
+                        if (useIntraRefresh) "enabled." else "disabled (plain periodic IDRs)."
+                )
+            }
+        }
+        fun encoderFormat(attempt: AvcConfigureAttempt) = MediaFormat.createVideoFormat(
+            MediaFormat.MIMETYPE_VIDEO_AVC,
+            profile.width,
+            profile.height
+        ).apply {
+            setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface)
+            setInteger(MediaFormat.KEY_BIT_RATE, profile.bitRate)
+            setInteger(MediaFormat.KEY_FRAME_RATE, profile.frameRate)
+            if (attempt.intraRefresh) {
+                // A full picture refresh every ~1s of frames; scheduled IDRs become a rare
+                // safety net because the rolling refresh keeps the stream healthy on its own.
+                setInteger(MediaFormat.KEY_INTRA_REFRESH_PERIOD, profile.frameRate)
+                setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, INTRA_REFRESH_IDR_INTERVAL_SECONDS)
+            } else {
+                setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, streamInterval)
+            }
+            // The bare attempt stops here: size, bitrate, frame rate and keyframe interval are
+            // the least any encoder must take, and everything below is a key some vendor codec
+            // may refuse outright. The drain loop caches SPS/PPS from the output format and
+            // prepends them itself, so losing KEY_PREPEND_HEADER_TO_SYNC_FRAMES costs nothing
+            // on the wire; losing the repeat-frame floor only shows on a stalled source.
+            if (attempt.bare) return@apply
+            if (useCbr) {
+                setInteger(
+                    MediaFormat.KEY_BITRATE_MODE,
+                    MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR
+                )
+            }
+            setInteger(MediaFormat.KEY_PREPEND_HEADER_TO_SYNC_FRAMES, 1)
+            // The floor under a stalled pixel source, not idle pacing. When the source stops
+            // - an Android Auto decoder stall, seconds at a time, is the common case - this
+            // interval is the only thing still feeding the dash, because the codec re-submits
+            // the last surface buffer and nothing else arrives. The compositor cannot cover
+            // the gap either: its own idle redraw is slower still.
+            //
+            // What a repeat costs depends on the stream shape, so the interval follows it:
+            //
+            //  - GOP: the repeat is a skip-macroblock P-frame, tens of bytes. 100 ms buys a
+            //    10 fps floor for nothing, and it is the value ThinkerRide, green_trip and
+            //    cn_thinkerride all ship. At 900 ms a stalled source left barely 1 fps on the
+            //    wire and a KOVE 800X reset the video socket after ~8s of it (rider log,
+            //    2026-08-20). 10 fps also stays under AdaptiveVideoController.MIN_FRAME_RATE,
+            //    so the repeat can never outpace the frame cap.
+            //
+            //  - all-intra: every frame is a full IDR, and shouldForwardFrame lets them all
+            //    through because they are all keyframes. A 100 ms repeat would mean 10 IDRs a
+            //    second of an unchanged picture - the rate controller holds the bitrate, so
+            //    each IDR just gets a ninth of the bits and the still image gets worse, at
+            //    nine times the encoding work. All-intra also tolerates arbitrary frame loss
+            //    by design, which is exactly the starvation the short interval exists to
+            //    prevent. It keeps the interval it has always had.
+            //
+            // Keyed on streamInterval, not profile.keyframeIntervalSeconds: a requested GOP
+            // degrades to all-intra on a codec without intra refresh, and it is the shape the
+            // stream really has that decides what a repeated frame costs.
+            setLong(MediaFormat.KEY_REPEAT_PREVIOUS_FRAME_AFTER, repeatFrameAfterUs(streamInterval))
+            if (attempt.forceBaseline) {
+                setInteger(
+                    MediaFormat.KEY_PROFILE,
+                    MediaCodecInfo.CodecProfileLevel.AVCProfileBaseline
+                )
+                setInteger(MediaFormat.KEY_LEVEL, MediaCodecInfo.CodecProfileLevel.AVCLevel31)
+            }
+        }
+        var lastFailure: Throwable? = null
+        for (attempt in avcConfigureAttempts(useIntraRefresh)) {
+            try {
+                configuredCodec.configure(
+                    encoderFormat(attempt),
+                    null,
+                    null,
+                    MediaCodec.CONFIGURE_FLAG_ENCODE
+                )
+            } catch (failure: Throwable) {
+                lastFailure = failure
+                ProjectionEventLog.warning(
+                    "ENCODER",
+                    "${configuredCodec.name} rejected AVC configure (${attempt.describe()}); " +
+                        "trying the next combination.",
+                    failure
+                )
+                if (runCatching { configuredCodec.reset() }.isFailure) return failure
+                continue
+            }
+            // Only the stream shape that was actually accepted may drive the drain loop.
+            streamKeyframeIntervalSeconds = streamInterval
+            intraRefreshActive = attempt.intraRefresh
+            ProjectionEventLog.record(
+                "ENCODER",
+                "Configured H.264 ${attempt.describe()} on ${configuredCodec.name}."
+            )
+            return null
+        }
+        return lastFailure ?: IllegalStateException("No AVC configuration was attempted.")
+    }
+
+    private fun listAvcEncoders(): List<AvcEncoderCandidate> = runCatching {
+        MediaCodecList(MediaCodecList.REGULAR_CODECS).codecInfos
+            .filter { info ->
+                info.isEncoder && info.supportedTypes.any {
+                    it.equals(MediaFormat.MIMETYPE_VIDEO_AVC, ignoreCase = true)
+                }
+            }
+            .map { AvcEncoderCandidate(it.name, hardware = it.isHardwareAccelerated) }
+    }.getOrDefault(emptyList())
+
+    /**
+     * One line per advertised AVC encoder with what it claims for this profile's size, so a phone
+     * that refuses everything explains itself in the diagnostics report instead of in a guess.
+     */
+    private fun describeAvcEncoders(): String {
+        val encoders = runCatching {
+            MediaCodecList(MediaCodecList.REGULAR_CODECS).codecInfos.filter { info ->
+                info.isEncoder && info.supportedTypes.any {
+                    it.equals(MediaFormat.MIMETYPE_VIDEO_AVC, ignoreCase = true)
+                }
+            }
+        }.getOrDefault(emptyList())
+        if (encoders.isEmpty()) return "The phone advertises no AVC encoder at all."
+        return "Advertised: " + encoders.joinToString("; ") { info ->
+            val caps = runCatching { info.getCapabilitiesForType(MediaFormat.MIMETYPE_VIDEO_AVC) }
+                .getOrNull()
+            val video = caps?.videoCapabilities
+            val encoder = caps?.encoderCapabilities
+            buildString {
+                append(info.name)
+                append(if (info.isHardwareAccelerated) " (hw" else " (sw")
+                if (video != null) {
+                    append(", widths=").append(video.supportedWidths)
+                    append(", heights=").append(video.supportedHeights)
+                    append(", size ok=").append(
+                        runCatching { video.isSizeSupported(profile.width, profile.height) }
+                            .getOrDefault(false)
+                    )
+                    append(", fps@size=").append(
+                        runCatching {
+                            video.getSupportedFrameRatesFor(profile.width, profile.height)
+                        }.getOrNull() ?: "n/a"
+                    )
+                    append(", bitrate=").append(video.bitrateRange)
+                }
+                if (encoder != null) {
+                    append(", CBR=").append(
+                        runCatching {
+                            encoder.isBitrateModeSupported(
+                                MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR
+                            )
+                        }.getOrDefault(false)
+                    )
+                }
+                if (caps != null) {
+                    append(", intraRefresh=").append(
+                        runCatching {
+                            caps.isFeatureSupported(MediaCodecInfo.CodecCapabilities.FEATURE_IntraRefresh)
+                        }.getOrDefault(false)
+                    )
+                    append(", surface=").append(
+                        caps.colorFormats.contains(MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface)
+                    )
+                }
+                append(")")
+            }
+        } + "."
     }
 
     fun stop() {
