@@ -1947,4 +1947,18 @@
     <string name="legacy_landscape_fb5e029b">PAYSAGE</string>
     <string name="legacy_portrait_5a1dab9b">PORTRAIT</string>
     <string name="legacy_experimental_f1ae3108">Expérimental</string>
+    <!-- Source: catalogue catch-up 2026-09-06 - handlebar profiles, companion display, Home Assistant Torque, trip phone health, and the reworded wire verdict -->
+    <string name="legacy_1_s_is_holding_the_dashboard_connection_f85acc07">%1$s occupe la connexion au tableau de bord</string>
+    <string name="legacy_another_app_is_holding_the_dashboard_connection_2f8f3870">Une autre application occupe la connexion au tableau de bord</string>
+    <string name="legacy_force_stop_your_motorcycle_s_own_companion_app_f_47bc5899">Forcez l\'arrêt de l\'application compagnon de votre moto depuis sa page Informations sur l\'appli, puis réessayez : Android ne laisse pas une application libérer la connexion d\'une autre.</string>
+    <string name="legacy_if_it_stayed_on_the_pairing_screen_moto_hub_keep_74219a6">S\'il est resté sur l\'écran d\'appairage, MOTO-HUB continue d\'essayer des formats vidéo jusqu\'à ce que l\'un d\'eux fonctionne. Si d\'autres motards avec le même tableau de bord ont déjà confirmé celui-ci, il vous le demande une fois de plus avant de passer au suivant.</string>
+    <string name="legacy_if_your_other_moto_hub_app_is_running_a_session__263cbf82">Si votre autre application MOTO-HUB a une session en cours sur ce téléphone, arrêtez celle-là.</string>
+    <string name="legacy_import_qr_from_an_image_65acae9a">Importer un QR depuis une image</string>
+    <string name="legacy_moto_hub_will_connect_on_its_own_when_the_dashbo_9f3fe52b">MOTO-HUB se connectera tout seul quand le tableau de bord s\'allumera.</string>
+    <string name="legacy_on_this_phone_that_is_almost_always_1_s_force_st_26b6b463">Sur ce téléphone c\'est presque toujours %1$s. Forcez son arrêt depuis sa page Informations sur l\'appli, puis réessayez : Android ne laisse pas une application libérer la connexion d\'une autre.</string>
+    <string name="legacy_shown_while_moto_hub_watches_for_the_motorcycle__5410550d">Affiché pendant que MOTO-HUB guette le Wi-Fi de la moto.</string>
+    <string name="legacy_the_three_local_ports_moto_hub_needs_for_the_das_ac32b51a">Les trois ports locaux dont MOTO-HUB a besoin pour le tableau de bord (%1$s) sont occupés en ce moment, la connexion échouerait.</string>
+    <string name="legacy_try_anyway_909523a8">Essayer quand même</string>
+    <string name="legacy_waiting_for_s_c5c92cf8">En attente de %s</string>
+    <string name="legacy_waiting_for_the_motorcycle_24d361aa">En attente de la moto</string>
 </resources>

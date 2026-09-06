@@ -1948,4 +1948,18 @@
     <string name="legacy_landscape_fb5e029b">QUERFORMAT</string>
     <string name="legacy_portrait_5a1dab9b">HOCHFORMAT</string>
     <string name="legacy_experimental_f1ae3108">Experimentell</string>
+    <!-- Source: catalogue catch-up 2026-09-06 - handlebar profiles, companion display, Home Assistant Torque, trip phone health, and the reworded wire verdict -->
+    <string name="legacy_1_s_is_holding_the_dashboard_connection_f85acc07">%1$s belegt die Verbindung zum Cockpit</string>
+    <string name="legacy_another_app_is_holding_the_dashboard_connection_2f8f3870">Eine andere App belegt die Verbindung zum Cockpit</string>
+    <string name="legacy_force_stop_your_motorcycle_s_own_companion_app_f_47bc5899">Beenden Sie die Begleit-App Ihres Motorrads zwangsweise über deren App-Info-Seite und versuchen Sie es erneut - Android lässt eine App die Verbindung einer anderen nicht freigeben.</string>
+    <string name="legacy_if_it_stayed_on_the_pairing_screen_moto_hub_keep_74219a6">Blieb es auf dem Kopplungsbildschirm, probiert MOTO-HUB weiter Videoformate, bis eines funktioniert. Wenn andere Fahrer mit demselben Dashboard dieses bereits bestätigt haben, fragt es dich noch einmal, bevor es weitergeht.</string>
+    <string name="legacy_if_your_other_moto_hub_app_is_running_a_session__263cbf82">Wenn Ihre andere MOTO-HUB-App auf diesem Telefon eine Sitzung führt, beenden Sie stattdessen jene.</string>
+    <string name="legacy_import_qr_from_an_image_65acae9a">QR aus einem Bild importieren</string>
+    <string name="legacy_moto_hub_will_connect_on_its_own_when_the_dashbo_9f3fe52b">MOTO-HUB verbindet sich von selbst, sobald das Cockpit hochfährt.</string>
+    <string name="legacy_on_this_phone_that_is_almost_always_1_s_force_st_26b6b463">Auf diesem Telefon ist das fast immer %1$s. Beenden Sie es zwangsweise über die App-Info-Seite und versuchen Sie es erneut - Android lässt eine App die Verbindung einer anderen nicht freigeben.</string>
+    <string name="legacy_shown_while_moto_hub_watches_for_the_motorcycle__5410550d">Wird angezeigt, während MOTO-HUB auf das WLAN des Motorrads wartet.</string>
+    <string name="legacy_the_three_local_ports_moto_hub_needs_for_the_das_ac32b51a">Die drei lokalen Ports, die MOTO-HUB für das Cockpit braucht (%1$s), sind gerade belegt, die Verbindung würde also scheitern.</string>
+    <string name="legacy_try_anyway_909523a8">Trotzdem versuchen</string>
+    <string name="legacy_waiting_for_s_c5c92cf8">Warten auf %s</string>
+    <string name="legacy_waiting_for_the_motorcycle_24d361aa">Warten auf das Motorrad</string>
 </resources>

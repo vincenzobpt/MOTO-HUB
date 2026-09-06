@@ -1956,4 +1956,18 @@
     <string name="legacy_landscape_fb5e029b">LANDSCAPE</string>
     <string name="legacy_portrait_5a1dab9b">PORTRAIT</string>
     <string name="legacy_experimental_f1ae3108">Experimental</string>
+    <!-- Source: catalogue catch-up 2026-09-06 - handlebar profiles, companion display, Home Assistant Torque, trip phone health, and the reworded wire verdict -->
+    <string name="legacy_1_s_is_holding_the_dashboard_connection_f85acc07">%1$s is holding the dashboard connection</string>
+    <string name="legacy_another_app_is_holding_the_dashboard_connection_2f8f3870">Another app is holding the dashboard connection</string>
+    <string name="legacy_force_stop_your_motorcycle_s_own_companion_app_f_47bc5899">Force-stop your motorcycle\'s own companion app from its App info page and try again - Android does not let one app release another one\'s connection.</string>
+    <string name="legacy_if_it_stayed_on_the_pairing_screen_moto_hub_keep_74219a6">If it stayed on the pairing screen, MOTO-HUB keeps trying video formats until one works. When other riders with the same dashboard have already confirmed this one, it asks you once more before moving on.</string>
+    <string name="legacy_if_your_other_moto_hub_app_is_running_a_session__263cbf82">If your other MOTO-HUB app is running a session on this phone, stop that one instead.</string>
+    <string name="legacy_import_qr_from_an_image_65acae9a">Import QR from an image</string>
+    <string name="legacy_moto_hub_will_connect_on_its_own_when_the_dashbo_9f3fe52b">MOTO-HUB will connect on its own when the dashboard comes up.</string>
+    <string name="legacy_on_this_phone_that_is_almost_always_1_s_force_st_26b6b463">On this phone that is almost always %1$s. Force-stop it from its App info page and try again - Android does not let one app release another one\'s connection.</string>
+    <string name="legacy_shown_while_moto_hub_watches_for_the_motorcycle__5410550d">Shown while MOTO-HUB watches for the motorcycle\'s Wi-Fi.</string>
+    <string name="legacy_the_three_local_ports_moto_hub_needs_for_the_das_ac32b51a">The three local ports MOTO-HUB needs for the dashboard (%1$s) are in use right now, so the connection would fail.</string>
+    <string name="legacy_try_anyway_909523a8">Try anyway</string>
+    <string name="legacy_waiting_for_s_c5c92cf8">Waiting for %s</string>
+    <string name="legacy_waiting_for_the_motorcycle_24d361aa">Waiting for the motorcycle</string>
 </resources>

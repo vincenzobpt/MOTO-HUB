@@ -1371,4 +1371,18 @@
     <string name="legacy_landscape_fb5e029b">ORIZZONTALE</string>
     <string name="legacy_portrait_5a1dab9b">VERTICALE</string>
     <string name="legacy_experimental_f1ae3108">Sperimentale</string>
+    <!-- Source: catalogue catch-up 2026-09-06 - handlebar profiles, companion display, Home Assistant Torque, trip phone health, and the reworded wire verdict -->
+    <string name="legacy_1_s_is_holding_the_dashboard_connection_f85acc07">%1$s sta tenendo la connessione al cruscotto</string>
+    <string name="legacy_another_app_is_holding_the_dashboard_connection_2f8f3870">Un\'altra app sta tenendo la connessione al cruscotto</string>
+    <string name="legacy_force_stop_your_motorcycle_s_own_companion_app_f_47bc5899">Forza l\'arresto dell\'app companion della tua moto dalla sua pagina Info app e riprova: Android non permette a un\'app di liberare la connessione di un\'altra.</string>
+    <string name="legacy_if_it_stayed_on_the_pairing_screen_moto_hub_keep_74219a6">Se è rimasto sulla schermata di associazione, MOTO-HUB continua a provare formati video finché non ne funziona uno. Se altri motociclisti con lo stesso cruscotto hanno già confermato questo, te lo chiede ancora una volta prima di cambiarlo.</string>
+    <string name="legacy_if_your_other_moto_hub_app_is_running_a_session__263cbf82">Se l\'altra app MOTO-HUB sta gestendo una sessione su questo telefono, ferma quella.</string>
+    <string name="legacy_import_qr_from_an_image_65acae9a">Importa il QR da un\'immagine</string>
+    <string name="legacy_moto_hub_will_connect_on_its_own_when_the_dashbo_9f3fe52b">MOTO-HUB si collegherà da solo quando il cruscotto si accende.</string>
+    <string name="legacy_on_this_phone_that_is_almost_always_1_s_force_st_26b6b463">Su questo telefono è quasi sempre %1$s. Forzane l\'arresto dalla sua pagina Info app e riprova: Android non permette a un\'app di liberare la connessione di un\'altra.</string>
+    <string name="legacy_shown_while_moto_hub_watches_for_the_motorcycle__5410550d">Mostrato mentre MOTO-HUB attende il Wi-Fi della moto.</string>
+    <string name="legacy_the_three_local_ports_moto_hub_needs_for_the_das_ac32b51a">Le tre porte locali che MOTO-HUB usa per il cruscotto (%1$s) sono occupate in questo momento, quindi la connessione fallirebbe.</string>
+    <string name="legacy_try_anyway_909523a8">Prova lo stesso</string>
+    <string name="legacy_waiting_for_s_c5c92cf8">In attesa di %s</string>
+    <string name="legacy_waiting_for_the_motorcycle_24d361aa">In attesa della moto</string>
 </resources>
