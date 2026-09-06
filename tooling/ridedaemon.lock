@@ -1,40 +1,23 @@
 # Generated dependency record. Update this file whenever hudlib.aar is rebuilt.
 source_repository=https://github.com/vincenzobpt/ridedaemon-lib
-source_commit=8aa76b849b7118ab8883f89181787d9307c7b043
+source_commit=f0ac158930a7afb71ee7b4134b0271c0c8dae8c5
 source_dirty=false
 source_checkout=refs/ridedaemon-lib-motohub
 gomobile_android_api=31
 artifact=apps/android/app/libs/hudlib.aar
-sha256=9a9da827c4b16bd77c5f7a474e54f2f4b4d3417ff1bfdd1c93b179bfcb967b9d
+sha256=d0bd5bae1d4d46cc345fbf7eb31e8b988d4cf40614d6910001f200efb781c3a5
 license=GPL-3.0-only
 
-# Rebuilt 2026-08-26: a teardown no longer reports itself as a dash failure, and
-# the notice a surviving PXC channel produces now says which channel died and
-# how long the dash had been ignoring it.
+# Rebuilt 2026-09-04: the daemon now reports how many frames the dashboard has
+# actually pulled off the data socket, so a session log can say whether the far
+# end ever asked for a picture.
 #
-# The media control and media stream listeners gained the isStopping() guard the
-# PXC server has always had - without it every stop emitted a fatal "use of
-# closed network connection", which is net.ErrClosed, i.e. our own CloseAll
-# reported back as the dash's fault. In a field log from a Voge dash over
-# Wi-Fi Direct it was the FIRST line of the teardown, ahead of the dash-side EOF
-# that actually caused it, because each callback is relayed on its own
-# goroutine. Both listeners also took the per-connection fatality rule already
-# used for PXC: fatal only when nothing else is being served there.
+# Every delivery number this app printed described the pipe from the encoder into
+# the transport - offerAccessUnit returning true - and stayed perfect while the
+# dashboard read nothing. The daemon has always counted the dash's own 0x0072
+# pulls; it now forwards them, which is what lets the transport say the dashboard
+# opened the video socket and closed it without ever asking for anything.
 #
-# Deliberately unchanged: the proactive keepalive. The ~18-minute ETIMEDOUT on
-# an abandoned CAR_DATA is tcp_retries2 counting from the first unacknowledged
-# byte, sent at the start of the session, so stopping the writes later cannot
-# save that socket - only never writing to it would, and that trades a known
-# 7-second death for a suspected one on a single correlation.
-#
-# Built with -androidapi 31, and pro-poc now records 31 too. It used to say 34,
-# but both worktrees have been carrying the same API-31 artifact since 1.1.95;
-# the field was describing an intention rather than the file. 31 is safe in both
-# (CORE is minSdk 31, pro-poc 34) because an AAR must never require a HIGHER API
-# than the app's minSdk - lower always works.
-#
-# Verified in the artifact: 4 ABIs as before, binding surface unchanged, the new
-# format strings present in libgojni.so, and the same .so byte-for-byte inside
-# app-debug.apk and app-core-debug.apk. app-pro-debug.apk carries zero copies of
-# it, so the GPL boundary still holds.
-source_note=teardown-is-not-a-dash-failure
+# Same build shape as the previous artifact: -androidapi 31, 4 ABIs, binding
+# surface unchanged.
+source_note=dash-pull-counter
