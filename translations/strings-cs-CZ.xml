@@ -1,0 +1,1976 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Locale: cs-CZ. Contributed by Puzzlehead0 (issue #9); en-US stays the source of truth. -->
+    <!-- Application identity -->
+    <string name="app_name">MOTO-HUB</string>
+
+    <!-- Settings > General > Language. Names are kept in their native form. -->
+    <string name="language_system_default">Výchozí dle systému</string>
+    <string name="language_english">English</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_korean">한국어 (대한민국)</string>
+    <string name="language_french">Français</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_dutch">Nederlands</string>
+    <string name="language_czech">Čeština</string>
+    <string name="language_title">Jazyk</string>
+    <string name="language_description">Vyberte jazyk používaný aplikací MOTO-HUB</string>
+    <string name="language_detail_description">MOTO-HUB se výchozím nastavením řídí jazykem telefonu. Výběrem jazyka níže jej pro tuto aplikaci přepíšete.</string>
+
+    <!-- Settings main page -->
+    <string name="settings_configuration">KONFIGURACE</string>
+    <string name="settings_title">Nastavení</string>
+    <string name="settings_general">Obecné</string>
+    <string name="settings_general_description">Jazyk, plynulé obnovení a chování aplikace</string>
+
+    <!-- Settings > General -->
+    <string name="settings_general_title">Obecné</string>
+    <string name="settings_check_updates_on_launch">Zkontrolovat aktualizace při spuštění</string>
+    <string name="settings_check_updates_on_launch_description">Kontrolovat aktualizace na GitHubu automaticky, maximálně jednou za 24 hodin</string>
+    <string name="settings_enable_seamless_resume">Povolit plynulé obnovení</string>
+    <string name="settings_seamless_resume_enabled_description">Android Auto se může po dlouhém přerušení T-Boxu obnovit s vypnutou obrazovkou</string>
+    <string name="settings_seamless_resume_disabled_description">Povolit Android Auto obnovit běh na pozadí, když se motocykl vrátí; při prvním povolení je vyžadováno oprávnění</string>
+
+    <!-- Settings option labels. These are also used by the route and projection pickers. -->
+    <string name="video_quality_smoother">Plynulejší</string>
+    <string name="video_quality_smoother_description">Nižší datový tok, méně tepla a nižší zátěž sítě.</string>
+    <string name="video_quality_balanced">Vyvážená</string>
+    <string name="video_quality_balanced_description">Aktuální kvalita MOTO-HUB a doporučené výchozí nastavení.</string>
+    <string name="video_quality_sharper">Ostřejší</string>
+    <string name="video_quality_sharper_description">Vyšší datový tok pro čistší mapy a text.</string>
+    <string name="video_power_auto">Automaticky</string>
+    <string name="video_power_auto_description">Přizpůsobit datový tok a snímkovou frekvenci teplotě telefonu a kvalitě Wi-Fi.</string>
+    <string name="video_power_smooth">Plynulý</string>
+    <string name="video_power_smooth_description">30 FPS s vybranou kvalitou videa.</string>
+    <string name="video_power_balanced">Vyvážený</string>
+    <string name="video_power_balanced_description">Stabilních 24 FPS s vybranou kvalitou videa.</string>
+    <string name="video_power_saver">Úsporný</string>
+    <string name="video_power_saver_description">20 FPS pro snížení zahřívání a spotřeby baterie.</string>
+    <string name="android_auto_resolution_auto">Automaticky</string>
+    <string name="android_auto_resolution_auto_description">Ponechat automatickou orientaci MOTO-HUB na základě zjištěné geometrie T-Boxu.</string>
+    <string name="android_auto_resolution_landscape_sd">Na šířku 800 x 480</string>
+    <string name="android_auto_resolution_landscape_sd_description">Standardní zdroj Android Auto na šířku.</string>
+    <string name="android_auto_resolution_landscape_hd">Na šířku 1280 x 720</string>
+    <string name="android_auto_resolution_landscape_hd_description">Ostřejší HD obraz na šířku s vyšší zátěží telefonu.</string>
+    <string name="android_auto_resolution_landscape_fhd">Na šířku 1920 × 1080</string>
+    <string name="android_auto_resolution_landscape_fhd_description">Zdroj v rozlišení Full HD na šířku. Neověřeno na žádné známé palubní desce.</string>
+    <string name="android_auto_resolution_landscape_qhd">Na šířku 2560 × 1440</string>
+    <string name="android_auto_resolution_landscape_qhd_description">Zdroj v rozlišení Quad HD na šířku. Náročné pro telefon a neověřeno na žádné známé palubní desce.</string>
+    <string name="android_auto_resolution_landscape_uhd">Na šířku 3840 × 2160</string>
+    <string name="android_auto_resolution_landscape_uhd_description">Zdroj v rozlišení 4K na šířku. Telefon kóduje a dekóduje 4K současně; počítejte se zahříváním a výpadky snímků.</string>
+    <string name="android_auto_resolution_portrait_sd">Na výšku 720 x 1280</string>
+    <string name="android_auto_resolution_portrait_sd_description">Standardní zdroj Android Auto na výšku.</string>
+    <string name="android_auto_resolution_portrait_hd">Na výšku 1080 x 1920</string>
+    <string name="android_auto_resolution_portrait_hd_description">Ostřejší HD obraz na výšku s vyšší zátěží telefonu.</string>
+    <string name="android_auto_resolution_portrait_qhd">Na výšku 1440 × 2560</string>
+    <string name="android_auto_resolution_portrait_qhd_description">Zdroj v rozlišení Quad HD na výšku. Náročné pro telefon a neověřeno na žádné známé palubní desce.</string>
+    <string name="android_auto_resolution_portrait_uhd">Na výšku 2160 × 3840</string>
+    <string name="android_auto_resolution_portrait_uhd_description">Zdroj v rozlišení 4K na výšku. Telefon kóduje a dekóduje 4K současně; počítejte se zahříváním a výpadky snímků.</string>
+    <string name="android_auto_density_auto">Automaticky</string>
+    <string name="android_auto_density_auto_description">Použije se hustota, která odpovídá vybranému rozlišení.</string>
+    <string name="android_auto_density_120">120 dpi</string>
+    <string name="android_auto_density_120_description">Nejmenší rozhraní, nejvíce mapy na obrazovce. Obtížně čitelné na malém TFT displeji.</string>
+    <string name="android_auto_density_160">160 dpi</string>
+    <string name="android_auto_density_160_description">Malé rozhraní. Hustota, kterou zdroje na šířku používají výchozím nastavení.</string>
+    <string name="android_auto_density_213">213 dpi</string>
+    <string name="android_auto_density_213_description">Mezi malým a standardním. Užitečné, když je 160 příliš těsné a 240 příliš hrubé.</string>
+    <string name="android_auto_density_240">240 dpi</string>
+    <string name="android_auto_density_240_description">Standardní rozhraní. Hustota, kterou zdroje na výšku používají výchozím nastavení.</string>
+    <string name="android_auto_density_320">320 dpi</string>
+    <string name="android_auto_density_320_description">Velké rozhraní, snáze čitelné a lépe stisknutelné v rukavicích. Méně mapy na obrazovce.</string>
+    <string name="android_auto_density_480">480 dpi</string>
+    <string name="android_auto_density_480_description">Největší rozhraní. Smysluplné pouze u zdrojů s vysokým rozlišením.</string>
+    <string name="android_auto_insets_auto">Automaticky</string>
+    <string name="android_auto_insets_auto_description">Použít plný zdroj Android Auto; projekční oblast T-Box nepřidává žádné okraje AA.</string>
+    <string name="android_auto_insets_manual">Ručně</string>
+    <string name="android_auto_insets_manual_description">Oznamovat Android Auto bezpečné okraje TFT dle konkrétní motorky.</string>
+    <string name="distance_units_kilometers">Kilometry</string>
+    <string name="distance_units_kilometers_description">Vzdálenosti a rychlosti v km a km/h.</string>
+    <string name="distance_units_miles">Míle</string>
+    <string name="distance_units_miles_description">Vzdálenosti a rychlosti v mi a mph.</string>
+    <string name="route_preference_fastest">Nejrychlejší</string>
+    <string name="route_preference_fastest_description">Nejrychlejší trasa, dálnice povoleny.</string>
+    <string name="route_preference_scenic">Vyhlídková</string>
+    <string name="route_preference_scenic_description">Upřednostnění vedlejších silnic a vyhýbání se dálnicím.</string>
+
+    <!-- Core/Pro bridge notification -->
+    <string name="core_bridge_channel_name">MOTO-HUB Core propojení</string>
+    <string name="core_bridge_channel_description">Udržuje spojení s T-Boxem aktivní, zatímco jej MOTO-HUB Pro používá</string>
+    <string name="core_bridge_notification_title">MOTO-HUB Core je aktivní</string>
+    <string name="core_bridge_notification_text">Obsluhuje MOTO-HUB Pro.</string>
+
+    <!-- Projection notifications -->
+    <string name="projection_channel_name">Projekce MOTO-HUB</string>
+    <string name="projection_channel_description">Stav streamování na displej motocyklu</string>
+    <string name="projection_notification_title">MOTO-HUB je aktivní</string>
+    <string name="projection_notification_text">Projekce obrazovky je aktivní.</string>
+    <string name="projection_notification_dimmed_text">Projekce je aktivní, displej telefonu je ztmavený.</string>
+    <string name="stop_projection">Zastavit</string>
+    <string name="dim_phone_display">Ztmavit displej</string>
+    <string name="restore_phone_display">Obnovit displej</string>
+
+    <!-- Android Auto notifications -->
+    <string name="android_auto_channel_name">MOTO-HUB Android Auto</string>
+    <string name="android_auto_notification_title">Relace MOTO-HUB Android Auto</string>
+    <string name="android_auto_notification_text">Relace je aktivní. Otevřete MOTO-HUB pro živý stav projekce.</string>
+    <string name="stop_android_auto">Zastavit Android Auto</string>
+
+    <!-- Ride Dashboard notifications -->
+    <string name="ride_dashboard_channel_name">MOTO-HUB Ride Dashboard</string>
+    <string name="ride_dashboard_channel_description">Stav živého streamování dat jízdy</string>
+    <string name="ride_dashboard_notification_title">MOTO-HUB Ride Dashboard</string>
+    <string name="ride_dashboard_notification_text">Telemetrie GPS a streamování palubní desky jsou aktivní.</string>
+    <string name="stop_ride_dashboard">Zastavit palubní desku</string>
+    <!-- Source: MainActivity.kt -->
+    <string name="legacy_moto_hub_diagnostics_ba6420b1">Diagnostika MOTO-HUB</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_about_the_project_2feef1f7">O PROJEKTU</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_check_for_updates_66a2b53b">Zkontrolovat aktualizace</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_close_3e2edd8">Zavřít</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_experimental_software_e22071df">EXPERIMENTÁLNÍ SOFTWARU</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_no_network_called_1_s_has_been_seen_but_this_pho_3174d343">Žádná síť s názvem „%1$s“ nebyla nalezena, ale tento telefon zná „%2$s“, která se liší pouze v mezerách. Chcete-li zachovat to, co jste zadali, uložte znovu.</string>
+    <string name="legacy_open_github_repository_80f9bf71">Otevřít repozitář na GitHubu</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_platform_9e635873">PLATFORMA</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_source_support_aa797bf0">ZDROJ A PODPORA</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_use_1_s_ef5e7994">Použít %1$s</string>
+    <string name="legacy_version_3fc0a8b8">VERZE</string>
+    <!-- Source: feature/androidauto/AndroidAutoPreviewScreen.kt -->
+    <string name="legacy_fullscreen_7d6157db">Celá obrazovka</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_address_or_coordinates_9e7a90a">Adresa nebo souřadnice</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_back_1f7907">Zpět</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_controls_e20faad6">Ovládací prvky</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_cycle_panels_c623ab89">Přepínat panely</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_everything_on_this_page_controls_the_projection__88534bf1">Vše na této stránce ovládá projekci aktuálně zobrazovanou na motocyklu.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_exit_fullscreen_b7c93dd">Opustit celou obrazovku</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_fullscreen_map_bafc2397">Mapa na celou obrazovku</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_handlebar_controls_cf2abe6b">Ovládání na řídítkách</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_home_2268ff">Domů</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_open_glove_friendly_fullscreen_controller_2d746356">Otevřít ovladač na celou obrazovku pro rukavice</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_reset_default_mapping_bd7464fe">Obnovit výchozí mapování</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_scroll_ebe1cfb8">Posun +</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_scroll_ebe1f19f">Posun −</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_the_value_is_restored_when_handlebar_capture_is__ea95c499">Hodnota se obnoví, jakmile se odchytávání na řídítkách vypne.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_timing_9551dc6a">Časování</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_use_the_motorcycle_buttons_without_looking_down__1b06094c">Používejte tlačítka motocyklu bez nutnosti dívat se dolů. Aktivní projekce přijímá příkazy jako první.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_voice_4eff112">Hlas</string>
+    <!-- Source: feature/controls/MediaButtonBridge.kt -->
+    <string name="legacy_motorcycle_buttons_control_targetname_c5bca78f">Tlačítka motocyklu ovládají $targetName</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_application_logs_ca54c69f">Provozní deníky aplikace</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_clear_3e2c62d">Vymazat</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_copy_log_e59a8039">Kopírovat protokol</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_no_diagnostic_events_have_been_recorded_290567d5">Nebyly zaznamenány žádné diagnostické události.</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_persistent_events_from_wi_fi_t_box_mirroring_enc_679d01c0">Trvalé události z Wi-Fi, T-Boxu, zrcadlení, enkodéru a Android Auto.</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_share_4c25fbf">Sdílet</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_troubleshooting_f6bb8e3a">ŘEŠENÍ PROBLÉMŮ</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_check_t_box_and_cellular_routes_without_starting_7ae11348">Zkontrolovat trasy T-Boxu a mobilních dat bez spuštění VPN nebo změny výchozí sítě.</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_network_diagnostics_a4fc929a">Diagnostika sítě</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_no_network_snapshot_available_5baf5bb0">Není k dispozici žádný snímek sítě.</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_result_8fe0bc1d">VÝSLEDEK</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_system_lab_433267fc">SYSTÉMOVÁ LAB</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_start_a_projection_to_populate_the_log_23fff8de">Spusťte projekci pro naplnění protokolu.</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_add_a_motorcycle_by_scanning_its_t_box_qr_code_a77ba91f">Přidejte motocykl naskenováním QR kódu jeho T-Boxu.</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_add_motorcycle_397b0e90">Přidat motocykl</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_edit_20e22a">Upravit</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_motorcycles_2c9478e2">Motocykly</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_no_qr_connect_manually_8ad804ea">Nemáte QR kód? Připojte se ručně</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_options_18bf1e7e">Možnosti</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_saved_motorcycles_181a24a9">ULOŽENÉ MOTOCYKLY</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_scan_a_qr_code_5a21ea0a">Naskenovat QR kód</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_use_this_motorcycle_1204179a">Použít tento motocykl</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_your_garage_c0aeffb4">VAŠE GARÁŽ</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_your_garage_is_empty_f25b99e3">Vaše garáž je prázdná</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_connection_eeae6ade">PŘIPOJENÍ</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_cancel_77df1a9a">Zrušit</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_changes_are_saved_immediately_3ab73352">Změny se ukládají okamžitě.</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_choose_how_the_complete_android_auto_image_is_fi_cb149112">Vyberte, jak se má celý obraz Android Auto přizpůsobit displeji TFT.</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_display_name_6697cf49">Zobrazované jméno</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_exclude_pixels_occupied_by_the_motorcycle_ui_the_c5210089">Vyloučit pixely obsazené uživatelským rozhraním motocyklu. Tyto hodnoty jsou uloženy pro tento </string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_for_example_300_1aa3b7a">Například: 300</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_for_example_mt700_adventure_4c1ae7c7">Například: MT700 Adventure</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_fuel_2195d6">Palivo</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_full_tank_range_on_a_fill_up_powers_the_fuel_ran_68a667ae">Dojezd na plnou nádrž. Napájí varování dojezdu paliva při navigaci.</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_identity_fbc2d4de">Identita</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_motorcycle_profile_bd90ddfa">PROFIL MOTOCYKLU</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_make_it_yours_9dfd813d">Přizpůsobte si aplikaci</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_override_the_automatic_profile_detection_for_thi_dcc5245b">Přepsat automatickou detekci profilu pro tento motocykl. Použijte pouze v případě, že </string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_91afe4a4">Odebrat</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_motorcycle_c0498b52">Odebrat motocykl?</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_photo_7fa92bb6">Odebrat fotku</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_this_motorcycle_f21e94d7">Odebrat tento motocykl</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_reset_margins_ff05a94">Obnovit okraje</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_t_box_identifier_modelid_2c1c9ebd">Identifikátor T-Boxu: $modelId</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_tank_range_km_f16147b8">Dojezd nádrže (km)</string>
+    <!-- Garage tank-range field label when the rider selects miles. -->
+    <string name="legacy_tank_range_mi_f1614ebe">Dojezd nádrže (mi)</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_the_wi_fi_password_is_stored_securely_on_this_ph_b6fb6382">Heslo Wi-Fi je bezpečně uloženo v tomto telefonu.</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_the_name_is_only_used_inside_moto_hub_10a5f3a4">Název se používá pouze uvnitř aplikace MOTO-HUB.</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_the_saved_connection_profile_and_its_photo_will__c6d581e2">Uložený profil připojení a jeho fotografie budou z MOTO-HUB odstraněny.</string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_could_not_derive_a_peer_ip_this_network_may_not__3fa3f2d0">Nelze odvodit IP adresu protějšku – tato síť možná ještě nemá použitelnou trasu.</string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_if_easyconn_discovery_keeps_failing_briefly_reco_ced96e0d">Pokud vyhledávání EasyConn stále selhává, krátce se znovu připojte k tomuto T-Boxu a prověřte jej </string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_scan_common_easyconn_ports_835f5172">Skenovat běžné porty EasyConn</string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_t_box_capability_inspector_937ec87d">INSPEKTOR SCHOPNOSTÍ T-BOXU</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_another_easyconn_app_can_keep_the_t_box_link_occ_fd2f2f53">Jiná aplikace EasyConn může blokovat spojení s T-Boxem i po opuštění popředí.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_connection_failed_3b5c2fbf">PŘIPOJENÍ SELHALO</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_choose_what_the_ride_dashboard_shows_for_navigat_793eeb07">Vyberte, co má Ride Dashboard zobrazovat pro navigaci.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_connect_your_motorcycle_2e5794e6">Připojte svůj motocykl.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_connecting_48965ad8">Připojování</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_dashboard_map_5dae1b0">Mapa palubní desky</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_disconnect_966f34bc">Odpojit</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_first_time_setup_d929eaa7">PRVOTNÍ NASTAVENÍ</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_session_actions_bc6aa933">AKCE RELACE</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_scan_the_t_box_qr_code_to_save_the_network_crede_67df5b62">Naskenujte QR kód T-Boxu pro automatické uložení přihlašovacích údajů k síti.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_setting_up_network_and_t_box_7769a762">Nastavování sítě a T-Boxu</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_what_to_show_122be0b9">Co zobrazit?</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_back_fe3a848e">‹ Zpět</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_arrived_ff08704d">V CÍLI</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_calculating_your_route_86fbe56d">Výpočet vaší trasy…</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_done_2097a2">Hotovo</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_exact_destination_pin_used_for_routing_tap_the_m_10786cc">Přesný špendlík cíle použitý pro směrování. Klepnutím na mapu jej změníte.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_guidance_to_your_destination_will_end_27d69f">Navádění do vašeho cíle bude ukončeno.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_info_225cae">INFO</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_keep_going_6d8f25bf">Pokračovat</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_live_navigation_70ce19c8">ŽIVÁ NAVIGACE</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_map_location_9df6ea19">POLOHA NA MAPĚ</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_navigation_needs_attention_7f3ab90f">NAVIGACE VYŽADUJE POZORNOST</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_no_9c1">NE</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_name_24eeab">Název</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_navigation_will_start_either_way_open_the_ride_d_b34bca11">Navigace se spustí v obou případech. Otevřít Ride Dashboard na TFT motocyklu?</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_no_favorites_yet_save_one_from_a_route_preview_o_b8e45fac">Zatím žádné oblíbené položky. Uložte si nějakou z náhledu trasy nebo obrazovky příjezdu.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_no_matches_e3c700ba">Žádné shody.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_not_every_address_number_is_mapped_in_openstreet_cf7708fe">Ne každé popisné číslo je v OpenStreetMap ještě zmapováno, takže špendlík </string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_off_route_recalculating_1f5a422b">Mimo trasu – přepočítávání…</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_open_ride_dashboard_202629d">Otevřít Ride Dashboard?</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_optional_label_267da254">Volitelný štítek</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_route_type_519caed1">TYP TRASY</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_reroute_a49323d6">Změnit trasu</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_27359d">Uložit</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_a_destination_as_a_favorite_from_a_route_pr_5669fe67">Uložit cíl do oblíbených z náhledu trasy.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_favorite_85e74bf">Uložit do oblíbených</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_this_route_d63094aa">Uložit tuto trasu</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_search_address_or_paste_coordinates_daf446f5">Hledat adresu nebo vložit souřadnice</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_start_navigation_2d34b0b2">Spustit navigaci</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_stop_277c22">Zastavit</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_stop_navigation_8a243dad">Zastavit navigaci?</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_tap_to_dismiss_d17702a2">Klepnutím skryjete</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_work_293b31">Práce</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_yes_156c7">ANO</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_you_have_arrived_e0a68436">Jste v cíli</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_e_g_sunday_loop_1dd6a810">např. Nedělní vyjížďka</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_label_27143b17">‹ $label</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_clear_all_5a4e690e">VYMAZAT VŠE</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_dest_2072c2">Cíl</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_fit_113f1">Přizpůsobit</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_full_screen_22a47efd">Celá obrazovka</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_select_all_ba2cd45d">VYBRAT VŠE</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_openstreetmap_contributors_692ada40">© Přispěvatelé OpenStreetMap</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_auto_detects_direct_networks_choose_wi_fi_direct_a24126ac">Automaticky detekuje sítě DIRECT-. Zvolte Wi-Fi Direct pro palubní desku, která je vlastník skupiny P2P (Group Owner).</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_connect_without_a_qr_code_bd61ac9f">Připojit bez QR kódu</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_manual_setup_176cc583">RUČNÍ NASTAVENÍ</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_some_motorcycles_don_t_show_a_pairing_qr_code_on_c3361949">Některé motocykly nezobrazují párovací QR kód na palubní desce. Pokud již znáte </string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_t_box_wi_fi_transport_2b8fdfb9">Wi-Fi přenos T-Boxu</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_wi_fi_network_name_ssid_4e8cc3a7">Název sítě Wi-Fi (SSID)</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_wi_fi_password_aa1722dd">Heslo k Wi-Fi</string>
+    <!-- Source: feature/pairing/TBoxQrScannerScreen.kt -->
+    <string name="legacy_t_box_scan_eb4ea12b">SKEN T-BOXU</string>
+    <!-- Source: feature/ridedashboard/RideDashboardPreviewScreen.kt -->
+    <string name="legacy_uses_this_phone_s_gps_no_t_box_needed_same_rende_58537da7">Používá GPS tohoto telefonu – T-Box není potřeba. Stejný vykreslovač i směr/přiblížení </string>
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_elevation_last_hour_10deed1a">STOUPÁNÍ / POSLEDNÍ HODINA</string>
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_now_12eb6">NYNÍ</string>
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_waiting_for_gnss_elevation_f069100e">ČEKÁNÍ NA NADMOŘSKOU VÝŠKU GNSS</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_battery_7593afdc">$battery%</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_g_force_fca415c5">G-SÍLA</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_motion_sensors_b224e96f">SNÍMAČE POHYBU</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_phone_system_b2b20c1d">TELEFON // SYSTÉM</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_turn_rate_9cfa82a3">RYCHLOT OTÁČENÍ</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_ahead_3b5bda1">VPŘEDU</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_compass_sun_45d9eeda">KOMPAS // SLUNCE</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_left_239807">VLEVO</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_right_4a5c9fc">VPRAVO</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_sun_horizon_6a3f3196">SLUNCE / HORIZONT</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_sun_behind_2679a1ae">SLUNCE ZA JEZDCEM</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_waiting_for_position_heading_75ece8e0">ČEKÁNÍ NA POLOHU A SMĚR</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_dashboard_customization_b85f9307">PŘIZPŮSOBENÍ PALUBNÍ DESKY</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_grant_41dd0fc">Povolit</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_live_layout_cdba0cde">ŽIVÉ ROZVRŽENÍ</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_map_1293c">MAPA</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_map_stays_in_the_centre_f108a4fb">Mapa zůstává ve středu</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_needs_notification_access_44d40c16">Vyžaduje přístup k oznámením</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_reset_defaults_6000a23">Obnovit výchozí nastavení</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_swap_2785b3">Prohodit</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_tap_to_assign_d1b41d7">KLEPNUTÍM PŘIŘADIT</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_widget_library_cb7316bf">KNIHOVNA WIDGETŮ</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_current_location_5f369a9c">AKTUÁLNÍ POLOHA</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_eta_10d72">ETA</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_nav_route_20ffc4db">NAV / TRASA</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_off_route_recalculating_7a9dcf5c">MIMO TRASU — PŘEPOČÍTÁVÁNÍ</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_remaining_d9f0bdd6">ZBÝVÁ</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_rise_2662c9">STOUPÁNÍ</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_set_14042">NASTAVIT</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_sun_1422c">SLUNCE</string>
+    <!-- Source: feature/ridedashboard/widget/NowPlayingWidget.kt -->
+    <string name="legacy_no_media_session_5cbc8365">-- ŽÁDNÁ RELACE MÉDIÍ --</string>
+    <!-- Source: feature/ridedashboard/widget/NowPlayingWidget.kt -->
+    <string name="legacy_no_artwork_2acf3875">BEZ OBRAZU</string>
+    <!-- Source: feature/ridedashboard/widget/NowPlayingWidget.kt -->
+    <string name="legacy_now_playing_media_session_45191bd6">PRÁVĚ HRAJE // RELACE MÉDIÍ</string>
+    <!-- Source: feature/ridedashboard/widget/SatelliteWidget.kt -->
+    <string name="legacy_signal_coverage_fef46060">POKRYTÍ SIGNÁLEM</string>
+    <!-- Source: feature/ridedashboard/widget/SpeedGaugeWidget.kt -->
+    <string name="legacy_ground_speed_gps_c8f77ac7">RYCHLOST VOZIDLA / GPS</string>
+    <!-- Source: feature/ridedashboard/widget/SpeedGaugeWidget.kt -->
+    <string name="legacy_km_h_233edb">KM/H</string>
+    <!-- Speed-unit label when the rider selects miles in Settings. -->
+    <string name="legacy_mph_12b05">MPH</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_average_km_h_d2517b1e">PRŮMĚRNÁ KM/H</string>
+    <!-- Trip-metrics average-speed label when the rider selects miles. -->
+    <string name="legacy_average_mph_6c8da62">PRŮMĚRNÁ MPH</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_recent_8fd93a5b">NEDÁVNÉ</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_speed_profile_2c1ba290">PROFIL RYCHLOSTI</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_trip_performance_8c26f32b">JÍZDA // VÝKON</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_waiting_for_speed_data_91032a2d">ČEKÁNÍ NA ÚDAJE O RYCHLOSTI</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_check_cellular_data_b94ccb68">MOC ZKONTROLOVAT MOBILNÍ DATA</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_live_23a8ec">ŽIVĚ</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_loading_3edc6d1c">NAČÍTÁNÍ</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_open_meteo_gps_2cc3134f">OPEN-METEO • GPS</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_rain_probability_9ad3fd28">PRAVDĚPODOBNOST DEŠTĚ $probability%</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_retrying_every_15s_e5e3f7a4">OPAKOVÁNÍ KAŽDÝCH 15 S</string>
+    <!-- Source: feature/safety/SafetyDisclaimerDialog.kt -->
+    <string name="legacy_i_understand_and_continue_7ea73adb">Rozumím a pokračovat</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_android_auto_content_insets_7046c7dd">OKRAJE OBSAHU ANDROID AUTO</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_choose_image_detail_and_how_moto_hub_balances_sm_577123e1">Vyberte detail obrazu a jak MOTO-HUB vyvažuje plynulost, zahřívání, baterii a zátěž Wi-Fi.</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_default_route_type_b528b630">VÝCHOZÍ TYP TRASY</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_motorcycle_features_1ef519ec">FUNKCE MOTOCYKLU</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_power_mode_357a57fe">REŽIM NAPÁJENÍ</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_resolution_bd8b64ac">ROZLIŠENÍ</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_turn_by_turn_routing_uses_your_own_stadia_maps_a_76117a71">Navigace křižovatku po křižovatce používá váš vlastní API klíč Stadia Maps, nikoli </string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_units_4d25f4f">JEDNOTKY</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_delete_79cb71cb">Smazat</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_delete_this_trip_b2d7ee2d">Smazat tuto jízdu?</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_delete_trip_1d14595a">Smazat jízdu</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_discard_c6d7a07e">Zahodit</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_export_gpx_83319643">Exportovat GPX</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_finish_save_39e52944">Dokončit a uložit</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_gps_logging_works_with_the_phone_locked_37383170">Záznam GPS funguje i se zamknutým telefonem</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_not_saved_d22da6ba">NEULOŽENO</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_name_this_ride_9a657605">Pojmenovat tuto jízdu</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_opening_the_saved_trip_now_c583b843">Nyní se otevírá uložená jízda.</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_recorded_rides_823a26eb">ZAZNAMENANÉ JÍZDY</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_recording_unavailable_9bbb7461">ZÁZNAM NEDOSTUPNÝ</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_ride_archive_c06bf17a">ARCHIV JÍZD</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_record_a_ride_ce0c4be6">Zaznamenat jízdu</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_recording_was_too_short_to_keep_6761ae14">Záznam byl příliš krátký na uložení</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_rename_trip_584eaba7">Přejmenovat jízdu</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_ride_recordings_need_at_least_100_m_15_s_of_move_260f0993">Záznamy jízdy vyžadují alespoň 100 m, 15 s pohybu a dva body GPS.</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_saved_4b07667">ULOŽENO</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_start_new_recording_36e83013">Spustit nový záznam</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_start_recording_836b8b93">Spustit záznam</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_track_details_6b05b82d">PODROBNOSTI TRASY</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_the_gps_trace_and_all_recorded_statistics_will_b_6d59f1b7">Stopa GPS a všechny zaznamenané statistiky budou trvale odstraněny.</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trip_name_5c3de586">Název jízdy</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trip_saved_to_recorded_rides_31c5533c">Jízda uložena do Zaznamenaných jízd</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trips_4d520ce">Jízdy</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_try_again_25aeb09b">Zkuste to znovu</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_view_2832a5">ZOBRAZIT</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trips_ca1b8627">‹ Jízdy</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_allow_apk_installation_a3116df5">Povolit instalaci APK</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_checking_github_releases_7e509ccb">Kontrola vydání na GitHubu...</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_moto_hub_updates_c98ab24f">Aktualizace MOTO-HUB</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_no_apk_asset_attached_to_this_release_7a89904d">K tomuto vydání není připojen žádný soubor APK.</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_no_newer_version_is_available_b79316a1">Není k dispozici žádná novější verze.</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_pre_release_6bd19a9d">PŘEDBĚŽNÉ VYDÁNÍ</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_retry_4b33288">Opakovat</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_skip_this_version_c2d1da37">Preskočit tuto verzi</string>
+    <!-- Source: session/ProjectionForegroundService.kt -->
+    <string name="legacy_projection_is_running_8c249b1a">Projekce běží</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_fill_and_crop_8b8b5d16">Vyplnit a oříznout</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_preserve_aspect_ratio_b340e377">Zachovat poměr stran</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_show_the_complete_image_with_black_side_bars_whe_90d880eb">Zobrazit celý obraz s černými bočními pruhy, pokud je to potřeba.</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_stretch_display_45b17e87">Roztáhnout obraz</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_use_the_whole_tft_and_keep_all_content_visible_w_6c1c6337">Použít celý TFT a udržet veškerý obsah viditelný s mírným roztáhnutím.</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_use_the_whole_tft_without_stretching_crop_the_ed_8f0ac706">Použít celý TFT bez roztahování; při rozdílných poměrech stran oříznout okraje.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_adjust_the_phone_media_level_while_handlebar_cap_a55dd55a">Upravit hlasitost médií telefonu, když je aktivní odchytávání tlačítek na řídítkách.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_advanced_handlebar_mapping_d94a5a3b">Pokročilé mapování řídítek</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_choose_the_day_night_style_used_by_android_auto_c4b5df26">Vyberte styl den/noc používaný Android Auto.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_customize_double_taps_holds_and_android_auto_com_59078421">Přizpůsobte dvojitá stisknutí, podržení a příkazy Android Auto.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_destinations_available_to_one_press_handlebar_na_19306aee">Cíle dostupné pro navigaci jedním stisknutím na řídítkách.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_double_tap_a52552f4">Dvojité stisknutí</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_map_appearance_b4c189c8">Vzhled mapy</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_media_volume_142f4af6">Hlasitost médií</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_saved_places_f8158025">Uložená místa</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_select_hold_6cc41543">Vybrat podržení</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_detected_networks_fa8527c3">Zjištěné sítě</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_session_events_1a7f9e03">Události relace</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_android_auto_display_56c75982">Displej Android Auto</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_choose_widgets_for_each_side_panel_c04b42c9">Vyberte widgety pro každý boční panel</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_customize_dashboard_3d094ab7">Přizpůsobit palubní desku</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_endpoint_geometry_protocol_and_feature_flags_7f197859">Koncový bod, geometrie, protokol a příznaky funkcí</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_exclude_pixels_occupied_by_the_motorcycle_ui_c69e3740">Vyloučit pixely obsazené uživatelským rozhraním motocyklu</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_how_the_complete_android_auto_image_fits_the_tft_11c8bbf2">Jak se celý obraz Android Auto přizpůsobuje displeji TFT</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_override_automatic_profile_detection_b102be5">Přepsat automatickou detekci profilu</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_t_box_capability_inspector_e5159c9d">Inspektor schopností T-Boxu</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_t_box_profile_override_f6f6b251">Přepsání profilu T-Boxu</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_tft_safe_margins_d1e86e30">Bezpečné okraje TFT</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_motorcycle_15a347f8">‹ Motocykl</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_customize_d780ac23">Přizpůsobit</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_dim_phone_display_4f190e58">Ztmavit displej telefonu</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_draw_recorded_points_on_the_dashboard_map_d0764c05">Vykreslit zaznamenané body na mapě palubní desky.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_keep_the_tft_active_while_reducing_phone_distrac_f9df0d5a">Udržet TFT aktivní a zároveň snížit rozptylování telefonem.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_open_the_on_screen_android_auto_controls_55f559a3">Otevřít ovládací prvky Android Auto na obrazovce.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_preview_50417ba8">Náhled</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_preview_touch_c103ae4d">Náhled &amp; dotyk</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_show_gps_track_2ed7fcf2">Zobrazit trasu GPS</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_view_android_auto_and_interact_from_your_phone_1e4d3a53">Zobrazit Android Auto a ovládat jej z telefonu.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_review_your_route_before_starting_guidance_48917adb">Před spuštěním navádění zkontrolujte svou trasu.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_take_me_home_bb1e43ee">Navést domů</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_about_moto_hub_6966e1f8">O aplikaci MOTO-HUB</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_android_auto_cb210d00">Android Auto</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_announce_upcoming_maneuvers_while_navigating_7c1d9f50">Hlásit nadcházející manévry během navigace</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_connect_on_launch_9e7cd0e0">Automatické připojení při spuštění</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_connect_recovery_trip_recording_1bf7551f">Automatické připojení, obnova, záznam jízdy</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_record_rides_3d1b712a">Automaticky zaznamenávat jízdy</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_recover_stalled_android_auto_and_ride_dashb_5da6ea2d">Automaticky obnovovat zamrznuté streamy Android Auto a Ride Dashboardu</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_bluetooth_capture_and_mapping_3e23fd19">Odchytávání a mapování Bluetooth</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_connect_and_discover_t_box_when_app_opens_fe05f1ea">Připojit a vyhledat T-Box při otevření aplikace</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_connection_automation_93f3bb33">Připojení &amp; automatizace</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_diagnostics_3748418c">Diagnostika</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_disable_touchscreen_4f636f13">Deaktivovat dotykovou obrazovku</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_draw_detected_curved_segments_in_a_distinct_colo_906c94c">Vykreslit zjištěné zakřivené úseky odlišnou barvou na mapě TFT</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_enable_logging_e57825e2">Povolit zaznamenávání protokolu</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_encoder_detail_and_power_mode_for_all_streams_9c18fdcf">Detail enkodéru a režim napájení pro všechny streamy</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_fuel_range_warning_e301d2ef">Varování dojezdu paliva</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_full_client_info_every_candidate_profile_s_score_fb2a321f">Plné CLIENT_INFO, skóre každého kandidátského profilu, neznámý příkaz </string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_golden_hour_hint_26c00b9f">Nápověda k zlaté hodince</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_highlight_curvy_roads_6d7866a">Zvýraznit klikaté silnice</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_master_switch_for_the_diagnostic_log_off_means_n_1d7e2b81">Hlavní přepínač diagnostického protokolu. Vypnuto znamená, že se nic nezaznamenává </string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_navigation_e5d7e634">Navigace</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_network_tests_and_application_logs_6064f99">Testy sítě a provozní deníky aplikace</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_preview_ride_dashboard_cf294e4">Náhled Ride Dashboardu</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_recovery_watchdog_eb0fb218">Hlídací pes obnovy (Watchdog)</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_resolution_and_display_mode_70f7a2be">Rozlišení a režim zobrazení</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_review_copy_share_or_clear_events_fa00934b">Prohlížet, kopírovat, sdílet nebo vymazat události</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_routes_through_fossgis_s_free_public_valhalla_se_5f3fb227">Směrování přes bezplatný veřejný server Valhalla FOSSGIS namísto </string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_see_the_tft_render_on_this_phone_using_its_own_g_d21ea9ba">Zobrazit vykreslování TFT na tomto telefonu pomocí vlastní GPS - T-Box není potřeba</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_show_forecast_conditions_at_your_destination_in__d467471f">Zobrazit předpověď počasí v cíli v náhledu trasy</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_show_minutes_to_the_nearest_sunrise_sunset_golde_840f15d">Zobrazit minuty do nejbližšího východu/západu slunce či zlaté hodinky</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_start_gps_logging_with_projection_sessions_1c3d9c89">Spustit záznam GPS současně s relacemi projekce</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_t_box_discovery_wi_fi_binding_cellular_routes_32d84d5f">Vyhledávání T-Boxu, vazba Wi-Fi, trasy mobilních dat</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_try_without_a_key_demo_server_74e379d4">Zkuste to bez klíče (demo server)</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_use_focus_and_handlebar_controls_even_when_the_t_d1be0479">Používat zaměření a ovládací prvky na řídítkách, i když T-Box hlásí dotykový displej</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_verbose_t_box_logging_ee12f7b3">Podrobné zaznamenávání T-Boxu</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_video_quality_3ed2f63a">Kvalita videa</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_voice_guidance_a2d4eea6">Hlasové navádění</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_warn_when_a_route_would_exceed_your_motorcycle_s_c31a0f09">Varovat, pokud by trasa překročila dojezd nádrže vášho motocyklu (nastaveno v Garáži)</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_weather_at_arrival_44ffc4d8">Počasí při příjezdu</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_your_own_routing_api_key_for_turn_by_turn_94d8b202">Váš vlastní API klíč pro směrování křižovatku po křižovatce</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_settings_7469104a">‹ Nastavení</string>
+    <!-- Source: feature/trips/TripRecordingService.kt -->
+    <string name="legacy_gps_ride_recording_and_trip_statistics_28992d34">Záznam jízdy přes GPS a statistiky trasy</string>
+    <!-- Source: session/PhoneDisplayDimmer.kt -->
+    <string name="legacy_moto_hub_display_dimmer_57b6244b">Stmívač displeje MOTO-HUB</string>
+    <!-- Dynamic UI templates. Keep positional placeholders unchanged. -->
+    <string name="legacy_filter_1_d_497daa14">FILTR %1$d</string>
+    <string name="legacy_recording_1_s_b01f3573">ZÁZNAM · %1$s</string>
+    <string name="legacy_1_d_optimized_gps_points_de88df06">%1$d optimalizovaných bodů GPS</string>
+    <string name="legacy_place_1_d_name_6bdc57c6">Název místa %1$d</string>
+    <string name="legacy_save_place_1_d_39c7a048">Uložit místo %1$d</string>
+    <string name="legacy_t_box_identifier_1_s_531e2638">Identifikátor T-Boxu: %1$s</string>
+    <string name="legacy_1_s_fe2c9a02">‹ %1$s</string>
+    <string name="legacy_motorcycle_buttons_control_1_s_6e2f90ac">Tlačítka motocyklu ovládají %1$s</string>
+    <string name="legacy_rain_1_d_84b55e18">DÉŠŤ %1$d%%</string>
+    <string name="legacy_1_d_c_41e7b8ff">%1$d °C</string>
+    <string name="legacy_1_d_km_h_6ce8c40f">%1$d KM/H</string>
+    <!-- Weather forecast wind speed when the rider selects miles. -->
+    <string name="legacy_1_d_mph_669c2f51">%1$d MPH</string>
+    <string name="legacy_moto_hub_258caaa5">MOTO-HUB</string>
+    <string name="legacy_recording_this_ride_1aceedab">Záznam této jízdy</string>
+    <string name="legacy_moto_hub_controls_f72ba5d1">Ovládací prvky MOTO-HUB</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_available_e7e32615">%1$d k dispozici</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_remaining_e0c291">Zbývá %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_2_s_a1c6054a">%1$s · %2$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1000_mt_x_cfdl26_a07555df">1000 MT-X (CFDL26)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_200_ms_snappier_singles_bddf5c9a">200 ms – svižnější jednoduchá stisknutí</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_300_ms_balanced_17f78a68">300 ms – vyvážené</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_450_ms_forgiving_doubles_3234effd">450 ms – tolerantnější dvojitá stisknutí</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_500_ms_quicker_hold_a1cbda27">500 ms – rychlejší podržení</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_600_ms_balanced_9f5246b">600 ms – vyvážené</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_800_ms_deliberate_hold_32e73399">800 ms – vědomé podržení</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_800mt_cfdl26_9a9a6453">800MT (CFDL26)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_800nk_advanced_cfdl26_8796cfe5">800NK Advanced (CFDL26)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_active_profile_dcb9be6f">AKTIVNÍ PROFIL</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_4d461ce0">ANDROID AUTO</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_atms_1ed139">Bankomaty</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_avg_feb2">PRŮM</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_avg_speed_7231cd39">PRŮMĚRNÁ RYCHLOST</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_access_point_2a7fd7f4">Přístupový bod</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_airports_db81a128">Letiště</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_album_cover_current_track_and_progress_5704cf2c">Obal alba, aktuální skladba a průběh</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_altitude_7d3daec2">Nadm. výška</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_map_9e2be3c">Mapa Android Auto</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_arc_speedometer_bearing_and_gnss_lock_status_a1dab290">Obloukový tachometr, azimut a stav zamknutí GNSS</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_assistant_ccab92be">Asistent</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_attractions_ab6135cc">Atrakce</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_auto_1f51cf">Auto</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_auto_day_night_808f223b">Automaticky (den/noc)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_backward_left_7f90d6f7">Zpět – Vlevo</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_backward_double_tap_left_bf920c29">Zpět dvojité stisknutí – Vlevo</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bakery_7628ee00">Pekařství</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_banks_3cfd197">Banky</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bars_pubs_8301b610">Bary a hospody</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_battery_phone_fc45d1a1">Baterie a Telefon</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_battery_charging_connectivity_temperature_and_mo_59cfa2d5">Baterie, nabíjení, konektivita, teplota a snímače pohybu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bicycle_rental_cee64385">Půjčovna kol</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_absolute_volume_change_3096ab72">Změna absolutní hlasitosti Bluetooth</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_next_track_command_7a7046ee">Příkaz Bluetooth pro další skladbu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_play_pause_command_a9252e58">Příkaz Bluetooth pro přehrát/pauza</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_previous_track_command_d68a66f2">Příkaz Bluetooth pro předchozí skladbu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl16_450sr_style_non_touch_b3fdf770">CFDL16 / 450SR styl bez dotyku</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl16_legacy_b0fd3b8a">CFDL16 / Původní</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl26_motoplay_landscape_touch_a52d575c">CFDL26 MotoPlay na šířku dotykový</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl26_motoplay_portrait_handlebar_primary_c724cad9">CFDL26 MotoPlay na výšku primárně pro řídítka</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfmoto_800nk_97f23a55">CFMOTO 800NK</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cl_c450_5c8b3190">CL-C450</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_crcp_sdk_0_9_23_x_non_touch_5621c1f8">CRCP / sdk 0.9.23.x nedotykový</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_campsites_75e7180b">Kempingy</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_car_service_917649">Autoservis</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_charging_5973c691">Nabíjení</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_choose_a_widget_for_1_s_26345a66">Vyberte widget pro %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_compass_9bdfd4f2">Kompas</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_current_conditions_wind_humidity_via_open_meteo_4e58c8f3">Aktuální podmínky, vítr, vlhkost přes Open-Meteo</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_down_1de05778">Směrové tlačítko dolů</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_left_1de3d2dd">Směrové tlačítko vlevo</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_right_9eecea06">Směrové tlačítko vpravo</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_up_a8ebfef1">Směrové tlačítko nahoru</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d29c">Směrové tlačítko ▲</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d2a0">Směrové tlačítko ▶</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d2a6">Směrové tlačítko ▼</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d2aa">Směrové tlačítko ◀</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_dist_2005a6">VZD</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_distance_3fd77bf5">VZDÁLENOST</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_day_light_2f4e1b57">Den (světlý)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_detect_from_the_motorcycle_recommended_9fd07c6f">Detekovat z motocyklu (doporučeno)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_development_simulator_profile_45f9bdc8">Profil vývojářského simulátoru</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_do_nothing_a83eb158">Nedělat nic</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_double_press_c52a55d2">Dolů dvojité stisknutí</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_press_6ec23765">Dolů stisknutí</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_double_f6f5f8f8">Dolů · dvojité</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_single_1037016f">Dolů · jednoduché</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_drinking_water_6ae0dde1">Pitná voda</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_elapsed_c777dd5c">UPLYNULÝ ČAS</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_elevation_857ea708">STOUPÁNÍ +</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_editing_1_s_a5399c23">Úprava %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_elevation_profile_climb_rate_and_gps_accuracy_d7b5d893">Výškový profil, rychlost stoupání a přesnost GPS</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_favorites_3baf7a37">OBLÍBENÉ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_favorite_427c2dbc">Oblíbené</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_fire_stations_e5a3dc49">Hasičské stanice</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_food_21807e">Jídlo</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_forward_right_ed1ba1ce">Vpřed – Vpravo</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_forward_double_tap_right_50824858">Vpřed dvojité stisknutí – Vpravo</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_gnss_satellite_visibility_and_fix_status_55616e56">Viditelnost satelitů GNSS a stav fixace</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_gps_search_f2175dfe">VYHLEDÁVÁNÍ GPS</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_gps_1_d_m_85cd2614">GPS ±%1$d m</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_guiding_to_destination_1328e050">Navádění do cíle</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_heading_sun_altitude_and_rider_relative_sun_posi_8620d321">Směr jízdy, výška slunce a poloha slunce vůči jezdci</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_hospitals_466ae959">Nemocnice</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_hotels_stays_e91bd2ff">Hotely a ubytování</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_in_use_1_s_9a0bc66d">POUŽÍVÁ SE • %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_key_configured_d2c8ebf">KLÍČ NAKONFIGUROVÁN</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_large_glove_friendly_actions_for_the_active_dash_ae3e3599">Velké akce přizpůsobené pro ovládání v rukavicích pro aktivní palubní desku.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_larger_absolute_volume_change_c11a1729">Větší změna absolutní hlasitosti</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_left_panel_9dcb38cb">Levý panel</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_left_double_f4a67f33">Vlevo · dvojité</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_left_single_de787aa">Vlevo · jednoduché</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_log_copied_to_clipboard_a7cbe711">Protokol byl zkopírován do schránky</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_max_12944">MAX</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_max_speed_6338424b">MAXIMÁLNÍ RYCHLOST</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_mode_2431a3">REŽIM</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_moto_hub_simulator_72ee829">Simulátor MOTO-HUB</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_moving_87e69c4e">POHYB</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_manage_88ef8985">Spravovat</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_manage_guidance_search_a_new_destination_or_resu_7899102a">Spravujte navádění, vyhledejte nový cíl nebo pokračujte v trase.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_manual_recording_73634e37">Ruční záznam</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_mirroring_8b513fa3">Zrcadlení</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_mirrors_android_auto_s_own_map_5091f0fa">Zrcadlí vlastní mapu Android Auto</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_motoplay_landscape_cfdl16_47ddf145">MotoPlay Na šířku (CFDL16)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_motorcycle_service_4f005f46">Servis motocyklu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigation_8beff614">NAVIGACE</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_no_key_set_25cc0b82">KLÍČ NENÍ NASTAVEN</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_native_turn_by_turn_navigation_rendered_on_the_t_96caa565">Nativní navigace křižovatku po křižovatce vykreslovaná na TFT</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_nav_place_1_9c6fda12">Nav · místo 1</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_nav_place_2_9c6fda13">Nav · místo 2</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_nav_place_3_9c6fda14">Nav · místo 3</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigate_place_1_8cdacefb">Navigovat → místo 1</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigate_place_2_8cdacefc">Navigovat → místo 2</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigate_place_3_8cdacefd">Navigovat → místo 3</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_near_square_panel_544x512_7dfae4b9">Téměř čtvercový panel, 544x512</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_near_square_touch_panel_720x712_644c47fc">Téměř čtvercový dotykový panel, 720x712</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_next_turn_eta_sun_position_daylight_remaining_48ea2589">Příští odbočka, ETA, poloha slunce, zbývající denní světlo</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_night_dark_e807e573">Noc (tmavý)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_none_252358">Žádné</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_now_playing_774920a4">Právě hraje</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ok_select_85c307d1">OK / vybrat</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_off_1354f">Vypnuto</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_openstreetmap_12cdd70f">OpenStreetMap</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_phone_489454e">TELEFON</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_pad_fullscreen_screen_stays_on_tap_exit_to_leave_fed4fb3e">Celá obrazovka tabletu — obrazovka zůstává zapnutá. Klepnutím na Ukončit ji opustíte.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_parking_33f14b98">Parkoviště</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_pharmacies_3d1e90b1">Lékárny</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_picnic_8e7a005e">Piknik</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_police_8ed2913e">Policie</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_post_offices_828381d7">Pošty</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_quick_controls_b6d227a9">Rychlé ovládání</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_recent_destinations_4acda7ca">NEDÁVNÉ CÍLE</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_recorded_route_823d22b9">ZAZNAMENANÁ TRASA</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ride_dashboard_7a0ca94c">RIDE DASHBOARD</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rides_4a5be5b">JÍZDY</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_route_options_30bc2f87">MOŽNOSTI TRASY</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_route_preview_683e8cb1">NÁHLED TRASY</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_requires_a_real_bluetooth_key_up_e9aa900c">Vyžaduje reálné uvolnění tlačítka Bluetooth (key-up)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rest_areas_9d275e5a">Odpočívadla</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ride_dashboard_ae928d6c">Ride Dashboard</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_right_panel_f3a982e0">Pravý panel</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_right_double_8bb580fe">Vpravo · dvojité</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_right_single_a4f68975">Vpravo · jednoduché</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rotary_back_875f5656">Otočný ovladač zpět</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rotary_forward_5bd716f6">Otočný ovladač vpřed</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_saved_routes_18cdcb23">ULOŽENÉ TRASY</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_search_results_3469955e">VÝSLEDKY VYHLEDÁVÁNÍ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_selected_for_1_s_49f82b77">VYBRÁNO PRO %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_satellites_110a3ab8">Satelity</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_save_route_5f739206">Uložit trasu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_search_a_destination_pick_a_favorite_or_start_fr_a4048c1b">Vyhledejte cíl, vyberte z oblíbených nebo začněte z uložené trasy.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_ok_6ca8fff1">Vybrat / OK</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_double_tap_enter_star_8a562c06">Vybrat dvojité stisknutí – Enter / Hvězdička</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_hold_enter_star_217fe7bb">Vybrat podržení – Enter / Hvězdička</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_tap_enter_star_b26a1adf">Vybrat stisknutí – Enter / Hvězdička</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_double_44fd35de">Vybrat · dvojité</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_hold_ce87ce0c">Vybrat · podržení</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_tap_2ff408b6">Vybrat · stisknutí</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_send_navigation_and_selection_commands_to_androi_887e42f0">Odesílat příkazy pro navigaci a výběr do Android Auto.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_speed_gauge_85be8ba0">Ukazatel rychlosti</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_start_android_auto_to_enable_the_controller_2a5eb409">Spusťte Android Auto pro aktivaci ovladače.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_start_the_dashboard_to_enable_these_actions_1fe53fdf">Spusťte palubní desku pro aktivaci těchto akcí.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_supermarkets_5e8b87fc">Supermarkety</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_connected_35a5911b">T-Box připojen</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_time_274acd">ČAS</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_total_4c4e324">CELKEM</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_toilets_1eefa3e6">Toalety</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_touch_controller_53c8733d">Dotykový ovladač</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_trip_metrics_7c88c7c8">Metriky jízdy</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_trip_distance_duration_average_speed_and_speed_p_97ed123f">Vzdálenost jízdy, trvání, průměrná rychlost a profil rychlosti</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_two_next_track_presses_inside_the_window_7db072f9">Dvě stisknutí tlačítka další skladby v daném časovém okně</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_two_presses_inside_the_double_tap_window_cc11c279">Dvě stisknutí v časovém okně pro dvojité stisknutí</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_create_log_file_9dac9184">Nelze vytvořit soubor protokolu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_save_the_motorcycle_photo_d9e617d">Nelze uložit fotografii motocyklu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_double_press_5e63a079">Nahoru dvojité stisknutí</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_press_df788a9e">Nahoru stisknutí</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_double_6854af1f">Nahoru · dvojité</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_single_8195b796">Nahoru · jednoduché</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_viewpoints_390623e8">Vyhlídky</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_weather_ac24cfd4">Počasí</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_where_are_you_going_f697966b">Kam jedete?</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_wi_fi_direct_p2p_5247f7ce">Wi-Fi Direct (P2P)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_your_route_is_live_e56afe3e">Vaše trasa je aktivní</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_modelid_66660742_wi_fi_direct_non_touch_f23f0c0b">modelId 66660742, Wi-Fi Direct, nedotykový</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_absolute_volume_change_53b165a0">změna absolutní hlasitosti</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_play_pause_command_31202f86">příkaz přehrát/pauza</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_previous_track_command_f9a52120">příkaz pro předchozí skladbu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_next_track_command_26b481c">příkaz pro další skladbu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_both_1f3381">OBĚ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_live_564f882c">ANDROID AUTO ŽIVĚ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_standby_9525974d">ANDROID AUTO POHOTOVOSTNÍ REŽIM</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_phone_preview_live_290cbf6">ŽIVÝ NÁHLED V TELEFONU</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_7d22d040">SPUŠTĚNÍ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_live_on_tft_d375f015">ŽIVĚ NA TFT</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_preparing_69cf13e4">PŘÍPRAVA</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_recording_route_df2cfb1a">ZÁZNAM TRASY</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_is_ready_to_connect_6b95609b">%1$s je připraven k připojení.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_allow_moto_hub_notifications_to_keep_streaming_v_4700fc1e">Povolit oznámení MOTO-HUB pro udržení viditelného a ovladatelného streamování.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_allow_nearby_devices_and_location_to_detect_the__a4c1fa2c">Povolte Zařízení v okolí a Polohu pro detekci Wi-Fi sítě T-Boxu.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_is_requesting_a_connection_to_1_s_ffe67969">Android žádá o připojení k %1$s.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_camera_permission_is_required_to_read_the_t_box__4e87d105">Pro načtení QR kódu T-Boxu je vyžadováno oprávnění k fotoaparátu.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_connection_cancelled_you_can_try_again_at_any_ti_19906357">Připojení bylo zrušeno. Můžete to kdykoli zkusit znovu.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_disconnected_372b4933">Odpojeno.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_motorcycle_8dd33db1">Motocykl</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_network_connected_searching_for_the_easyconn_ser_851763f6">Síť připojena. Vyhledává se služba EasyConn.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_no_known_phone_location_yet_move_outdoors_and_re_47df6139">Zatím není známa poloha telefonu; přejděte ven a zkuste to znovu.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_pair_a_motorcycle_in_garage_before_starting_navi_76f923b3">Před spuštěním navigace spárujte motocykl v Garáži.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_permission_granted_starting_the_capture_session_4805d845">Oprávnění uděleno. Spouští se relace odchytávání.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_profile_saved_connect_to_the_t_box_network_and_s_a9069261">Profil uložen. Připojte se k síti T-Boxu a spusťte vyhledávání.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_qr_code_scanned_but_the_profile_was_not_saved_1__e3b6164f">QR kód naskenován, ale profil nebyl uložen: %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ride_dashboard_streaming_is_active_on_the_motorc_3729a921">Streamování Ride Dashboardu je aktivní na TFT motocyklu.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_set_up_the_motorcycle_network_to_get_started_32bb831">Pro začátek nastavte síť motocyklu.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_sharing_cancelled_by_the_user_72c1171e">Sdílení bylo zrušeno uživatelem.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_something_went_wrong_try_again_b634c6cc">Něco se nepokazilo. Zkuste to znovu.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_the_ride_dashboard_pipeline_f27c3ca7">Spouštění kanálu Ride Dashboardu.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_the_native_ride_dashboard_d28cae88">Spouštění nativního Ride Dashboardu.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_the_projection_pipeline_bcc6994a">Spouštění kanálu projekce.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_stop_the_current_mirroring_or_android_auto_sessi_5390e262">Před otevřením Ride Dashboardu odsud zastavte aktuální relaci zrcadlení nebo Android Auto.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_streaming_active_to_the_motorcycle_tft_b881d9a3">Streamování na TFT motocyklu je aktivní.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_qr_code_scanned_and_saved_1_s_is_ready_to__d28dd75d">QR kód T-Boxu naskenován a uložen. %1$s je připraven k připojení.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_connection_lost_reconnect_to_the_motorcycl_cb4aa98e">Spojení s T-Boxem bylo ztraceno. Znovu se připojte k síti motocyklu.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_found_you_can_now_choose_an_app_or_screen__163f7c13">T-Box nalezen. Nyní můžete vybrat aplikaci nebo obrazovku ke sdílení.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_not_found_1_s_656efb68">T-Box nenalezen: %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_that_search_is_too_long_try_a_shorter_search_e54badba">Toto vyhledávání je příliš dlouhé. Zkuste kratší dotaz.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_curved_segments_detected_af1abc2b">Zjištěno %1$d zakřivených úseků</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_entries_newest_first_7c18f089">%1$d záznamů / od nejnovějších</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_km_remaining_after_this_route_1b9e2ebf">Po této trase zbývá %1$d km</string>
+    <!-- Fuel-range warning when the rider selects miles. -->
+    <string name="legacy_1_d_mi_remaining_after_this_route_aaf9da45">Po této trase zbývá %1$d mi</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_2_s_3_s_4fcb415a">%1$s %2$s: %3$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_2_d_c_4859b80e">%1$s · %2$d °C</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_connect_a_motorcycle_before_customizing_its_dash_cc281859">Před úpravou palubní desky připojte motocykl.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_curvy_roads_ahead_15524f7">Před vámi jsou klikaté silnice</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_golden_hour_in_1_d_min_5c769914">Zlatá hodinka za %1$d min</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_golden_hour_now_ab52d7b1">Zlatá hodinka právě probíhá</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_installed_version_1_s_2_d_29cd3201">Nainstalovaná verze: %1$s (%2$d)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_location_and_notifications_are_required_while_re_4f6ceb2b">Při zaznamenávání jízdy je vyžadována poloha a oznámení</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_opening_in_1_d_s_42389c34">Otevírání za %1$d s…</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_peer_1_s_2_s_521b5084">Protějšek %1$s -&gt; %2$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_port_1_d_b6522e8b">Port %1$d</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_open_github_8bdb9881">Nelze otevřít GitHub</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_open_wi_fi_settings_537aaf03">Nelze otevřít nastavení Wi-Fi</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_open_the_companion_app_settings_c0a83e03">Nelze otevřít nastavení doprovodné aplikace</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_no_open_ports_found_8533cd9d">nebyly nalezeny žádné otevřené porty</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_open_1_s_e55a596b">otevřít: %1$s</string>
+    <!-- Android Auto pre-flight: an OEM companion app is installed, but may not be active. %1$s is
+         its name as shown on the phone (CFMOTO, Zontes Smart, Carbit Ride, ...). -->
+    <string name="legacy_1_s_detected_66208287">Zjištěno: %1$s</string>
+    <string name="legacy_moto_hub_starts_google_android_auto_not_1_s_3a77813f">Aplikace MOTO-HUB spouští Google Android Auto, nikoli %1$s.</string>
+    <string name="legacy_1_s_can_still_take_over_the_dashboard_connection_5bc85002">Aplikace %1$s může i na pozadí převzít připojení k palubní desce. Pro spolehlivé zrcadlení ji před pokračováním vynuceně ukončete v nastavení Androidu.</string>
+    <string name="legacy_continue_with_android_auto_f6c7ef01">Pokračovat s Android Auto</string>
+    <string name="legacy_open_1_s_settings_470b74f2">Otevřít nastavení aplikace %1$s</string>
+    <string name="legacy_do_not_show_this_warning_again_d3abf59b">Toto varování již nezobrazovat</string>
+    <!-- Source: tbox/ProfileOverride.kt -->
+    <string name="legacy_generic_dashboard_53d1376b">Obecná palubní deska</string>
+    <!-- Source: tbox/ProfileOverride.kt -->
+    <string name="legacy_neutral_defaults_for_a_dashboard_that_is_not_rec_8d299cf0">Neutrální výchozí hodnoty pro nerozpoznanou palubní desku</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_unfamiliar_pairing_code_714f8ce7">Neznámý párovací kód</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_this_code_carries_wi_fi_details_for_1_s_but_it_w_422a5994">Tento kód obsahuje podrobnosti Wi-Fi pro %1$s, ale nebyl vydán adresou Carbit jako u palubních desek známých aplikaci MOTO-HUB.</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_several_manufacturers_ship_the_same_dashboard_so_49305d38">Několik výrobců dodává stejný software palubní desky pod vlastní značkou, takže to může být váš motocykl. Pokračujte pouze v případě, že jste jej naskenovali z vlastní palubní desky.</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_use_these_details_52f852ac">Použít tyto údaje</string>
+
+    <!-- ===========================================================         Catalogue sweep, 2026-08-13: strings this worktree draws but had
+         no identifier for. Values come from the pro-poc catalogues, where
+         the same source strings are already translated.
+         ================================================================== -->
+
+    <!-- Source: MainActivity.kt -->
+    <string name="legacy_unable_to_open_discord_50e2e02e">Nepodařilo se otevřít Discord</string>
+
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_d_taps_away_from_the_prototype_779bf960">Ještě %d klepnutí do prototypu</string>
+    <string name="legacy_community_source_fe28bfcc">KOMUNITA A ZDROJOVÝ KÓD</string>
+    <string name="legacy_discord_c6d7d50c">Discord</string>
+    <string name="legacy_github_7f258fe3">GitHub</string>
+    <string name="legacy_map_rendering_by_maplibre_native_bsd_2_clause_ve_1f7cda7f">Vykreslování map zajišťuje MapLibre Native (BSD-2-Clause). Vektorové dlaždice od OpenFreeMap dle schématu OpenMapTiles; rastrové dlaždice od OpenStreetMap Foundation. Vyhledávání adres od Photon. Routing od Valhalla, hostováno na Stadia Maps nebo demo serveru FOSSGIS. Místa od Overpass. Počasí od Open-Meteo. Ceny pohonných hmot publikované jako otevřená data španělským ministerstvem Ministerio para la Transición Ecológica, portugalským DGEG, francouzským Ministère de l\'Économie a italským MIMIT. Data DGEG se nesmí používat ke komerčním účelům.</string>
+    <string name="legacy_maps_data_b256210d">MAPY A DATA</string>
+    <string name="legacy_maps_addresses_and_routes_are_built_on_data_by_o_f0b02b91">Mapy, adresy a trasy jsou postaveny na datech od přispěvatelů © OpenStreetMap, licencovaných pod ODbL.</string>
+    <string name="legacy_prototype_unlocked_856a4841">Prototyp odemčen</string>
+
+    <!-- Source: feature/androidauto/AndroidAutoHelpScreen.kt -->
+    <string name="legacy_a_notification_confirms_the_server_is_running_le_eacf82e">Oznámení potvrzuje, že server běží. Nechte jej běžet: zůstane aktivní, dokud jej nezastavíte nebo neresetujete telefon.</string>
+    <string name="legacy_android_auto_17_4_removed_the_way_an_app_can_ask_890c8f24">Android Auto 17.4 odebral způsob, jakým aplikace mohla žádat o projekci. Műtö-HUB se o to stále pokouší a na starších verzích to funguje – ale když ne, Android Auto lze spustit z jeho vlastní vývojářské nabídky. Nic nemusíte instalovat.</string>
+    <string name="legacy_android_auto_does_not_start_2266b70e">Android Auto se nespustí</string>
+    <string name="legacy_every_time_android_auto_will_not_start_18ff3ab9">PO KAŽDÉM SELHÁNÍ SPUŠTĚNÍ ANDROID AUTO</string>
+    <string name="legacy_go_back_to_moto_hub_and_start_android_auto_it_co_ff8cc50d">Vraťte se do MOTO-HUBu a spusťte Android Auto. Připojí se samo během několika sekund – nic jiného není třeba tlačit.</string>
+    <string name="legacy_in_android_auto_s_developer_settings_open_the_me_1ea3a8cf">V nastavení pro vývojáře Android Auto otevřete nabídku ⋮ v pravém horním rohu a vyberte „Spustit server hlavní jednotky“ (Start head unit server). Je to v této nabídce, nikoli v seznamu nastavení pod ní.</string>
+    <string name="legacy_in_developer_settings_turn_on_add_new_cars_to_an_19f79566">V nastavení pro vývojáře zapněte „Přidat do Android Auto nová auta“ (starší verze tomu říkají „Neznámé zdroje“).</string>
+    <string name="legacy_jumps_straight_to_the_app_where_the_menu_above_l_7c8b2093">Přejde přímo do aplikace, kde se nachází výše uvedená nabídka</string>
+    <string name="legacy_normally_moto_hub_waits_and_asks_android_auto_to_6c183bab">Normálně MOTO-HUB čeká a žádá Android Auto o připojení. Verze 17.4 tuto možnost uzavřela pro všechny aplikace tohoto druhu, nejen pro tuto. Server hlavní jednotky obrací směr – Android Auto čeká a MOTO-HUB se připojuje k němu – což jsou dvířka, která Google ponechal otevřená pro své vlastní testovací nástroje.</string>
+    <string name="legacy_one_time_setup_ca24c531">JEDNORÁZOVÉ NASTAVENÍ</string>
+    <string name="legacy_open_android_auto_settings_48a5120d">Otevřít nastavení Android Auto</string>
+    <string name="legacy_open_the_android_auto_app_scroll_to_the_bottom_a_69ae9e53">Otevřete aplikaci Android Auto, sjeďte dolů a desetkrát klepněte na „Verze“. Objeví se nastavení pro vývojáře.</string>
+    <string name="legacy_why_14fa8">PROČ</string>
+
+    <!-- Source: feature/controls/BluetoothStatus.kt -->
+    <string name="legacy_allow_bluetooth_access_so_the_app_can_see_whethe_8754f4c2">Povolte přístup k Bluetooth, aby aplikace viděla, zda je motocykl připojen.</string>
+    <string name="legacy_bluetooth_is_off_turn_it_on_then_pair_the_motorc_5375bc65">Bluetooth je vypnuté – zapněte jej a poté spárujte motocykl.</string>
+    <string name="legacy_connected_now_1_s_if_that_is_the_motorcycle_the__cd016af1">Nyní připojeno: %1$s. Pokud je to motocykl, tlačítka na řidítkách mohou ovládat telefon.</string>
+    <string name="legacy_no_audio_device_is_connected_right_now_with_the__7d4f4d3e">Není připojeno žádné zvukové zařízení. S nastartovaným motocyklem by se zde měla objevit jeho přístrojová deska – pokud se neobjeví nikdy, spárujte ji v nastavení Bluetooth.</string>
+    <string name="legacy_this_phone_has_no_bluetooth_b42f7e85">Tento telefon nemá Bluetooth.</string>
+
+    <!-- Source: feature/controls/HandlebarMappingScreen.kt -->
+    <string name="legacy_a_button_the_app_has_not_been_taught_yet_53060697">Tlačítko, které se aplikace ještě nenaučila</string>
+    <string name="legacy_a_single_press_acts_immediately_instead_of_waiti_ebd37a80">Jedno stisknutí reaguje okamžitě, namísto čekání na vypršení limitu pro dvojité stisknutí. Dvojité stisknutí stále funguje – pouze se nejprve provede to jedno.</string>
+    <string name="legacy_allow_bluetooth_bbde9a57">Povolit Bluetooth</string>
+    <string name="legacy_bluetooth_settings_ed5eb975">Nastavení Bluetooth</string>
+    <string name="legacy_checking_bluetooth_ce222d3e">Kontrola Bluetooth…</string>
+    <string name="legacy_choose_what_this_press_does_4e74fce9">Vyberte, co toto stisknutí provede.</string>
+    <string name="legacy_done_1_d_presses_learned_dd4b86bd">Hotovo – naučeno %1$d stisknutí.</string>
+    <string name="legacy_double_press_window_a8b0763c">Časové okno pro dvojité stisknutí</string>
+    <string name="legacy_every_card_now_describes_your_handlebar_buttons__f70bd7b3">Každá karta nyní popisuje vaše řídítka. Tlačítka, která jste označili jako chybějící, jsou pryč.</string>
+    <string name="legacy_finish_7d6e78b3">Dokončit</string>
+    <string name="legacy_handlebar_7b449ccb">Řídítka</string>
+    <string name="legacy_hold_gestures_a5df4e6b">Gesta podržení</string>
+    <string name="legacy_hold_time_bba08d6e">Doba podržení</string>
+    <string name="legacy_how_long_the_app_waits_before_deciding_a_press_w_fbe08ef2">Jak dlouho aplikace čeká, než vyhodnotí stisknutí jako dvojité nebo podržené.</string>
+    <string name="legacy_motorcycle_bluetooth_88c59adf">Bluetooth motocyklu</string>
+    <string name="legacy_not_detected_yet_d1e8f877">zatím nezjištěno</string>
+    <string name="legacy_not_on_my_bike_49509421">Na mé motorce není</string>
+    <string name="legacy_nothing_happens_some_dashboards_keep_a_button_fo_c80119d0">Nic se neděje? Některé přístrojové desky si tlačítko vyhrazují pro sebe a telefonu nepošlou vůbec nic – u CFMOTO CFDL16 přesně to dělá KRÁTKÉ stisknutí kolébkového přepínače. Označte jej jako chybějící a přestane zabírat místo.</string>
+    <string name="legacy_on_the_motorcycle_do_this_5d34555e">Na motorce proveďte toto</string>
+    <string name="legacy_one_card_per_button_with_what_a_press_a_double_p_e88303f5">Jedna karta na tlačítko s popisem toho, co dělá stisknutí, dvojité stisknutí a podržení. Naučte řídítka, aby aplikace věděla, která tlačítka ty vaše skutečně mají.</string>
+    <string name="legacy_press_a_handlebar_button_fd958503">Stiskněte tlačítko na řídítkách</string>
+    <string name="legacy_reset_actions_to_defaults_95ecb43">Obnovit výchozí akce</string>
+    <string name="legacy_skip_27599f">Přeskočit</string>
+    <string name="legacy_snappy_singles_330a9d7e">Rychlá jednotlivá stisknutí</string>
+    <string name="legacy_step_1_d_of_2_d_72bf41f6">KROK %1$d Z %2$d</string>
+    <string name="legacy_stop_here_d51e892e">Zastavit zde</string>
+    <string name="legacy_teach_my_handlebar_51393162">Naučit moje řídítka</string>
+    <string name="legacy_timing_937fe44a">NAČASOVÁNÍ</string>
+    <string name="legacy_turn_off_if_your_handlebar_needs_a_long_physical_c92718d1">Vypněte, pokud vaše řídítka vyžadují dlouhý fyzický stisk pro každé kliknutí – jinak budou tato stisknutí vyhodnocena jako podržení.</string>
+    <string name="legacy_controls_fd1b9add">‹ Ovládání</string>
+    <string name="legacy_handlebar_c1b6ada4">‹ Řídítka</string>
+
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_add_your_first_motorcycle_to_get_rolling_b8e9f267">Přidejte svůj první motocykl a můžete vyrazit.</string>
+    <string name="legacy_no_motorcycle_no_problem_4346def1">ŽÁDNÝ MOTOCYKL? ŽÁDNÝ PROBLÉM</string>
+
+    <!-- Source: feature/home/CoreAvailability.kt -->
+    <string name="legacy_advanced_needs_moto_hub_core_installed_and_paire_722fef7d">Pokročilé funkce vyžadují nainstalovaný MOTO-HUB (Core) spárovaný s vaší T-Box jednotkou pro připojení, zrcadlení nebo spuštění Android Auto.</string>
+    <string name="legacy_couldn_t_open_the_browser_3e0fae25">Nepodařilo se otevřít prohlížeč.</string>
+    <string name="legacy_download_moto_hub_core_976f62e2">Stáhnout MOTO-HUB Core</string>
+    <string name="legacy_moto_hub_core_not_found_b76c3f4f">MOTO-HUB CORE NENALEZEN</string>
+
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_android_auto_17_4_removed_the_way_apps_ask_it_to_b5455068">Android Auto 17.4 odebral způsob, jakým aplikace mohou žádat o projekci. Lze ho stále spustit z vlastní vývojářské nabídky Android Auto.</string>
+    <string name="legacy_one_possible_cause_1_s_is_installed_and_can_keep_47cef163">Možná příčina: %1$s je nainstalována a může blokovat spojení s palubní deskou i na pozadí. Pokud se připojení stále nedaří, vynuceně ji zastavte na stránce Informace o aplikaci a zkuste to znovu.</string>
+    <string name="legacy_open_1_s_app_info_33a7c01c">Otevřít info aplikace %1$s</string>
+    <string name="legacy_retry_connection_54743f76">Opakovat připojení</string>
+    <string name="legacy_some_dashboards_never_broadcast_a_network_of_the_787ecd2c">Některé přístrojové desky nikdy nevysílají vlastní síť: připojují se k hotspotu, který vytváří váš telefon, a to pomocí SSID a hesla zobrazených na palubní desce. Pokud se na ní píše „otevřete hotspot Android“, zkuste to.</string>
+    <string name="legacy_1_s_is_installed_and_may_be_holding_the_dashboar_2c02bb10">%1$s je nainstalována a může blokovat palubní desku. Vynuceně ji zastavte na stránce Informace o aplikaci a zkuste to znovu.</string>
+    <string name="legacy_try_my_phone_hosts_the_hotspot_d4f6db66">Zkusit: hotspot hostuje můj telefon</string>
+
+    <!-- Source: feature/home/HubViewModel.kt -->
+    <string name="legacy_network_connected_pairing_over_bluetooth_and_wai_5b4c6259">Síť je připojena. Probíhá párování přes Bluetooth a čeká se na přístrojovou desku.</string>
+
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_altitude_ft_89feab0c">NADMOŘSKÁ VÝŠKA (STOPY)</string>
+    <string name="legacy_altitude_m_caa51e4f">NADMOŘSKÁ VÝŠKA (M)</string>
+    <string name="legacy_distance_ft_552284d9">VZDÁLENOST (STOPY)</string>
+    <string name="legacy_distance_km_5522856d">VZDÁLENOST (KM)</string>
+    <string name="legacy_distance_m_a7e856e2">VZDÁLENOST (M)</string>
+    <string name="legacy_distance_mi_552285a7">VZDÁLENOST (MÍLE)</string>
+    <string name="legacy_max_km_h_45403037">MAX. KM/H</string>
+    <string name="legacy_max_mph_5d129e29">MAX. MPH</string>
+
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_connect_and_recovery_57ed0872">Automatické připojení a obnova</string>
+    <string name="legacy_auto_recover_stalled_android_auto_streams_bd3e2d8e">Automaticky obnovovat zamrzlé streamy Android Auto</string>
+    <string name="legacy_button_mapping_815600">Mapování tlačítek</string>
+    <string name="legacy_buttons_control_android_auto_3dc44642">Tlačítka ovládají Android Auto</string>
+    <string name="legacy_drive_android_auto_with_the_motorcycle_s_buttons_ec16509d">Ovládat Android Auto pomocí tlačítek na motocyklu</string>
+    <string name="legacy_handlebar_buttons_47b4fd2c">Tlačítka na řídítkách</string>
+    <string name="legacy_managed_by_the_companion_app_its_controls_screen_9ad80a75">Spravováno doprovodnou aplikací: její obrazovka Ovládání při každém spuštění relace znovu aplikuje vlastní konfiguraci řídítek a přepisuje nastavení zde. Nastavte řídítka tam.</string>
+    <string name="legacy_music_volume_9fa56d95"> HLASITOST HUDBY</string>
+    <string name="legacy_off_means_the_mode_picker_stays_exactly_as_befor_c93efb5c">Vypnuto znamená, že výběr režimu zůstane přesně tak, jak byl předtím.</string>
+    <string name="legacy_on_9ff">Zapnuto</string>
+    <string name="legacy_put_a_screen_on_the_tft_as_soon_as_the_motorcycl_60bf969c">Zobrazit obrazovku na TFT panelu ihned po připojení motocyklu</string>
+    <string name="legacy_requires_the_phone_paired_to_the_motorcycle_s_bl_dda6960a">Vyžaduje telefon spárovaný s Bluetooth motocyklu. Hudba hraje dál, ale její tlačítka jsou během běžící relace zachycena.</string>
+    <string name="legacy_set_the_dash_clock_over_bluetooth_experimental_3431b284">Nastavit hodiny na palubní desce přes Bluetooth (experimentální)</string>
+    <string name="legacy_settings_595d2043">Nastavení</string>
+    <string name="legacy_some_dashboards_ask_for_the_time_over_bluetooth__b44ce43b">Některé palubní desky požadují čas přes Bluetooth namísto Wi-Fi a bez něj ukazují 00:00. Vyžaduje, aby motorka již byla spárovaná s tímto telefonem v nastavení Bluetooth systému Android. Ve výchozím nastavení vypnuto; MOTO-HUB odpovídá pouze zařízením, která si o to řeknou vlastním protokolem palubní desky.</string>
+    <string name="legacy_some_dashboards_forget_settings_like_the_clock_w_76d95842">Některé palubní desky zapomínají nastavení jako hodiny, když se spojení Wi-Fi Direct zcela přeruší. Udržuje telefon spojený se sítí motorky, dokud neopustíte aplikaci nebo nevypnete Wi-Fi. Ve výchozím nastavení vypnuto; zapínejte pouze v případě, že vaše palubní deska po odpojení ztrácí čas.</string>
+    <string name="legacy_start_automatically_2cb44c45">Spustit automaticky</string>
+    <string name="legacy_start_on_connect_94487a47">Spustit při připojení</string>
+    <string name="legacy_stay_linked_to_the_bike_s_wi_fi_after_disconnect_81b0e941">Zůstat připojen k Wi-Fi motocyklu i po odpojení</string>
+    <string name="legacy_the_motorcycle_s_buttons_reach_the_phone_over_bl_356cbf0d">Tlačítka motocyklu dorazí do telefonu přes Bluetooth jako mediální klávesy. Během streamování relace je MOTO-HUB může zachytit a ovládat jimi navigaci Android Auto namísto hudebního přehrávače.</string>
+    <string name="legacy_what_each_press_double_press_and_hold_does_97201ad9">Co dělá jednotlivé stisknutí, dvojité stisknutí a podržení</string>
+    <string name="legacy_what_to_do_when_android_auto_refuses_to_project_fa692d1b">Co dělat, když Android Auto odmítá provádět projekci</string>
+    <string name="legacy_what_to_start_5b78fc39">CO SPUSTIT</string>
+    <string name="legacy_while_capture_is_on_the_volume_buttons_navigate__9e410bf">Když je zachytávání zapnuté, tlačítka hlasitosti slouží k navigaci namísto změny hlasitosti – úroveň poslechu nastavte zde.</string>
+    <string name="legacy_with_this_on_moto_hub_skips_the_what_should_i_sh_498b0614">Když je tato možnost zapnutá, MOTO-HUB přeskočí obrazovku „co mám zobrazit?“ a po navázání spojení s motocyklem rovnou zobrazí zvolenou obrazovku na TFT panelu. Spustí se jednou při spuštění aplikace – zastavte obrazovku a jste zpět v ovládání.</string>
+
+    <!-- Source: ui/components/SystemKillNotice.kt -->
+    <string name="legacy_dismiss_c6dc4a6a">Zavřít</string>
+    <string name="legacy_stopped_by_your_phone_37b2b157">ZASTAVENO TELEFONEM</string>
+    <string name="legacy_your_last_session_ended_at_1_s_because_the_phone_8386f49c">Vaše poslední relace skončila v %1$s, protože telefon zavřel aplikaci %2$s, nikoli kvůli chybě v aplikaci.</string>
+
+    <!-- ==================================================================
+         Catalogue sweep, 2026-08-13 (second pass): source strings that sit
+         inside an if/when/arrayOf within the lookup call.
+         ================================================================== -->
+
+    <!-- Source: feature/ai/AiSettingsScreen.kt -->
+    <string name="legacy_api_key_fb0d9b39">Klíč API</string>
+    <string name="legacy_replace_api_key_d64eadad">Vyměnit klíč API</string>
+
+    <!-- Source: feature/androidauto/AndroidAutoPreviewScreen.kt -->
+    <string name="legacy_hide_controls_2dc943b4">Skrýt ovládání</string>
+
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_1_d_rpm_2_d_km_h_3_d_c_coolant_60ed46da">%1$d ot/min · %2$d km/h · chladicí kapalina %3$d °C</string>
+    <string name="legacy_obd_adapter_connected_29e365e9">OBD adaptér připojen</string>
+    <string name="legacy_saved_4bf7e67">Uloženo</string>
+    <string name="legacy_the_dashboard_shows_why_on_the_motorcycle_442e8daa">Důvod se zobrazuje na palubní desce motocyklu.</string>
+    <string name="legacy_waiting_for_the_obd_adapter_b3b01207">Čeká se na OBD adaptér</string>
+
+    <!-- Source: feature/controls/HandlebarMappingScreen.kt -->
+    <string name="legacy_listening_2ece009b">Naslouchání</string>
+    <string name="legacy_received_d3a64e01">Přijato</string>
+    <string name="legacy_teach_again_4fb10bd5">Naučit znovu</string>
+
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_bluetooth_is_turned_off_so_the_obd_adapter_canno_5a8640c">Bluetooth je vypnuté, takže se nelze spojit s OBD adaptérem.</string>
+    <string name="legacy_customizable_vector_map_rendered_on_the_tft_bfa6e220">Přizpůsobitelná vektorová mapa vykreslená na TFT panelu</string>
+    <string name="legacy_gps_following_8ad5867b">Sledování GPS</string>
+    <string name="legacy_moto_hub_needs_bluetooth_access_to_reach_the_obd_af681be3">MOTO-HUB potřebuje přístup k Bluetooth, aby mohl komunikovat s OBD adaptérem.</string>
+    <string name="legacy_no_map_live_engine_data_from_a_paired_elm327_ada_8ecf531c">Bez mapy: živá data motoru ze spárovaného adaptéru ELM327</string>
+    <string name="legacy_no_paired_obd_adapter_found_pair_the_elm327_dong_90029f7c">Nebyl nalezen žádný spárovaný OBD adaptér. Nejprve spárujte modul ELM327.</string>
+    <string name="legacy_restore_gps_76fc23d8">Obnovit GPS</string>
+
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_mute_24c639">Ztlumit</string>
+    <string name="legacy_voice_on_8e4723ad">Hlas zapnut</string>
+
+    <!-- Source: feature/obd/ObdFuelAirScreen.kt -->
+    <string name="legacy_the_ecu_is_adding_fuel_steadily_worth_a_look_if__da08dd7">Řídicí jednotka (ECU) stabilně přidává palivo. Stojí za to se na to podívat, pokud hodnota poroste dál.</string>
+    <string name="legacy_the_ecu_is_taking_fuel_away_steadily_worth_a_loo_b2e06214">Řídicí jednotka (ECU) stabilně ubírá palivo. Stojí za to se na to podívat, pokud hodnota klesá dál.</string>
+
+    <!-- Source: feature/obd/ObdFullScanScreen.kt -->
+    <string name="legacy_last_scan_1c6351c7">POSLEDNÍ SKENOVÁNÍ</string>
+    <string name="legacy_run_full_scan_62e71f9">Spustit úplné skenování</string>
+    <string name="legacy_scanning_f99dc8b1">SKENOVÁNÍ</string>
+    <string name="legacy_scanning_b757d75">Skenování…</string>
+
+    <!-- Source: feature/obd/ObdHubScreen.kt -->
+    <string name="legacy_bluetooth_is_turned_off_92ceda3f">Bluetooth je vypnuté.</string>
+    <string name="legacy_connected_and_reading_1e53c68c">Připojeno a čte se</string>
+    <string name="legacy_connecting_ca35204e">Připojování…</string>
+    <string name="legacy_moto_hub_needs_bluetooth_access_to_reach_the_ada_8763b3f4">MOTO-HUB potřebuje přístup k Bluetooth, aby dosáhl na adaptér.</string>
+    <string name="legacy_no_paired_obd_adapter_found_72c35314">Nebyl nalezen žádný spárovaný OBD adaptér.</string>
+    <string name="legacy_not_connected_273cf5d2">Nepřipojeno.</string>
+
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_1h_af24">-1H</string>
+    <string name="legacy_climbing_6536490d">STOUPÁNÍ</string>
+    <string name="legacy_descending_da6096f8">KLESÁNÍ</string>
+    <string name="legacy_gnss_live_7bc47fe5">ŽIVÁ GNSS</string>
+    <string name="legacy_level_44fa364">ROVINA</string>
+    <string name="legacy_no_fix_8982dd16">ŽÁDNÝ SIGNÁL</string>
+    <string name="legacy_vertical_speed_427682fd">VERTIKÁLNÍ RYCHLOST</string>
+
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_battery_level_508e0b71">ÚROVEŇ BATERIE</string>
+    <string name="legacy_charging_843f5271">NABÍJENÍ</string>
+    <string name="legacy_external_power_41cdb450">EXTERNÍ NAPÁJENÍ</string>
+    <string name="legacy_hot_1182d">HORKÁ</string>
+    <string name="legacy_low_power_483394f9">NÍZKÝ VÝKON</string>
+    <string name="legacy_no_sensor_69b15af9">ŽÁDNÝ SENZOR</string>
+    <string name="legacy_normal_8999b0e7">NORMÁLNÍ</string>
+    <string name="legacy_warm_288a85">TEPLÁ</string>
+
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_east_205bfd">VÝCHOD</string>
+    <string name="legacy_glare_risk_8e426920">RIZIKO OSLNĚNÍ</string>
+    <string name="legacy_gnss_stale_fd32d3a0">ZASTARALÁ GNSS</string>
+    <string name="legacy_ne_9b7">SV</string>
+    <string name="legacy_no_gnss_a6d94c86">BEZ GNSS</string>
+    <string name="legacy_north_47050e5">SEVER</string>
+    <string name="legacy_nw_9c9">SZ</string>
+    <string name="legacy_se_a52">JV</string>
+    <string name="legacy_south_4b6d1ad">JIH</string>
+    <string name="legacy_sun_tracking_5fd65e2b">SLEDOVÁNÍ SLUNCE</string>
+    <string name="legacy_sw_a64">JZ</string>
+    <string name="legacy_west_2899af">ZÁPAD</string>
+
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_off_for_1_s_a8aabb23">Vypnuto pro %1$s</string>
+    <string name="legacy_one_widget_pinned_on_1_s_9ab92ad6">Jeden widget připnutý na %1$s</string>
+    <string name="legacy_rotating_on_1_s_c5e75b74">Střídání na %1$s</string>
+    <string name="legacy_this_panel_cycles_through_the_1_d_ticked_widgets_3a2b2d0e">Tento panel prochází %1$d zaškrtnutých widgetů.</string>
+    <string name="legacy_this_panel_shows_that_one_widget_and_never_rotat_f3acc606">Tento panel zobrazuje tento jeden widget a nikdy se nestřídá. Zaškrtněte o jeden více pro spuštění kolotoče.</string>
+    <string name="legacy_tick_widgets_below_to_build_this_panel_s_carouse_ab0f3111">Zaškrtněte widgety níže a sestavte kolotoč pro tento panel. Každý panel má svůj vlastní.</string>
+
+    <!-- Source: feature/ridedashboard/widget/SatelliteWidget.kt -->
+    <string name="legacy_2d_fix_weak_geometry_e5b0cd1f">2D FIXACE • SLABÁ GEOMETRIE</string>
+    <string name="legacy_3d_fix_navigation_ready_bff99e13">3D FIXACE • NAVIGACE PŘIPRAVENA</string>
+    <string name="legacy_scan_26be7d">SKENOVAT</string>
+    <string name="legacy_searching_for_satellites_f009ee35">VYHLEDÁVÁNÍ SATELITŮ</string>
+
+    <!-- Source: feature/ridedashboard/widget/SpeedGaugeWidget.kt -->
+    <string name="legacy_gnss_ok_35ac4b15">GNSS V POŘÁDKU</string>
+    <string name="legacy_n_4e">S</string>
+    <string name="legacy_w_57">Z</string>
+
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_session_live_5f7f2456">AKTIVNÍ RELACE</string>
+
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_capture_84285f26">Zachytit</string>
+    <string name="legacy_capturing_561c2223">Zachytávání…</string>
+    <string name="legacy_recalibrate_ceebf5d4">Přecejchovat</string>
+
+    <!-- Source: feature/trips/TripLibraryUi.kt -->
+    <string name="legacy_enhanced_9c6c8376">VYLEPŠENO</string>
+    <string name="legacy_gps_only_e6f03982">POUZE GPS</string>
+         description; rendered outside the app's own Compose runtime, so it is a plain string
+         resource rather than a motoHubText() call). -->
+    <string name="handlebar_hid_capture_description">Umožňuje aplikaci MOTO-HUB číst stisknutí směrového ovladače (D-pad) z Bluetooth HID dálkového ovladače na řídítkách, pokud je v nastavení tlačítek řídítek vybrán režim HID.</string>
+
+    <!-- ==================================================================
+         Handlebar HID mode, phone-only Android Auto and the teach
+         prerequisite dialog (PR #8, rebased 2026-08-18).
+         ================================================================== -->
+    <string name="legacy_android_auto_isn_t_running_9f167e30">Android Auto neběží</string>
+    <string name="legacy_teaching_the_handlebar_needs_a_live_android_auto_697217d0">K naučení tlačítkům na řídítkách je vyžadována aktivní relace Android Auto pro zachycení stisknutí. Připojte se k motocyklu, nebo relaci spusťte na tomto telefonu bez T-Boxu.</string>
+    <string name="legacy_connect_to_1_s_579387aa">Připojit k %1$s</string>
+    <string name="legacy_start_on_this_phone_no_t_box_f1bcc79f">Spustit na tomto telefonu (bez T-Boxu)</string>
+    <string name="legacy_bluetooth_is_off_turn_it_on_then_pair_the_remote_356459fc">Bluetooth je vypnutý — zapněte jej a poté spárujte ovladač jako klávesnici.</string>
+    <string name="legacy_allow_bluetooth_access_so_the_app_can_read_the_r_bf160fa2">Povolte přístup k Bluetooth, aby aplikace mohla číst stisknutí tlačítek ovladače.</string>
+    <string name="legacy_bluetooth_is_on_a_hid_remote_doesn_t_show_up_her_77795af8">Bluetooth je zapnutý. HID ovladač se zde nezobrazuje jako připojené zařízení — pokud stisknutí stále nejsou rozpoznána, zkontrolujte, zda je spárován v systémovém nastavení Bluetooth a zda je zapnuta Usnadnění přístupu.</string>
+    <string name="legacy_or_right_now_without_the_t_box_21ba0502">NEBO HNED TEĎ, BEZ T-BOXU</string>
+    <string name="legacy_android_auto_straight_to_your_phone_f0cc540c">Android Auto — přímo do vašeho telefonu</string>
+    <string name="legacy_input_protocol_8ff4fe4e">VSTUPNÍ PROTOKOL</string>
+    <string name="legacy_most_dashboards_send_buttons_as_avrcp_media_keys_6e1dd82c">Většina přístrojových desek posílá tlačítka jako médiové klávesy AVRCP — ponechte nastaveno na AVRCP. Režim HID zvolte pouze v případě, že se ovladač páruje jako Bluetooth klávesnice a jeho stisknutí se níže vůbec nezaznamenávají.</string>
+    <string name="legacy_hid_mode_also_needs_moto_hub_s_accessibility_ser_c0cdf4cc">Režim HID vyžaduje také zapnutou Službu usnadnění MOTO-HUB, jinak stisknutí nebudou rozpoznána.</string>
+    <string name="legacy_open_accessibility_settings_a01c954b">Otevřít nastavení Usnadnění</string>
+    <string name="legacy_turn_on_moto_hub_so_handlebar_presses_reach_the__b41c5310">Zapněte MOTO-HUB, aby stisknutí z řídítek dorazila do aplikace z jakékoli obrazovky</string>
+    <string name="legacy_was_moto_hub_s_switch_greyed_out_android_blocks__b5233420">Byl přepínač MOTO-HUB zašedlý? Android jej blokuje pro aplikace, které nebyly nainstalovány z obchodu, a MOTO-HUB je stažen z GitHubu. Otevřete Informace o aplikaci, klepněte na ⋮ vpravo nahoře, zvolte „Povolit omezená nastavení“ a poté se vraťte a přepínač zapněte.</string>
+    <string name="legacy_open_app_info_7c77c863">Otevřít Informace o aplikaci</string>
+    <string name="legacy_where_allow_restricted_settings_lives_8f29fea1">Kde se nachází „Povolit omezená nastavení“</string>
+    <string name="legacy_avrcp_media_keys_f50e20c7">AVRCP (médiové klávesy)</string>
+    <string name="legacy_hid_d_pad_a247f04a">HID (směrový ovladač)</string>
+    <string name="legacy_default_the_dashboard_sends_bluetooth_media_key__ccbdfbf7">Výchozí. Přístrojová deska odesílá příkazy médiových kláves Bluetooth pro přehrávání/pauzu, skladbu a hlasitost.</string>
+    <string name="legacy_for_remotes_that_pair_as_a_bluetooth_keyboard_an_25055a66">Pro ovladače, které se párují jako Bluetooth klávesnice a odesílají stisknutí směrového ovladače. Vyžaduje zapnutí Služby usnadnění MOTO-HUB níže.</string>
+
+    <!-- External display service (USB AOA) - notification channel and ongoing notification -->
+    <string name="legacy_moto_hub_external_display_streaming_1be823ca">MOTO-HUB streamování na externí displej</string>
+    <string name="legacy_streaming_to_external_display_via_usb_ab5c31c6">Streamování na externí displej přes USB</string>
+    <string name="legacy_stop_external_display_c050e9ab">Zastavit externí displej</string>
+    <string name="legacy_aap_accessory_probe_running_bcf6ccd1">Běží test příslušenství AAP</string>
+
+    <!-- About screen -->
+    <string name="legacy_your_phone_your_motorcycle_display_c5956fcb">Váš telefon.\nVáš displej motocyklu.</string>
+    <string name="legacy_follow_development_join_our_community_report_iss_b8b8fffa">Sledujte vývoj, připojte se k naší komunitě, hlašte chyby a stahujte nová vydání.</string>
+    <string name="legacy_moto_hub_is_an_independent_project_it_is_not_aff_9e4c2633">MOTO-HUB je nezávislý projekt. Není propojen, schválen ani sponzorován společností Carbit, CFMOTO, žádným jiným výrobcem, jehož přístrojová deska používá EasyConn, společností Google ani Android Auto. Všechny názvy produktů a ochranné známky patří jejich příslušným vlastníkům.</string>
+    <string name="legacy_moto_hub_is_an_experimental_proof_of_concept_not_34b4b321">MOTO-HUB je experimentální koncept (proof-of-concept), nikoli produkční produkt.</string>
+    <string name="legacy_development_and_testing_happen_on_a_cfmoto_700mt_ac58afbf">Vývoj a testování probíhá na přístrojové desce CFMOTO 700MT-ADV s telefony OnePlus 13 / Galaxy Z Fold4. Ostatní motocykly, značky, verze firmwaru T-Boxu a telefony zde nejsou testovány: očekávejte odlišné chování, opakované pokusy o připojení nebo stav bez připojení. Pokud přístrojová deska zobrazuje QR kód pro párování, stojí za to to vyzkoušet.</string>
+    <string name="legacy_do_not_rely_on_it_as_your_only_source_of_critica_39775433">Nespoléhejte na tuto aplikaci jako na jediný zdroj kritické navigace. Navigaci nastavte pouze při zaparkování a software používejte na vlastní nebezpečí.</string>
+
+    <!-- Garage - hero tiles -->
+    <string name="legacy_scan_motorcycle_qr_code_cc47d360">Naskenovat QR kód motocyklu</string>
+    <string name="legacy_point_your_camera_at_the_t_box_sticker_1fc1811">Namiřte fotoaparát na štítek T-Boxu</string>
+    <string name="legacy_no_qr_manual_setup_e8495cc4">Nemáte QR kód? Ruční nastavení</string>
+    <string name="legacy_type_the_network_in_yourself_b35606b3">Zadejte síť ručně</string>
+    <string name="legacy_scan_its_t_box_qr_code_ca4d32e3">Naskenujte QR kód T-Boxu</string>
+    <string name="legacy_no_qr_manual_1dd2a7a7">Bez QR? Ručně</string>
+    <string name="legacy_type_the_network_in_b00b50ec">Zadejte síť</string>
+    <string name="legacy_used_by_phone_only_display_modes_without_a_t_box_13ed383e">Používáno režimy zobrazení pouze pro telefon bez T-Boxu</string>
+    <string name="legacy_talk_to_a_second_phone_over_your_own_hotspot_2aec1606">Komunikace s druhým telefonem přes váš vlastní hotspot</string>
+    <string name="legacy_default_settings_a0578342">Výchozí nastavení</string>
+    <string name="legacy_group_intercom_c81733c6">Skupinový interkom</string>
+
+    <!-- Motorcycle details - photo and Android Auto format buttons (short labels) -->
+    <string name="legacy_add_photo_203b2dd3">Přidat fotku</string>
+    <string name="legacy_change_photo_ad0735e2">Změnit fotku</string>
+    <string name="legacy_motorcycle_photo_4fd6c703">Fotka motocyklu</string>
+    <string name="legacy_fit_10ff1">PRŮBĚH</string>
+    <string name="legacy_stretch_baa072e5">ROZTÁHNOUT</string>
+    <string name="legacy_crop_1fb290">OŘÍZNOUT</string>
+
+    <!-- T-Box capability inspector - section titles and row labels -->
+    <string name="legacy_a_read_only_view_of_data_observed_directly_from__eb0959e6">Pohled pouze pro čtení na data sledovaná přímo z tohoto T-Boxu.</string>
+    <string name="legacy_wi_fi_network_68c4e1ac">Wi-Fi síť</string>
+    <string name="legacy_easyconn_endpoint_f9ecbf07">Koncový bod EasyConn</string>
+    <string name="legacy_nsd_package_bfb67045">Balíček NSD</string>
+    <string name="legacy_last_discovered_a02851f2">Naposledy zjištěno</string>
+    <string name="legacy_diagnostics_54322d8c">DIAGNOSTIKA</string>
+    <string name="legacy_if_easyconn_discovery_keeps_failing_briefly_reco_b8d938f8">Pokud zjišťování EasyConn selhává, krátce se znovu připojte k tomuto T-Boxu a otestujte jeho známé porty (10915-10935) přímo, abyste zjistili, který skutečně odpovídá.</string>
+    <string name="legacy_display_8e70a4a2">DISPLEJ</string>
+    <string name="legacy_tft_capture_area_ad3b6865">Oblast zachycení TFT</string>
+    <string name="legacy_orientation_d9c9db0">Orientace</string>
+    <string name="legacy_reported_dpi_4b722c90">Nahlášené DPI</string>
+    <string name="legacy_dpi_mode_9e4a5ea6">Režim DPI</string>
+    <string name="legacy_screen_type_5d60ca4e">Typ obrazovky</string>
+    <string name="legacy_reported_identity_b41296b">NAHLÁŠENÁ IDENTITA</string>
+    <string name="legacy_head_unit_name_1d44c987">Název hlavní jednotky</string>
+    <string name="legacy_vehicle_brand_1ca30d73">Značka vozidla</string>
+    <string name="legacy_vehicle_model_1d3cbd15">Model vozidla</string>
+    <string name="legacy_these_values_are_shown_exactly_as_reported_by_th_16427b8c">Tyto hodnoty jsou zobrazeny přesně tak, jak je nahlásil T-Box. MOTO-HUB neodvozuje model motocyklu z QR kódu ani z názvu sítě.</string>
+    <string name="legacy_software_protocol_2108716b">SOFTWARE A PROTOKOL</string>
+    <string name="legacy_pxc_version_5fba84f3">Verze PXC</string>
+    <string name="legacy_sdk_version_aacf3ed2">Verze SDK</string>
+    <string name="legacy_software_version_8135c77f">Verze softwaru</string>
+    <string name="legacy_version_code_301c55">Kód verze</string>
+    <string name="legacy_reported_package_ec9e7619">Nahlášený balíček</string>
+    <string name="legacy_product_type_42ccc3eb">Typ produktu</string>
+    <string name="legacy_transport_type_33b665f1">Typ přenosu</string>
+    <string name="legacy_function_mask_a68c5a14">Maska funkcí</string>
+    <string name="legacy_wi_fi_socket_timeout_c3c69476">Časový limit Wi-Fi socketu</string>
+    <string name="legacy_feature_flags_3e60189d">PŘÍZNAKY FUNKCÍ</string>
+    <string name="legacy_screen_mirroring_3102b12f">Zrcadlení obrazovky</string>
+    <string name="legacy_screen_touch_4eb406ab">Dotyk obrazovky</string>
+    <string name="legacy_overlay_touch_d474eb4f">Dotyk překryvné vrstvy</string>
+    <string name="legacy_mirror_reconnect_e70c0c56">Opakované připojení zrcadlení</string>
+    <string name="legacy_landscape_adaptive_4f69625b">Adaptivní na šířku</string>
+    <string name="legacy_socket_authentication_94d326a5">Autentizace socketu</string>
+    <string name="legacy_microphone_c888754a">Mikrofon</string>
+    <string name="legacy_hid_input_9c332ccd">Vstup HID</string>
+    <string name="legacy_third_party_apps_a5fc13b2">Aplikace třetích stran</string>
+    <string name="legacy_phone_signal_e87f95ba">Signál telefonu</string>
+    <string name="legacy_time_synchronization_62f3fb2d">Synchronizace času</string>
+    <string name="legacy_bluetooth_calls_f80c25c3">Bluetooth hovory</string>
+    <string name="legacy_sensitive_client_info_fields_are_intentionally_e_4b966321">Citlivá pole CLIENT_INFO jsou záměrně vyloučena z ukládání a zobrazování.</string>
+    <string name="legacy_capability_report_captured_65a39462">Zpráva o schopnostech byla zachycena</string>
+    <string name="legacy_t_box_discovered_cd525276">T-Box byl nalezen</string>
+    <string name="legacy_no_observations_yet_d99ce56e">Zatím žádné záznamy</string>
+    <string name="legacy_client_info_was_captured_during_an_easyconn_hand_f72a40e8">CLIENT_INFO bylo zachyceno během navazování spojení (handshake) EasyConn.</string>
+    <string name="legacy_start_mirroring_or_android_auto_once_to_capture__cd900a4a">Spusťte jednou zrcadlení nebo Android Auto pro zachycení CLIENT_INFO.</string>
+    <string name="legacy_connect_this_motorcycle_then_start_mirroring_or__176c21dd">Připojte tento motocykl a poté jednou spusťte zrcadlení nebo Android Auto.</string>
+    <string name="legacy_wait_288975">ČEKEJTE</string>
+    <string name="legacy_observed_1_s_43b8d8b3">Zaznamenáno %1$s</string>
+    <string name="legacy_not_reported_7aaeba0">Nenahlášeno</string>
+    <string name="legacy_supported_a4e9e48e">PODPOROVÁNO</string>
+    <string name="legacy_not_supported_14e0b361">NEPODPOROVÁNO</string>
+    <string name="legacy_not_reported_108c5fa0">NENAH LÁŠENO</string>
+
+    <!-- QR pairing - photo fallback dialog and live scanner -->
+    <string name="legacy_analyzing_qr_photo_aa205a9c">Probíhá analýza fotky QR kódu…</string>
+    <string name="legacy_removing_display_patterns_and_trying_qr_recognit_b1c3a1e8">Odstraňování vzorů displeje a pokus o rozpoznání QR kódu</string>
+    <string name="legacy_attempt_1_d_of_2_d_e7c367b5">Pokus %1$d z %2$d</string>
+    <string name="legacy_flash_on_64bdb02f">Blesk ZAP</string>
+    <string name="legacy_flash_40cffd0">Blesk</string>
+    <string name="legacy_zoom_1_s_d659e688">Přiblížení %1$s</string>
+    <string name="legacy_max_12d44">Max</string>
+    <string name="legacy_tap_the_qr_code_to_focus_use_zoom_if_it_is_small_2607a78c">Klepněte na QR kód pro zaostření • Je-li malý, použijte přiblížení</string>
+
+    <!-- Safety disclaimer shown on first launch -->
+    <string name="legacy_safety_warning_243ef82e">BEZPEČNOSTNÍ UPOZORNĚNÍ</string>
+    <string name="legacy_riding_requires_your_full_attention_never_intera_96038a24">Jízda vyžaduje vaši plnou pozornost. Nikdy nemanipulujte s MOTO-HUB, Android Auto, navigací, zrcadlením, záznamem trasy ani s žádnými prvky na obrazovce, pokud je motocykl v pohybu.</string>
+    <string name="legacy_configure_and_verify_everything_only_while_parke_57e1b31b">Vše nastavujte a ověřujte pouze při zaparkování. Tuto aplikaci používejte výhradně v zcela bezpečné a kontrolované situaci. Pokud podmínky nejsou zcela bezpečné, aplikaci nepoužívejte.</string>
+    <string name="legacy_moto_hub_is_not_a_safety_device_and_cannot_preve_a3d43f2f">MOTO-HUB není bezpečnostní zařízení a nemůže zabránit nepozornosti, nehodám, zraněním ani škodám. Jste výhradně odpovědní za bezpečnou jízdu a dodržování všech platných zákonů.</string>
+    <string name="legacy_i_understand_do_not_show_this_warning_again_e4526192">Rozumím — toto upozornění již nezobrazovat</string>
+
+    <!-- GitHub update dialog -->
+    <string name="legacy_downloading_fe585f4">Stahování...</string>
+    <string name="legacy_download_and_install_508990da">Stáhnout a nainstalovat</string>
+
+    <!-- Home and shared UI -->
+    <string name="legacy_no_motorcycle_b58a6930">Žádný motocykl</string>
+    <string name="legacy_stop_streaming_3eba75e4">Zastavit streamování</string>
+    <string name="legacy_touch_the_preview_to_control_android_auto_91609ae0">Klepnutím na náhled můžete ovládat Android Auto</string>
+
+    <!-- Handlebar mapping - action short labels, family headers and calibration hints -->
+    <string name="legacy_up_abb">Nahoru</string>
+    <string name="legacy_down_2098c2">Dolů</string>
+    <string name="legacy_left_241427">Doleva</string>
+    <string name="legacy_right_4b4d1fc">Doprava</string>
+    <string name="legacy_ok_9dc">OK</string>
+    <string name="legacy_place_1_45c34f38">Pozice 1</string>
+    <string name="legacy_place_2_45c34f39">Pozice 2</string>
+    <string name="legacy_place_3_45c34f3a">Pozice 3</string>
+    <string name="legacy_move_the_cursor_78e625b4">POSUNOUT KURZOR</string>
+    <string name="legacy_system_92af662f">SYSTÉM</string>
+    <string name="legacy_navigate_to_f20c4b8a">NAVIGOVAT DO</string>
+    <string name="legacy_this_button_has_no_hold_skipping_automatically_44873c53">Toto tlačítko neudržuje stisk – automaticky se přeskakuje.</string>
+    <string name="legacy_that_was_a_single_press_press_twice_quickly_for__e774e0f2">To bylo jedno stisknutí – pro dvojité stiskněte dvakrát rychle za sebou.</string>
+    <string name="legacy_that_was_a_quick_tap_press_and_hold_a_moment_lon_5b9c9d4d">To bylo krátké klepnutí – stiskněte a podržte o chvíli déle.</string>
+    <string name="legacy_open_hotspot_settings_7d1f3d4a">Otevřít nastavení hotspotu</string>
+    <!-- The "MOTO-HUB is still looking" notification shown while a connection attempt runs,
+         and the hosted-network wording that tells the rider not to close the app. %1$s is
+         the motorcycle network name. -->
+    <string name="legacy_moto_hub_connection_progress_c260af34">Průběh připojování MOTO-HUB</string>
+    <string name="legacy_looking_for_1_s_9983a22f">Hledání %1$s</string>
+    <string name="legacy_connecting_to_1_s_2f10e3b8">Připojování k %1$s</string>
+    <string name="legacy_keep_moto_hub_open_closing_it_stops_the_search_54ec507">Nezavírejte MOTO-HUB – zavřením se vyhledávání zastaví.</string>
+    <string name="legacy_hotspot_is_up_searching_it_for_the_dashboard_thi_caab4cd3">Hotspot je aktivní. Vyhledává se přístrojový panel – může to trvat až 90 sekund, proto nechejte MOTO-HUB otevřený.</string>
+    <!-- Asked once per video format tried, after a session that looked healthy from the phone:
+         only the rider can see whether the dashboard actually displayed it. %1$s is the
+         motorcycle name. -->
+    <string name="legacy_did_it_show_up_on_the_dashboard_f341c05">Zobrazilo se to na přístrojovém panelu?</string>
+    <string name="legacy_last_time_you_connected_to_1_s_everything_looked_46fc9a09">Při posledním připojení k %1$s vypadalo z pohledu telefonu vše v pořádku. MOTO-HUB nemá jak vidět obrazovku přístrojového panelu, takže toto je jediná věc, na kterou se musí zeptat.</string>
+    <string name="legacy_if_it_stayed_on_the_pairing_screen_moto_hub_will_40398b69">Pokud zůstala obrazovka párování, MOTO-HUB zkusí při příští jízdě jiný formát videa a bude pokračovat, dokud některý nebude fungovat.</string>
+    <string name="legacy_yes_i_saw_it_625527f4">Ano, viděl(a) jsem to</string>
+    <string name="legacy_no_nothing_appeared_f92c88fc">Ne, nic se nezobrazilo</string>
+    <!-- Shown when the video-format search cannot progress because every session so far ran the
+         Ride Dashboard, which sends its own format. -->
+    <string name="legacy_the_video_format_search_is_waiting_ac28c9a">Vyhledávání formátu videa čeká</string>
+    <string name="legacy_moto_hub_is_still_looking_for_a_video_format_you_44b4c53c">MOTO-HUB stále hledá formát videa, který váš přístrojový panel dokáže zobrazit, ale během spuštěného Android Auto může testovat pouze jeden – Ride Dashboard totiž vždy posílá svůj vlastní formát.</string>
+    <string name="legacy_connect_once_with_android_auto_and_the_search_mo_71871380">Připojte se jednou pomocí Android Auto a vyhledávání bude automaticky pokračovat.</string>
+    <string name="legacy_got_it_7f79855f">Rozumím</string>
+
+    <!-- ===========================================================
+         Catalogue sweep, 2026-08-24: strings this worktree draws but had no
+         identifier for. The photo-picker values come from the pro-poc
+         catalogues, where the same source strings are already translated;
+         the About paragraph is this worktree's own, rewritten when CORE
+         dropped to Android 12.
+         ================================================================== -->
+
+    <!-- Source: MainActivity.kt -->
+    <string name="legacy_camera_permission_is_required_to_take_a_photo_951c5abe">Pro pořízení fotografie je vyžadováno přístupové oprávnění ke fotoaparátu</string>
+
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_browse_files_e6b23981">Procházet soubory</string>
+    <string name="legacy_choose_from_gallery_1d40e025">Vybrat z galerie</string>
+    <string name="legacy_downloads_cloud_drives_and_any_other_folder_eb4e2c46">Stažené soubory, cloudová úložiště a jakékoli další složky.</string>
+    <string name="legacy_open_the_camera_and_shoot_it_now_75ae0eed">Otevřete fotoaparát a vyfoťte ji teď.</string>
+    <string name="legacy_pick_one_of_your_photos_913c1c70">Vyberte jednu ze svých fotek.</string>
+    <string name="legacy_take_a_photo_cefc733a">Vyfotit</string>
+
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_moto_hub_connects_an_android_12_phone_to_a_motor_b791c32e">MOTO-HUB propojuje telefon s Androidem 12+ s palubní deskou motocyklu přes EasyConn — softwarové řešení od Carbitu, které dodává několik výrobců, mimo jiné CFMOTO. Podporuje zrcadlení obrazovky a aplikací, projekci Android Auto, uložené profily motocyklů a diagnostiku přímo v zařízení.</string>
+
+    <!-- Source: feature/controls — a controller button stands in for a handlebar press -->
+    <string name="legacy_handlebar_presses_32db65bc">STISKY NA ŘÍDÍTKÁCH</string>
+    <string name="legacy_backward_hold_left_72d8761e">Přidržení dozadu – Vlevo</string>
+    <string name="legacy_forward_hold_right_3f058b83">Přidržení dopředu – Vpravo</string>
+
+    <!-- Source: feature/diagnostics/BleExplorerScreen.kt — the Bluetooth LE workbench -->
+    <string name="legacy_bluetooth_le_explorer_2ab1f074">Průzkumník Bluetooth LE</string>
+    <string name="legacy_find_any_bluetooth_le_device_open_it_and_see_wha_ff9d191c">Vyhledejte jakékoli zařízení Bluetooth LE, otevřete jej a zjistěte, z čeho se skutečně skládá: jeho služby, charakteristiky a každý odeslaný bajt. Určeno pro ovladače, které o sobě nic nehlásí – stiskněte jejich tlačítka během odběru notifikací a protokol se sám zapíše do protokolu událostí.</string>
+    <string name="legacy_devices_1_d_c9f468d8">ZAŘÍZENÍ (%1$d)</string>
+    <string name="legacy_filter_by_name_address_or_service_5c4953c4">Filtrovat podle názvu, adresy nebo služby</string>
+    <string name="legacy_not_connectable_a36d7984"> - nelze připojit</string>
+    <string name="legacy_services_99327804">služby: </string>
+    <string name="legacy_manufacturer_5ba47ab7">výrobce: </string>
+    <string name="legacy_service_data_703f501b">data služby: </string>
+    <string name="legacy_connected_839202e9">PŘIPOJENO</string>
+    <string name="legacy_rediscover_cece7f3c">Znovu vyhledat</string>
+    <string name="legacy_mtu_517_7d540d89">MTU 517</string>
+    <string name="legacy_read_rssi_318ccc81">Načíst RSSI</string>
+    <string name="legacy_read_26cdb6">Číst</string>
+    <string name="legacy_write_4ff67bf">Zapsat</string>
+    <string name="legacy_write_to_1_s_716e199f">Zapsat do %1$s</string>
+    <string name="legacy_bytes_in_hex_01_ff_0a_01ff0a_and_0x01_0xff_all_w_69a0e8b2">Bajty v hexadecimálním formátu – funguje „01 FF 0A“, „01ff0a“ i „0x01,0xFF“. Toto zapisuje přímo do zařízení: u některého hardwaru může nesprávná hodnota změnit nastavení, které lze jen obtížně vrátit zpět.</string>
+    <string name="legacy_hex_11afb">Hex</string>
+    <string name="legacy_not_valid_hex_yet_f28e24dc">Zatím neplatný hexadecimální zápis.</string>
+    <string name="legacy_1_d_byte_s_f2d64482">%1$d bajtů</string>
+    <string name="legacy_no_response_bdcb77a0">Bez odpovědi</string>
+    <string name="legacy_traffic_eb2daddd">PROVOZ</string>
+    <string name="legacy_nothing_yet_dc65bed9">Zatím nic.</string>
+    <string name="legacy_every_line_here_is_also_in_the_application_log_s_f3e682dd">Každý řádek zde je také v protokolu aplikace, takže relaci lze odeslat v diagnostické zprávě.</string>
+    <string name="legacy_dash_clock_lab_a1a0638d">Laboratoř hodin přístrojové desky</string>
+    <string name="legacy_experiments_for_dashes_that_reset_the_clock_zont_a4c75a39">Experimenty pro palubní desky, které resetují hodiny (Zontes, Voge)</string>
+    <string name="legacy_scan_connect_and_read_any_ble_device_byte_by_byt_c47fb770">Skenovat, připojit a číst jakékoli zařízení BLE bajt po bajtu</string>
+
+    <!-- Source: strings the extractor used to miss inside if/else expressions -->
+    <string name="legacy_stop_scanning_93cac2ef">Zastavit skenování</string>
+    <string name="legacy_scan_for_devices_883edf83">Skenovat zařízení</string>
+    <string name="legacy_showing_named_devices_only_18320ef1">Zobrazují se pouze pojmenovaná zařízení</string>
+    <string name="legacy_showing_every_device_ab347b96">Zobrazují se všechna zařízení</string>
+    <string name="legacy_nothing_yet_a_remote_that_sleeps_only_advertises_231ea04a">Zatím nic. Ovladač, který je v režimu spánku, vysílá signál pouze několik sekund po stisknutí tlačítka – stiskněte tlačítko a držte ovladač blízko.</string>
+    <string name="legacy_start_a_scan_to_see_what_is_around_bd69ed5b">Spusťte skenování a zjistěte, co je v okolí.</string>
+    <string name="legacy_unsubscribe_862dd2b1">Zrušit odběr</string>
+    <string name="legacy_subscribe_9621fd2a">Odebírat</string>
+
+    <!-- Source: feature/controls — actions that drive the Ride Dashboard itself -->
+    <string name="legacy_dashboard_next_panel_8f5432b1">Palubní deska: další panel</string>
+    <string name="legacy_dashboard_fullscreen_map_1bd08691">Palubní deska: mapa na celou obrazovku</string>
+    <string name="legacy_dashboard_zoom_the_map_on_me_4f78353">Palubní deska: přiblížit mapu na mou polohu</string>
+    <string name="legacy_dashboard_change_the_left_widget_2ac18bf8">Palubní deska: změnit levý widget</string>
+    <string name="legacy_dashboard_change_the_right_widget_e40e68ad">Palubní deska: změnit pravý widget</string>
+    <string name="legacy_panel_33b634ef">Panel +</string>
+    <string name="legacy_map_full_b08caf3">Mapa na celou obr.</string>
+    <string name="legacy_zoom_me_5ca904e5">Přiblížit mě</string>
+    <string name="legacy_widget_l_b0744190">Widget L</string>
+    <string name="legacy_widget_r_b0744196">Widget P</string>
+
+    <!-- Source: feature/controls — actions that drive the rider's music -->
+    <string name="legacy_music_464f605">HUDBA</string>
+    <string name="legacy_music_play_pause_f246dd44">Hudba: přehrát / pozastavit</string>
+    <string name="legacy_music_next_track_516d3c09">Hudba: následující skladba</string>
+    <string name="legacy_music_previous_track_dab94b8d">Hudba: předchozí skladba</string>
+    <string name="legacy_music_volume_up_f45c31d6">Hudba: zvýšit hlasitost</string>
+    <string name="legacy_music_volume_down_4e0f651d">Hudba: snížit hlasitost</string>
+    <string name="legacy_play_25ff54">Přehrát</string>
+    <string name="legacy_next_24ff13">Další</string>
+    <string name="legacy_previous_b7ee1f17">Předchozí</string>
+    <string name="legacy_vol_4eff3fe">Hlas. +</string>
+    <string name="legacy_vol_4f015e5">Hlas. −</string>
+
+    <!-- Source: feature/controls — the three input sources, and which one is live -->
+    <string name="legacy_motorcycle_handlebar_dc90fcfc">ŘÍDÍTKA MOTOCYKLU</string>
+    <string name="legacy_android_auto_17_4_removed_the_way_an_app_can_ask_217ec1b2">Android Auto verze 17.4 odstranil možnost, jak může aplikace požádat o spuštění projekce. MOTO-HUB se o to stále pokouší a u starších verzí to funguje – pokud tomu tak není, čtyři níže uvedené kroky spustí Android Auto přímo z jeho vlastního vývojářského menu. Toto funguje, i když vše ostatní selže, a nemusíte nic instalovat.</string>
+    <string name="legacy_start_android_auto_yourself_3b0dffe1">SPUSŤTE ANDROID AUTO RUČNĚ</string>
+    <string name="legacy_open_the_android_auto_app_s_settings_scroll_to_t_4ef36207">Otevřete nastavení aplikace Android Auto, kolečkem projeďte úplně dolů a klepněte desetkrát na „Verze“. Tím se zpřístupní vývojářské možnosti – stačí to udělat pouze jednou.</string>
+    <string name="legacy_stay_on_that_same_android_auto_settings_screen_o_2c08cebc">Zůstaňte na stejné obrazovce nastavení Android Auto, otevřete nabídku tří teček vpravo nahoře a vyberte „Spustit server hlavní jednotky“. Je to v této nabídce, nikoli ve Vývojářských možnostech. Toto je krok, který vše spustí.</string>
+    <string name="legacy_while_you_are_in_there_629f07a5">KDYŽ UŽ JSTE TAM</string>
+    <string name="legacy_open_developer_settings_from_that_same_screen_an_4629699">Otevřete Vývojářská nastavení ze stejné obrazovky a zapněte „Přidat nová auta do Android Auto“ (starší verze to nazývají „Neznámé zdroje“). V Android Auto 17.2 a starších tento přepínač sám o sobě často stačí. Od verze 17.3 tomu tak není – je vyžadován krok 2 – takže nepřestávejte zde, pokud se Android Auto stále nespustí.</string>
+
+    <!-- Source: androidauto/AndroidAutoSelfModeHelp — the step the home screen and the
+         Android Auto preview draw when projection needs the rider to do something -->
+    <string name="legacy_start_head_unit_server_da7b299f">Spustit „server hlavní jednotky“</string>
+    <string name="legacy_the_three_dot_menu_at_the_top_right_of_android_a_d6625ac7">nabídka tří teček vpravo nahoře v samotném nastavení Android Auto</string>
+    <string name="legacy_unlock_android_auto_s_developer_options_first_op_2865efda">Nejprve odemkněte vývojářské možnosti Android Auto: otevřete jeho nastavení, dole na stránce klepněte desetkrát na „Verze“.</string>
+    <string name="legacy_enable_add_new_cars_to_android_auto_75bf90fa">Povolit „Přidat nová auta do Android Auto“</string>
+    <string name="legacy_android_auto_then_developer_settings_f55db1c8">Android Auto, poté Vývojářská nastavení</string>
+
+    <!-- Source: feature/androidauto/AndroidAutoPreviewScreen — the preview's own status line -->
+    <string name="legacy_android_auto_is_not_running_start_a_session_from_e803c9ee">Android Auto neběží. Spusťte relaci z Domovské obrazovky.</string>
+    <string name="legacy_preparing_android_auto_db146bea">Příprava Android Auto…</string>
+    <string name="legacy_waiting_for_android_auto_to_start_projecting_b7646bd0">Čekání na zahájení projekce Android Auto…</string>
+    <string name="legacy_live_preview_touch_enabled_73752c4b">Živý náhled · dotyk povolen</string>
+
+    <!-- Source: failure text the home screen's error banner draws. Declared as constants and compared by
+         identity on the way there, so the catalogue is the only place they can be translated -->
+    <string name="legacy_google_android_auto_never_connected_to_moto_hub__bd46b5a3">Služba Google Android Auto se k aplikaci MOTO-HUB nikdy nepřipojila. Novější verze Android Auto odstranily způsob, jakým aplikace žádají o projekci, takže ji spusťte přímo z Android Auto. Otevřete nastavení aplikace Android Auto, dole klepněte desetkrát na „Verze“ pro odemknutí vývojářských možností. Poté na stejné obrazovce nastavení otevřete nabídku tří teček vpravo nahoře a vyberte „Spustit server hlavní jednotky“ – tato nabídka je na běžné obrazovce nastavení Android Auto, nikoli ve Vývojářských možnostech. Nechte MOTO-HUB běžet: připojí se automaticky během několika sekund a server můžete nechat běžet i pro příště.</string>
+    <string name="legacy_google_android_auto_took_moto_hub_s_request_and__ae0978d0">Služba Google Android Auto přijala požadavek MOTO-HUB a poté jej ignorovala. To dělá v případě, že hlavní jednotce dosud neudělila důvěru. Otevřete nastavení aplikace Android Auto, dole klepněte desetkrát na „Verze“ pro odemknutí vývojářských možností, otevřete Vývojářská nastavení a zapněte „Přidat nová auta do Android Auto“ (starší verze používají název „Neznámé zdroje“), poté znovu spusťte Android Auto z MOTO-HUB. Pokud se stále nic neděje, vraťte se na obrazovku nastavení Android Auto a použijte nabídku tří teček vpravo nahoře: „Spustit server hlavní jednotky“.</string>
+    <string name="legacy_google_android_auto_took_moto_hub_s_request_and__3e12afc0">Služba Google Android Auto přijala požadavek aplikace MOTO-HUB a poté jej ignorovala, což je vše, co v této verzi dělá: Android Auto 17.3 a novější odstranily způsob, jakým může aplikace požádat o projekci. Spusťte ji místo toho přímo z Android Auto. Otevřete nastavení aplikace Android Auto, dole klepněte desetkrát na „Verze“ pro odemknutí vývojářských možností, poté otevřete nabídku tří teček vpravo nahoře na stejné obrazovce nastavení a vyberte „Spustit server hlavní jednotky“. Nechte MOTO-HUB běžet: připojí se automaticky během několika sekund. Když už tam jste, měla by být zapnuta i volba „Přidat nová auta do Android Auto“ ve Vývojářských možnostech.</string>
+    <string name="legacy_another_easyconn_session_is_already_using_the_lo_fa50b26f">Místní připojovací porty (10920–10922) již používá jiná relace EasyConn. Ukončete jakoukoli aktivní relaci MOTO-HUB nebo vynuceně ukončete doprovodnou aplikaci motocyklu (CFMOTO, Zontes Smart, Carbit Ride a ekvivalenty jiných značek) a zkuste připojení zopakovat.</string>
+    <string name="legacy_phone_wi_fi_is_off_turn_it_on_then_tap_connect_a_5fd21cc0">Wi-Fi v telefonu je vypnutá. Zapněte ji a znovu klepněte na Připojit.</string>
+    <string name="legacy_phone_hotspot_is_off_turn_it_on_then_tap_connect_683a58f1">Aktivní přístupový bod (hotspot) v telefonu je vypnutý. Zapněte jej a znovu klepněte na Připojit.</string>
+    <string name="legacy_action_needed_a446e8df">VYŽADOVÁNA AKCE</string>
+    <string name="legacy_do_this_in_android_auto_9a49aaee">PROVEĎTE V ANDROID AUTO</string>
+    <string name="legacy_show_me_how_73baf02b">Ukázat jak</string>
+    <string name="legacy_for_dashes_that_reset_their_clock_at_every_ignit_64c2ff15">Pro palubní desky, které resetují své hodiny při každém cyklu zapalování (především Zontes a Voge). Při zapnuté palubní desce se laboratoř připojí přes Bluetooth, naslouchá, poté odešle čas v pěti různých formátech a zaznamená každý bajt. Projeďte se, vypněte a zapněte zapalování a sdílejte protokol událostí aplikace: bude v něm uvedeno, který formát palubní deska přijala.</string>
+    <string name="legacy_run_clock_experiments_8ad4688f">Spustit experimenty s hodinami</string>
+    <string name="legacy_live_log_831d05f0">ŽIVÝ PROTOKOL</string>
+    <string name="legacy_nothing_yet_power_the_dash_on_then_run_the_exper_b1ec5c8f">Zatím nic. Zapněte palubní desku a poté spusťte experimenty.</string>
+    <string name="legacy_moto_hub_closed_unexpectedly_30f439d7">Aplikace MOTO-HUB byla neočekávaně ukončena</string>
+    <string name="legacy_the_last_time_you_used_moto_hub_it_stopped_becau_8448d27c">Při posledním použití aplikace MOTO-HUB došlo k chybě a jejímu zastavení. Odeslání diagnostické zprávy umožní vývojáři zjistit příčinu.</string>
+    <string name="legacy_the_report_contains_your_motorcycle_s_dashboard__f4208b9f">Zpráva obsahuje model palubní desky vašich motocyklů, model telefonu, verze systémů Android a Android Auto, nainstalované verze MOTO-HUB a protokol událostí aplikace včetně chyby. Hesla, poloha a hardwarové adresy se nikdy neodesílají.</string>
+    <string name="legacy_send_reports_automatically_from_now_on_7cdd2209">Odteraz odesílat zprávy automaticky</string>
+    <string name="legacy_send_report_55908cac">Odeslat zprávu</string>
+    <string name="legacy_how_your_data_is_handled_ff77c87f">Jak je nakládáno s vašimi daty</string>
+    <string name="legacy_not_now_e202d7e9">Nyní ne</string>
+    <string name="legacy_help_improve_moto_hub_9bf5292c">Pomozte vylepšit MOTO-HUB</string>
+    <string name="legacy_moto_hub_can_send_a_diagnostics_report_to_the_de_36cc6ba6">MOTO-HUB může vývojáři odesílat diagnostickou zprávu: model palubní desky motocyklu, model telefonu, verze systémů Android, Android Auto, nainstalované verze MOTO-HUB a protokol událostí aplikace. Hesla, poloha a hardwarové adresy se nikdy neodesílají.</string>
+    <string name="legacy_reports_go_out_at_most_once_a_day_after_an_updat_6fc12b8d">Zprávy se odesílají maximálně jednou denně, po aktualizaci nebo po pádu aplikace, a to pouze přes připojení s přístupem k internetu. Vaše ID podpory je zobrazeno v Nastavení ▸ Diagnostika, kde lze tuto funkci kdykoli zapnout nebo vypnout.</string>
+    <string name="legacy_send_reports_5c810947">Odesílat zprávy</string>
+    <string name="legacy_diagnostics_privacy_notice_1f708f84">Oznámení o ochraně osobních údajů diagnostiky</string>
+    <string name="legacy_support_id_5239972c">ID podpory</string>
+    <string name="legacy_moto_hub_support_id_7149b87">ID podpory MOTO-HUB</string>
+    <string name="legacy_tap_to_copy_quote_it_when_asking_for_help_it_ide_edc7231">Klepnutím zkopírujete. Uveďte jej při žádosti o pomoc; identifikuje tento telefon a motocykl.</string>
+    <string name="legacy_support_id_copied_63da1e38">ID podpory zkopírováno</string>
+    <string name="legacy_what_gets_sent_f4a13bbf">Co se odesílá</string>
+    <string name="legacy_read_what_a_report_contains_then_choose_whether__e679dae">Přečtěte si, co zpráva obsahuje, a poté zvolte, zda ji chcete odesílat</string>
+    <string name="legacy_who_holds_your_reports_how_long_they_are_kept_an_ea54a6b7">Kdo spravuje vaše zprávy, jak dlouho jsou uchovávány a jak požádat o jejich smazání</string>
+    <string name="legacy_send_diagnostics_now_9368c9ea">Odeslat diagnostiku nyní</string>
+    <string name="legacy_this_build_has_no_collector_configured_e224996">Tato verze nemá nakonfigurovaný žádný sběrač dat</string>
+    <string name="legacy_logging_is_off_the_log_would_end_at_1_s_c9d7198e">Protokolování je vypnuté; protokol by skončil v %1$s</string>
+    <string name="legacy_logging_is_off_there_is_no_log_to_send_eca8d32d">Protokolování je vypnuté; k odeslání není žádný protokol</string>
+    <string name="legacy_send_diagnostics_automatically_880f35b7">Odesílat diagnostiku automaticky</string>
+    <string name="legacy_sends_the_report_above_to_the_developer_at_most__8689def0">Odesílá výše uvedenou zprávu vývojáři maximálně jednou denně, po aktualizaci nebo po pádu aplikace – pouze přes připojení s přístupem k internetu. Modely palubní desky a telefonu, verze aplikací a protokol událostí aplikace; nikdy hesla, polohu ani hardwarové adresy.</string>
+    <string name="legacy_logging_is_off_d9325d5a">PROTOKOLOVÁNÍ JE VYPNUTO</string>
+    <string name="legacy_nothing_has_been_recorded_since_1_s_what_was_log_1be484ac">Od %1$s nebylo nic zaznamenáno. To, co bylo zaznamenáno předtím, zůstane zachováno – vypnutím protokolování se zastaví nové záznamy, staré se nikdy nesmažou.</string>
+    <string name="legacy_nothing_has_been_recorded_and_there_is_no_earlie_dd873fa0">Nebylo nic zaznamenáno a neexistuje ani žádný dřívější protokol.</string>
+    <string name="legacy_a_report_sent_now_carries_that_log_so_it_says_no_cb65d9dc">Zpráva odeslaná nyní obsahuje tento protokol, takže neříká nic o tom, co aplikace dělá dnes. Chcete-li nahlásit problém, zapněte znovu Povolit protokolování, vyvolejte problém znovu a poté zprávu odešlete.</string>
+    <string name="legacy_that_worked_keep_it_b0100883">Fungovalo to – zachovat?</string>
+    <string name="legacy_your_dashboard_is_now_accepting_the_picture_on_t_a2e41389">Vaše palubní deska nyní přijímá obraz v profilu %1$s. Používat jej i nadále pro tento motocykl?</string>
+    <string name="legacy_you_have_just_found_out_something_moto_hub_could_5d173f67">Právě jste zjistili něco, co MOTO-HUB nedokázal sám určit: který profil tato palubní deska skutečně přijímá. Odesláním protokolu to budete sdílet, takže další jezdec s vaším motocyklem získá správné nastavení hned napoprvé.</string>
+    <string name="legacy_send_my_log_now_80f590fe">Odeslat můj protokol nyní</string>
+    <string name="legacy_send_logs_automatically_from_now_on_1efdfbe9">Odteraz odesílat protokoly automaticky</string>
+    <string name="legacy_keep_it_318f8786">Ponechat</string>
+    <string name="legacy_undo_284d04">Zpět</string>
+    <string name="legacy_try_another_profile_2632e907">Zkusit jiný profil</string>
+    <string name="legacy_the_connection_to_your_motorcycle_is_fine_the_da_6a78bba4">Připojení k motocyklu je v pořádku – palubní deska pouze odmítá obraz ve formátu, ve kterém je odesílán. Jiný profil tento formát změní. Výběrem profilu se připojení ihned obnoví, a pokud jej palubní deska začne zobrazovat, MOTO-HUB se dotáže, zda jej chcete zachovat.</string>
+    <string name="legacy_your_dashboard_is_not_showing_this_9765fbe3">VAŠE PALUBNÍ DESKA TOTO NEZOBRAZUJE</string>
+    <string name="legacy_connected_but_the_picture_is_being_refused_tap_t_b17b1097">Připojeno, ale obraz je odmítán. Klepnutím vyzkoušejte jiný profil.</string>
+    <string name="legacy_connected_not_displaying_53b322ca">PŘIPOJENO, NEZOBRAZUJE SE</string>
+    <string name="legacy_your_dashboard_refused_1_d_of_the_picture_it_was_beaebc06">Vaše palubní deska odmítla %1$d %% obrazu, který jí byl odeslán (%2$d snímků z %3$d).</string>
+    <string name="legacy_this_is_what_your_dashboard_reports_itself_to_be_8dfdffdd">Toto je identifikace, kterou o sobě hlásí vaše palubní deska.</string>
+    <string name="legacy_speaks_the_same_protocol_your_motorcycle_is_alre_7a13c9ca">Používá stejný protokol, který váš motocykl již používá.</string>
+    <string name="legacy_plain_settings_no_assumptions_a_good_thing_to_fa_3d3a2213">Čisté nastavení bez předpokladů – dobrá volba pro záložní řešení.</string>
+    <string name="legacy_an_experiment_for_one_dashboard_s_open_question__1eafa773">Experiment pro nevyřešený problém jedné palubní desky. Nemusí mít žádný účinek.</string>
+    <string name="legacy_navigation_active_on_tft_b6221bcf">Navigace aktivní na TFT</string>
+    <string name="legacy_tft_is_receiving_your_screen_56fd381">TFT přijímá vaši obrazovku</string>
+    <string name="legacy_android_auto_is_waiting_for_one_step_from_you_31eacac3">Android Auto čeká na jeden krok z vaší strany</string>
+    <string name="legacy_session_is_being_prepared_742c490a">Relace se připravuje</string>
+    <string name="legacy_button_presses_are_off_2952e766">STISKY TLAČÍTEK JSOU VYPNUTY</string>
+    <string name="legacy_moto_hub_advanced_owns_this_setting_and_writes_i_b8e328f7">Toto nastavení spravuje MOTO-HUB ADVANCED a přepisuje je, takže je zapněte tam, nikoli zde.</string>
+    <string name="legacy_turn_presses_back_on_9d506146">Znovu zapnout stisky</string>
+    <string name="legacy_these_drive_the_ride_dashboard_so_they_do_nothin_d4d30d86">Tyto prvky ovládají Ride Dashboard, takže nic nedělají, pokud aplikace neběží – samotná relace Android Auto nestačí.</string>
+    <string name="legacy_show_button_presses_on_the_dashboard_4ed2cd5e">Zobrazovat stisky tlačítek na palubní desce</string>
+
+    <!-- Source: feature/controls — the handlebar page after the Bluetooth controller was removed -->
+    <string name="legacy_your_motorcycle_s_own_handlebar_drives_moto_hub__f19519f3">MOTO-HUB se ovládá přímo z řídítek vašeho motocyklu. Jednou je nastavte a poté každému tlačítku přiřaďte požadovanou akci.</string>
+    <string name="legacy_presses_still_arrive_and_still_show_up_on_this_p_62dfa27d">Stisky stále přicházejí a zobrazují se na této stránce – neprovádí se s nimi však žádná akce.</string>
+    <string name="legacy_every_handlebar_press_432fb397">Každé stisknutí na řídítkách </string>
+    <!-- Home: MOTO-HUB ADVANCED promo card and dialog -->
+    <string name="legacy_couldn_t_open_moto_hub_advanced_89c059e1">MOTO-HUB ADVANCED nelze otevřít.</string>
+    <string name="legacy_moto_hub_advanced_1cc3b73d">MOTO-HUB ADVANCED</string>
+    <string name="legacy_dashboard_navigation_and_trips_installed_on_this_7ffa5bb9">Palubní deska, navigace a jízdy – nainstalováno v tomto telefonu.</string>
+    <string name="legacy_free_companion_app_dashboard_navigation_trips_an_256e51cd">Bezplatná doprovodná aplikace: palubní deska, navigace, jízdy a další.</string>
+    <string name="legacy_open_259a6a">Otevřít</string>
+    <string name="legacy_see_what_it_adds_c8867b38">Zjistit, co přináší navíc</string>
+    <string name="legacy_a_second_free_app_that_installs_next_to_moto_hub_96f5853f">Druhá bezplatná aplikace, která se nainstaluje vedle MOTO-HUB a promění stejnou palubní desku v plnohodnotný palubní počítač. Nevyžaduje žádný další hardware.</string>
+    <string name="legacy_ride_dashboard_gps_speed_live_map_and_trip_stats_e664cbab">Ride Dashboard – GPS rychlost, živá mapa a statistiky jízdy na TFT</string>
+    <string name="legacy_navigation_search_motorcycle_routing_and_route_p_269dbf5a">Navigace – vyhledávání, plánování tras pro motocykly a náhled trasy</string>
+    <string name="legacy_on_the_route_weather_fuel_prices_and_speed_camer_1ec23092">Na trase – počasí, ceny paliv a rychlostní kamery</string>
+    <string name="legacy_trips_recording_replay_analysis_and_gpx_export_ec08e237">Jízdy – záznam, přehrávání, analýza a export do GPX</string>
+    <string name="legacy_ai_place_discovery_and_a_post_ride_riding_coach_34d4ea13">AI objevování míst a trenér jízdy po dokončení trasy</string>
+    <string name="legacy_group_intercom_rider_to_rider_voice_70e92f1a">Skupinový interkom – hlasová komunikace mezi jezdci</string>
+    <string name="legacy_moto_hub_stays_in_charge_of_the_motorcycle_pairi_6ccf9308">MOTO-HUB zůstává zodpovědný za motocykl: párování, připojení a Android Auto zde běžný dál. Nainstalujte stejnou verzi obou aplikací.</string>
+    <string name="legacy_download_advanced_66a9c89a">Stáhnout ADVANCED</string>
+    <string name="legacy_resolution_177354cc">Rozlišení</string>
+    <string name="legacy_the_video_source_android_auto_sends_to_the_dashb_a90d80a4">Zdroj videa, který Android Auto odesílá na palubní desku</string>
+    <string name="legacy_interface_size_7aea8aa8">Velikost rozhraní</string>
+    <string name="legacy_how_large_android_auto_draws_itself_on_that_sour_2161eca0">Jak velký obraz Android Auto vykresluje na tomto zdroji</string>
+    <string name="legacy_landscape_fb5e029b">NA ŠÍŘKU</string>
+    <string name="legacy_portrait_5a1dab9b">NA VÝŠKU</string>
+    <string name="legacy_experimental_f1ae3108">Experimentální</string>
+    <!-- Source: catalogue catch-up 2026-09-06 - handlebar profiles, companion display, Home Assistant Torque, trip phone health, and the reworded wire verdict -->
+    <string name="legacy_1_s_is_holding_the_dashboard_connection_f85acc07">Aplikace %1$s blokuje připojení k palubní desce</string>
+    <string name="legacy_another_app_is_holding_the_dashboard_connection_2f8f3870">Jiná aplikace blokuje připojení k palubní desce</string>
+    <string name="legacy_force_stop_your_motorcycle_s_own_companion_app_f_47bc5899">Vynuceně ukončete vlastní doprovodnou aplikaci motocyklu na její stránce Informace o aplikaci a zkuste to znovu – systém Android neumožňuje jedné aplikaci uvolnit připojení jiné aplikace.</string>
+    <string name="legacy_if_it_stayed_on_the_pairing_screen_moto_hub_keep_74219a6">Pokud zůstala na obrazovce párování, MOTO-HUB zkouší další video formáty, dokud některý nezafunguje. Pokud ostatní jezdci se stejnou palubní deskou tento formát již potvrdili, aplikace se vás před pokračováním dotáže ještě jednou.</string>
+    <string name="legacy_if_your_other_moto_hub_app_is_running_a_session__263cbf82">Pokud vaše druhá aplikace MOTO-HUB spouští relaci na tomto telefonu, ukončete raději ji.</string>
+    <string name="legacy_import_qr_from_an_image_65acae9a">Importovat QR kód z obrázku</string>
+    <string name="legacy_moto_hub_will_connect_on_its_own_when_the_dashbo_9f3fe52b">MOTO-HUB se připojí automaticky, jakmile se palubní deska spustí.</string>
+    <string name="legacy_on_this_phone_that_is_almost_always_1_s_force_st_26b6b463">Na tomto telefonu je to téměř vždy %1$s. Vynuceně ji ukončete na její stránce Informace o aplikaci a zkuste to znovu – systém Android neumožňuje jedné aplikaci uvolnit připojení jiné aplikace.</string>
+    <string name="legacy_shown_while_moto_hub_watches_for_the_motorcycle__5410550d">Zobrazuje se, zatímco MOTO-HUB vyhledává Wi-Fi síť motocyklu.</string>
+    <string name="legacy_the_three_local_ports_moto_hub_needs_for_the_das_ac32b51a">Tři místní porty, které MOTO-HUB potřebuje pro palubní desku (%1$s), se v současnosti používají, takže připojení by selhalo.</string>
+    <string name="legacy_try_anyway_909523a8">Přesto zkuste</string>
+    <string name="legacy_waiting_for_s_c5c92cf8">Čekání na %s</string>
+    <string name="legacy_waiting_for_the_motorcycle_24d361aa">Čekání na motocykl</string>
+</resources>
