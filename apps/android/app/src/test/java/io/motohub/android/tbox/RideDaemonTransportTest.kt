@@ -186,6 +186,39 @@ class RideDaemonTransportTest {
         assertEquals(0L, decodeVideoPullCount(byteArrayOf(1, 0, 0)))
     }
 
+    @Test
+    fun `reads back which page command the probe put on the wire`() {
+        // [step, ok, 4 bytes big-endian command]. The step ids are the wire contract with the
+        // daemon (net.PageSwitchProbeStep), so they are written out here rather than read from
+        // the transport's private companion - if one side renumbers them, this fails.
+        val pageStatus = byteArrayOf(1, 1, 0x00, 0x02, 0x04, 0x00)
+        assertEquals(0x20400L, decodePageSwitchProbeCommand(pageStatus))
+
+        val jump = byteArrayOf(2, 1, 0x00, 0x02, 0x04, 0x80.toByte())
+        assertEquals(0x20480L, decodePageSwitchProbeCommand(jump))
+
+        val mainPage = byteArrayOf(3, 1, 0x00, 0x02, 0x01, 0x70)
+        assertEquals(0x20170L, decodePageSwitchProbeCommand(mainPage))
+    }
+
+    @Test
+    fun `a probe step with no command of its own reads as zero`() {
+        // The start marker and the no-channel marker both carry 0; neither is a failure to
+        // decode, and neither may be printed as a command.
+        assertEquals(0L, decodePageSwitchProbeCommand(byteArrayOf(0, 1, 0, 0, 0, 0)))
+        assertEquals(0L, decodePageSwitchProbeCommand(null))
+        assertEquals(0L, decodePageSwitchProbeCommand(byteArrayOf(0, 1, 0)))
+    }
+
+    @Test
+    fun `only the QJ dash that never paints asks for the page experiment`() {
+        // A dashboard that already displays a picture must never be sent unsolicited page
+        // commands: that is the whole reason this is a per-profile opt-in.
+        assertTrue(TBoxModelProfile.QJ_SRK921_RR.sendsPageSwitchProbe)
+        val others = TBoxModelProfile.entries.filter { it != TBoxModelProfile.QJ_SRK921_RR }
+        assertTrue(others.none { it.sendsPageSwitchProbe })
+    }
+
     private fun captureRequest(width: Int, height: Int): ByteArray = ByteBuffer
         .allocate(204)
         .order(ByteOrder.LITTLE_ENDIAN)

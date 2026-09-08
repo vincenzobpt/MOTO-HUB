@@ -436,6 +436,57 @@ class RideDaemonTransport(
         return TBoxWireLadder.configFor(appContext, motorcycle, profile)
     }
 
+    /**
+     * Narrate one step of the phone-to-car page experiment.
+     *
+     * The commands move the dashboard's own UI, so nothing on this side can observe whether
+     * they worked - only the rider looking at the panel can. These lines exist to put a
+     * timestamp on each command, so "it lit up" in a support note can be matched to the
+     * command that preceded it, and so a probe that never fired is distinguishable from one
+     * that fired and achieved nothing.
+     */
+    private fun logPageSwitchProbe(payload: ByteArray?) {
+        val step = payload?.getOrNull(0)?.toInt() ?: -1
+        val delivered = payload?.getOrNull(1)?.toInt() == 1
+        val command = decodePageSwitchProbeCommand(payload)
+        val commandHex = "0x" + java.lang.Long.toHexString(command)
+        when (step) {
+            PAGE_PROBE_STARTED -> ProjectionEventLog.record(
+                "TBOX",
+                "Page-switch experiment starting: this dashboard reads the video stream but " +
+                    "has never been seen to display it, so the phone is about to ask its UI " +
+                    "to come to the front. Three commands, three seconds apart. If the panel " +
+                    "changes, note the time - that is the only way to tell which one worked."
+            )
+            PAGE_PROBE_PAGE_STATUS -> ProjectionEventLog.record(
+                "TBOX",
+                "Page-switch step 1/3: told the dashboard the mirroring page is now open " +
+                    "(ECP_P2C_PAGE_STATUS $commandHex)" + probeOutcome(delivered)
+            )
+            PAGE_PROBE_JUMP_TO_CAR_PAGE -> ProjectionEventLog.record(
+                "TBOX",
+                "Page-switch step 2/3: asked the dashboard to jump to the mirroring page " +
+                    "(ECP_P2C_JUMP_TO_CAR_PAGE $commandHex)" + probeOutcome(delivered)
+            )
+            PAGE_PROBE_SWITCH_TO_MAIN_PAGE -> ProjectionEventLog.record(
+                "TBOX",
+                "Page-switch step 3/3: asked the dashboard to show its own main page " +
+                    "(ECP_P2C_SWITCH_TO_SYSTEM_MAIN_PAGE $commandHex)" + probeOutcome(delivered) +
+                    " This one moves the dash AWAY from mirroring on purpose: if only this " +
+                    "step changes the panel, the commands work and the page number is wrong."
+            )
+            PAGE_PROBE_NO_CONTROL_CHANNEL -> ProjectionEventLog.warning(
+                "TBOX",
+                "Page-switch experiment could not run: there was no open PXC connection " +
+                    "left to send these commands on, so nothing was sent."
+            )
+        }
+    }
+
+    /** Whether the command reached the socket. Nothing here says the dashboard liked it. */
+    private fun probeOutcome(delivered: Boolean): String =
+        if (delivered) "." else "; the write failed and the experiment stopped here."
+
     override suspend fun discover(link: TBoxLink, expectedModelId: String?): Result<TBoxHost> = withContext(Dispatchers.IO) {
         ProjectionEventLog.record("DISCOVERY", "Starting Android NSD discovery on T-Box link (${link.label}).")
         runCatching {
@@ -460,6 +511,10 @@ class RideDaemonTransport(
                 // own supportExtendProtocol byte. Every recognised unit keeps the indexed
                 // framing it already displays.
                 setPlainVideoFramingAllowed(wire.allowsPlainVideoFraming)
+                // Read from the profile, not from [wire]: the ladder searches video formats,
+                // and this is not one. It asks the dash's own UI to come forward, which is a
+                // different question from what the picture looks like when it does.
+                setPageSwitchProbeEnabled(profile.sendsPageSwitchProbe)
                 // The dash asks for wall-clock time over PXC and the daemon answers it,
                 // but only Android knows the zone: Go's local location on a device is
                 // UTC and carries no usable name. The id alone was not enough - it only
@@ -1806,6 +1861,10 @@ class RideDaemonTransport(
                     }
                     return
                 }
+                if (command == TRANSPORT_PAGE_SWITCH_PROBE_COMMAND) {
+                    logPageSwitchProbe(payload)
+                    return
+                }
                 if (command == TRANSPORT_VIDEO_FRAMING_COMMAND) {
                     val extendByte = payload?.getOrNull(0)?.toInt() ?: -1
                     val plainApplied = payload?.getOrNull(1)?.toInt() == 1
@@ -2278,6 +2337,13 @@ class RideDaemonTransport(
         const val VIDEO_PULL_FIRST = 1
         const val VIDEO_PULL_PROGRESS = 2
         const val VIDEO_PULL_SOCKET_CLOSED = 3
+        /** Payload: [step, ok, 4 bytes big-endian command]; steps below. */
+        const val TRANSPORT_PAGE_SWITCH_PROBE_COMMAND = 3L
+        const val PAGE_PROBE_STARTED = 0
+        const val PAGE_PROBE_PAGE_STATUS = 1
+        const val PAGE_PROBE_JUMP_TO_CAR_PAGE = 2
+        const val PAGE_PROBE_SWITCH_TO_MAIN_PAGE = 3
+        const val PAGE_PROBE_NO_CONTROL_CHANNEL = 4
         /** Bounds for the always-on first-occurrence dump of unknown protocol commands. */
         const val UNKNOWN_COMMAND_LOG_LIMIT = 32
         const val UNKNOWN_COMMAND_PREVIEW_BYTES = 64
@@ -2574,6 +2640,19 @@ internal fun decodeVideoPullCount(payload: ByteArray?): Long {
     if (payload == null || payload.size < 9) return 0L
     var value = 0L
     for (index in 1 until 9) {
+        value = (value shl 8) or (payload[index].toLong() and 0xFF)
+    }
+    return value
+}
+
+/**
+ * The 4-byte big-endian PXC command id a page-probe payload carries, or 0 when the step has
+ * none (the start marker and the "no control channel" marker both report 0).
+ */
+internal fun decodePageSwitchProbeCommand(payload: ByteArray?): Long {
+    if (payload == null || payload.size < 6) return 0L
+    var value = 0L
+    for (index in 2 until 6) {
         value = (value shl 8) or (payload[index].toLong() and 0xFF)
     }
     return value

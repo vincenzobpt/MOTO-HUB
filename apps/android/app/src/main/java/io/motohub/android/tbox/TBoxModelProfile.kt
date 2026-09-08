@@ -95,6 +95,19 @@ enum class TBoxModelProfile(
      */
     val encoderPlainGopWithoutIntraRefresh: Boolean = false,
     /**
+     * Send the phone-to-car page sequence once the dash says STREAM_START.
+     *
+     * Off for every dashboard but one. It puts three commands on the wire that travel
+     * phone-to-car - `ECP_P2C_PAGE_STATUS`, `ECP_P2C_JUMP_TO_CAR_PAGE` and
+     * `ECP_P2C_SWITCH_TO_SYSTEM_MAIN_PAGE`, all from the EasyConn SDK inside the CarbitRide
+     * APK - and no reference implementation sends any of them, so this is an experiment
+     * rather than a port. It exists for a dash that opens the video socket, pulls the whole
+     * stream at ~30 Hz and paints none of it, which is what a head unit whose UI never left
+     * its waiting page looks like from the phone's side. Never turn it on for a dashboard
+     * that already displays a picture.
+     */
+    val sendsPageSwitchProbe: Boolean = false,
+    /**
      * Encode exactly [fallbackTBoxVideoArea]'s dimensions instead of the 16-aligned canvas.
      * ThinkerRide declares the stream size to the dash in a header, and the reference app
      * encodes precisely what it declares (600x1024); we used to declare 600 and stream 592.
@@ -366,25 +379,66 @@ enum class TBoxModelProfile(
     /**
      * The QJ SRK921 RR's 5-inch dash: an 800x352 video band on a Carbit-licensed EasyConn stack
      * (`flavor 51`, `channel 37303`, `package_name linux_no_package`, `sdkVersion 0.9.23.1`) that
-     * takes every frame it is offered and paints none of them.
+     * pulls the whole stream and paints none of it.
      *
      * This is the profile [TBoxWireLadder] could not find. Rider 1d316f4b/bffd0679 walked the
      * whole ladder twice - all four rungs, both framings, all-intra and 1s GOP alike - and every
      * rung ended the same way: the socket healthy, `frameTimeouts=0`, `frameRejections=0`, over a
      * thousand frames accepted in seventy seconds, and a rider looking at nothing but the dash's
-     * Wi-Fi icon. Two facts narrow what is left. The blackout survives the source: Android Auto
-     * and the Ride Dashboard, which share nothing but this transport, are equally blank. And the
-     * all-intra rungs do not merely fail, they take the link down - the dash drops its own AP
-     * 4s, 27s and 46s into three consecutive sessions at -17dBm, which is not coverage, it is
-     * firmware giving up on a stream it cannot keep up with.
+     * Wi-Fi icon. The blackout survives the source: Android Auto and the Ride Dashboard, which
+     * share nothing but this transport, are equally blank. The all-intra rungs also do not merely
+     * fail, they take the link down - the dash drops its own AP 4s, 27s and 46s into three
+     * consecutive sessions at -17dBm, which is not coverage - so do not go back to them.
      *
-     * So the delta here is the one variable the ladder never had a rung for: the *rate*. The
-     * reference fork's profile for the other Carbit `flavor 51` units sends 10 fps on a 2s GOP at
-     * 2 Mbps rather than the 30 fps all-intra [GENERIC] guesses, and a dash that acknowledges
-     * everything while painting nothing is what an over-fed decoder looks like from this side.
-     * [encoderPlainGopWithoutIntraRefresh] keeps the keyframes plain: intra refresh is the other
-     * thing this family has never been shown to decode, and pinning both at once would leave two
-     * variables in play should the next log still be black.
+     * The encoder settings below were the *rate* experiment: 10 fps on a 2s GOP at 2 Mbps, the
+     * way the reference fork drives the other Carbit `flavor 51` units, rather than the 30 fps
+     * all-intra [GENERIC] guesses, on the theory that a dash acknowledging everything while
+     * painting nothing was an over-fed decoder. **That theory is dead.** Report 59A7-4A36-6C03
+     * (support id 81d3f550, 2026-09-08, ADV+CORE 1.1.114) is the first log from this dash to
+     * carry the `dashPulls` counter, and it shows the dash is not merely acknowledging frames -
+     * it drives the pull loop itself. Two sessions, both on exactly these settings, both black:
+     * Android Auto pulled 808 times over 29s against 288 frames offered, the Ride Dashboard 580
+     * times over 18s against 253. It opened `:10920`, sent `0x0072` at ~28-30 Hz with no gap,
+     * took all 541 real frames plus the idles between them, `frameTimeouts=0`,
+     * `frameRejections=0`, and never closed the socket - the rider stopped both sessions - over a
+     * link at -23/-29dBm on 5180MHz.
+     *
+     * The same log buries the other three suspects. Framing: `supportExtendProtocol=0` was
+     * honoured and the frame index dropped, still black. Codec: `encoder=2` is H.264 and we send
+     * H.264 Baseline L3.1 at 800x352, the geometry the dash itself asks for in `CAPTURE_CONFIG`.
+     * And "the dash never reads the stream" is precisely what `dashPulls` refutes. **Do not spend
+     * another rider's session on format, bitrate or fps - all three are excluded.** The settings
+     * below stay because nothing indicts them either, not because they are a fix.
+     *
+     * What is left are two silences on the dash's side of PXC. It never sends `MEDIA_CONTROL`
+     * `0x60` (viewAreaConfig) - only `0x10` `CAPTURE_CONFIG` and `0x70` `STREAM_START`,
+     * `mediaCtrlRx=2` in both sessions - the same silence as the black Zontes, while a working
+     * CFDL16 does send it. And it never sends `CHECK_SN_DONE` (`0x201c1`) even though the daemon
+     * answers its `CHECK_SN` with `CHECK_SN_RESULT isOk:true`, the way open-cflink does. Read
+     * together: the dash opens and drains the video socket but its UI never enters the mirroring
+     * page, which is exactly the "only the Wi-Fi icon" the rider reports. The next step is
+     * finding which phone-originated PXC command makes this firmware switch pages.
+     *
+     * Not `0x10020`. It is declared in the daemon and never sent by us, which briefly made it look
+     * like a candidate, but it is a bike-to-phone notification and always was: open-cflink,
+     * open-cfmoto and open-cfmoto-zanderp all name it MEDIA_FEATURE_CFG
+     * (`{music,talkie,tts,vr,autoChangeToBT}`), part of the CFDL26 notify burst the dash sends
+     * after CHECK_SN and expects a bare `cmd+1` ack for - which the daemon's default even-command
+     * branch already gives it. This QJ dash never sends it at all. Originating it from the phone
+     * has no evidence behind it in any of the four references.
+     *
+     * The commands that ARE phone-to-car live in the `0x2xxxx` block, and the EasyConn SDK inside
+     * the CarbitRide APK names three worth trying, all JSON-bodied:
+     * `ECP_P2C_PAGE_STATUS` (`0x20400`, `{page,status,type}`, with `ECP_APP_PAGE_STATUS_OPEN=1`),
+     * `ECP_P2C_JUMP_TO_CAR_PAGE` (`0x20480`, `{page}`) and `ECP_P2C_SWITCH_TO_SYSTEM_MAIN_PAGE`
+     * (`0x20170`, empty). `ECP_C2P_STANDARD_PAGES` puts the mirror page at `21`
+     * (`ECP_APP_PAGE_MIRROR_FLOATING`) and the main page at `7`. None of the three is sent by any
+     * reference implementation either, so each is a genuine experiment, not a port.
+     *
+     * Field notes for whoever picks that up: the dash asks for `bitrate=4194304` and `fps=0`
+     * while we send 2 Mbps at 10 fps, and reports `capScreenMode=0`, `videoType=0`,
+     * `orientation=1`, `mirrorMode=1`, `screenType=1`, `supportScreenMirroring=true`,
+     * `supportScreenTouch=false`.
      *
      * Claimed by modelId alone, and deliberately: `37303` belongs to this one dashboard across the
      * whole collector, while `flavor 51` also covers a Voge Valico and two further rebadges that
@@ -405,15 +459,19 @@ enum class TBoxModelProfile(
         // unit in this family; it is the only supportFunction this firmware has ever been seen to
         // send.
         advertisedSupportFunction = 128,
-        // Both copied from GENERIC verbatim: the ladder already proved neither is the variable
-        // here (indexed and plain framing were each denied twice), so changing them alongside the
-        // rate would only make the next log harder to read.
+        // Both copied from GENERIC verbatim, and both now settled rather than merely untouched:
+        // the ladder denied indexed and plain framing twice each, and 59A7-4A36-6C03 then showed
+        // the dash pulling the whole stream with plain framing honoured. Neither is the variable.
         allowsPlainVideoFraming = true,
         requiresProactivePxcHeartbeat = true,
         encoderKeyframeIntervalSeconds = 2,
         encoderFrameRate = 10,
         encoderBitRate = 2_000_000,
-        encoderPlainGopWithoutIntraRefresh = true
+        encoderPlainGopWithoutIntraRefresh = true,
+        // The one thing in this profile that is not about the picture. Everything above
+        // describes a stream this dash demonstrably reads and does not show; this asks its
+        // UI to come to the front. See the doc comment above and sendsPageSwitchProbe.
+        sendsPageSwitchProbe = true
     ),
     /**
      * KOVE 800X (and, until they earn their own profiles, other ThinkerRide-family dashes): a
