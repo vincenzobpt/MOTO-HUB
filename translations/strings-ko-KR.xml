@@ -20,6 +20,10 @@
     <string name="language_detail_description">MOTO-HUB는 기본적으로 전화 언어를 따릅니다. 이 앱에 대해 재정의하려면 아래에서 언어를 선택하세요.</string>
 
     <!-- Settings main page -->
+    <string name="legacy_download_anyway_c17b27fb">그래도 다운로드</string>
+    <string name="legacy_download_over_1_s_23fdd550">%1$s(으)로 다운로드할까요?</string>
+    <string name="legacy_moto_hub_1_s_is_2_s_and_right_now_the_only_conne_8ebbc51c">MOTO-HUB %1$s은(는) %2$s이며, 지금 인터넷에 연결되는 유일한 회선은 통신사가 요금을 부과하는 %3$s입니다. 오토바이에서는 정상입니다. 계기판 Wi-Fi에는 인터넷이 전혀 없습니다.</string>
+    <string name="legacy_waiting_for_wi_fi_costs_nothing_the_update_stays_3f38fec8">Wi-Fi를 기다려도 손해는 없습니다. 업데이트는 이 목록에 그대로 남아 있습니다.</string>
     <string name="settings_configuration">구성</string>
     <string name="settings_title">설정</string>
     <string name="settings_general">일반</string>

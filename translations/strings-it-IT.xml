@@ -18,6 +18,10 @@
     <string name="language_detail_description">Per impostazione predefinita MOTO-HUB segue la lingua del telefono. Scegli qui una lingua diversa solo per questa app.</string>
 
     <!-- Schermata principale delle impostazioni -->
+    <string name="legacy_download_anyway_c17b27fb">Scarica comunque</string>
+    <string name="legacy_download_over_1_s_23fdd550">Scaricare via %1$s?</string>
+    <string name="legacy_moto_hub_1_s_is_2_s_and_right_now_the_only_conne_8ebbc51c">MOTO-HUB %1$s pesa %2$s e in questo momento l\'unica connessione che raggiunge Internet è %3$s, che il tuo operatore fa pagare. In moto è normale: il Wi-Fi del cruscotto non ha Internet.</string>
+    <string name="legacy_waiting_for_wi_fi_costs_nothing_the_update_stays_3f38fec8">Aspettare il Wi-Fi non costa nulla: l\'aggiornamento resta in questo elenco.</string>
     <string name="settings_configuration">CONFIGURAZIONE</string>
     <string name="settings_title">Impostazioni</string>
     <string name="settings_general">Generale</string>

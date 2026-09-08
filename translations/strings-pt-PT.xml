@@ -18,6 +18,10 @@
     <string name="language_detail_description">Por predefinição, o MOTO-HUB segue o idioma do telefone. Escolha abaixo um idioma diferente apenas para esta aplicação.</string>
 
     <!-- Página principal das definições -->
+    <string name="legacy_download_anyway_c17b27fb">Transferir mesmo assim</string>
+    <string name="legacy_download_over_1_s_23fdd550">Transferir por %1$s?</string>
+    <string name="legacy_moto_hub_1_s_is_2_s_and_right_now_the_only_conne_8ebbc51c">O MOTO-HUB %1$s ocupa %2$s e, neste momento, a única ligação que chega à Internet é %3$s, que o seu operador cobra. Na mota isso é normal: o Wi-Fi do painel não tem Internet nenhuma.</string>
+    <string name="legacy_waiting_for_wi_fi_costs_nothing_the_update_stays_3f38fec8">Esperar pelo Wi-Fi não custa nada: a atualização fica nesta lista.</string>
     <string name="settings_configuration">CONFIGURAÇÃO</string>
     <string name="settings_title">Definições</string>
     <string name="settings_general">Geral</string>

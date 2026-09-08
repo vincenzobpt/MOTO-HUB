@@ -20,6 +20,10 @@
     <string name="language_detail_description">MOTO-HUB suit la langue du téléphone par défaut. Choisissez une langue ci-dessous pour la remplacer dans cette application.</string>
 
     <!-- Settings main page -->
+    <string name="legacy_download_anyway_c17b27fb">Télécharger quand même</string>
+    <string name="legacy_download_over_1_s_23fdd550">Télécharger via %1$s ?</string>
+    <string name="legacy_moto_hub_1_s_is_2_s_and_right_now_the_only_conne_8ebbc51c">MOTO-HUB %1$s pèse %2$s, et la seule connexion qui atteint Internet en ce moment est %3$s, que votre opérateur facture. Sur la moto c\'est normal : le Wi-Fi du tableau de bord n\'a pas d\'Internet du tout.</string>
+    <string name="legacy_waiting_for_wi_fi_costs_nothing_the_update_stays_3f38fec8">Attendre le Wi-Fi ne coûte rien : la mise à jour reste dans cette liste.</string>
     <string name="settings_configuration">CONFIGURATION</string>
     <string name="settings_title">Réglages</string>
     <string name="settings_general">Général</string>

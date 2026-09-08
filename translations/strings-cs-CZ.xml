@@ -20,6 +20,10 @@
     <string name="language_detail_description">MOTO-HUB se výchozím nastavením řídí jazykem telefonu. Výběrem jazyka níže jej pro tuto aplikaci přepíšete.</string>
 
     <!-- Settings main page -->
+    <string name="legacy_download_anyway_c17b27fb">Přesto stáhnout</string>
+    <string name="legacy_download_over_1_s_23fdd550">Stáhnout přes %1$s?</string>
+    <string name="legacy_moto_hub_1_s_is_2_s_and_right_now_the_only_conne_8ebbc51c">MOTO-HUB %1$s má %2$s a jediné připojení, které se teď dostane na internet, je %3$s, které si operátor účtuje. Na motorce je to běžné: Wi-Fi přístrojové desky internet vůbec nemá.</string>
+    <string name="legacy_waiting_for_wi_fi_costs_nothing_the_update_stays_3f38fec8">Počkat na Wi-Fi nic nestojí: aktualizace zůstane v tomto seznamu.</string>
     <string name="settings_configuration">KONFIGURACE</string>
     <string name="settings_title">Nastavení</string>
     <string name="settings_general">Obecné</string>

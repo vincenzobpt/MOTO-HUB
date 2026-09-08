@@ -20,6 +20,10 @@
     <string name="language_detail_description">MOTO-HUB folgt standardmäßig der Telefonsprache. Wähle unten eine Sprache, um sie nur für diese App zu überschreiben.</string>
 
     <!-- Settings main page -->
+    <string name="legacy_download_anyway_c17b27fb">Trotzdem herunterladen</string>
+    <string name="legacy_download_over_1_s_23fdd550">Über %1$s herunterladen?</string>
+    <string name="legacy_moto_hub_1_s_is_2_s_and_right_now_the_only_conne_8ebbc51c">MOTO-HUB %1$s ist %2$s groß, und die einzige Verbindung mit Internet ist gerade %3$s, die dein Anbieter berechnet. Auf dem Motorrad ist das normal: Das WLAN des Displays hat gar kein Internet.</string>
+    <string name="legacy_waiting_for_wi_fi_costs_nothing_the_update_stays_3f38fec8">Auf WLAN zu warten kostet nichts: Das Update bleibt in dieser Liste.</string>
     <string name="settings_configuration">KONFIGURATION</string>
     <string name="settings_title">Einstellungen</string>
     <string name="settings_general">Allgemein</string>
