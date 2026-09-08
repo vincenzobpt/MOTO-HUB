@@ -13,6 +13,7 @@ import io.motohub.android.feature.pairing.manualSsidVerdict
 import io.motohub.android.feature.pairing.withModelIdForConnectionMode
 import io.motohub.android.session.ConnectionProgressNotification
 import io.motohub.android.session.HubSessionState
+import io.motohub.android.session.dashReachable
 import io.motohub.android.session.MotorcycleProfile
 import io.motohub.android.session.SessionPhase
 import io.motohub.android.session.ProjectionRuntime
@@ -124,12 +125,36 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
         private set
 
     /**
+     * Whether the motorcycle was ALREADY within reach when the rider cancelled - see
+     * [dashReachable].
+     *
+     * Recorded at the cancel, not read at the retry, because the question [autoConnectDecision]
+     * asks is whether anything has CHANGED since the rider said no. Without this the association
+     * rung lifts every cancel made while standing at the motorcycle, which is where cancels
+     * happen: that is rider c110050c's report with an extra step.
+     */
+    var dashReachableWhenCancelled: Boolean = false
+        private set
+
+    /**
      * Whether the active motorcycle is visibly on the air - tri-state, see
      * [TBoxNetworkConnector.isDashBroadcasting]. Null when no profile is selected, too, since
      * that is equally "cannot be said".
      */
     fun isDashBroadcasting(): Boolean? =
         mutableUiState.value.session.motorcycle?.let(networkConnector::isDashBroadcasting)
+
+    /**
+     * Whether this phone is on the active motorcycle's own network right now - see
+     * [TBoxNetworkConnector.isAssociatedTo].
+     *
+     * Two-valued where [isDashBroadcasting] is three, and that is the point: it goes through no
+     * scan, so no throttle can turn it into "cannot be said". [autoConnectDecision] reads it as
+     * the second thing able to lift a rider's cancel, because a phone already ON the dash's
+     * network is stronger evidence than seeing the dash in a list.
+     */
+    fun isAssociatedToDash(): Boolean =
+        mutableUiState.value.session.motorcycle?.let(networkConnector::isAssociatedTo) ?: false
 
     init {
         ProjectionEventLog.record(
@@ -520,6 +545,7 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
         // reconnect after a mode stops, or an auto-connect the policy did let through. Whichever
         // it was, the earlier cancel has been answered and must not keep suppressing anything.
         riderCancelledConnect = false
+        dashReachableWhenCancelled = false
         // "Is Wi-Fi on" is the wrong question for a dash that joins a network the phone hosts:
         // tethering turns the station radio off, so that check reports false for the whole life
         // of a working PHONE_HOTSPOT session and used to block every connect through here -
@@ -800,6 +826,8 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
         }
         ProjectionEventLog.record("CONNECTION", "User cancelled the connection attempt.")
         riderCancelledConnect = true
+        // Sampled here and never again: this is the "before" the retry is compared against.
+        dashReachableWhenCancelled = dashReachable(isDashBroadcasting(), isAssociatedToDash())
         viewModelScope.launch {
             activeJob.cancelAndJoin()
             transport.stop()

@@ -175,6 +175,23 @@ class TBoxTransportClient(
     }
 
     /**
+     * Writes [connectionMode] onto Core's own garage entry for [ssid], because this app's rider
+     * just chose it here.
+     *
+     * The edit to [forgetMotorcycle]'s delete. Returns false for an unbound Core or one that
+     * predates [IpcBridgeContract.CONTRACT_VERSION_SET_CONNECTION_MODE] - "Core may still hold a
+     * different mode", which the caller has to be able to say out loud, for the same reason the
+     * delete does. It does NOT mean a row existed and kept its old value: a Core new enough to
+     * take the call answers the same way whether it wrote a row or had none.
+     */
+    fun setMotorcycleConnectionMode(ssid: String, connectionMode: String): Boolean {
+        if (ssid.isBlank() || connectionMode.isBlank()) return false
+        if (contractVersion() < IpcBridgeContract.CONTRACT_VERSION_SET_CONNECTION_MODE) return false
+        return runCatching { service?.setMotorcycleConnectionMode(ssid, connectionMode) }
+            .isSuccess && service != null
+    }
+
+    /**
      * Hands Core a Wi-Fi Direct group THIS process formed, with the addresses already resolved
      * here - see ITBoxTransportService.aidl for why Core cannot resolve them itself. Only call
      * it when [contractVersion] is at least [IpcBridgeContract.CONTRACT_VERSION_FORMED_GROUP];

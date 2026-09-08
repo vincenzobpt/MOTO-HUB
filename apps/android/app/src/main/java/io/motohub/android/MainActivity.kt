@@ -129,6 +129,7 @@ import io.motohub.android.tbox.TBoxCapabilityStore
 import io.motohub.android.tbox.TBoxModelProfile
 import io.motohub.android.tbox.TBoxPortScanResult
 import io.motohub.android.tbox.TBoxPortScanner
+import io.motohub.android.tbox.TBoxScanPermissions
 import io.motohub.android.tbox.CompanionAppRegistry
 import io.motohub.android.tbox.WifiGate
 import io.motohub.android.ui.components.HubScreenKey
@@ -263,6 +264,27 @@ class MainActivity : ComponentActivity() {
         finish()
     }
 
+    /**
+     * The same hand-off as [handlebarBluetoothLauncher], for the grants that decide whether this
+     * app can see the Wi-Fi air - see [TBoxScanPermissions] for what is blind without them and
+     * what that has cost.
+     *
+     * A field, and always finishing, for the reasons given on that launcher. The result is logged
+     * per permission rather than as one boolean because a partial grant is a real state: a rider
+     * can allow "Nearby devices" and refuse location on the same sheet, and the next report has
+     * to be able to say which.
+     */
+    private val tboxScanPermissionsLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { grants ->
+        ProjectionEventLog.record(
+            "PERMISSION",
+            "Wi-Fi permission results (asked on the companion app's behalf): " +
+                grants.entries.joinToString { "${it.key.substringAfterLast('.')}=${it.value}" } + "."
+        )
+        finish()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ProjectionEventLog.record("UI", "Main activity created.")
@@ -272,6 +294,7 @@ class MainActivity : ComponentActivity() {
         refreshAoaAccessoryConnected(intent)
         handleAndroidAutoPreviewLaunchIntent(intent)
         handleHandlebarBluetoothRequestIntent(intent)
+        handleTBoxScanPermissionRequestIntent(intent)
 
         setContent {
             MotoHubTheme {
@@ -404,7 +427,10 @@ class MainActivity : ComponentActivity() {
                     updateError = null
                     updateScope.launch {
                         val result = runCatching {
-                            withContext(Dispatchers.IO) { updateRepository.fetchReleases() }
+                            // The dispatcher is chosen inside now, along with the network:
+                            // while a T-Box session is up this process is bound to the
+                            // motorcycle's Wi-Fi and GitHub is unreachable from it.
+                            updateRepository.fetchReleases(context)
                         }
                         updateLoading = false
                         result.onSuccess { releases ->
@@ -861,7 +887,9 @@ class MainActivity : ComponentActivity() {
                     val decision = autoConnectDecision(
                         riderCancelled = viewModel.riderCancelledConnect,
                         previousAttempts = autoConnectAttempts,
-                        dashBroadcasting = viewModel.isDashBroadcasting()
+                        dashBroadcasting = viewModel.isDashBroadcasting(),
+                        associatedToDash = viewModel.isAssociatedToDash(),
+                        dashReachableWhenCancelled = viewModel.dashReachableWhenCancelled
                     )
                     if (decision is AutoConnectDecision.Skip) {
                         ProjectionEventLog.debug("AUTO_CONNECT", "Auto-connect skipped; ${decision.reason}")
@@ -1860,6 +1888,7 @@ class MainActivity : ComponentActivity() {
         refreshAoaAccessoryConnected(intent)
         handleAndroidAutoPreviewLaunchIntent(intent)
         handleHandlebarBluetoothRequestIntent(intent)
+        handleTBoxScanPermissionRequestIntent(intent)
     }
 
     /**
@@ -1921,6 +1950,51 @@ class MainActivity : ComponentActivity() {
             "Requesting handlebar Bluetooth on the companion app's behalf."
         )
         handlebarBluetoothLauncher.launch(Manifest.permission.BLUETOOTH_CONNECT)
+    }
+
+    /**
+     * Puts THIS app's Wi-Fi/location request in front of the rider because the companion app
+     * asked, then closes so they land back where they tapped.
+     *
+     * The Bluetooth hand-off above exists because a permission belongs to a package and the
+     * handlebar is decoded here; this one exists because a permission belongs to a package and
+     * the Wi-Fi air is READ here. Every connect a companion app drives runs
+     * [io.motohub.android.ipc.CoreTBoxConnector] in this process, and until now nothing on that
+     * path ever asked for anything - [tboxConnectPermissions] is reached only from this app's own
+     * Connect button, which a rider who drives everything from the companion app never presses.
+     * Four supports (fc17a4f7, 36a3fd37, 6e77dcf7, f27f3825) show the result: an empty Wi-Fi scan
+     * on every attempt for the life of the installation, and with it every piece of guidance this
+     * app has about whether the dash is on the air, on its own access point, or on the wrong
+     * channel. See [TBoxScanPermissions].
+     *
+     * Answers nothing itself when the grants are already held: the companion asks before sending
+     * anyone here, but the two checks are one process apart.
+     */
+    private fun handleTBoxScanPermissionRequestIntent(intent: Intent?) {
+        if (intent?.getBooleanExtra(
+                IpcBridgeContract.EXTRA_REQUEST_TBOX_WIFI_PERMISSIONS,
+                false
+            ) != true
+        ) {
+            return
+        }
+        // Removed for the reason the handlebar one is: the launch intent outlives the request.
+        intent.removeExtra(IpcBridgeContract.EXTRA_REQUEST_TBOX_WIFI_PERMISSIONS)
+        if (TBoxScanPermissions.heldBy(this)) {
+            ProjectionEventLog.record(
+                "PERMISSION",
+                "The companion app asked for the Wi-Fi permissions; this app already holds them."
+            )
+            finish()
+            return
+        }
+        ProjectionEventLog.record(
+            "PERMISSION",
+            "Requesting the Wi-Fi permissions on the companion app's behalf: " +
+                TBoxScanPermissions.missingFor(this)
+                    .joinToString { it.substringAfterLast('.') } + "."
+        )
+        tboxScanPermissionsLauncher.launch(TBoxScanPermissions.required.toTypedArray())
     }
 
     /** Handles the phone-only Android Auto deep-link sent by PRO. */
@@ -2029,15 +2103,10 @@ private fun tboxConnectPermissions(
     context: Context,
     profile: MotorcycleProfile?
 ): Array<String> {
-    val permissions = mutableListOf(
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.ACCESS_FINE_LOCATION
-    )
-    // NEARBY_WIFI_DEVICES exists only from Android 13; requesting an unknown permission on 12
-    // gets an instant auto-denial. There the location pair above IS the Wi-Fi join gate.
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        permissions += Manifest.permission.NEARBY_WIFI_DEVICES
-    }
+    // The Wi-Fi half is TBoxScanPermissions': the same set the companion app now asks this app
+    // about over the bridge, and the same set that decides whether anything here can read the
+    // air at all. One list, so the two questions can never drift apart.
+    val permissions = TBoxScanPermissions.required.toMutableList()
     if (ThinkerRideGate.requiresBle(profile) || MotoHubSettings.bluetoothClockSync(context)) {
         permissions += ThinkerRideGate.blePermissions
     }

@@ -42,7 +42,8 @@ import io.motohub.android.BuildConfig
 import io.motohub.android.i18n.motoHubText
 import io.motohub.android.ui.components.MotoHubDialogBody
 
-private const val ADVANCED_PACKAGE_NAME = "io.motohub.android.pro"
+// The one in IpcBridgeContract, not a second copy: three files had grown their own.
+private val ADVANCED_PACKAGE_NAME = io.motohub.android.ipc.IpcBridgeContract.ADVANCED_PACKAGE_NAME
 private const val ADVANCED_RELEASES_URL =
     "https://github.com/vincenzobpt/MOTO-HUB-PRO-releases/releases/latest"
 

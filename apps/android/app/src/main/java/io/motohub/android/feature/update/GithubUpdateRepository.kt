@@ -3,10 +3,15 @@
 // Part of MOTO-HUB. Free software under the GNU AGPL v3; see LICENSE.
 package io.motohub.android.feature.update
 
+import android.content.Context
+import android.net.Network
+import io.motohub.android.net.withCellularNetwork
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 import java.time.Instant
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 
 data class GithubReleaseAsset(
@@ -44,11 +49,34 @@ class GithubUpdateRepository(
     private val owner: String = "vincenzobpt",
     private val repository: String = "MOTO-HUB"
 ) {
-    fun fetchReleases(): List<GithubRelease> {
+    /**
+     * Every release, read over a network that actually reaches the Internet.
+     *
+     * [context] exists only to choose that network, and it is a required argument rather than a
+     * convenience: while a T-Box session is up the process is BOUND to the motorcycle's Wi-Fi
+     * (ConnectivityManager.bindProcessToNetwork), which has no route to anywhere, and a plain
+     * URL.openConnection() there fails - silently, as "no updates found". Support fc17a4f7
+     * (2026-09-05) is what that costs from the other side; see GithubUpdateInstaller.
+     *
+     * Same helper the diagnostics upload already uses for the identical reason, and its KDoc says
+     * so in as many words: the report that describes a bad session is the one that cannot leave
+     * the phone.
+     */
+    suspend fun fetchReleases(context: Context): List<GithubRelease> =
+        // The dispatcher wraps the HELPER, not just the fetch: withCellularNetwork chooses the
+        // network on the caller's dispatcher, and the callers are Compose click handlers on the
+        // main thread. See GithubUpdateInstaller.downloadAndInstall for the same note.
+        withContext(Dispatchers.IO) {
+            withCellularNetwork(context, cellularOnly = false) { network ->
+                fetchAllReleases(network)
+            }
+        }
+
+    private fun fetchAllReleases(network: Network?): List<GithubRelease> {
         val allReleases = buildList {
             var page = 1
             while (true) {
-                val pageJson = fetchPage(page)
+                val pageJson = fetchPage(page, network)
                 val pageReleases = parseReleases(pageJson)
                 addAll(pageReleases)
                 if (JSONArray(pageJson).length() < PAGE_SIZE) break
@@ -60,10 +88,11 @@ class GithubUpdateRepository(
             .sortedWith(releaseComparator)
     }
 
-    private fun fetchPage(page: Int): String {
+    private fun fetchPage(page: Int, network: Network?): String {
         val endpoint = "https://api.github.com/repos/$owner/$repository/releases" +
             "?per_page=$PAGE_SIZE&page=$page"
-        val connection = (URL(endpoint).openConnection() as HttpURLConnection).apply {
+        val url = URL(endpoint)
+        val connection = ((network?.openConnection(url) ?: url.openConnection()) as HttpURLConnection).apply {
             requestMethod = "GET"
             connectTimeout = TIMEOUT_MILLIS
             readTimeout = TIMEOUT_MILLIS

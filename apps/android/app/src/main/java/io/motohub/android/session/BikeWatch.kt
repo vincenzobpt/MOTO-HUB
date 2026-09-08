@@ -16,6 +16,13 @@ import android.content.Intent
  * - [hasSavedMotorcycle]: there is nothing to look for otherwise.
  * - [riderCancelled] is the clearest "no" the UI has - see [autoConnectDecision], which reads the
  *   same flag. A watch that outlived a cancel would be the cancel bug again, only invisible.
+ *   NOTE that the two now read it differently, on purpose: auto-connect lifts a cancel when the
+ *   dash BECOMES reachable, this does not lift it at all. A watch exists to keep the process
+ *   alive and foreground-eligible while the rider is AWAY from a motorcycle that is not there
+ *   yet; the change that lifts a cancel - the dash coming into reach - is the same event that
+ *   ends the waiting the watch was for. Nothing is lost by leaving it disarmed, and arming a
+ *   notification that says "waiting for the motorcycle" beside a dash the phone can already see
+ *   would be the lie this file's last paragraph refuses.
  *
  * The phases that qualify are every phase in which a link is wanted and none exists:
  * NETWORK_SETUP_REQUIRED (where a session that has not connected sits), ERROR (where a 30s

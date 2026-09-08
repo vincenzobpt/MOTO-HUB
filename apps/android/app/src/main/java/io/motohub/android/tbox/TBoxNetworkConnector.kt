@@ -841,10 +841,14 @@ class TBoxNetworkConnector(context: Context) {
         // 2026-07-30) printed that verdict four times while the same dash measured -50dBm on
         // 5180MHz two minutes later.
         if (results.isEmpty()) {
+            // WHY it is empty, not just that it is. The neutral version of this line appeared ~60
+            // times in one log and four investigations had to guess at the cause from the code;
+            // see TBoxScanPermissions.emptyScanCause. A missing grant is permanent, and reads
+            // exactly like a throttled scan from here.
             ProjectionEventLog.debug(
                 "NETWORK",
                 "The phone's Wi-Fi scan came back empty (0 networks), so it says nothing about " +
-                    "whether $target is in range."
+                    "whether $target is in range - ${TBoxScanPermissions.emptyScanCause(appContext)}."
             )
             publishScanFacts(visibility = "scan_empty")
             return

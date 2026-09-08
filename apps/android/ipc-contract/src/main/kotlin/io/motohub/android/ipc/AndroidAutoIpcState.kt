@@ -57,8 +57,13 @@ object IpcBridgeContract {
      *     this one says what Core would do with it.
      * 17: forgetMotorcycle(). The rider could empty only one of the two garages; this is the
      *     other one's delete.
+     * 18: EXTRA_REQUEST_TBOX_WIFI_PERMISSIONS. No call appended - an Intent extra, gated the same
+     *     way because a Core that does not understand it opens its home screen and leaves the
+     *     rider holding an unanswered question.
+     * 19: setMotorcycleConnectionMode(). The other half of 17: that one is the rider's delete,
+     *     this one is the rider's edit.
      */
-    const val CONTRACT_VERSION = 17
+    const val CONTRACT_VERSION = 19
 
     /**
      * First [CONTRACT_VERSION] whose Core forgets a motorcycle on the companion app's word,
@@ -70,6 +75,42 @@ object IpcBridgeContract {
      * that Core may still hold an entry, because it has no way to remove it.
      */
     const val CONTRACT_VERSION_FORGET_MOTORCYCLE = 17
+
+    /**
+     * First [CONTRACT_VERSION] whose Core takes the connection mode a rider set in the companion
+     * app, through setMotorcycleConnectionMode().
+     *
+     * The residual [CONTRACT_VERSION_FORGET_MOTORCYCLE] deliberately left open. That one closes
+     * the rider who DELETES a motorcycle; this one closes the rider who edits it. Core's garage
+     * row completes an incoming connect (io.motohub.android.ipc.completedFrom), and a bare AUTO
+     * from a companion is read there as "nothing was set" rather than as a choice - so a rider
+     * who moved the mode back to Auto in the companion app had it replaced by Core's own older
+     * value on the very next connect, with no screen in either app able to reach that row.
+     *
+     * A field, not a row: Core's entry carries a modelId the companion never mints (support
+     * adb68a95, a KOVE 450 Rally that Core alone knew was a ThinkerRide), so the mode is written
+     * over and everything else is left exactly as it was. That is why this is not forgetMotorcycle
+     * called on save.
+     *
+     * Below this version the companion must say, in its own log, that the other garage may still
+     * hold a different mode - it has no way to change it.
+     */
+    const val CONTRACT_VERSION_SET_CONNECTION_MODE = 19
+
+    /**
+     * First [CONTRACT_VERSION] whose Core understands [EXTRA_REQUEST_TBOX_WIFI_PERMISSIONS] and
+     * raises its own Wi-Fi/location request on the companion app's word.
+     *
+     * Below this the extra is ignored and Core simply opens, which is not a failure the companion
+     * can see and not what its dialog promised - so the offer is never made to an older Core at
+     * all. The rider keeps the only route that has ever existed there: pressing Connect inside
+     * Core once, which is what raises that request.
+     *
+     * The permission itself is read without any of this - PackageManager.checkPermission reports
+     * another package's runtime grant - so what this version gates is only whether Core can be
+     * ASKED, never whether the companion can tell that it needs to be.
+     */
+    const val CONTRACT_VERSION_CORE_WIFI_PERMISSION = 18
 
     /** First [CONTRACT_VERSION] whose Core implements connectOverFormedGroup(). */
     const val CONTRACT_VERSION_FORMED_GROUP = 2
@@ -275,6 +316,14 @@ object IpcBridgeContract {
     const val CONNECT_STAGE_REFUSED = 3
 
     const val CORE_PACKAGE_NAME = "io.motohub.android"
+
+    /**
+     * The companion app's package. Here beside Core's because the pair identifies the two halves
+     * and several things now ask a question about a specific one of them - a per-package runtime
+     * grant, an installed-version lookup, the offer to open the other app. Each of those had
+     * grown its own private copy of this string.
+     */
+    const val ADVANCED_PACKAGE_NAME = "io.motohub.android.pro"
     const val CORE_MAIN_ACTIVITY_CLASS_NAME = "io.motohub.android.MainActivity"
 
     /** Core-side deep-link used by the full Android Auto preview controls. */
@@ -319,4 +368,26 @@ object IpcBridgeContract {
      * soon as the rider answers, so they land back where they tapped.
      */
     const val EXTRA_REQUEST_HANDLEBAR_BLUETOOTH = "io.motohub.android.extra.REQUEST_HANDLEBAR_BLUETOOTH"
+
+    /**
+     * Asks Core to put ITS OWN Wi-Fi/location request in front of the rider, then close.
+     *
+     * Same mechanism as [EXTRA_REQUEST_HANDLEBAR_BLUETOOTH] and the same reason - a runtime
+     * permission can only be requested by the package that wants it - for the other half of the
+     * connection that lives over there. Core is the process that joins the network, reads the
+     * Wi-Fi scan and answers "is the dash on the air, on its own access point, or not there at
+     * all"; every connect a companion app drives runs in it, and nothing on that path has ever
+     * asked for a permission. Core's own request is raised by its Connect button, which a rider
+     * who drives everything from the companion app never presses.
+     *
+     * What that costs is not a failure but a silence: `getScanResults()` hands an ungranted
+     * process an EMPTY list and `WifiInfo.getSSID()` reads `<unknown ssid>`, so every piece of
+     * evidence Core has about the air answers "cannot be said", permanently and without an error.
+     * Supports fc17a4f7, 36a3fd37, 6e77dcf7 and f27f3825 are one log each of exactly that.
+     *
+     * Gated on [CONTRACT_VERSION_CORE_WIFI_PERMISSION]: an older Core ignores the extra and opens
+     * its home screen, which is a worse answer than not offering.
+     */
+    const val EXTRA_REQUEST_TBOX_WIFI_PERMISSIONS =
+        "io.motohub.android.extra.REQUEST_TBOX_WIFI_PERMISSIONS"
 }

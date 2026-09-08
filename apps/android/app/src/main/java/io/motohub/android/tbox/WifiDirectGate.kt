@@ -67,9 +67,21 @@ internal object WifiDirectGate {
      * than enforced: unlike the permission, whether it blocks P2P varies by OEM build, and
      * blocking a join that would have worked is worse than a slightly longer failure.
      */
-    fun isLocationEnabled(context: Context): Boolean {
-        val locationManager = context.getSystemService(LocationManager::class.java) ?: return true
-        return runCatching { locationManager.isLocationEnabled }.getOrDefault(true)
+    fun isLocationEnabled(context: Context): Boolean = locationEnabledOrNull(context) ?: true
+
+    /**
+     * The same toggle, but **null when it cannot be read** - no LocationManager, or one that
+     * threw.
+     *
+     * [isLocationEnabled] deliberately answers true there, because it gates a hint and blocking a
+     * join that would have worked is the worse mistake. A diagnostics report is the opposite
+     * case: "the phone says location is on" and "nobody could ask" are different facts, and a
+     * report that prints the first for the second sends its reader somewhere else entirely. Same
+     * rule as the per-half permission fields beside it.
+     */
+    fun locationEnabledOrNull(context: Context): Boolean? {
+        val locationManager = context.getSystemService(LocationManager::class.java) ?: return null
+        return runCatching { locationManager.isLocationEnabled }.getOrNull()
     }
 
     /** Shown to the rider when the joining app has no grant for [requiredPermission]. */

@@ -20,7 +20,9 @@ import io.motohub.android.tbox.ProfileOverride
 import io.motohub.android.tbox.TBoxCapabilities
 import io.motohub.android.tbox.TBoxCapabilityStore
 import io.motohub.android.tbox.TBoxModelProfile
+import io.motohub.android.tbox.TBoxScanPermissions
 import io.motohub.android.tbox.TBoxWireLadder
+import io.motohub.android.tbox.WifiDirectGate
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -93,7 +95,14 @@ object DiagnosticReportBuilder {
             // could arrive; nothing said what the half that decodes it would do with one, and a
             // rider's log cannot answer that either (support 0df154af: three protocol switches
             // and a full teaching wizard, with no trace of any of it in what he sent).
-            put("schema", 4)
+            // 5: "permissions" grows the Wi-Fi/location grant of each half, and the phone-wide
+            //    location toggle. The Bluetooth grant answered "can a handlebar press arrive";
+            //    this answers "can either half see the Wi-Fi air at all" - and a process without
+            //    it is handed an EMPTY scan and an "<unknown ssid>" with no error anywhere, so
+            //    from a log it is indistinguishable from a phone that genuinely sees nothing.
+            //    Four investigations (fc17a4f7, 36a3fd37, 6e77dcf7, f27f3825) had to infer it
+            //    from the shape of the code and none of them could state it.
+            put("schema", 5)
             put("reportId", reportId)
             put("supportId", supportId)
             put("deviceId", deviceId)
@@ -111,7 +120,7 @@ object DiagnosticReportBuilder {
             put("motorcycles", JSONArray().apply {
                 profiles.forEach { put(motorcycle(appContext, it, isActive = it.id == active?.id, ladders = ladders)) }
             })
-            put("permissions", permissions(bluetooth))
+            put("permissions", permissions(appContext, bluetooth))
             put("handlebar", handlebar(handlebarStates, radio))
             put("settings", settings(appContext))
             put("log", JSONObject().apply {
@@ -131,12 +140,46 @@ object DiagnosticReportBuilder {
      * is not the app the rider configured. JSONObject.NULL rather than a dropped key for the half
      * that could not be asked - see HandlebarBluetoothGrants.
      */
-    private fun permissions(bluetooth: HandlebarBluetoothGrants) = JSONObject().apply {
+    private fun permissions(context: Context, bluetooth: HandlebarBluetoothGrants) = JSONObject().apply {
         put("bluetoothConnect", JSONObject().apply {
             put("advanced", bluetooth.advanced ?: JSONObject.NULL)
             put("core", bluetooth.core ?: JSONObject.NULL)
         })
+        // Read straight off PackageManager for BOTH halves, with no bridge call and no timeout:
+        // checkPermission reports another package's runtime grant without any privilege of its
+        // own. That is why this field, unlike the Bluetooth one above, can be filled in by
+        // whichever edition happens to be building the report - and why it is never "could not be
+        // asked" for a package that is actually there.
+        put("wifiScan", JSONObject().apply {
+            put("advanced", wifiScanGrant(context, IpcBridgeContract.ADVANCED_PACKAGE_NAME))
+            put("core", wifiScanGrant(context, IpcBridgeContract.CORE_PACKAGE_NAME))
+        })
+        // Not a permission and not per package: the phone-wide toggle Android also consults for
+        // scan results. It is the second of the two ways a scan comes back empty forever, and
+        // telling it from the first is the whole reason this field exists.
+        //
+        // Three-valued, like everything else in this block: WifiDirectGate.isLocationEnabled
+        // answers TRUE when the toggle cannot be read at all, which is right where it gates a
+        // hint and wrong here - a report claiming "location is on" for a phone nobody could ask
+        // is the absent-vs-false conflation this whole object exists to avoid.
+        put("locationServices", WifiDirectGate.locationEnabledOrNull(context) ?: JSONObject.NULL)
     }
+
+    /**
+     * Whether [packageName] holds every permission in [TBoxScanPermissions], or JSONObject.NULL
+     * when that package is not installed (or not visible to this one).
+     *
+     * Null rather than false for an absent package, on the same rule as the Bluetooth grant
+     * beside it: checkPermission answers DENIED for a package that is not there, and a report
+     * that let those two read the same would have a reader telling a rider to grant a permission
+     * to an app they never installed.
+     */
+    private fun wifiScanGrant(context: Context, packageName: String): Any =
+        if (runCatching { context.packageManager.getPackageInfo(packageName, 0) }.isSuccess) {
+            TBoxScanPermissions.heldBy(context, packageName)
+        } else {
+            JSONObject.NULL
+        }
 
     /**
      * How each half's handlebar is configured, and whether the radio could deliver a press at all.

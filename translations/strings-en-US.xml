@@ -20,6 +20,10 @@
     <string name="language_detail_description">MOTO-HUB follows the phone language by default. Choose a language below to override it for this app.</string>
 
     <!-- Settings main page -->
+    <string name="legacy_download_anyway_c17b27fb">Download anyway</string>
+    <string name="legacy_download_over_1_s_23fdd550">Download over %1$s?</string>
+    <string name="legacy_moto_hub_1_s_is_2_s_and_right_now_the_only_conne_8ebbc51c">MOTO-HUB %1$s is %2$s, and right now the only connection that reaches the Internet is %3$s, which your operator charges for. On the motorcycle that is normal - the dashboard\'s Wi-Fi has no Internet at all.</string>
+    <string name="legacy_waiting_for_wi_fi_costs_nothing_the_update_stays_3f38fec8">Waiting for Wi-Fi costs nothing: the update stays in this list.</string>
     <string name="settings_configuration">CONFIGURATION</string>
     <string name="settings_title">Settings</string>
     <string name="settings_general">General</string>

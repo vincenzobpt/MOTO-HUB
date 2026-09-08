@@ -366,4 +366,33 @@ interface ITBoxTransportService {
      * that the other garage may still hold an entry. Same tail-position rule as the calls above.
      */
     void forgetMotorcycle(String ssid);
+
+    /**
+     * Write [connectionMode] onto this package's own garage entry for [ssid], because the
+     * companion app's rider just chose it over there.
+     *
+     * The other half of forgetMotorcycle(), and the residual it deliberately left open. Core's
+     * row is what completes an incoming connect (io.motohub.android.ipc.completedFrom), and a
+     * bare AUTO arriving from a companion is read there as "the caller said nothing" rather than
+     * as "the rider chose Auto" - so a rider who moved the mode back to Auto in the companion app
+     * had Core's own older value put straight back on the next connect. Support f27f3825
+     * (Benelli TRK 702X, bj5G2266) is that shape: PHONE_HOTSPOT on this side, "This motorcycle
+     * expects your phone to host the network" on every attempt, and no screen in either app able
+     * to reach the row that said it.
+     *
+     * ONE FIELD, and every row matching the name: the two garages mint their own ids, and this
+     * entry carries a modelId the companion never mints (support adb68a95, a KOVE 450 Rally that
+     * only Core knew was a ThinkerRide). Replacing the row would throw that away; writing the one
+     * field the rider actually changed does not.
+     *
+     * [connectionMode] is a TBoxConnectionMode name. An unknown value is ignored rather than
+     * guessed at - a newer companion naming a mode this build has never heard of must not be able
+     * to blank the one that works.
+     *
+     * Silent when there is nothing here under that name. A Core that predates this call ignores
+     * it, so the caller must check getContractVersion() against
+     * IpcBridgeContract.CONTRACT_VERSION_SET_CONNECTION_MODE first and, below that, say that the
+     * other garage may still hold a different mode. Same tail-position rule as the calls above.
+     */
+    void setMotorcycleConnectionMode(String ssid, String connectionMode);
 }

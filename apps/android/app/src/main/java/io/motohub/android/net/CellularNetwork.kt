@@ -70,6 +70,19 @@ private suspend fun <T> runWithBindFallback(
     block(NetworkBindFallback.fallbackNetwork(context))
 }
 
+/**
+ * The network [withCellularNetwork] would choose for a non-cellular-only call, or null when there
+ * is none - so a caller can ask what a request is ABOUT to cost before making it.
+ *
+ * Internal and read-only: the selection lives in one place, and the update dialog's "this will use
+ * mobile data" warning must name the same network the download then takes, or it is a lie.
+ */
+internal fun validatedInternetNetwork(context: Context): Network? {
+    val connectivityManager =
+        context.applicationContext.getSystemService(ConnectivityManager::class.java) ?: return null
+    return runCatching { findValidatedInternetNetwork(connectivityManager) }.getOrNull()
+}
+
 private fun findValidatedInternetNetwork(connectivityManager: ConnectivityManager): Network? =
     connectivityManager.allNetworks
         .asSequence()

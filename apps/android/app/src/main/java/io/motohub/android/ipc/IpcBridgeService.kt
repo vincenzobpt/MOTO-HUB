@@ -52,6 +52,7 @@ import io.motohub.android.session.DashboardDeliveryMonitor
 import io.motohub.android.session.ProjectionEventLog
 import io.motohub.android.tbox.FormedP2pGroup
 import io.motohub.android.data.MotorcycleProfileStore
+import io.motohub.android.session.TBoxConnectionMode
 import io.motohub.android.tbox.ProfileOverride
 import io.motohub.android.tbox.TBoxEvent
 import io.motohub.android.tbox.TBoxModelProfile
@@ -398,6 +399,45 @@ class IpcBridgeService : Service() {
                 "Core's own garage entry for $target forgotten at the companion app's request: " +
                     "the rider deleted or re-paired that motorcycle over there, and a row left " +
                     "here would go on completing every later connect."
+            )
+        }
+
+        // The rider EDITED the mode over there, which is the residual the delete above left open:
+        // completedFrom() reads a bare AUTO from a companion as "nothing was set" and puts this
+        // row's own value back, so a rider moving the mode to Auto in the companion app changed
+        // nothing at all (support f27f3825).
+        //
+        // One field, every row matching the name. This entry carries a modelId the companion
+        // never mints - support adb68a95's KOVE 450 Rally, which only this app knew was a
+        // ThinkerRide - so replacing the row would fix one thing by losing another.
+        override fun setMotorcycleConnectionMode(ssid: String?, connectionMode: String?) {
+            val target = ssid?.trim().orEmpty()
+            if (target.isEmpty()) return
+            // An unknown name is ignored, never guessed at: a newer companion naming a mode this
+            // build has never heard of must not be able to blank the one that works today.
+            val mode = runCatching { TBoxConnectionMode.valueOf(connectionMode.orEmpty()) }
+                .getOrElse {
+                    ProjectionEventLog.warning(
+                        "GARAGE",
+                        "The companion app asked for connection mode \"$connectionMode\" on " +
+                            "$target, which this build does not know - leaving the stored mode " +
+                            "alone."
+                    )
+                    return
+                }
+            val store = MotorcycleProfileStore(this@IpcBridgeService)
+            val affected = runCatching { store.loadAll() }
+                .getOrElse { emptyList() }
+                .filter { it.ssid.equals(target, ignoreCase = true) && it.connectionMode != mode }
+            if (affected.isEmpty()) return
+            // makeActive = false: the rider changed a setting in the other app, they did not
+            // choose which motorcycle this one is pointing at.
+            affected.forEach { store.save(it.copy(connectionMode = mode), makeActive = false) }
+            ProjectionEventLog.record(
+                "GARAGE",
+                "Core's own garage entry for $target moved to connectionMode=$mode at the " +
+                    "companion app's request: the rider chose it over there, and until now this " +
+                    "row's older value was put back on every connect."
             )
         }
 
