@@ -156,6 +156,25 @@ class TBoxTransportClient(
     fun contractVersion(): Int = runCatching { service?.getContractVersion() }.getOrNull() ?: 0
 
     /**
+     * Tells Core to forget its own garage entry for [ssid], because this app's rider just deleted
+     * or re-paired that motorcycle here.
+     *
+     * Returns false when the bound Core predates
+     * [IpcBridgeContract.CONTRACT_VERSION_FORGET_MOTORCYCLE], or when nothing is bound at all -
+     * i.e. "Core may still hold an entry", which is a thing the caller has to be able to say out
+     * loud. It does NOT mean an entry existed and survived: a Core new enough to take the call
+     * answers the same way whether it deleted a row or had none, and neither is a failure.
+     *
+     * Gated on the version rather than called blind for the reason [contractVersion] gives: a
+     * dead transaction is indistinguishable from a Core that ran the call and found nothing.
+     */
+    fun forgetMotorcycle(ssid: String): Boolean {
+        if (ssid.isBlank()) return false
+        if (contractVersion() < IpcBridgeContract.CONTRACT_VERSION_FORGET_MOTORCYCLE) return false
+        return runCatching { service?.forgetMotorcycle(ssid) }.isSuccess && service != null
+    }
+
+    /**
      * Hands Core a Wi-Fi Direct group THIS process formed, with the addresses already resolved
      * here - see ITBoxTransportService.aidl for why Core cannot resolve them itself. Only call
      * it when [contractVersion] is at least [IpcBridgeContract.CONTRACT_VERSION_FORMED_GROUP];

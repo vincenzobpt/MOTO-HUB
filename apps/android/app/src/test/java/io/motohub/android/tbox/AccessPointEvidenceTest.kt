@@ -24,7 +24,7 @@ class AccessPointEvidenceTest {
         // is not even asked and arrives as null.
         assertEquals(
             AccessPointEvidence.HELD_NETWORK,
-            accessPointEvidence(holdsNetwork = true, broadcasting = null)
+            accessPointEvidence(holdsNetwork = true, associatedToSsid = false, broadcasting = null)
         )
     }
 
@@ -34,7 +34,7 @@ class AccessPointEvidenceTest {
         // the network cannot be any of those things, so a denial does not get to overrule it.
         assertEquals(
             AccessPointEvidence.HELD_NETWORK,
-            accessPointEvidence(holdsNetwork = true, broadcasting = false)
+            accessPointEvidence(holdsNetwork = true, associatedToSsid = false, broadcasting = false)
         )
     }
 
@@ -43,7 +43,40 @@ class AccessPointEvidenceTest {
         // The 11:00:44 / 11:01:05 / 11:01:09 path, unchanged: this is what already worked.
         assertEquals(
             AccessPointEvidence.SCAN_SIGHTING,
-            accessPointEvidence(holdsNetwork = false, broadcasting = true)
+            accessPointEvidence(holdsNetwork = false, associatedToSsid = false, broadcasting = true)
+        )
+    }
+
+    @Test
+    fun anAssociationOpensTheRoadWhenTheScanIsThrottledToNothing() {
+        // Rider f27f3825 (samsung SM-S938B, Benelli TRK 702X, bj5G2266, 2026-09-07): hotspot up
+        // and Wi-Fi associated to the dash's own access point at the same time, four fallbacks
+        // declined with "no usable scan at all", an _EasyConn._tcp. advertisement resolved on
+        // that other network and discarded every time. The association is the fact none of the
+        // throttled readings could withdraw.
+        assertEquals(
+            AccessPointEvidence.ASSOCIATED_SSID,
+            accessPointEvidence(holdsNetwork = false, associatedToSsid = true, broadcasting = null)
+        )
+    }
+
+    @Test
+    fun anAssociationOutranksAScanThatDeniesTheDash() {
+        // Same argument as the held network: being ON the network cannot be stale or throttled,
+        // so a scan that failed to see it does not get to close the road.
+        assertEquals(
+            AccessPointEvidence.ASSOCIATED_SSID,
+            accessPointEvidence(holdsNetwork = false, associatedToSsid = true, broadcasting = false)
+        )
+    }
+
+    @Test
+    fun aHeldNetworkStillOutranksAnAssociation() {
+        // Both are true whenever this connector owns the join. The held network is reported
+        // because it is the one the caller can reuse without re-requesting anything.
+        assertEquals(
+            AccessPointEvidence.HELD_NETWORK,
+            accessPointEvidence(holdsNetwork = true, associatedToSsid = true, broadcasting = null)
         )
     }
 
@@ -53,11 +86,11 @@ class AccessPointEvidenceTest {
         // on. An unknown scan is not evidence of an access point, and never becomes one here.
         assertEquals(
             AccessPointEvidence.NONE,
-            accessPointEvidence(holdsNetwork = false, broadcasting = false)
+            accessPointEvidence(holdsNetwork = false, associatedToSsid = false, broadcasting = false)
         )
         assertEquals(
             AccessPointEvidence.NONE,
-            accessPointEvidence(holdsNetwork = false, broadcasting = null)
+            accessPointEvidence(holdsNetwork = false, associatedToSsid = false, broadcasting = null)
         )
     }
 }

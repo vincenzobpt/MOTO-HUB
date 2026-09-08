@@ -728,6 +728,42 @@ class TBoxNetworkConnector(context: Context) {
         }
     }
 
+    /**
+     * Whether this phone is associated to [profile]'s access point RIGHT NOW.
+     *
+     * The third rung of [io.motohub.android.tbox.AccessPointEvidence], and the one that answers
+     * the case the other two cannot. [isHuntingFor] only knows about networks THIS connector
+     * asked for, so a dash the rider joined from Android's own Wi-Fi settings is invisible to it,
+     * and [isDashBroadcasting] goes through `getScanResults`, which Android throttles to nothing
+     * for minutes at a time. The current association goes through neither: it is a property of
+     * the link the phone is holding, and it is true precisely when the access-point road is open.
+     *
+     * Rider f27f3825 (samsung SM-S938B, Benelli TRK 702X, bj5G2266, 2026-09-07) is the case.
+     * Hotspot up and Wi-Fi associated at the same time - both icons in the screenshots he sent -
+     * an `_EasyConn._tcp.` advertisement resolved within 150ms of every discovery start and
+     * discarded as "the wrong network (345)", a 253-address sweep of the hotspot subnet finding
+     * nothing, and four fallbacks declined with "no usable scan at all". The dash was on its own
+     * access point, the phone was on it too, and nothing in the ladder could say so.
+     *
+     * Returns false, never true, when Android withholds the name: a redacted SSID is not evidence
+     * of anything, and the hotspot message is still the right answer for a dash that really is a
+     * Wi-Fi client. The name is read and compared, never logged - see [currentWifiDescription]
+     * for why a rider's other network never reaches a file people paste into public threads.
+     */
+    @SuppressLint("MissingPermission")
+    fun isAssociatedTo(profile: MotorcycleProfile): Boolean {
+        val target = normalizeSsid(profile.ssid)
+        if (target.isEmpty()) return false
+        val onWifi = connectivityManager.activeNetwork
+            ?.let { connectivityManager.getNetworkCapabilities(it) }
+            ?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true
+        if (!onWifi) return false
+        val ssid = runCatching { normalizeSsid(wifiManager.connectionInfo?.ssid.orEmpty()) }
+            .getOrDefault("")
+        if (ssid.isBlank() || ssid == "<unknown ssid>") return false
+        return ssid.equals(target, ignoreCase = true)
+    }
+
     private fun ScanResult.ssidText(): String =
         (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) wifiSsid?.toString() else null)
             ?.removeSurrounding("\"")

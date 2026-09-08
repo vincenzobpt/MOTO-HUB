@@ -344,4 +344,26 @@ interface ITBoxTransportService {
      * Same tail-position rule as the calls above.
      */
     String getHandlebarState();
+
+    /**
+     * Forget this package's own garage entry for [ssid], because the companion app's rider just
+     * deleted or re-paired that motorcycle over there.
+     *
+     * MOTO-HUB keeps two garages, and until this call only one of them could be emptied by the
+     * rider. Core's copy answers connect() through
+     * io.motohub.android.ipc.completedFrom, so a stale row here kept deciding for a profile the
+     * rider had already thrown away: support f27f3825 (Benelli TRK 702X, bj5G2266, 2026-09-07)
+     * deleted his motorcycle at 19:37:56, re-paired it by hand at 19:38:39, and was refused 12
+     * seconds later by the connectionMode of the entry he had just deleted - with no screen in
+     * either app able to reach it.
+     *
+     * Keyed on the network name for the reason getWireLadderProgress() already is: a profile id
+     * is minted per garage, so the two entries for one physical dashboard never share one.
+     *
+     * Silent when there is nothing to forget - a rider who never paired in Core is not an error.
+     * A CORE that predates this call ignores it, so the caller must check getContractVersion()
+     * against IpcBridgeContract.CONTRACT_VERSION_FORGET_MOTORCYCLE first and, below that, say
+     * that the other garage may still hold an entry. Same tail-position rule as the calls above.
+     */
+    void forgetMotorcycle(String ssid);
 }

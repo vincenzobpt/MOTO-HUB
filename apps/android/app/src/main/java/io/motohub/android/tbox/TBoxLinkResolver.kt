@@ -307,8 +307,19 @@ object TBoxLinkResolver {
         // installation that has ever logged it.
         val holdsNetwork = networkConnector.isHuntingFor(profile.ssid) &&
             networkConnector.currentNetwork() != null
-        val broadcasting = if (holdsNetwork) null else networkConnector.isDashBroadcasting(profile)
-        if (accessPointEvidence(holdsNetwork, broadcasting) == AccessPointEvidence.NONE) {
+        // Asked before the scan, and for the same reason the held network is: it cannot be
+        // throttled away. A dash the rider joined from Android's own Wi-Fi settings belongs to no
+        // request this connector made, so isHuntingFor cannot see it - and rider f27f3825 sat
+        // exactly there, hotspot up and associated to his dash's access point at the same time,
+        // while every getScanResults call came back empty.
+        val associatedToSsid = if (holdsNetwork) false else networkConnector.isAssociatedTo(profile)
+        val broadcasting = if (holdsNetwork || associatedToSsid) {
+            null
+        } else {
+            networkConnector.isDashBroadcasting(profile)
+        }
+        val evidence = accessPointEvidence(holdsNetwork, associatedToSsid, broadcasting)
+        if (evidence == AccessPointEvidence.NONE) {
             // The silence here was a hole. Five identical "no hotspot is running" errors in a
             // rider log (samsung SM-S948B, qj-5G-d8cf, 2026-08-23) said nothing about whether
             // this road had even been considered, let alone which of its two answers had closed
@@ -331,12 +342,17 @@ object TBoxLinkResolver {
         ProjectionEventLog.record(
             "NETWORK",
             (
-                if (holdsNetwork) {
-                    "No hosted network, but this phone is already on ${profile.ssid}'s access " +
-                        "point - taking it instead."
-                } else {
-                    "No hosted network, but ${profile.ssid} is broadcasting - joining its access " +
-                        "point instead."
+                when (evidence) {
+                    AccessPointEvidence.HELD_NETWORK ->
+                        "No hosted network, but this phone is already on ${profile.ssid}'s access " +
+                            "point - taking it instead."
+                    AccessPointEvidence.ASSOCIATED_SSID ->
+                        "No hosted network, but this phone is associated to ${profile.ssid} right " +
+                            "now - the dash has an access point and is on it, so taking that road " +
+                            "instead of waiting for a scan Android is throttling."
+                    else ->
+                        "No hosted network, but ${profile.ssid} is broadcasting - joining its " +
+                            "access point instead."
                 }
                 ) + " This motorcycle is saved as \"My phone hosts the hotspot\"; if the " +
                 "access point keeps working, change the mode in manual pairing to skip this step."
@@ -426,6 +442,16 @@ internal enum class AccessPointEvidence {
      */
     HELD_NETWORK,
 
+    /**
+     * This phone is associated to the profile's SSID right now, through a join nothing in this
+     * app asked for - Android's own Wi-Fi settings, or a network it reconnected to on its own.
+     * Weaker than [HELD_NETWORK] only in that this connector does not own the network and may
+     * have to re-request it; as evidence that the dash HAS an access point it is just as good,
+     * and it is immune to the scan throttling that made [SCAN_SIGHTING] unavailable to rider
+     * f27f3825 for the whole session (see [TBoxNetworkConnector.isAssociatedTo]).
+     */
+    ASSOCIATED_SSID,
+
     /** The dash was in the phone's latest Wi-Fi scan, and that scan was recent enough to count. */
     SCAN_SIGHTING,
 
@@ -434,13 +460,21 @@ internal enum class AccessPointEvidence {
 }
 
 /**
+ * @param associatedToSsid the phone is on the profile's network right now, by a join this app did
+ *   not make. Asked before the scan for the same reason [holdsNetwork] is: it cannot be throttled
+ *   away. Not consulted when [holdsNetwork] is true, which already implies it.
  * @param broadcasting the scan's answer, with null for "this phone handed back nothing usable".
- *   Not consulted at all when [holdsNetwork] is true, which is why null is the ordinary value
- *   there rather than a missing reading.
+ *   Not consulted at all when [holdsNetwork] or [associatedToSsid] is true, which is why null is
+ *   the ordinary value there rather than a missing reading.
  */
-internal fun accessPointEvidence(holdsNetwork: Boolean, broadcasting: Boolean?): AccessPointEvidence =
+internal fun accessPointEvidence(
+    holdsNetwork: Boolean,
+    associatedToSsid: Boolean,
+    broadcasting: Boolean?
+): AccessPointEvidence =
     when {
         holdsNetwork -> AccessPointEvidence.HELD_NETWORK
+        associatedToSsid -> AccessPointEvidence.ASSOCIATED_SSID
         broadcasting == true -> AccessPointEvidence.SCAN_SIGHTING
         else -> AccessPointEvidence.NONE
     }

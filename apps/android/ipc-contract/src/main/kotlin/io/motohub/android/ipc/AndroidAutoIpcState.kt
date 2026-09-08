@@ -55,8 +55,21 @@ object IpcBridgeContract {
      *     tell "recovery is off" from "this Core never heard the question".
      * 15: getHandlebarState(). The other half of 13: that one says whether a press can reach Core,
      *     this one says what Core would do with it.
+     * 17: forgetMotorcycle(). The rider could empty only one of the two garages; this is the
+     *     other one's delete.
      */
-    const val CONTRACT_VERSION = 16
+    const val CONTRACT_VERSION = 17
+
+    /**
+     * First [CONTRACT_VERSION] whose Core forgets a motorcycle on the companion app's word,
+     * through forgetMotorcycle().
+     *
+     * Until this, deleting a motorcycle in the companion app emptied that app's garage only, and
+     * Core's own entry for the same network name went on completing every later connect - the
+     * defect support f27f3825 hit head-on. Below this version the companion must tell its rider
+     * that Core may still hold an entry, because it has no way to remove it.
+     */
+    const val CONTRACT_VERSION_FORGET_MOTORCYCLE = 17
 
     /** First [CONTRACT_VERSION] whose Core implements connectOverFormedGroup(). */
     const val CONTRACT_VERSION_FORMED_GROUP = 2

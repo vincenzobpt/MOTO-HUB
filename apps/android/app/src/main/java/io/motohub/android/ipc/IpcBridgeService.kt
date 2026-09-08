@@ -51,6 +51,7 @@ import io.motohub.android.encoding.VideoDeliveryProbe
 import io.motohub.android.session.DashboardDeliveryMonitor
 import io.motohub.android.session.ProjectionEventLog
 import io.motohub.android.tbox.FormedP2pGroup
+import io.motohub.android.data.MotorcycleProfileStore
 import io.motohub.android.tbox.ProfileOverride
 import io.motohub.android.tbox.TBoxEvent
 import io.motohub.android.tbox.TBoxModelProfile
@@ -375,6 +376,31 @@ class IpcBridgeService : Service() {
          * companion pushes is applied to these same stores, so a mismatch between what it sent
          * and what this returns is itself the finding.
          */
+        // The companion app's rider deleted or re-paired this motorcycle over there. Core's own
+        // garage entry for the same network name is what completedFrom() answers connect() with,
+        // so leaving it behind is what let a deleted profile go on refusing connects for support
+        // f27f3825 - see forgetMotorcycle() in the AIDL for that log.
+        //
+        // Deliberately by SSID and deliberately every match: the two garages mint their own ids,
+        // and a network name a rider has just thrown away should not survive in this process
+        // under any id at all.
+        override fun forgetMotorcycle(ssid: String?) {
+            val target = ssid?.trim().orEmpty()
+            if (target.isEmpty()) return
+            val store = MotorcycleProfileStore(this@IpcBridgeService)
+            val doomed = runCatching { store.loadAll() }
+                .getOrElse { emptyList() }
+                .filter { it.ssid.equals(target, ignoreCase = true) }
+            if (doomed.isEmpty()) return
+            doomed.forEach { store.delete(it.id) }
+            ProjectionEventLog.record(
+                "GARAGE",
+                "Core's own garage entry for $target forgotten at the companion app's request: " +
+                    "the rider deleted or re-paired that motorcycle over there, and a row left " +
+                    "here would go on completing every later connect."
+            )
+        }
+
         override fun getHandlebarState(): String =
             io.motohub.android.feature.controls.currentHandlebarState(this@IpcBridgeService)
                 .encode()
