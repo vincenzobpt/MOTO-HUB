@@ -133,12 +133,14 @@
     <!-- Source: feature/about/AboutScreen.kt -->
     <string name="legacy_experimental_software_e22071df">LOGICIEL EXPÉRIMENTAL</string>
     <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_no_network_called_1_s_has_been_seen_but_this_pho_3174d343">Aucun réseau nommé « %1$s » n\'a été vu, mais ce téléphone connaît « %2$s », qui n\'en diffère que par les espaces. Enregistre à nouveau pour conserver ce que tu as saisi.</string>
     <string name="legacy_open_github_repository_80f9bf71">Ouvrir le dépôt GitHub</string>
     <!-- Source: feature/about/AboutScreen.kt -->
     <string name="legacy_platform_9e635873">PLATEFORME</string>
     <!-- Source: feature/about/AboutScreen.kt -->
     <string name="legacy_source_support_aa797bf0">SOURCE ET SUPPORT</string>
     <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_use_1_s_ef5e7994">Utiliser %1$s</string>
     <string name="legacy_version_3fc0a8b8">VERSION</string>
     <!-- Source: feature/androidauto/AndroidAutoPreviewScreen.kt -->
     <string name="legacy_fullscreen_7d6157db">Plein écran</string>

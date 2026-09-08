@@ -125,9 +125,11 @@
     <string name="legacy_check_for_updates_66a2b53b">Procurar atualizações</string>
     <string name="legacy_close_3e2edd8">Fechar</string>
     <string name="legacy_experimental_software_e22071df">SOFTWARE EXPERIMENTAL</string>
+    <string name="legacy_no_network_called_1_s_has_been_seen_but_this_pho_3174d343">Não foi vista nenhuma rede chamada “%1$s”, mas este telemóvel conhece “%2$s”, que só difere nos espaços. Guarde de novo para manter o que escreveu.</string>
     <string name="legacy_open_github_repository_80f9bf71">Abrir o repositório GitHub</string>
     <string name="legacy_platform_9e635873">PLATAFORMA</string>
     <string name="legacy_source_support_aa797bf0">CÓDIGO E APOIO</string>
+    <string name="legacy_use_1_s_ef5e7994">Usar %1$s</string>
     <string name="legacy_version_3fc0a8b8">VERSÃO</string>
     <string name="legacy_fullscreen_7d6157db">Ecrã inteiro</string>
     <string name="legacy_address_or_coordinates_9e7a90a">Morada ou coordenadas</string>

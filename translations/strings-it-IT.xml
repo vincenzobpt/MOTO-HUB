@@ -125,9 +125,11 @@
     <string name="legacy_check_for_updates_66a2b53b">Controlla aggiornamenti</string>
     <string name="legacy_close_3e2edd8">Chiudi</string>
     <string name="legacy_experimental_software_e22071df">SOFTWARE SPERIMENTALE</string>
+    <string name="legacy_no_network_called_1_s_has_been_seen_but_this_pho_3174d343">Nessuna rete chiamata “%1$s” è stata vista, ma questo telefono conosce “%2$s”, che differisce solo negli spazi. Salva di nuovo per tenere quello che hai scritto.</string>
     <string name="legacy_open_github_repository_80f9bf71">Apri repository GitHub</string>
     <string name="legacy_platform_9e635873">PIATTAFORMA</string>
     <string name="legacy_source_support_aa797bf0">CODICE E SUPPORTO</string>
+    <string name="legacy_use_1_s_ef5e7994">Usa %1$s</string>
     <string name="legacy_version_3fc0a8b8">VERSIONE</string>
     <string name="legacy_fullscreen_7d6157db">Schermo intero</string>
     <string name="legacy_address_or_coordinates_9e7a90a">Indirizzo o coordinate</string>

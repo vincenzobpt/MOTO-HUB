@@ -126,15 +126,23 @@ fun ManualPairingScreen(
             // created that can never be joined.
             ssidSuggestion?.let { suggestion ->
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    // One sentence with both names in it, not four fragments glued around them:
+                    // a translator handed "No network called " and " has been seen, but this
+                    // phone knows " separately cannot move them, and every language that puts
+                    // its verb elsewhere would come out wrong. Same for the button.
                     Text(
-                        motoHubText("No network called ") + "\"" + ssid + "\"" +
-                            motoHubText(" has been seen, but this phone knows ") + "\"" + suggestion +
-                            "\"" + motoHubText(", which differs only in spacing. Save again to keep what you typed."),
+                        motoHubText(
+                            "No network called “%1\$s” has been seen, but this phone knows " +
+                                "“%2\$s”, which differs only in spacing. Save again to keep " +
+                                "what you typed.",
+                            ssid,
+                            suggestion
+                        ),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     TextButton(onClick = onAcceptSsidSuggestion) {
-                        Text(motoHubText("Use ") + suggestion)
+                        Text(motoHubText("Use %1\$s", suggestion))
                     }
                 }
             }

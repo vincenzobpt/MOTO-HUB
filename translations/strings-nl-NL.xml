@@ -133,12 +133,14 @@
     <!-- Source: feature/about/AboutScreen.kt -->
     <string name="legacy_experimental_software_e22071df">EXPERIMENTELE SOFTWARE</string>
     <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_no_network_called_1_s_has_been_seen_but_this_pho_3174d343">Er is geen netwerk met de naam “%1$s” gezien, maar deze telefoon kent “%2$s”, dat alleen in spaties verschilt. Sla nogmaals op om te behouden wat je hebt getypt.</string>
     <string name="legacy_open_github_repository_80f9bf71">GitHub-repository openen</string>
     <!-- Source: feature/about/AboutScreen.kt -->
     <string name="legacy_platform_9e635873">PLATFORM</string>
     <!-- Source: feature/about/AboutScreen.kt -->
     <string name="legacy_source_support_aa797bf0">BRONCODE &amp; ONDERSTEUNING</string>
     <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_use_1_s_ef5e7994">%1$s gebruiken</string>
     <string name="legacy_version_3fc0a8b8">VERSIE</string>
     <!-- Source: feature/androidauto/AndroidAutoPreviewScreen.kt -->
     <string name="legacy_fullscreen_7d6157db">Volledig scherm</string>
