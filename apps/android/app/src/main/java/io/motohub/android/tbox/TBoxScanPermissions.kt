@@ -92,16 +92,31 @@ internal object TBoxScanPermissions {
      * Ordered by what a reader should act on: a missing grant is permanent and fixable, location
      * services are a phone-wide toggle, and only when neither is the answer is throttling worth
      * mentioning - it is the one cause that goes away on its own.
+     *
+     * The toggle is read through [WifiDirectGate.locationEnabledOrNull] and not through
+     * [WifiDirectGate.isLocationEnabled], which answers `true` for a LocationManager that is
+     * missing or throws. That default is right where it lives - it gates a hint, and blocking a
+     * join that would have worked is the worse mistake - and wrong here, because it would send
+     * this line straight to the confident last branch and assert throttling about a phone nobody
+     * could ask. That is the same absent-vs-false conflation the report field beside it was made
+     * three-valued to avoid, and this line is the one an investigation reads first.
      */
     fun emptyScanCause(context: Context): String {
         val missing = missingFor(context).map { it.substringAfterLast('.') }
+        // One observation, not one per branch: two reads could disagree and the line would then
+        // describe a phone that never existed.
+        val locationEnabled = WifiDirectGate.locationEnabledOrNull(context)
         return when {
             missing.isNotEmpty() ->
                 "this app has not been granted ${missing.joinToString()}, so Android hands it " +
                     "an empty list whatever is on the air"
-            !WifiDirectGate.isLocationEnabled(context) ->
+            locationEnabled == false ->
                 "location services are switched off on this phone, and Android empties the Wi-Fi " +
                     "scan for every app while they are"
+            locationEnabled == null ->
+                "this app holds the grants, but whether location services are on could not be " +
+                    "read here - so this is either that toggle being off, which empties the scan " +
+                    "for every app, or the platform not having refreshed the list"
             else ->
                 "the platform has not refreshed the list, or scan throttling is in force"
         }

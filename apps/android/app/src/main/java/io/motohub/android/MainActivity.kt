@@ -65,6 +65,7 @@ import io.motohub.android.data.MotorcyclePhotoStore
 import io.motohub.android.data.MotorcycleProfileStore
 import io.motohub.android.session.AutoConnectDecision
 import io.motohub.android.session.autoConnectDecision
+import io.motohub.android.session.dashReachable
 import io.motohub.android.session.BikeWatch
 import io.motohub.android.session.shouldWatchForBike
 import io.motohub.android.session.MotorcycleProfile
@@ -884,12 +885,19 @@ class MainActivity : ComponentActivity() {
                     // Deliberately before the timestamp is stamped: a skip must not push the
                     // cooldown out, so the resume that finally finds the dash on the air is not
                     // made to wait for a decision that cost nothing.
+                    // Both rungs read ONCE and shared with the cancel evidence: asking twice
+                    // would spend a second scan read and could answer differently between the
+                    // decision and the observation that retires the evidence.
+                    val dashBroadcasting = viewModel.isDashBroadcasting()
+                    val associatedToDash = viewModel.isAssociatedToDash()
                     val decision = autoConnectDecision(
                         riderCancelled = viewModel.riderCancelledConnect,
                         previousAttempts = autoConnectAttempts,
-                        dashBroadcasting = viewModel.isDashBroadcasting(),
-                        associatedToDash = viewModel.isAssociatedToDash(),
-                        dashReachableWhenCancelled = viewModel.dashReachableWhenCancelled
+                        dashBroadcasting = dashBroadcasting,
+                        associatedToDash = associatedToDash,
+                        dashReachableWhenCancelled = viewModel.dashReachableWhenCancelled(
+                            dashReachable(dashBroadcasting, associatedToDash)
+                        )
                     )
                     if (decision is AutoConnectDecision.Skip) {
                         ProjectionEventLog.debug("AUTO_CONNECT", "Auto-connect skipped; ${decision.reason}")

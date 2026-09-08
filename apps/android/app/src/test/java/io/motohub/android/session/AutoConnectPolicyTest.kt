@@ -163,6 +163,33 @@ class AutoConnectPolicyTest {
     }
 
     @Test
+    fun theCancelEvidenceIsRetiredByTheDashGoingOutOfReach() {
+        // Without this the sample taken at the cancel is a fact about the past, and nothing can
+        // contradict it: a rider who cancels standing at the motorcycle - which is where cancels
+        // happen - then rides away and comes back never gets an automatic attempt again for the
+        // life of the process, although the dash genuinely went out of reach and returned.
+        assertFalse(cancelEvidenceStillStands(dashReachableWhenCancelled = true, dashReachableNow = false))
+        // And once retired it stays retired: the return is then a change, so the cancel lifts.
+        assertEquals(
+            AutoConnectDecision.Go,
+            decide(
+                riderCancelled = true,
+                associatedToDash = true,
+                dashReachableWhenCancelled = cancelEvidenceStillStands(true, dashReachableNow = false)
+            )
+        )
+    }
+
+    @Test
+    fun butStayingInReachDoesNotRetireIt() {
+        // The other direction, and the one that must not regress: while the dash has been within
+        // reach continuously since the cancel, nothing has changed and the cancel stands.
+        assertTrue(cancelEvidenceStillStands(dashReachableWhenCancelled = true, dashReachableNow = true))
+        // A cancel made out of reach never had the evidence to begin with.
+        assertFalse(cancelEvidenceStillStands(dashReachableWhenCancelled = false, dashReachableNow = true))
+    }
+
+    @Test
     fun everySkipSaysWhyInTheLog() {
         // These strings land in a rider's log and are the only account of a connect that did not
         // happen; an empty one would read as a bug in the app rather than a decision.

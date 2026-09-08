@@ -122,3 +122,21 @@ fun autoConnectDecision(
  */
 fun dashReachable(dashBroadcasting: Boolean?, associatedToDash: Boolean): Boolean =
     dashBroadcasting == true || associatedToDash
+
+/**
+ * Whether the "already within reach when they cancelled" evidence still stands, given what can be
+ * seen now.
+ *
+ * [autoConnectDecision] lifts a cancel when the dash BECOMES reachable, and it compares against a
+ * fact sampled at the moment of the cancel. Left at that, the fact is about the past and nothing
+ * can ever contradict it: a rider who cancels standing at the motorcycle - which is where cancels
+ * happen, and the case [dashReachableWhenCancelled] was added for - then rides away and comes
+ * back gets no automatic attempt for the whole life of the process, although the dash really did
+ * go out of reach and return.
+ *
+ * Seeing it out of reach IS that contradiction, and from there a return is a change again. One
+ * line, and it lives here rather than in a ViewModel because all four call sites across the three
+ * editions have to retire the evidence by the same rule they read it by.
+ */
+fun cancelEvidenceStillStands(dashReachableWhenCancelled: Boolean, dashReachableNow: Boolean): Boolean =
+    dashReachableWhenCancelled && dashReachableNow

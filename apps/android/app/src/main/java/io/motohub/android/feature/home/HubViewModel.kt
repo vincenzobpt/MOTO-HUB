@@ -13,6 +13,7 @@ import io.motohub.android.feature.pairing.manualSsidVerdict
 import io.motohub.android.feature.pairing.withModelIdForConnectionMode
 import io.motohub.android.session.ConnectionProgressNotification
 import io.motohub.android.session.HubSessionState
+import io.motohub.android.session.cancelEvidenceStillStands
 import io.motohub.android.session.dashReachable
 import io.motohub.android.session.MotorcycleProfile
 import io.motohub.android.session.SessionPhase
@@ -126,15 +127,27 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Whether the motorcycle was ALREADY within reach when the rider cancelled - see
-     * [dashReachable].
-     *
-     * Recorded at the cancel, not read at the retry, because the question [autoConnectDecision]
-     * asks is whether anything has CHANGED since the rider said no. Without this the association
-     * rung lifts every cancel made while standing at the motorcycle, which is where cancels
-     * happen: that is rider c110050c's report with an extra step.
+     * [dashReachable]. Sampled at the cancel, and retired by [dashReachableWhenCancelled] once
+     * the dash has been seen out of reach since.
      */
-    var dashReachableWhenCancelled: Boolean = false
-        private set
+    private var cancelledWithDashInReach: Boolean = false
+
+    /**
+     * The same fact, answered against what can be seen NOW: true only while the dash has been
+     * within reach continuously since the rider said no.
+     *
+     * A function and not the field it reads, because the evidence has to be RETIRED by an
+     * observation and a plain field let every caller read it without ever making one. A fact
+     * about the past cannot be contradicted, so the cancel of a rider standing at their
+     * motorcycle - which is where cancels happen - stood for the whole life of the process even
+     * after they had genuinely ridden away and come back. See [cancelEvidenceStillStands], which
+     * holds the rule for all three editions.
+     */
+    fun dashReachableWhenCancelled(dashReachableNow: Boolean): Boolean {
+        cancelledWithDashInReach =
+            cancelEvidenceStillStands(cancelledWithDashInReach, dashReachableNow)
+        return cancelledWithDashInReach
+    }
 
     /**
      * Whether the active motorcycle is visibly on the air - tri-state, see
@@ -545,7 +558,7 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
         // reconnect after a mode stops, or an auto-connect the policy did let through. Whichever
         // it was, the earlier cancel has been answered and must not keep suppressing anything.
         riderCancelledConnect = false
-        dashReachableWhenCancelled = false
+        cancelledWithDashInReach = false
         // "Is Wi-Fi on" is the wrong question for a dash that joins a network the phone hosts:
         // tethering turns the station radio off, so that check reports false for the whole life
         // of a working PHONE_HOTSPOT session and used to block every connect through here -
@@ -826,8 +839,9 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
         }
         ProjectionEventLog.record("CONNECTION", "User cancelled the connection attempt.")
         riderCancelledConnect = true
-        // Sampled here and never again: this is the "before" the retry is compared against.
-        dashReachableWhenCancelled = dashReachable(isDashBroadcasting(), isAssociatedToDash())
+        // The "before" the retry is compared against. Sampled here, and retired by
+        // dashReachableWhenCancelled() the first time the dash is seen out of reach.
+        cancelledWithDashInReach = dashReachable(isDashBroadcasting(), isAssociatedToDash())
         viewModelScope.launch {
             activeJob.cancelAndJoin()
             transport.stop()
