@@ -7,6 +7,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import io.motohub.android.i18n.MotoHubStrings
 
 /**
  * Stage 1 of the Core/Pro split removed the GPL T-Box transport (hudlib) from the PRO flavor — it
@@ -26,7 +27,10 @@ internal fun proFeatureUnavailable(context: Context, featureLabel: String): Bool
     Handler(Looper.getMainLooper()).post {
         Toast.makeText(
             context.applicationContext,
-            "$featureLabel in MOTO-HUB Advanced is coming soon (use MOTO-HUB Core for now).",
+            MotoHubStrings.get(
+                "%1\$s in MOTO-HUB Advanced is coming soon (use MOTO-HUB Core for now).",
+                featureLabel
+            ),
             Toast.LENGTH_LONG
         ).show()
     }

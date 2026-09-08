@@ -1575,7 +1575,7 @@
     <string name="legacy_bluetooth_is_off_turn_it_on_then_pair_the_remote_356459fc">블루투스가 꺼져 있습니다 — 켠 다음 리모컨을 키보드로 페어링하세요.</string>
     <string name="legacy_allow_bluetooth_access_so_the_app_can_read_the_r_bf160fa2">앱이 리모컨의 버튼 입력을 읽을 수 있도록 블루투스 접근을 허용하세요.</string>
     <string name="legacy_bluetooth_is_on_a_hid_remote_doesn_t_show_up_her_77795af8">블루투스가 켜져 있습니다. HID 리모컨은 연결된 기기로 여기에 표시되지 않습니다 — 입력이 계속 인식되지 않으면 시스템 블루투스 설정에서 페어링되어 있는지, 접근성이 켜져 있는지 확인하세요.</string>
-    <string name="legacy_or_right_now_without_the_t_box_21ba0502">또는 T-BOX 없이 지금 바로</string>
+    <string name="legacy_or_right_now_without_the_t_box_21ba0502">또는 지금 바로, T-BOX 없이</string>
     <string name="legacy_android_auto_straight_to_your_phone_f0cc540c">Android Auto — 휴대폰에서 바로</string>
     <string name="legacy_input_protocol_8ff4fe4e">입력 프로토콜</string>
     <string name="legacy_most_dashboards_send_buttons_as_avrcp_media_keys_6e1dd82c">대부분의 계기판은 버튼을 AVRCP 미디어 키로 보냅니다 — AVRCP로 두세요. 리모컨이 블루투스 키보드로 페어링되고 아래에 입력이 전혀 표시되지 않을 때만 HID를 선택하세요.</string>
@@ -1867,30 +1867,30 @@
     <string name="legacy_live_log_831d05f0">실시간 로그</string>
     <string name="legacy_nothing_yet_power_the_dash_on_then_run_the_exper_b1ec5c8f">아직 없습니다. 계기판을 켠 다음 실험을 실행하세요.</string>
     <string name="legacy_moto_hub_closed_unexpectedly_30f439d7">MOTO-HUB가 예기치 않게 종료되었습니다</string>
-    <string name="legacy_the_last_time_you_used_moto_hub_it_stopped_becau_8448d27c">지난번 MOTO-HUB 사용 중 오류로 중단되었습니다. 진단 보고서를 보내야 개발자가 원인을 찾을 수 있습니다.</string>
+    <string name="legacy_the_last_time_you_used_moto_hub_it_stopped_becau_8448d27c">지난번에 MOTO-HUB를 사용할 때 오류로 인해 앱이 중단되었습니다. 진단 보고서를 보내면 개발자가 원인을 찾을 수 있습니다.</string>
     <string name="legacy_the_report_contains_your_motorcycle_s_dashboard__f4208b9f">보고서에는 오토바이 계기판 모델, 휴대폰 모델, Android 및 Android Auto 버전, 설치된 MOTO-HUB 버전, 그리고 오류를 포함한 애플리케이션 로그가 들어 있습니다. 비밀번호, 위치, 하드웨어 주소는 절대 포함되지 않습니다.</string>
-    <string name="legacy_send_reports_automatically_from_now_on_7cdd2209">이제부터 보고서 자동 전송</string>
+    <string name="legacy_send_reports_automatically_from_now_on_7cdd2209">이제부터 보고서를 자동으로 보내기</string>
     <string name="legacy_send_report_55908cac">보고서 보내기</string>
     <string name="legacy_how_your_data_is_handled_ff77c87f">데이터 처리 방식</string>
     <string name="legacy_not_now_e202d7e9">나중에</string>
-    <string name="legacy_help_improve_moto_hub_9bf5292c">MOTO-HUB 개선에 참여하기</string>
+    <string name="legacy_help_improve_moto_hub_9bf5292c">MOTO-HUB 개선에 도움 주기</string>
     <string name="legacy_moto_hub_can_send_a_diagnostics_report_to_the_de_36cc6ba6">MOTO-HUB는 개발자에게 진단 보고서를 보낼 수 있습니다. 오토바이 계기판 모델, 휴대폰 모델, 설치된 Android·Android Auto·MOTO-HUB 버전, 애플리케이션 로그가 포함됩니다. 비밀번호, 위치, 하드웨어 주소는 절대 포함되지 않습니다.</string>
-    <string name="legacy_reports_go_out_at_most_once_a_day_after_an_updat_6fc12b8d">보고서는 하루에 최대 한 번, 업데이트 후 또는 비정상 종료 후에만, 그리고 인터넷에 연결된 상태에서만 전송됩니다. Support ID는 설정 ▸ 진단에 표시되며, 그곳에서 언제든지 켜고 끌 수 있습니다.</string>
-    <string name="legacy_send_reports_5c810947">보고서 전송</string>
-    <string name="legacy_diagnostics_privacy_notice_1f708f84">진단 개인정보 처리 안내</string>
-    <string name="legacy_support_id_5239972c">Support ID</string>
-    <string name="legacy_moto_hub_support_id_7149b87">MOTO-HUB Support ID</string>
-    <string name="legacy_tap_to_copy_quote_it_when_asking_for_help_it_ide_edc7231">탭하여 복사하세요. 도움을 요청할 때 함께 알려 주세요. 이 휴대폰과 오토바이를 식별합니다.</string>
-    <string name="legacy_support_id_copied_63da1e38">Support ID를 복사했습니다</string>
-    <string name="legacy_what_gets_sent_f4a13bbf">전송되는 항목</string>
-    <string name="legacy_read_what_a_report_contains_then_choose_whether__e679dae">보고서에 무엇이 담기는지 읽어 보고 전송 여부를 선택하세요</string>
-    <string name="legacy_who_holds_your_reports_how_long_they_are_kept_an_ea54a6b7">누가 보고서를 보관하는지, 얼마나 오래 보관하는지, 어떻게 삭제를 요청하는지</string>
-    <string name="legacy_send_diagnostics_now_9368c9ea">지금 진단 보내기</string>
+    <string name="legacy_reports_go_out_at_most_once_a_day_after_an_updat_6fc12b8d">보고서는 하루 최대 한 번, 업데이트 후 또는 비정상 종료 후에, 인터넷에 연결된 회선에서만 전송됩니다. 지원 ID는 설정 ▸ 진단에 표시되며, 그곳에서 언제든지 켜거나 끌 수 있습니다.</string>
+    <string name="legacy_send_reports_5c810947">보고서 보내기</string>
+    <string name="legacy_diagnostics_privacy_notice_1f708f84">진단 개인정보 처리방침</string>
+    <string name="legacy_support_id_5239972c">지원 ID</string>
+    <string name="legacy_moto_hub_support_id_7149b87">MOTO-HUB 지원 ID</string>
+    <string name="legacy_tap_to_copy_quote_it_when_asking_for_help_it_ide_edc7231">탭하여 복사하세요. 도움을 요청할 때 알려 주세요. 이 휴대폰과 오토바이를 식별합니다.</string>
+    <string name="legacy_support_id_copied_63da1e38">지원 ID를 복사했습니다</string>
+    <string name="legacy_what_gets_sent_f4a13bbf">전송되는 내용</string>
+    <string name="legacy_read_what_a_report_contains_then_choose_whether__e679dae">보고서에 무엇이 담기는지 읽고 전송 여부를 선택하세요</string>
+    <string name="legacy_who_holds_your_reports_how_long_they_are_kept_an_ea54a6b7">누가 보고서를 보관하는지, 보관 기간, 그리고 삭제를 요청하는 방법</string>
+    <string name="legacy_send_diagnostics_now_9368c9ea">지금 진단 정보 보내기</string>
     <string name="legacy_this_build_has_no_collector_configured_e224996">이 빌드에는 수집 서버가 설정되어 있지 않습니다</string>
     <string name="legacy_logging_is_off_the_log_would_end_at_1_s_c9d7198e">로깅이 꺼져 있습니다. 로그는 %1$s에서 끝납니다</string>
     <string name="legacy_logging_is_off_there_is_no_log_to_send_eca8d32d">로깅이 꺼져 있어 보낼 로그가 없습니다</string>
-    <string name="legacy_send_diagnostics_automatically_880f35b7">진단 자동 전송</string>
-    <string name="legacy_sends_the_report_above_to_the_developer_at_most__8689def0">위 보고서를 하루에 최대 한 번, 업데이트 후 또는 비정상 종료 후에, 인터넷에 연결된 상태에서만 개발자에게 보냅니다. 계기판과 휴대폰 모델, 앱 버전, 애플리케이션 로그가 포함되며 비밀번호, 위치, 하드웨어 주소는 절대 포함되지 않습니다.</string>
+    <string name="legacy_send_diagnostics_automatically_880f35b7">진단 정보 자동 전송</string>
+    <string name="legacy_sends_the_report_above_to_the_developer_at_most__8689def0">위 보고서를 개발자에게 하루 최대 한 번, 업데이트 후 또는 비정상 종료 후에, 인터넷에 연결된 회선에서만 보냅니다. 계기판과 휴대폰 모델, 앱 버전, 애플리케이션 로그가 포함되며 비밀번호, 위치, 하드웨어 주소는 절대 포함되지 않습니다.</string>
     <string name="legacy_logging_is_off_d9325d5a">로깅이 꺼져 있음</string>
     <string name="legacy_nothing_has_been_recorded_since_1_s_what_was_log_1be484ac">%1$s 이후로 기록된 내용이 없습니다. 그 전에 기록된 내용은 그대로 남아 있습니다. 로깅을 끄면 새 기록만 멈출 뿐, 기존 기록은 삭제되지 않습니다.</string>
     <string name="legacy_nothing_has_been_recorded_and_there_is_no_earlie_dd873fa0">기록된 내용이 없고, 이전 로그도 없습니다.</string>
@@ -1963,4 +1963,11 @@
     <string name="legacy_try_anyway_909523a8">그래도 시도</string>
     <string name="legacy_waiting_for_s_c5c92cf8">%s 대기 중</string>
     <string name="legacy_waiting_for_the_motorcycle_24d361aa">오토바이 대기 중</string>
+    <!-- Source: trips/TripAnalysisScreen.kt, home/HubHomeScreen.kt, companion, ai/AiPreset, and the service notifications - literals that reached a lookup indirectly, or were never wrapped -->
+    <string name="legacy_1_s_in_moto_hub_advanced_is_coming_soon_use_moto_6bcb37c0">%1$s은(는) MOTO-HUB Advanced에 곧 추가됩니다 (지금은 MOTO-HUB Core를 사용하세요).</string>
+    <string name="legacy_import_qr_6b03505c">QR 가져오기</string>
+    <string name="legacy_scan_new_qr_ed7e6784">새 QR 스캔</string>
+    <!-- Source: feature/home - the secondary actions under the pairing and projection cards -->
+    <string name="legacy_how_to_start_android_auto_e44c5dd3">Android Auto 시작 방법</string>
+    <string name="legacy_open_wi_fi_settings_299670db">Wi-Fi 설정 열기</string>
 </resources>

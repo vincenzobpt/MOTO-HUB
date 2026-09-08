@@ -420,7 +420,7 @@
     <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
     <string name="legacy_elevation_last_hour_10deed1a">ALTITUDE / DERNIÈRE HEURE</string>
     <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
-    <string name="legacy_now_12eb6">MAINTENANT</string>
+    <string name="legacy_now_12eb6">ACTUEL</string>
     <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
     <string name="legacy_waiting_for_gnss_elevation_f069100e">EN ATTENTE DE L\'ALTITUDE GNSS</string>
     <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
@@ -432,7 +432,7 @@
     <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
     <string name="legacy_phone_system_b2b20c1d">TÉLÉPHONE // SYSTÈME</string>
     <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
-    <string name="legacy_turn_rate_9cfa82a3">VITESSE DE ROTATION</string>
+    <string name="legacy_turn_rate_9cfa82a3">VIT. ROTATION</string>
     <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
     <string name="legacy_ahead_3b5bda1">DEVANT</string>
     <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
@@ -1580,7 +1580,7 @@
     <string name="legacy_bluetooth_is_off_turn_it_on_then_pair_the_remote_356459fc">Le Bluetooth est éteint — activez-le, puis associez la télécommande en tant que clavier.</string>
     <string name="legacy_allow_bluetooth_access_so_the_app_can_read_the_r_bf160fa2">Autorisez l\'accès au Bluetooth pour que l\'application puisse lire les appuis de la télécommande.</string>
     <string name="legacy_bluetooth_is_on_a_hid_remote_doesn_t_show_up_her_77795af8">Le Bluetooth est activé. Une télécommande HID n\'apparaît pas ici comme appareil connecté — si les appuis ne sont toujours pas reconnus, vérifiez qu\'elle est associée dans les réglages Bluetooth du système et que l\'Accessibilité est activée.</string>
-    <string name="legacy_or_right_now_without_the_t_box_21ba0502">OU TOUT DE SUITE, SANS T-BOX</string>
+    <string name="legacy_or_right_now_without_the_t_box_21ba0502">OU MAINTENANT, SANS T-BOX</string>
     <string name="legacy_android_auto_straight_to_your_phone_f0cc540c">Android Auto — directement sur le téléphone</string>
     <string name="legacy_input_protocol_8ff4fe4e">PROTOCOLE D\'ENTRÉE</string>
     <string name="legacy_most_dashboards_send_buttons_as_avrcp_media_keys_6e1dd82c">La plupart des tableaux de bord envoient les boutons comme touches multimédia AVRCP — laissez AVRCP. Choisissez HID seulement si la télécommande s\'associe comme clavier Bluetooth et que ses appuis n\'apparaissent jamais ci-dessous.</string>
@@ -1636,7 +1636,7 @@
     <string name="legacy_easyconn_endpoint_f9ecbf07">Point de terminaison EasyConn</string>
     <string name="legacy_nsd_package_bfb67045">Paquet NSD</string>
     <string name="legacy_last_discovered_a02851f2">Dernière détection</string>
-    <string name="legacy_diagnostics_54322d8c">DIAGNOSTICS</string>
+    <string name="legacy_diagnostics_54322d8c">DIAGNOSTIC</string>
     <string name="legacy_if_easyconn_discovery_keeps_failing_briefly_reco_b8d938f8">Si la détection EasyConn continue d\'échouer, reconnectez-vous brièvement à ce T-Box et sondez directement ses ports connus (10915-10935) pour voir lequel répond réellement.</string>
     <string name="legacy_display_8e70a4a2">AFFICHAGE</string>
     <string name="legacy_tft_capture_area_ad3b6865">Zone de capture TFT</string>
@@ -1872,7 +1872,7 @@
     <string name="legacy_live_log_831d05f0">JOURNAL EN DIRECT</string>
     <string name="legacy_nothing_yet_power_the_dash_on_then_run_the_exper_b1ec5c8f">Rien pour l\'instant. Allumez le tableau de bord, puis lancez les tests.</string>
     <string name="legacy_moto_hub_closed_unexpectedly_30f439d7">MOTO-HUB s\'est fermé de façon inattendue</string>
-    <string name="legacy_the_last_time_you_used_moto_hub_it_stopped_becau_8448d27c">La dernière fois que vous avez utilisé MOTO-HUB, il s\'est arrêté à cause d\'une erreur. C\'est l\'envoi du rapport de diagnostic qui permet au développeur d\'en trouver la cause.</string>
+    <string name="legacy_the_last_time_you_used_moto_hub_it_stopped_becau_8448d27c">La dernière fois que vous avez utilisé MOTO-HUB, l\'application s\'est arrêtée à cause d\'une erreur. Envoyer le rapport de diagnostic est ce qui permet au développeur d\'en trouver la cause.</string>
     <string name="legacy_the_report_contains_your_motorcycle_s_dashboard__f4208b9f">Le rapport contient le modèle du tableau de bord de votre moto, le modèle de votre téléphone, les versions d\'Android et d\'Android Auto, les versions de MOTO-HUB installées et le journal de l\'application avec l\'erreur. Les mots de passe, les positions et les adresses matérielles n\'y figurent jamais.</string>
     <string name="legacy_send_reports_automatically_from_now_on_7cdd2209">Envoyer les rapports automatiquement à partir de maintenant</string>
     <string name="legacy_send_report_55908cac">Envoyer le rapport</string>
@@ -1880,22 +1880,22 @@
     <string name="legacy_not_now_e202d7e9">Pas maintenant</string>
     <string name="legacy_help_improve_moto_hub_9bf5292c">Aidez à améliorer MOTO-HUB</string>
     <string name="legacy_moto_hub_can_send_a_diagnostics_report_to_the_de_36cc6ba6">MOTO-HUB peut envoyer un rapport de diagnostic au développeur : le modèle du tableau de bord de votre moto, le modèle de votre téléphone, les versions d\'Android, d\'Android Auto et de MOTO-HUB installées, et le journal de l\'application. Les mots de passe, les positions et les adresses matérielles n\'y figurent jamais.</string>
-    <string name="legacy_reports_go_out_at_most_once_a_day_after_an_updat_6fc12b8d">Les rapports partent au plus une fois par jour, après une mise à jour ou après un plantage, et uniquement via une connexion avec accès à Internet. Votre Support ID figure dans Paramètres ▸ Diagnostic, où vous pouvez l\'activer ou le désactiver à tout moment.</string>
+    <string name="legacy_reports_go_out_at_most_once_a_day_after_an_updat_6fc12b8d">Les rapports partent au maximum une fois par jour, après une mise à jour ou après un plantage, et uniquement via une connexion avec accès à Internet. Votre ID d\'assistance figure dans Réglages ▸ Diagnostic, où vous pouvez activer ou désactiver cela à tout moment.</string>
     <string name="legacy_send_reports_5c810947">Envoyer les rapports</string>
-    <string name="legacy_diagnostics_privacy_notice_1f708f84">Avis de confidentialité du diagnostic</string>
-    <string name="legacy_support_id_5239972c">Support ID</string>
-    <string name="legacy_moto_hub_support_id_7149b87">MOTO-HUB Support ID</string>
-    <string name="legacy_tap_to_copy_quote_it_when_asking_for_help_it_ide_edc7231">Touchez pour copier. Indiquez-le quand vous demandez de l\'aide : il identifie ce téléphone et cette moto.</string>
-    <string name="legacy_support_id_copied_63da1e38">Support ID copié</string>
+    <string name="legacy_diagnostics_privacy_notice_1f708f84">Avis de confidentialité des diagnostics</string>
+    <string name="legacy_support_id_5239972c">ID d\'assistance</string>
+    <string name="legacy_moto_hub_support_id_7149b87">ID d\'assistance MOTO-HUB</string>
+    <string name="legacy_tap_to_copy_quote_it_when_asking_for_help_it_ide_edc7231">Touchez pour copier. Mentionnez-le en demandant de l\'aide : il identifie ce téléphone et cette moto.</string>
+    <string name="legacy_support_id_copied_63da1e38">ID d\'assistance copié</string>
     <string name="legacy_what_gets_sent_f4a13bbf">Ce qui est envoyé</string>
-    <string name="legacy_read_what_a_report_contains_then_choose_whether__e679dae">Lisez ce que contient un rapport, puis choisissez si vous voulez les envoyer</string>
+    <string name="legacy_read_what_a_report_contains_then_choose_whether__e679dae">Lisez ce que contient un rapport, puis choisissez de les envoyer ou non</string>
     <string name="legacy_who_holds_your_reports_how_long_they_are_kept_an_ea54a6b7">Qui conserve vos rapports, combien de temps ils sont gardés et comment les faire supprimer</string>
     <string name="legacy_send_diagnostics_now_9368c9ea">Envoyer le diagnostic maintenant</string>
     <string name="legacy_this_build_has_no_collector_configured_e224996">Cette version n\'a aucun collector configuré</string>
     <string name="legacy_logging_is_off_the_log_would_end_at_1_s_c9d7198e">La journalisation est désactivée ; le journal s\'arrêterait à %1$s</string>
     <string name="legacy_logging_is_off_there_is_no_log_to_send_eca8d32d">La journalisation est désactivée ; il n\'y a aucun journal à envoyer</string>
     <string name="legacy_send_diagnostics_automatically_880f35b7">Envoyer le diagnostic automatiquement</string>
-    <string name="legacy_sends_the_report_above_to_the_developer_at_most__8689def0">Envoie le rapport ci-dessus au développeur au plus une fois par jour, après une mise à jour ou après un plantage - uniquement via une connexion avec accès à Internet. Modèles de tableau de bord et de téléphone, versions de l\'application et journal de l\'application ; jamais de mots de passe, de positions ni d\'adresses matérielles.</string>
+    <string name="legacy_sends_the_report_above_to_the_developer_at_most__8689def0">Envoie le rapport ci-dessus au développeur au maximum une fois par jour, après une mise à jour ou après un plantage, et uniquement via une connexion avec accès à Internet. Modèles de tableau de bord et de téléphone, versions de l\'application et journal de l\'application ; jamais de mots de passe, de positions ni d\'adresses matérielles.</string>
     <string name="legacy_logging_is_off_d9325d5a">JOURNALISATION DÉSACTIVÉE</string>
     <string name="legacy_nothing_has_been_recorded_since_1_s_what_was_log_1be484ac">Plus rien n\'a été enregistré depuis %1$s. Ce qui a été journalisé avant est conservé : désactiver la journalisation arrête les nouvelles entrées, elle n\'efface jamais les anciennes.</string>
     <string name="legacy_nothing_has_been_recorded_and_there_is_no_earlie_dd873fa0">Rien n\'a été enregistré, et il n\'existe pas non plus de journal antérieur.</string>
@@ -1968,4 +1968,11 @@
     <string name="legacy_try_anyway_909523a8">Essayer quand même</string>
     <string name="legacy_waiting_for_s_c5c92cf8">En attente de %s</string>
     <string name="legacy_waiting_for_the_motorcycle_24d361aa">En attente de la moto</string>
+    <!-- Source: trips/TripAnalysisScreen.kt, home/HubHomeScreen.kt, companion, ai/AiPreset, and the service notifications - literals that reached a lookup indirectly, or were never wrapped -->
+    <string name="legacy_1_s_in_moto_hub_advanced_is_coming_soon_use_moto_6bcb37c0">%1$s arrive bientôt dans MOTO-HUB Advanced (utilisez MOTO-HUB Core pour l\'instant).</string>
+    <string name="legacy_import_qr_6b03505c">Importer un QR</string>
+    <string name="legacy_scan_new_qr_ed7e6784">Scanner un nouveau QR</string>
+    <!-- Source: feature/home - the secondary actions under the pairing and projection cards -->
+    <string name="legacy_how_to_start_android_auto_e44c5dd3">Comment démarrer Android Auto</string>
+    <string name="legacy_open_wi_fi_settings_299670db">Ouvrir les réglages Wi-Fi</string>
 </resources>

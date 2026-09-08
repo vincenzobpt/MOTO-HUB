@@ -1201,7 +1201,7 @@ private fun SecondaryAction(text: String, onClick: () -> Unit, modifier: Modifie
         shape = RoundedCornerShape(14.dp),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
     ) {
-        Text(text)
+        Text(motoHubText(text))
     }
 }
 

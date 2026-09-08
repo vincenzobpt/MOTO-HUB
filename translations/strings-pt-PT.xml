@@ -278,7 +278,7 @@
     <string name="legacy_g_force_fca415c5">FORÇA G</string>
     <string name="legacy_motion_sensors_b224e96f">SENSORES DE MOVIMENTO</string>
     <string name="legacy_phone_system_b2b20c1d">TELEMÓVEL // SISTEMA</string>
-    <string name="legacy_turn_rate_9cfa82a3">VELOCIDADE ANGULAR</string>
+    <string name="legacy_turn_rate_9cfa82a3">VEL. ANGULAR</string>
     <string name="legacy_ahead_3b5bda1">À FRENTE</string>
     <string name="legacy_compass_sun_45d9eeda">BÚSSOLA // SOL</string>
     <string name="legacy_left_239807">ESQUERDA</string>
@@ -1004,7 +1004,7 @@
     <string name="legacy_bluetooth_is_off_turn_it_on_then_pair_the_remote_356459fc">O Bluetooth está desligado — liga-o e emparelha o comando como teclado.</string>
     <string name="legacy_allow_bluetooth_access_so_the_app_can_read_the_r_bf160fa2">Permite o acesso ao Bluetooth para que a aplicação possa ler as pressões do comando.</string>
     <string name="legacy_bluetooth_is_on_a_hid_remote_doesn_t_show_up_her_77795af8">O Bluetooth está ligado. Um comando HID não aparece aqui como dispositivo ligado — se as pressões continuarem por reconhecer, verifica que está emparelhado nas definições Bluetooth do sistema e que a Acessibilidade está ativada.</string>
-    <string name="legacy_or_right_now_without_the_t_box_21ba0502">OU AGORA MESMO, SEM T-BOX</string>
+    <string name="legacy_or_right_now_without_the_t_box_21ba0502">OU JÁ, SEM O T-BOX</string>
     <string name="legacy_android_auto_straight_to_your_phone_f0cc540c">Android Auto — diretamente no telemóvel</string>
     <string name="legacy_input_protocol_8ff4fe4e">PROTOCOLO DE ENTRADA</string>
     <string name="legacy_most_dashboards_send_buttons_as_avrcp_media_keys_6e1dd82c">A maioria dos painéis envia os botões como teclas multimédia AVRCP — deixa AVRCP. Escolhe HID apenas se o comando emparelhar como teclado Bluetooth e as suas pressões nunca aparecerem em baixo.</string>
@@ -1173,7 +1173,7 @@
     <string name="legacy_the_video_format_search_is_waiting_ac28c9a">A procura do formato de vídeo está à espera</string>
     <string name="legacy_moto_hub_is_still_looking_for_a_video_format_you_44b4c53c">O MOTO-HUB continua à procurar um formato de vídeo que o seu painel consiga mostrar, mas só pode testar um enquanto o Android Auto está a funcionar: o Ride Dashboard envia sempre o seu próprio formato.</string>
     <string name="legacy_connect_once_with_android_auto_and_the_search_mo_71871380">Ligue-se uma vez com o Android Auto e a procura continua sozinha.</string>
-    <string name="legacy_got_it_7f79855f">Entendido</string>
+    <string name="legacy_got_it_7f79855f">Percebi</string>
 
     <!-- ===========================================================
          Catalogue sweep, 2026-08-24: strings this worktree draws but had no
@@ -1295,8 +1295,8 @@
     <string name="legacy_run_clock_experiments_8ad4688f">Executar experiências de relógio</string>
     <string name="legacy_live_log_831d05f0">REGISTO AO VIVO</string>
     <string name="legacy_nothing_yet_power_the_dash_on_then_run_the_exper_b1ec5c8f">Ainda nada. Ligue o painel e depois execute as experiências.</string>
-    <string name="legacy_moto_hub_closed_unexpectedly_30f439d7">O MOTO-HUB fechou inesperadamente</string>
-    <string name="legacy_the_last_time_you_used_moto_hub_it_stopped_becau_8448d27c">Da última vez que usou o MOTO-HUB, este parou devido a um erro. Enviar o relatório de diagnóstico é o que permite ao programador descobrir porquê.</string>
+    <string name="legacy_moto_hub_closed_unexpectedly_30f439d7">A MOTO-HUB fechou inesperadamente</string>
+    <string name="legacy_the_last_time_you_used_moto_hub_it_stopped_becau_8448d27c">Da última vez que usou a MOTO-HUB, a aplicação parou devido a um erro. Enviar o relatório de diagnóstico é o que permite ao programador descobrir porquê.</string>
     <string name="legacy_the_report_contains_your_motorcycle_s_dashboard__f4208b9f">O relatório contém o modelo do painel da sua mota, o modelo do seu telemóvel, as versões do Android e do Android Auto, as versões do MOTO-HUB instaladas e o registo da aplicação incluindo o erro. Palavras-passe, posições e endereços de hardware nunca são incluídos.</string>
     <string name="legacy_send_reports_automatically_from_now_on_7cdd2209">Enviar relatórios automaticamente a partir de agora</string>
     <string name="legacy_send_report_55908cac">Enviar relatório</string>
@@ -1304,22 +1304,22 @@
     <string name="legacy_not_now_e202d7e9">Agora não</string>
     <string name="legacy_help_improve_moto_hub_9bf5292c">Ajude a melhorar o MOTO-HUB</string>
     <string name="legacy_moto_hub_can_send_a_diagnostics_report_to_the_de_36cc6ba6">O MOTO-HUB pode enviar um relatório de diagnóstico ao programador: o modelo do painel da sua mota, o modelo do seu telemóvel, as versões do Android, do Android Auto e do MOTO-HUB instaladas e o registo da aplicação. Palavras-passe, posições e endereços de hardware nunca são incluídos.</string>
-    <string name="legacy_reports_go_out_at_most_once_a_day_after_an_updat_6fc12b8d">Os relatórios são enviados no máximo uma vez por dia, após uma atualização ou após uma falha, e apenas através de uma ligação com acesso à Internet. O seu Support ID aparece em Definições ▸ Diagnóstico, onde pode ativar ou desativar isto a qualquer momento.</string>
+    <string name="legacy_reports_go_out_at_most_once_a_day_after_an_updat_6fc12b8d">Os relatórios são enviados no máximo uma vez por dia, após uma atualização ou após uma falha, e apenas através de uma ligação com acesso à Internet. O seu ID de suporte aparece em Definições ▸ Diagnóstico, onde pode ativar ou desativar isto a qualquer momento.</string>
     <string name="legacy_send_reports_5c810947">Enviar relatórios</string>
-    <string name="legacy_diagnostics_privacy_notice_1f708f84">Aviso de privacidade do diagnóstico</string>
-    <string name="legacy_support_id_5239972c">Support ID</string>
-    <string name="legacy_moto_hub_support_id_7149b87">MOTO-HUB Support ID</string>
-    <string name="legacy_tap_to_copy_quote_it_when_asking_for_help_it_ide_edc7231">Toque para copiar. Indique-o quando pedir ajuda: identifica este telemóvel e esta mota.</string>
-    <string name="legacy_support_id_copied_63da1e38">Support ID copiado</string>
+    <string name="legacy_diagnostics_privacy_notice_1f708f84">Aviso de privacidade dos diagnósticos</string>
+    <string name="legacy_support_id_5239972c">ID de suporte</string>
+    <string name="legacy_moto_hub_support_id_7149b87">ID de suporte MOTO-HUB</string>
+    <string name="legacy_tap_to_copy_quote_it_when_asking_for_help_it_ide_edc7231">Toque para copiar. Indique-o ao pedir ajuda: identifica este telemóvel e esta mota.</string>
+    <string name="legacy_support_id_copied_63da1e38">ID de suporte copiado</string>
     <string name="legacy_what_gets_sent_f4a13bbf">O que é enviado</string>
-    <string name="legacy_read_what_a_report_contains_then_choose_whether__e679dae">Leia o que contém um relatório e depois escolha se os quer enviar</string>
-    <string name="legacy_who_holds_your_reports_how_long_they_are_kept_an_ea54a6b7">Quem guarda os seus relatórios, durante quanto tempo são mantidos e como pedir que sejam apagados</string>
+    <string name="legacy_read_what_a_report_contains_then_choose_whether__e679dae">Leia o que um relatório contém e depois escolha se os quer enviar</string>
+    <string name="legacy_who_holds_your_reports_how_long_they_are_kept_an_ea54a6b7">Quem guarda os seus relatórios, durante quanto tempo e como pedir a sua eliminação</string>
     <string name="legacy_send_diagnostics_now_9368c9ea">Enviar diagnóstico agora</string>
     <string name="legacy_this_build_has_no_collector_configured_e224996">Esta compilação não tem nenhum collector configurado</string>
     <string name="legacy_logging_is_off_the_log_would_end_at_1_s_c9d7198e">O registo está desativado; o log terminaria em %1$s</string>
     <string name="legacy_logging_is_off_there_is_no_log_to_send_eca8d32d">O registo está desativado; não há nenhum log para enviar</string>
     <string name="legacy_send_diagnostics_automatically_880f35b7">Enviar diagnóstico automaticamente</string>
-    <string name="legacy_sends_the_report_above_to_the_developer_at_most__8689def0">Envia o relatório acima ao programador no máximo uma vez por dia, após uma atualização ou após uma falha - apenas através de uma ligação com acesso à Internet. Modelos do painel e do telemóvel, versões da aplicação e registo da aplicação; nunca palavras-passe, posições ou endereços de hardware.</string>
+    <string name="legacy_sends_the_report_above_to_the_developer_at_most__8689def0">Envia o relatório acima ao programador no máximo uma vez por dia, após uma atualização ou após uma falha, e apenas através de uma ligação com acesso à Internet. Modelos do painel e do telemóvel, versões da aplicação e o registo da aplicação; nunca palavras-passe, posições ou endereços de hardware.</string>
     <string name="legacy_logging_is_off_d9325d5a">REGISTO DESATIVADO</string>
     <string name="legacy_nothing_has_been_recorded_since_1_s_what_was_log_1be484ac">Nada foi registado desde %1$s. O que foi registado antes é mantido - desativar o registo impede novas entradas, nunca apaga as antigas.</string>
     <string name="legacy_nothing_has_been_recorded_and_there_is_no_earlie_dd873fa0">Nada foi registado e também não existe um registo anterior.</string>
@@ -1392,4 +1392,11 @@
     <string name="legacy_try_anyway_909523a8">Tentar mesmo assim</string>
     <string name="legacy_waiting_for_s_c5c92cf8">À espera de %s</string>
     <string name="legacy_waiting_for_the_motorcycle_24d361aa">À espera da mota</string>
+    <!-- Source: trips/TripAnalysisScreen.kt, home/HubHomeScreen.kt, companion, ai/AiPreset, and the service notifications - literals that reached a lookup indirectly, or were never wrapped -->
+    <string name="legacy_1_s_in_moto_hub_advanced_is_coming_soon_use_moto_6bcb37c0">%1$s chega em breve ao MOTO-HUB Advanced (por agora use o MOTO-HUB Core).</string>
+    <string name="legacy_import_qr_6b03505c">Importar QR</string>
+    <string name="legacy_scan_new_qr_ed7e6784">Digitalizar novo QR</string>
+    <!-- Source: feature/home - the secondary actions under the pairing and projection cards -->
+    <string name="legacy_how_to_start_android_auto_e44c5dd3">Como iniciar o Android Auto</string>
+    <string name="legacy_open_wi_fi_settings_299670db">Abrir as definições de Wi-Fi</string>
 </resources>

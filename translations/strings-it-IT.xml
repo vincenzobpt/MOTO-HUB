@@ -278,7 +278,7 @@
     <string name="legacy_g_force_fca415c5">FORZA G</string>
     <string name="legacy_motion_sensors_b224e96f">SENSORI DI MOVIMENTO</string>
     <string name="legacy_phone_system_b2b20c1d">TELEFONO // SISTEMA</string>
-    <string name="legacy_turn_rate_9cfa82a3">VELOCITÀ DI ROTAZIONE</string>
+    <string name="legacy_turn_rate_9cfa82a3">VEL. ROTAZIONE</string>
     <string name="legacy_ahead_3b5bda1">AVANTI</string>
     <string name="legacy_compass_sun_45d9eeda">BUSSOLA // SOLE</string>
     <string name="legacy_left_239807">SINISTRA</string>
@@ -304,8 +304,8 @@
     <string name="legacy_rise_2662c9">ALBA</string>
     <string name="legacy_set_14042">TRAMONTO</string>
     <string name="legacy_sun_1422c">SOLE</string>
-    <string name="legacy_no_media_session_5cbc8365">-- NESSUNA SESSIONE MULTIMEDIALE --</string>
-    <string name="legacy_no_artwork_2acf3875">NESSUNA COPERTINA</string>
+    <string name="legacy_no_media_session_5cbc8365">-- NESSUNA SESSIONE MEDIA --</string>
+    <string name="legacy_no_artwork_2acf3875">SENZA COVER</string>
     <string name="legacy_now_playing_media_session_45191bd6">IN RIPRODUZIONE // SESSIONE MULTIMEDIALE</string>
     <string name="legacy_signal_coverage_fef46060">COPERTURA DEL SEGNALE</string>
     <string name="legacy_ground_speed_gps_c8f77ac7">VELOCITÀ AL SUOLO / GPS</string>
@@ -1173,7 +1173,7 @@
     <string name="legacy_the_video_format_search_is_waiting_ac28c9a">La ricerca del formato video è ferma</string>
     <string name="legacy_moto_hub_is_still_looking_for_a_video_format_you_44b4c53c">MOTO-HUB sta ancora cercando un formato video che il tuo cruscotto sappia mostrare, ma può provarne uno solo mentre Android Auto è in funzione: il Ride Dashboard manda sempre il suo formato.</string>
     <string name="legacy_connect_once_with_android_auto_and_the_search_mo_71871380">Collegati una volta con Android Auto e la ricerca prosegue da sola.</string>
-    <string name="legacy_got_it_7f79855f">Ho capito</string>
+    <string name="legacy_got_it_7f79855f">Capito</string>
 
     <!-- ===========================================================
          Catalogue sweep, 2026-08-24: strings this worktree draws but had no
@@ -1295,31 +1295,31 @@
     <string name="legacy_run_clock_experiments_8ad4688f">Esegui gli esperimenti sull\'orologio</string>
     <string name="legacy_live_log_831d05f0">LOG IN DIRETTA</string>
     <string name="legacy_nothing_yet_power_the_dash_on_then_run_the_exper_b1ec5c8f">Ancora niente. Accendi il cruscotto, poi esegui gli esperimenti.</string>
-    <string name="legacy_moto_hub_closed_unexpectedly_30f439d7">MOTO-HUB si è chiuso in modo imprevisto</string>
-    <string name="legacy_the_last_time_you_used_moto_hub_it_stopped_becau_8448d27c">L\'ultima volta che hai usato MOTO-HUB si è interrotto per un errore. Inviare il rapporto di diagnostica è ciò che permette allo sviluppatore di scoprire perché.</string>
+    <string name="legacy_moto_hub_closed_unexpectedly_30f439d7">MOTO-HUB si è chiuso in modo anomalo</string>
+    <string name="legacy_the_last_time_you_used_moto_hub_it_stopped_becau_8448d27c">L\'ultima volta che hai usato MOTO-HUB si è interrotto a causa di un errore. Inviare il report diagnostico è ciò che permette allo sviluppatore di scoprirne il motivo.</string>
     <string name="legacy_the_report_contains_your_motorcycle_s_dashboard__f4208b9f">Il rapporto contiene il modello del cruscotto della tua moto, il modello del telefono, le versioni di Android e Android Auto, le versioni di MOTO-HUB installate e il log dell\'applicazione compreso l\'errore. Password, posizioni e indirizzi hardware non sono mai inclusi.</string>
-    <string name="legacy_send_reports_automatically_from_now_on_7cdd2209">Invia i rapporti automaticamente d\'ora in poi</string>
-    <string name="legacy_send_report_55908cac">Invia il rapporto</string>
+    <string name="legacy_send_reports_automatically_from_now_on_7cdd2209">Invia i report automaticamente d\'ora in poi</string>
+    <string name="legacy_send_report_55908cac">Invia il report</string>
     <string name="legacy_how_your_data_is_handled_ff77c87f">Come vengono trattati i tuoi dati</string>
     <string name="legacy_not_now_e202d7e9">Non ora</string>
-    <string name="legacy_help_improve_moto_hub_9bf5292c">Aiuta a migliorare MOTO-HUB</string>
+    <string name="legacy_help_improve_moto_hub_9bf5292c">Aiutaci a migliorare MOTO-HUB</string>
     <string name="legacy_moto_hub_can_send_a_diagnostics_report_to_the_de_36cc6ba6">MOTO-HUB può inviare un rapporto di diagnostica allo sviluppatore: il modello del cruscotto della tua moto, il modello del telefono, le versioni di Android, Android Auto e MOTO-HUB installate e il log dell\'applicazione. Password, posizioni e indirizzi hardware non sono mai inclusi.</string>
-    <string name="legacy_reports_go_out_at_most_once_a_day_after_an_updat_6fc12b8d">I rapporti partono al massimo una volta al giorno, dopo un aggiornamento o dopo un errore, e solo su una connessione con accesso a Internet. Il tuo Support ID è indicato in Impostazioni ▸ Diagnostica, dove puoi attivare o disattivare tutto questo in qualsiasi momento.</string>
-    <string name="legacy_send_reports_5c810947">Invia i rapporti</string>
-    <string name="legacy_diagnostics_privacy_notice_1f708f84">Informativa sulla privacy della diagnostica</string>
-    <string name="legacy_support_id_5239972c">Support ID</string>
-    <string name="legacy_moto_hub_support_id_7149b87">MOTO-HUB Support ID</string>
-    <string name="legacy_tap_to_copy_quote_it_when_asking_for_help_it_ide_edc7231">Tocca per copiare. Citalo quando chiedi aiuto: identifica questo telefono e questa moto.</string>
-    <string name="legacy_support_id_copied_63da1e38">Support ID copiato</string>
-    <string name="legacy_what_gets_sent_f4a13bbf">Che cosa viene inviato</string>
-    <string name="legacy_read_what_a_report_contains_then_choose_whether__e679dae">Leggi che cosa contiene un rapporto, poi scegli se inviarli</string>
-    <string name="legacy_who_holds_your_reports_how_long_they_are_kept_an_ea54a6b7">Chi conserva i tuoi rapporti, per quanto tempo e come farli cancellare</string>
-    <string name="legacy_send_diagnostics_now_9368c9ea">Invia la diagnostica adesso</string>
+    <string name="legacy_reports_go_out_at_most_once_a_day_after_an_updat_6fc12b8d">I report partono al massimo una volta al giorno, dopo un aggiornamento o dopo un crash, e solo su una connessione con accesso a Internet. Il tuo ID di supporto è in Impostazioni ▸ Diagnostica, dove puoi attivare o disattivare tutto questo in qualsiasi momento.</string>
+    <string name="legacy_send_reports_5c810947">Invia i report</string>
+    <string name="legacy_diagnostics_privacy_notice_1f708f84">Informativa privacy delle diagnostiche</string>
+    <string name="legacy_support_id_5239972c">ID di supporto</string>
+    <string name="legacy_moto_hub_support_id_7149b87">ID di supporto MOTO-HUB</string>
+    <string name="legacy_tap_to_copy_quote_it_when_asking_for_help_it_ide_edc7231">Tocca per copiare. Citalo quando chiedi assistenza: identifica questo telefono e questa moto.</string>
+    <string name="legacy_support_id_copied_63da1e38">ID di supporto copiato</string>
+    <string name="legacy_what_gets_sent_f4a13bbf">Cosa viene inviato</string>
+    <string name="legacy_read_what_a_report_contains_then_choose_whether__e679dae">Leggi cosa contiene un report, poi scegli se inviarli</string>
+    <string name="legacy_who_holds_your_reports_how_long_they_are_kept_an_ea54a6b7">Chi conserva i tuoi report, per quanto tempo e come farli cancellare</string>
+    <string name="legacy_send_diagnostics_now_9368c9ea">Invia diagnostica adesso</string>
     <string name="legacy_this_build_has_no_collector_configured_e224996">Questa build non ha un collector configurato</string>
     <string name="legacy_logging_is_off_the_log_would_end_at_1_s_c9d7198e">Il logging è disattivato: il log si fermerebbe al %1$s</string>
     <string name="legacy_logging_is_off_there_is_no_log_to_send_eca8d32d">Il logging è disattivato: non c\'è nessun log da inviare</string>
-    <string name="legacy_send_diagnostics_automatically_880f35b7">Invia la diagnostica automaticamente</string>
-    <string name="legacy_sends_the_report_above_to_the_developer_at_most__8689def0">Invia il rapporto qui sopra allo sviluppatore al massimo una volta al giorno, dopo un aggiornamento o dopo un errore, e solo su una connessione con accesso a Internet. Modello del cruscotto e del telefono, versioni dell\'app e log dell\'applicazione; mai password, posizioni o indirizzi hardware.</string>
+    <string name="legacy_send_diagnostics_automatically_880f35b7">Invia diagnostica automaticamente</string>
+    <string name="legacy_sends_the_report_above_to_the_developer_at_most__8689def0">Invia il report qui sopra allo sviluppatore al massimo una volta al giorno, dopo un aggiornamento o dopo un crash, e solo su una connessione con accesso a Internet. Modello di cruscotto e di telefono, versioni dell\'app e registro dell\'applicazione; mai password, posizioni o indirizzi hardware.</string>
     <string name="legacy_logging_is_off_d9325d5a">LOGGING DISATTIVATO</string>
     <string name="legacy_nothing_has_been_recorded_since_1_s_what_was_log_1be484ac">Non viene registrato nulla dal %1$s. Quello che era stato registrato prima resta - disattivare il logging ferma le nuove voci, non cancella mai quelle vecchie.</string>
     <string name="legacy_nothing_has_been_recorded_and_there_is_no_earlie_dd873fa0">Non è stato registrato nulla e non esiste nemmeno un log precedente.</string>
@@ -1392,4 +1392,11 @@
     <string name="legacy_try_anyway_909523a8">Prova lo stesso</string>
     <string name="legacy_waiting_for_s_c5c92cf8">In attesa di %s</string>
     <string name="legacy_waiting_for_the_motorcycle_24d361aa">In attesa della moto</string>
+    <!-- Source: trips/TripAnalysisScreen.kt, home/HubHomeScreen.kt, companion, ai/AiPreset, and the service notifications - literals that reached a lookup indirectly, or were never wrapped -->
+    <string name="legacy_1_s_in_moto_hub_advanced_is_coming_soon_use_moto_6bcb37c0">%1$s in MOTO-HUB Advanced arriverà presto (per ora usa MOTO-HUB Core).</string>
+    <string name="legacy_import_qr_6b03505c">Importa QR</string>
+    <string name="legacy_scan_new_qr_ed7e6784">Scansiona un nuovo QR</string>
+    <!-- Source: feature/home - the secondary actions under the pairing and projection cards -->
+    <string name="legacy_how_to_start_android_auto_e44c5dd3">Come avviare Android Auto</string>
+    <string name="legacy_open_wi_fi_settings_299670db">Apri le impostazioni Wi-Fi</string>
 </resources>

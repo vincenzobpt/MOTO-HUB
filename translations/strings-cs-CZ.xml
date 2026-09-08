@@ -432,7 +432,7 @@
     <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
     <string name="legacy_phone_system_b2b20c1d">TELEFON // SYSTÉM</string>
     <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
-    <string name="legacy_turn_rate_9cfa82a3">RYCHLOT OTÁČENÍ</string>
+    <string name="legacy_turn_rate_9cfa82a3">OTÁČENÍ</string>
     <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
     <string name="legacy_ahead_3b5bda1">VPŘEDU</string>
     <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
@@ -444,7 +444,7 @@
     <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
     <string name="legacy_sun_horizon_6a3f3196">SLUNCE / HORIZONT</string>
     <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
-    <string name="legacy_sun_behind_2679a1ae">SLUNCE ZA JEZDCEM</string>
+    <string name="legacy_sun_behind_2679a1ae">SLUNCE VZADU</string>
     <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
     <string name="legacy_waiting_for_position_heading_75ece8e0">ČEKÁNÍ NA POLOHU A SMĚR</string>
     <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
@@ -1977,4 +1977,11 @@
     <string name="legacy_try_anyway_909523a8">Přesto zkuste</string>
     <string name="legacy_waiting_for_s_c5c92cf8">Čekání na %s</string>
     <string name="legacy_waiting_for_the_motorcycle_24d361aa">Čekání na motocykl</string>
+    <!-- Source: trips/TripAnalysisScreen.kt, home/HubHomeScreen.kt, companion, ai/AiPreset, and the service notifications - literals that reached a lookup indirectly, or were never wrapped -->
+    <string name="legacy_1_s_in_moto_hub_advanced_is_coming_soon_use_moto_6bcb37c0">%1$s bude v MOTO-HUB Advanced brzy (zatím použijte MOTO-HUB Core).</string>
+    <string name="legacy_import_qr_6b03505c">Importovat QR</string>
+    <string name="legacy_scan_new_qr_ed7e6784">Naskenovat nový QR</string>
+    <!-- Source: feature/home - the secondary actions under the pairing and projection cards -->
+    <string name="legacy_how_to_start_android_auto_e44c5dd3">Jak spustit Android Auto</string>
+    <string name="legacy_open_wi_fi_settings_299670db">Otevřít nastavení Wi-Fi</string>
 </resources>

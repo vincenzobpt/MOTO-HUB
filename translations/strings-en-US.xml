@@ -1977,4 +1977,11 @@
     <string name="legacy_try_anyway_909523a8">Try anyway</string>
     <string name="legacy_waiting_for_s_c5c92cf8">Waiting for %s</string>
     <string name="legacy_waiting_for_the_motorcycle_24d361aa">Waiting for the motorcycle</string>
+    <!-- Source: trips/TripAnalysisScreen.kt, home/HubHomeScreen.kt, companion, ai/AiPreset, and the service notifications - literals that reached a lookup indirectly, or were never wrapped -->
+    <string name="legacy_1_s_in_moto_hub_advanced_is_coming_soon_use_moto_6bcb37c0">%1$s in MOTO-HUB Advanced is coming soon (use MOTO-HUB Core for now).</string>
+    <string name="legacy_import_qr_6b03505c">Import QR</string>
+    <string name="legacy_scan_new_qr_ed7e6784">Scan new QR</string>
+    <!-- Source: feature/home - the secondary actions under the pairing and projection cards -->
+    <string name="legacy_how_to_start_android_auto_e44c5dd3">How to start Android Auto</string>
+    <string name="legacy_open_wi_fi_settings_299670db">Open Wi-Fi settings</string>
 </resources>

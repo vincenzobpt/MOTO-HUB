@@ -1873,30 +1873,30 @@
     <string name="legacy_live_log_831d05f0">LIVE-PROTOKOLL</string>
     <string name="legacy_nothing_yet_power_the_dash_on_then_run_the_exper_b1ec5c8f">Noch nichts. Schalte das Display ein und führe dann die Experimente aus.</string>
     <string name="legacy_moto_hub_closed_unexpectedly_30f439d7">MOTO-HUB wurde unerwartet beendet</string>
-    <string name="legacy_the_last_time_you_used_moto_hub_it_stopped_becau_8448d27c">Beim letzten Mal wurde MOTO-HUB durch einen Fehler beendet. Nur mit dem Diagnosebericht kann der Entwickler herausfinden, warum.</string>
+    <string name="legacy_the_last_time_you_used_moto_hub_it_stopped_becau_8448d27c">Beim letzten Mal hat MOTO-HUB wegen eines Fehlers aufgehört. Nur das Senden des Diagnoseberichts lässt den Entwickler herausfinden, warum.</string>
     <string name="legacy_the_report_contains_your_motorcycle_s_dashboard__f4208b9f">Der Bericht enthält das Displaymodell deines Motorrads, dein Telefonmodell, die Android- und Android-Auto-Versionen, die installierten MOTO-HUB-Versionen und das Anwendungsprotokoll einschließlich des Fehlers. Passwörter, Positionen und Hardware-Adressen sind nie enthalten.</string>
     <string name="legacy_send_reports_automatically_from_now_on_7cdd2209">Berichte ab jetzt automatisch senden</string>
     <string name="legacy_send_report_55908cac">Bericht senden</string>
-    <string name="legacy_how_your_data_is_handled_ff77c87f">Wie deine Daten verarbeitet werden</string>
+    <string name="legacy_how_your_data_is_handled_ff77c87f">Wie mit deinen Daten umgegangen wird</string>
     <string name="legacy_not_now_e202d7e9">Jetzt nicht</string>
     <string name="legacy_help_improve_moto_hub_9bf5292c">Hilf mit, MOTO-HUB zu verbessern</string>
     <string name="legacy_moto_hub_can_send_a_diagnostics_report_to_the_de_36cc6ba6">MOTO-HUB kann einen Diagnosebericht an den Entwickler senden: das Displaymodell deines Motorrads, dein Telefonmodell, die installierten Android-, Android-Auto- und MOTO-HUB-Versionen sowie das Anwendungsprotokoll. Passwörter, Positionen und Hardware-Adressen sind nie enthalten.</string>
-    <string name="legacy_reports_go_out_at_most_once_a_day_after_an_updat_6fc12b8d">Berichte gehen höchstens einmal täglich raus, nach einem Update oder nach einem Absturz, und nur über eine Verbindung mit Internetzugang. Deine Support-ID steht unter Einstellungen ▸ Diagnose, wo sich das jederzeit ein- und ausschalten lässt.</string>
+    <string name="legacy_reports_go_out_at_most_once_a_day_after_an_updat_6fc12b8d">Berichte gehen höchstens einmal täglich, nach einem Update oder nach einem Absturz hinaus, und nur über eine Verbindung mit Internetzugang. Deine Support-ID steht unter Einstellungen ▸ Diagnose, wo sich das jederzeit ein- oder ausschalten lässt.</string>
     <string name="legacy_send_reports_5c810947">Berichte senden</string>
     <string name="legacy_diagnostics_privacy_notice_1f708f84">Datenschutzhinweis zur Diagnose</string>
-    <string name="legacy_support_id_5239972c">Support ID</string>
-    <string name="legacy_moto_hub_support_id_7149b87">MOTO-HUB Support ID</string>
-    <string name="legacy_tap_to_copy_quote_it_when_asking_for_help_it_ide_edc7231">Zum Kopieren tippen. Gib sie an, wenn du um Hilfe bittest: Sie identifiziert dieses Telefon und dieses Motorrad.</string>
+    <string name="legacy_support_id_5239972c">Support-ID</string>
+    <string name="legacy_moto_hub_support_id_7149b87">MOTO-HUB Support-ID</string>
+    <string name="legacy_tap_to_copy_quote_it_when_asking_for_help_it_ide_edc7231">Zum Kopieren tippen. Nenne sie, wenn du um Hilfe bittest; sie identifiziert dieses Telefon und Motorrad.</string>
     <string name="legacy_support_id_copied_63da1e38">Support-ID kopiert</string>
     <string name="legacy_what_gets_sent_f4a13bbf">Was gesendet wird</string>
     <string name="legacy_read_what_a_report_contains_then_choose_whether__e679dae">Lies, was ein Bericht enthält, und entscheide dann, ob du sie senden willst</string>
-    <string name="legacy_who_holds_your_reports_how_long_they_are_kept_an_ea54a6b7">Wer deine Berichte aufbewahrt, wie lange sie gespeichert werden und wie du sie löschen lässt</string>
+    <string name="legacy_who_holds_your_reports_how_long_they_are_kept_an_ea54a6b7">Wer deine Berichte hält, wie lange sie aufbewahrt werden und wie du sie löschen lässt</string>
     <string name="legacy_send_diagnostics_now_9368c9ea">Diagnose jetzt senden</string>
     <string name="legacy_this_build_has_no_collector_configured_e224996">In diesem Build ist kein Collector konfiguriert</string>
     <string name="legacy_logging_is_off_the_log_would_end_at_1_s_c9d7198e">Die Protokollierung ist aus; das Protokoll würde bei %1$s enden</string>
     <string name="legacy_logging_is_off_there_is_no_log_to_send_eca8d32d">Die Protokollierung ist aus; es gibt kein Protokoll zum Senden</string>
     <string name="legacy_send_diagnostics_automatically_880f35b7">Diagnose automatisch senden</string>
-    <string name="legacy_sends_the_report_above_to_the_developer_at_most__8689def0">Sendet den Bericht oben höchstens einmal täglich an den Entwickler, nach einem Update oder nach einem Absturz - und nur über eine Verbindung mit Internetzugang. Display- und Telefonmodell, App-Versionen und das Anwendungsprotokoll; nie Passwörter, Positionen oder Hardware-Adressen.</string>
+    <string name="legacy_sends_the_report_above_to_the_developer_at_most__8689def0">Sendet den obigen Bericht höchstens einmal täglich, nach einem Update oder nach einem Absturz an den Entwickler - nur über eine Verbindung mit Internetzugang. Display- und Telefonmodelle, App-Versionen und das Anwendungsprotokoll; nie Passwörter, Positionen oder Hardwareadressen.</string>
     <string name="legacy_logging_is_off_d9325d5a">PROTOKOLLIERUNG IST AUS</string>
     <string name="legacy_nothing_has_been_recorded_since_1_s_what_was_log_1be484ac">Seit %1$s wurde nichts mehr aufgezeichnet. Was davor protokolliert wurde, bleibt erhalten - das Ausschalten der Protokollierung stoppt neue Einträge, löscht aber nie die alten.</string>
     <string name="legacy_nothing_has_been_recorded_and_there_is_no_earlie_dd873fa0">Es wurde nichts aufgezeichnet, und ein früheres Protokoll gibt es auch nicht.</string>
@@ -1969,4 +1969,11 @@
     <string name="legacy_try_anyway_909523a8">Trotzdem versuchen</string>
     <string name="legacy_waiting_for_s_c5c92cf8">Warten auf %s</string>
     <string name="legacy_waiting_for_the_motorcycle_24d361aa">Warten auf das Motorrad</string>
+    <!-- Source: trips/TripAnalysisScreen.kt, home/HubHomeScreen.kt, companion, ai/AiPreset, and the service notifications - literals that reached a lookup indirectly, or were never wrapped -->
+    <string name="legacy_1_s_in_moto_hub_advanced_is_coming_soon_use_moto_6bcb37c0">%1$s kommt bald in MOTO-HUB Advanced (nutze vorerst MOTO-HUB Core).</string>
+    <string name="legacy_import_qr_6b03505c">QR importieren</string>
+    <string name="legacy_scan_new_qr_ed7e6784">Neuen QR scannen</string>
+    <!-- Source: feature/home - the secondary actions under the pairing and projection cards -->
+    <string name="legacy_how_to_start_android_auto_e44c5dd3">So startest du Android Auto</string>
+    <string name="legacy_open_wi_fi_settings_299670db">WLAN-Einstellungen öffnen</string>
 </resources>
