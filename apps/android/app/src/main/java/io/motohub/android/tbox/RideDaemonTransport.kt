@@ -515,6 +515,13 @@ class RideDaemonTransport(
                 // and this is not one. It asks the dash's own UI to come forward, which is a
                 // different question from what the picture looks like when it does.
                 setPageSwitchProbeEnabled(profile.sendsPageSwitchProbe)
+                // Read from the profile for the same reason as the line above: the ladder walks
+                // H.264 wire formats, and this is not one of them - it changes what the capture
+                // negotiation announces, so the dash is told JPEG before it opens the data socket.
+                // The session services read the same flag to build a still source instead of an
+                // encoder; if the two ever disagreed, one side would be putting JPEGs inside a
+                // frame the other negotiated as an access unit.
+                setJpegStillsEnabled(profile.easyConnJpegStills)
                 // The dash asks for wall-clock time over PXC and the daemon answers it,
                 // but only Android knows the zone: Go's local location on a device is
                 // UTC and carries no usable name. The id alone was not enough - it only
@@ -680,6 +687,46 @@ class RideDaemonTransport(
         }
     }
 
+    /**
+     * Hands the dash one JPEG still, for the profile that negotiated `encoder=1`.
+     *
+     * The frame id is deliberately unused: it belongs to the Yunmo protocol, where the dash
+     * acknowledges stills by id. EasyConn has no such acknowledgement - the dash pulls, and what
+     * comes back is the pull itself - so the counters this path keeps are the same ones the
+     * encoded path keeps, and a rider's log reads identically either way.
+     */
+    override fun offerStillFrame(jpeg: ByteArray, frameId: Int): Boolean {
+        val activeSession = session ?: return false
+        if (!activeSession.isRunning) return false
+        val future = submitPushStill(activeSession, jpeg) ?: return false
+        return try {
+            future.get(PUSH_FRAME_TIMEOUT_MS, TimeUnit.MILLISECONDS)
+            framesOffered.incrementAndGet()
+            lastFrameOfferedElapsed.set(SystemClock.elapsedRealtime())
+            true
+        } catch (timeout: java.util.concurrent.TimeoutException) {
+            framesTimedOut.incrementAndGet()
+            ProjectionEventLog.warning(
+                "TBOX",
+                "JPEG still dropped: pushStill() exceeded ${PUSH_FRAME_TIMEOUT_MS}ms timeout. " +
+                    "The T-Box may be unresponsive. Timeouts: ${framesTimedOut.get()}"
+            )
+            false
+        } catch (failure: Throwable) {
+            Log.w(TAG, "Unable to offer a JPEG still", failure)
+            ProjectionEventLog.error("TBOX", "Unable to push a JPEG still to RideDaemon.", failure)
+            false
+        }
+    }
+
+    /** [submitPushFrame] for stills; the queue and its back-pressure rules are the same. */
+    private fun submitPushStill(
+        activeSession: MobileSession,
+        jpeg: ByteArray
+    ): java.util.concurrent.Future<*>? = submitToPushQueue("JPEG still") {
+        activeSession.pushStill(jpeg)
+    }
+
     override fun offerAccessUnit(avcc: ByteArray): Boolean {
         val activeSession = session ?: return false
         if (!activeSession.isRunning) return false
@@ -709,27 +756,39 @@ class RideDaemonTransport(
      * access unit. Only a queue that remains blocked for the grace period is reported as a
      * transport failure to the caller.
      */
-    private fun submitPushFrame(activeSession: MobileSession, avcc: ByteArray): java.util.concurrent.Future<*>? {
+    private fun submitPushFrame(activeSession: MobileSession, avcc: ByteArray): java.util.concurrent.Future<*>? =
+        submitToPushQueue("AVC frame") { activeSession.pushFrame(avcc) }
+
+    /**
+     * Puts one payload on the single-threaded push queue, waiting out a transient overlap.
+     *
+     * [label] names the payload in the two log lines this can produce, and is the only thing that
+     * differs between an access unit and a still: they share the queue, the grace period and the
+     * rejection counter because they are the same back-pressure - one native call at a time, and a
+     * caller that must be told when the previous one has not returned.
+     */
+    private fun submitToPushQueue(
+        label: String,
+        push: () -> Unit
+    ): java.util.concurrent.Future<*>? {
         val deadline = SystemClock.elapsedRealtime() + PUSH_FRAME_SUBMIT_WAIT_MS
         while (true) {
             try {
-                return pushFrameExecutor.submit {
-                    activeSession.pushFrame(avcc)
-                }
+                return pushFrameExecutor.submit(push)
             } catch (_: RejectedExecutionException) {
                 val rejections = framesRejected.incrementAndGet()
                 if (rejections == 1L || rejections % REJECTED_FRAME_LOG_INTERVAL == 0L) {
                     ProjectionEventLog.warning(
                         "TBOX",
-                        "AVC frame submission temporarily delayed; waiting for the previous " +
-                            "pushFrame() call. Rejections so far: $rejections."
+                        "$label submission temporarily delayed; waiting for the previous " +
+                            "push call. Rejections so far: $rejections."
                     )
                 }
                 val remaining = deadline - SystemClock.elapsedRealtime()
                 if (remaining <= 0L) {
                     ProjectionEventLog.error(
                         "TBOX",
-                        "AVC frame submission stayed blocked for ${PUSH_FRAME_SUBMIT_WAIT_MS}ms."
+                        "$label submission stayed blocked for ${PUSH_FRAME_SUBMIT_WAIT_MS}ms."
                     )
                     return null
                 }

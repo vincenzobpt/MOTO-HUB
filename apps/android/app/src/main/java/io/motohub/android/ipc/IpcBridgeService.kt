@@ -294,7 +294,7 @@ class IpcBridgeService : Service() {
          * Answered from [activeSessionProfile], so a dash discovered as Yunmo is judged by the
          * profile the transport settled on rather than the one its model id resolves to.
          */
-        override fun videoWantsStills(): Boolean = activeSessionProfile()?.yunmoJpegVideo ?: false
+        override fun videoWantsStills(): Boolean = activeSessionProfile()?.usesJpegStills ?: false
 
         /**
          * Names the profile only when DISCOVERY changed it - never the one the motorcycle would

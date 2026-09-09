@@ -784,7 +784,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
             // through whichever mode they happen to open, and a profile that silently falls back
             // to H.264 on three of the four paths produced three rounds of field tests that each
             // reported "JPEG does not work" without a single JPEG ever leaving the phone.
-            if (sessionModelProfile.yunmoJpegVideo) {
+            if (sessionModelProfile.usesJpegStills) {
                 startJpegOutput(encoderProfile, capabilityProfile, handle)
                 return
             }

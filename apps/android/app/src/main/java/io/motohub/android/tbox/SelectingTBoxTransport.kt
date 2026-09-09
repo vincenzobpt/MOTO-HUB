@@ -129,12 +129,17 @@ class SelectingTBoxTransport(context: Context) : TBoxTransport {
     override suspend fun start(host: TBoxHost): Result<Unit> = active.start(host)
 
     /**
-     * Routes a JPEG still to the Yunmo transport, for the X-Cape profile that captures stills
-     * instead of encoding video. Returns false on any other family, which is what the caller wants:
-     * only a session configured for that profile ever produces JPEG frames in the first place.
+     * Routes a JPEG still to whichever transport is carrying this session.
+     *
+     * Yunmo is named rather than reached through [TBoxTransport.offerStillFrame] because its own
+     * still path takes the frame id for the acknowledgement window it keeps, which the interface
+     * method does not express. Every other family answers through the interface, and the ones that
+     * negotiated an encoded stream answer false there by default - which is what the caller wants,
+     * since only a session configured for stills ever produces one.
      */
     fun offerJpegFrame(jpeg: ByteArray, frameId: Int): Boolean =
-        if (active === yunmo) yunmo.offerJpegFrame(jpeg, frameId) else false
+        if (active === yunmo) yunmo.offerJpegFrame(jpeg, frameId)
+        else active.offerStillFrame(jpeg, frameId)
 
     /**
      * The [TBoxTransport] face of [offerJpegFrame], so a caller holding only the interface - the

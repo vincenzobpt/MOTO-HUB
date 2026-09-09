@@ -307,7 +307,7 @@ class ProjectionSessionService : Service() {
             // takes, unchanged; this branch returns before reaching any of it. `encoder` stays null,
             // which every later call site already tolerates (`encoder?.`, and the adaptive
             // controller's onTick returns immediately on a null encoder).
-            if (modelProfile.yunmoJpegVideo) {
+            if (modelProfile.usesJpegStills) {
                 startJpegCapture(projection, profile, modelProfile, handle)
                 return
             }

@@ -211,12 +211,49 @@ class RideDaemonTransportTest {
     }
 
     @Test
-    fun `only the QJ dash that never paints asks for the page experiment`() {
-        // A dashboard that already displays a picture must never be sent unsolicited page
-        // commands: that is the whole reason this is a per-profile opt-in.
-        assertTrue(TBoxModelProfile.QJ_SRK921_RR.sendsPageSwitchProbe)
+    fun `no dashboard asks for the page experiment any more`() {
+        // It ran on the QJ dash on 2026-09-09 and failed twice over: not one of the three
+        // commands was acknowledged, and the rider watching the panel saw nothing, the
+        // control command included. Three writes a session that the firmware provably
+        // ignores are not worth muddying the next experiment's only instrument - the panel.
+        assertTrue(TBoxModelProfile.entries.none { it.sendsPageSwitchProbe })
+    }
+
+    @Test
+    fun `only the QJ dash is told JPEG when it asked for H264`() {
+        // Every other EasyConn dashboard in the fleet paints an H.264 stream today. Answering
+        // the capture negotiation with encoder=1 anywhere else would change the wire format of
+        // all of them at once, and none of them has a field log asking for it.
+        assertTrue(TBoxModelProfile.QJ_SRK921_RR.easyConnJpegStills)
         val others = TBoxModelProfile.entries.filter { it != TBoxModelProfile.QJ_SRK921_RR }
-        assertTrue(others.none { it.sendsPageSwitchProbe })
+        assertTrue(others.none { it.easyConnJpegStills })
+    }
+
+    @Test
+    fun `every profile that is fed stills says so through one predicate`() {
+        // The four ways into a projection all read usesJpegStills. A profile that answered only
+        // one of the two flags would take the still path on some of them and build an encoder on
+        // the others - which is how three rounds of X-Cape field tests reported "JPEG does not
+        // work" without a single JPEG leaving the phone.
+        val stillProfiles = TBoxModelProfile.entries.filter { it.usesJpegStills }
+        assertTrue(TBoxModelProfile.QJ_SRK921_RR in stillProfiles)
+        assertTrue(TBoxModelProfile.MORINI_XCAPE_1200_JPEG in stillProfiles)
+        assertTrue(TBoxModelProfile.KOVE_625X in stillProfiles)
+        assertTrue(
+            TBoxModelProfile.entries.none {
+                it.usesJpegStills != (it.yunmoJpegVideo || it.easyConnJpegStills)
+            }
+        )
+    }
+
+    @Test
+    fun `the dash that is sent stills is not also sent an encoded stream`() {
+        // The two are mutually exclusive by construction: one session produces either stills or
+        // access units, never both, and a profile setting both flags would ask the Yunmo
+        // transport and the EasyConn negotiation for the same frames.
+        assertTrue(
+            TBoxModelProfile.entries.none { it.yunmoJpegVideo && it.easyConnJpegStills }
+        )
     }
 
     private fun captureRequest(width: Int, height: Int): ByteArray = ByteBuffer
