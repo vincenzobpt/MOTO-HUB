@@ -416,24 +416,25 @@ enum class TBoxModelProfile(
      * CFDL16 does send it. And it never sends `CHECK_SN_DONE` (`0x201c1`) even though the daemon
      * answers its `CHECK_SN` with `CHECK_SN_RESULT isOk:true`, the way open-cflink does. Read
      * together: the dash opens and drains the video socket but its UI never enters the mirroring
-     * page, which is exactly the "only the Wi-Fi icon" the rider reports. The next step is
-     * finding which phone-originated PXC command makes this firmware switch pages.
+     * page, which is exactly the "only the Wi-Fi icon" the rider reports. So [sendsPageSwitchProbe]
+     * asks it to come forward: after `STREAM_START` the phone sends the three phone-to-car page
+     * commands from the EasyConn SDK inside the CarbitRide APK, three seconds apart -
+     * `ECP_P2C_PAGE_STATUS` (`0x20400`, `{page,status,type}`, with `ECP_APP_PAGE_STATUS_OPEN=1`),
+     * `ECP_P2C_JUMP_TO_CAR_PAGE` (`0x20480`, `{page}`) and `ECP_P2C_SWITCH_TO_SYSTEM_MAIN_PAGE`
+     * (`0x20170`, empty), against the `21` `ECP_C2P_STANDARD_PAGES` calls
+     * `ECP_APP_PAGE_MIRROR_FLOATING`. The third moves the dash AWAY from mirroring and goes last
+     * deliberately: a panel that reacts only there proves the page plane works and the page id is
+     * what is wrong. No reference implementation sends any of the three, so this is an experiment,
+     * not a port, and **it has never run on a motorcycle** - a blank next log means the page plane
+     * is not the answer either, and the two silences above are what remains.
      *
-     * Not `0x10020`. It is declared in the daemon and never sent by us, which briefly made it look
-     * like a candidate, but it is a bike-to-phone notification and always was: open-cflink,
+     * It is not `0x10020`, which briefly looked like a candidate because it is declared in the
+     * daemon and never sent by us. It is a bike-to-phone notification and always was: open-cflink,
      * open-cfmoto and open-cfmoto-zanderp all name it MEDIA_FEATURE_CFG
      * (`{music,talkie,tts,vr,autoChangeToBT}`), part of the CFDL26 notify burst the dash sends
      * after CHECK_SN and expects a bare `cmd+1` ack for - which the daemon's default even-command
-     * branch already gives it. This QJ dash never sends it at all. Originating it from the phone
-     * has no evidence behind it in any of the four references.
-     *
-     * The commands that ARE phone-to-car live in the `0x2xxxx` block, and the EasyConn SDK inside
-     * the CarbitRide APK names three worth trying, all JSON-bodied:
-     * `ECP_P2C_PAGE_STATUS` (`0x20400`, `{page,status,type}`, with `ECP_APP_PAGE_STATUS_OPEN=1`),
-     * `ECP_P2C_JUMP_TO_CAR_PAGE` (`0x20480`, `{page}`) and `ECP_P2C_SWITCH_TO_SYSTEM_MAIN_PAGE`
-     * (`0x20170`, empty). `ECP_C2P_STANDARD_PAGES` puts the mirror page at `21`
-     * (`ECP_APP_PAGE_MIRROR_FLOATING`) and the main page at `7`. None of the three is sent by any
-     * reference implementation either, so each is a genuine experiment, not a port.
+     * branch already gives it. This QJ dash never sends it at all, and originating it from the
+     * phone has no evidence behind it in any of the four references.
      *
      * Field notes for whoever picks that up: the dash asks for `bitrate=4194304` and `fps=0`
      * while we send 2 Mbps at 10 fps, and reports `capScreenMode=0`, `videoType=0`,
