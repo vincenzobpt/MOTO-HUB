@@ -1,23 +1,32 @@
 # Generated dependency record. Update this file whenever hudlib.aar is rebuilt.
 source_repository=https://github.com/vincenzobpt/ridedaemon-lib
-source_commit=f0ac158930a7afb71ee7b4134b0271c0c8dae8c5
+source_commit=b85b61744c7701b7e9bcbf07f420aa1f83c1eb12
 source_dirty=false
 source_checkout=refs/ridedaemon-lib-motohub
 gomobile_android_api=31
 artifact=apps/android/app/libs/hudlib.aar
-sha256=d0bd5bae1d4d46cc345fbf7eb31e8b988d4cf40614d6910001f200efb781c3a5
+sha256=dec1a9e7d29cd5e8ff393894ea3966bbc14829f41acec1e79393373b96388867
 license=GPL-3.0-only
 
-# Rebuilt 2026-09-04: the daemon now reports how many frames the dashboard has
-# actually pulled off the data socket, so a session log can say whether the far
-# end ever asked for a picture.
+# Rebuilt 2026-09-09 on top of PR #1 (vuzasyanin), merged as 1b97156.
 #
-# Every delivery number this app printed described the pipe from the encoder into
-# the transport - offerAccessUnit returning true - and stayed perfect while the
-# dashboard read nothing. The daemon has always counted the dash's own 0x0072
-# pulls; it now forwards them, which is what lets the transport say the dashboard
-# opened the video socket and closed it without ever asking for anything.
+# Two SSDQ01-0120 Voge panels fail the clock in opposite ways. One reconnects
+# through CHECK_SN and never sends 0x10450 at all, so the solicited QUERY_TIME
+# handler never runs and the TFT stays on 01.01.1970. The daemon now waits two
+# seconds after CLIENT_INFO and, if currentHUTime still reads as an uptime
+# counter and no request arrived, pushes one unsolicited 0x10451 carrying the
+# same JSON the asking path already builds. A panel that does ask is marked
+# answered first, so it never receives a second packet.
+#
+# The other panel asks, is answered, and ignores it. SkipDashClockSync - new in
+# MobileConfig, default false, not yet set by this app - answers such a unit
+# with an empty ACK and never pushes, so a clock the rider set by hand is not
+# overwritten. Nothing changes for any dash until that flag is wired to a
+# setting.
+#
+# HUDConfig.CurrentHUTime widened from uint to uint64: on the 32-bit gomobile
+# ABI a set wall clock (~1.7e12 ms) was overflowing and reading as uptime.
 #
 # Same build shape as the previous artifact: -androidapi 31, 4 ABIs, binding
-# surface unchanged.
-source_note=dash-pull-counter
+# surface unchanged apart from the two SkipDashClockSync accessors.
+source_note=proactive-query-time-ack-if-dash-silent

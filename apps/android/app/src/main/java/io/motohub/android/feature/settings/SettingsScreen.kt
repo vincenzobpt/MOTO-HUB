@@ -482,6 +482,7 @@ private fun AutomationDetail(onBack: () -> Unit) {
     var autoRecovery by remember { mutableStateOf(MotoHubSettings.autoRecovery(context)) }
     var keepWifiDirect by remember { mutableStateOf(MotoHubSettings.keepWifiDirectAfterDisconnect(context)) }
     var bluetoothClock by remember { mutableStateOf(MotoHubSettings.bluetoothClockSync(context)) }
+    var dashClock by remember { mutableStateOf(MotoHubSettings.dashClockSync(context)) }
     MotoHubDetailScreen(title = motoHubText("Connection & automation"), backLabel = motoHubText("‹ Settings"), onBack = onBack) {
         ToggleRow(
             title = motoHubText("Auto-connect on launch"),
@@ -501,6 +502,22 @@ private fun AutomationDetail(onBack: () -> Unit) {
                 autoRecovery = it
                 MotoHubSettings.setAutoRecovery(context, it)
                 ProjectionEventLog.record("SETTINGS", "Auto-recovery changed to enabled=$it.")
+            }
+        )
+        ToggleRow(
+            title = motoHubText("Set the dash clock over Wi-Fi"),
+            description = motoHubText(
+                "On by default, and what sets the time on most dashboards. Turn it off only if " +
+                    "your dash asks MOTO-HUB for the time, ignores the answer, and shows " +
+                    "01.01.1970 anyway: on those units writing the clock changes nothing and can " +
+                    "overwrite a time you set by hand on the dashboard itself. With this off the " +
+                    "bike connects normally, it is simply never told what time it is."
+            ),
+            checked = dashClock,
+            onCheckedChange = {
+                dashClock = it
+                MotoHubSettings.setDashClockSync(context, it)
+                ProjectionEventLog.record("SETTINGS", "Dash clock sync changed to enabled=$it.")
             }
         )
         ToggleRow(

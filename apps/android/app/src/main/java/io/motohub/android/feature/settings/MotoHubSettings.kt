@@ -277,6 +277,7 @@ object MotoHubSettings {
     private const val KEY_AUTO_RECOVERY = "auto_recovery"
     private const val KEY_KEEP_WIFI_DIRECT_ON_DISCONNECT = "keep_wifi_direct_on_disconnect"
     private const val KEY_BLUETOOTH_CLOCK_SYNC = "bluetooth_clock_sync"
+    private const val KEY_DASH_CLOCK_SYNC = "dash_clock_sync"
     private const val KEY_AUTO_RECORD_TRIPS = "auto_record_trips"
     private const val KEY_SHOW_RECORDED_TRACK = "show_recorded_track_on_dashboard"
     private const val KEY_DISTANCE_UNITS = "distance_units"
@@ -459,6 +460,33 @@ object MotoHubSettings {
 
     fun setBluetoothClockSync(context: Context, enabled: Boolean) {
         preferences(context).edit().putBoolean(KEY_BLUETOOTH_CLOCK_SYNC, enabled).apply()
+    }
+
+    /**
+     * Tell the dashboard the wall-clock time over Wi-Fi when it asks, and when it does not ask.
+     *
+     * On by default, because that answer is what sets the clock on every dash that reads it, and
+     * an unanswered clock question is what left Morini X-Cape and Voge clusters at 01.01.1970 in
+     * the first place.
+     *
+     * It exists as a switch because one Voge panel class does the opposite. Two SSDQ01-0120 units
+     * are indistinguishable by firmware string - same flavor 51, same channel 37501, same
+     * version_name - and behave in opposite ways: one accepts the reply and keeps a real date,
+     * the other asks, is answered, discards it, and shows 01.01.1970 anyway. Writing a clock into
+     * the second kind does not fix it and can overwrite a time its rider set by hand on the
+     * dashboard itself, which then goes back to epoch on every connect.
+     *
+     * Turning this off makes the daemon answer the clock question with an empty body and never
+     * push the time unasked ([io.motohub.android.tbox.RideDaemonTransport] maps it to
+     * `MobileConfig.SkipDashClockSync`). The handshake still completes; the dash is simply not
+     * told a time. Only turn it off for a dash that asks for the time and ignores it - a dash that
+     * never asks at all is the case the daemon now handles on its own.
+     */
+    fun dashClockSync(context: Context): Boolean =
+        preferences(context).getBoolean(KEY_DASH_CLOCK_SYNC, true)
+
+    fun setDashClockSync(context: Context, enabled: Boolean) {
+        preferences(context).edit().putBoolean(KEY_DASH_CLOCK_SYNC, enabled).apply()
     }
 
     /**

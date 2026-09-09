@@ -530,6 +530,12 @@ class RideDaemonTransport(
                         .getOffset(System.currentTimeMillis())
                         .toLong() / 1000L
                 )
+                // One Voge panel class asks for the time, is answered, and shows 01.01.1970
+                // regardless; writing a clock into it can also overwrite one its rider set by
+                // hand on the dash. The rider's own switch is the only way to tell it apart -
+                // its firmware strings are identical to the panels the answer does fix. Read
+                // per session, so flipping the setting takes effect on the next connect.
+                setSkipDashClockSync(!MotoHubSettings.dashClockSync(appContext))
             }
             // A companion-driven session pushes its settings only after this point, so the channel
             // re-evaluates itself again from IpcBridgeService; see EcBtpClockChannel.
