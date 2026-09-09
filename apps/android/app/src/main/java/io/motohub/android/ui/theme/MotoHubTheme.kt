@@ -104,10 +104,14 @@ private val MotoHubTypography = Typography(
     )
 )
 
+// Softer than the 12/14/16 this app shipped with. The corner radius is the single strongest
+// "which year is this from" signal a Compose screen gives off, and the old set read as a 2019
+// Material 2 list. Everything here is drawn from MaterialTheme.shapes, so the whole app moves
+// together and no screen is left with the old radius next to a new one.
 private val MotoHubShapes = Shapes(
-    small = RoundedCornerShape(12.dp),
-    medium = RoundedCornerShape(14.dp),
-    large = RoundedCornerShape(16.dp)
+    small = RoundedCornerShape(14.dp),
+    medium = RoundedCornerShape(18.dp),
+    large = RoundedCornerShape(22.dp)
 )
 
 @Composable

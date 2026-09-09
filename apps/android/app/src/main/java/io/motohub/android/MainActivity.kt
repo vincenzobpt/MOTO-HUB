@@ -79,6 +79,7 @@ import io.motohub.android.feature.garage.MotorcyclePhotoSource
 import io.motohub.android.feature.garage.TBoxCapabilityScreen
 import io.motohub.android.feature.home.HubHomeScreen
 import io.motohub.android.feature.home.HubViewModel
+import io.motohub.android.feature.home.AdvancedPromoScreen
 import io.motohub.android.feature.home.WireNeedsAndroidAutoDialog
 import io.motohub.android.feature.home.WireVerdictDialog
 import io.motohub.android.feature.androidauto.AndroidAutoHelpScreen
@@ -320,6 +321,7 @@ class MainActivity : ComponentActivity() {
                 var showBleExplorer by rememberSaveable { mutableStateOf(false) }
                 var showApplicationLogs by rememberSaveable { mutableStateOf(false) }
                 var showAbout by rememberSaveable { mutableStateOf(false) }
+                var showAdvancedPromo by rememberSaveable { mutableStateOf(false) }
                 var showAndroidAutoHelp by rememberSaveable { mutableStateOf(false) }
                 val launchedPhoneOnlyAa =
                     intent?.getBooleanExtra(IpcBridgeContract.EXTRA_START_PHONE_ONLY_ANDROID_AUTO, false) == true
@@ -1136,6 +1138,7 @@ class MainActivity : ComponentActivity() {
                     showApplicationLogs -> HubScreenKey.APPLICATION_LOGS
                     showAndroidAutoHelp -> HubScreenKey.ANDROID_AUTO_HELP
                     showAbout -> HubScreenKey.ABOUT
+                    showAdvancedPromo -> HubScreenKey.ADVANCED_PROMO
                     showAndroidAutoPreview -> HubScreenKey.ANDROID_AUTO_PREVIEW
                     capabilityProfileId != null -> HubScreenKey.CAPABILITIES
                     editorProfileId != null -> HubScreenKey.MOTORCYCLE_DETAILS
@@ -1181,6 +1184,13 @@ class MainActivity : ComponentActivity() {
                         onBack = {
                             ProjectionEventLog.record("UI", "Application log screen closed.")
                             showApplicationLogs = false
+                        }
+                    )
+                        HubScreenKey.ADVANCED_PROMO ->
+                    AdvancedPromoScreen(
+                        onBack = {
+                            ProjectionEventLog.record("UI", "MOTO-HUB ADVANCED page closed.")
+                            showAdvancedPromo = false
                         }
                     )
                         HubScreenKey.ANDROID_AUTO_HELP ->
@@ -1556,6 +1566,10 @@ class MainActivity : ComponentActivity() {
                             showAndroidAutoPreview = true
                         },
                         onStartPhoneOnlyAndroidAuto = { continueAndroidAutoPhoneOnlyStart(true) },
+                        onOpenAdvancedPromo = {
+                            ProjectionEventLog.record("UI", "MOTO-HUB ADVANCED page opened from Home.")
+                            showAdvancedPromo = true
+                        },
                         dimDisplayEnabled = dimDisplayEnabled,
                         onDimDisplayChanged = { enabled ->
                             ProjectionEventLog.record("DISPLAY", "User changed display dimmer preference to enabled=$enabled.")
@@ -1669,6 +1683,10 @@ class MainActivity : ComponentActivity() {
                                 onOpenAbout = {
                                     ProjectionEventLog.record("UI", "About screen opened.")
                                     showAbout = true
+                                },
+                                onOpenAdvanced = {
+                                    ProjectionEventLog.record("UI", "MOTO-HUB ADVANCED page opened from Settings.")
+                                    showAdvancedPromo = true
                                 },
                                 seamlessResumeEnabled = seamlessResumeEnabled,
                                 onSeamlessResumeChanged = { enabled ->

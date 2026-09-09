@@ -7,6 +7,7 @@ import io.motohub.android.i18n.motoHubText
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -255,6 +256,28 @@ fun ModeIcon(mode: String, color: Color, iconSize: Dp = 24.dp) {
                 drawLine(color, Offset(s * 0.5f, s * 0.5f), Offset(s * 0.5f, s * 0.30f), stroke.width, cap = StrokeCap.Round)
                 drawLine(color, Offset(s * 0.5f, s * 0.5f), Offset(s * 0.66f, s * 0.58f), stroke.width, cap = StrokeCap.Round)
             }
+            "Voice" -> {
+                // Microphone on a stand - rider-to-rider voice, the one thing this set had no
+                // shape for. Capsule, arc cradle, stem, foot.
+                drawRoundRect(
+                    color = color,
+                    topLeft = Offset(s * 0.38f, s * 0.10f),
+                    size = Size(s * 0.24f, s * 0.44f),
+                    cornerRadius = CornerRadius(s * 0.12f),
+                    style = stroke
+                )
+                drawArc(
+                    color = color,
+                    startAngle = 0f,
+                    sweepAngle = 180f,
+                    useCenter = false,
+                    style = stroke,
+                    topLeft = Offset(s * 0.24f, s * 0.34f),
+                    size = Size(s * 0.52f, s * 0.42f)
+                )
+                drawLine(color, Offset(s * 0.50f, s * 0.76f), Offset(s * 0.50f, s * 0.88f), stroke.width, cap = StrokeCap.Round)
+                drawLine(color, Offset(s * 0.34f, s * 0.88f), Offset(s * 0.66f, s * 0.88f), stroke.width, cap = StrokeCap.Round)
+            }
             "Bike" -> {
                 // Side-view motorcycle silhouette: two wheels, a seat/frame line, and a headlight
                 // dot - reads cleanly as "motorcycle" at small icon sizes.
@@ -362,5 +385,56 @@ fun HeroTile(
                 overflow = TextOverflow.Ellipsis
             )
         }
+    }
+}
+
+/**
+ * One option in a grouped card: icon, what it is, what it costs you, chevron.
+ *
+ * The row equivalent of [HeroTile] - same icon vocabulary, same accent treatment, but laid out
+ * for a list of alternatives rather than a pair of targets. Deliberately not
+ * [MotoHubActionRow]: that one pins its title to a single line so every row in a settings group
+ * is the same height, and a clipped title is exactly what the message-legibility rule forbids.
+ * Nothing here is capped; a longer translation makes the row taller.
+ */
+@Composable
+fun HeroOptionRow(
+    title: String,
+    description: String,
+    icon: String,
+    color: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    trailing: String = "\u203a"
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(color.copy(alpha = 0.12f), RoundedCornerShape(13.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            ModeIcon(icon, color, iconSize = 21.dp)
+        }
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(motoHubText(title), style = MaterialTheme.typography.titleMedium)
+            Text(
+                motoHubText(description),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        Text(
+            trailing,
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }

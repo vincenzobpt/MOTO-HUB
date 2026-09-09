@@ -76,6 +76,7 @@ fun SettingsTabContent(
     onOpenBleExplorer: () -> Unit,
     onOpenApplicationLogs: () -> Unit,
     onOpenAbout: () -> Unit,
+    onOpenAdvanced: () -> Unit,
     onOpenAndroidAutoHelp: () -> Unit,
     seamlessResumeEnabled: Boolean,
     onSeamlessResumeChanged: (Boolean) -> Unit
@@ -113,6 +114,7 @@ fun SettingsTabContent(
                 onOpenNetworkDiagnostics = onOpenNetworkDiagnostics,
                 onOpenApplicationLogs = onOpenApplicationLogs,
                 onOpenAbout = onOpenAbout,
+                onOpenAdvanced = onOpenAdvanced,
                 onOpenAndroidAutoHelp = onOpenAndroidAutoHelp
             )
             SettingsDetail.GENERAL -> GeneralDetail(
@@ -165,6 +167,7 @@ private fun SettingsMainList(
     onOpenNetworkDiagnostics: () -> Unit,
     onOpenApplicationLogs: () -> Unit,
     onOpenAbout: () -> Unit,
+    onOpenAdvanced: () -> Unit,
     onOpenAndroidAutoHelp: () -> Unit
 ) {
     val context = LocalContext.current
@@ -231,6 +234,16 @@ private fun SettingsMainList(
                 description = "v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
                 onClick = onOpenAbout
             )
+            // The always-reachable way to the ADVANCED page. The promo card at the foot of Home
+            // is the one a rider meets by accident; this is the one they come looking for - and
+            // it costs no slot in a bottom bar a gloved thumb has to hit.
+            if (!BuildConfig.IS_PRO) {
+                MotoHubActionRow(
+                    title = motoHubText("MOTO-HUB ADVANCED"),
+                    description = motoHubText("Dashboard, navigation and trips - the free companion app"),
+                    onClick = onOpenAdvanced
+                )
+            }
         }
         Spacer(Modifier.height(8.dp))
     }

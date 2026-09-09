@@ -21,6 +21,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -198,18 +200,18 @@ fun AndroidAutoPreviewScreen(onBack: () -> Unit, startFullscreen: Boolean = fals
                     modifier = Modifier.fillMaxWidth(),
                     trailing = { TextButton(onClick = onBack) { Text(motoHubText("Close")) } }
                 )
-                Row(
+                PreviewStatusPill(streaming = streaming)
+                // Its own full-width line, under the pill rather than beside it. Sharing a
+                // SpaceBetween row with the pill left this text whatever width the pill did not
+                // want - fine for "Live preview", unreadable for an Android Auto failure, which
+                // is seven lines of instructions. Nothing caps it and nothing sizes it: the
+                // header grows and the preview below is inset by however tall it ends up.
+                Text(
+                    text = if (streaming) motoHubText("Touch the preview to control Android Auto") else status,
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    PreviewStatusPill(streaming = streaming)
-                    Text(
-                        text = if (streaming) motoHubText("Touch the preview to control Android Auto") else status,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
     }
@@ -237,18 +239,27 @@ private fun PreviewActionButton(label: String, onClick: () -> Unit) {
     ) { Text(label, style = MaterialTheme.typography.labelMedium) }
 }
 
+/**
+ * The whole message, over the dead preview.
+ *
+ * Scrollable rather than capped: an Android Auto failure is a paragraph of instructions, and it
+ * is longer than the space between the header and the bottom of a phone in landscape. Truncating
+ * it would hide the one step that fixes the ride, so it scrolls instead.
+ */
 @Composable
 private fun PreviewStatusOverlay(status: String, modifier: Modifier = Modifier) {
     Surface(
         modifier = modifier.padding(24.dp),
         color = Color.Black.copy(alpha = 0.82f),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(20.dp)
     ) {
         Text(
             text = status,
             color = Color.White,
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 20.dp, vertical = 16.dp)
         )
     }
 }
