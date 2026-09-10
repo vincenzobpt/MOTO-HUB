@@ -372,6 +372,13 @@ class RideDaemonTransport(
      */
     @Volatile
     private var motorcycleProfile: MotorcycleProfile? = null
+    /**
+     * The dashboard fingerprint this session's CLIENT_INFO produced, so a QUERY_TIME arriving
+     * later can be filed against the firmware that sent it. Null until CLIENT_INFO is decoded;
+     * QUERY_TIME always arrives after it, so by then this is set.
+     */
+    @Volatile
+    private var sessionDashFingerprint: String? = null
     /** Elapsed-time mark for the running session, so its length can be judged when it ends. */
     private val sessionStartedElapsed = AtomicLong(0L)
     /**
@@ -434,6 +441,17 @@ class RideDaemonTransport(
     private fun wireConfigFor(profile: TBoxModelProfile): TBoxWireConfig {
         val motorcycle = motorcycleProfile ?: return profile.wireConfig
         return TBoxWireLadder.configFor(appContext, motorcycle, profile)
+    }
+
+    /**
+     * Whether this motorcycle's dashboard has been seen sending QUERY_TIME before. The fingerprint
+     * comes from the capabilities the last session stored, so a first-ever connection answers
+     * false and the dash is still offered the unsolicited push it may well need.
+     */
+    private fun dashKnownToAskForTime(): Boolean {
+        val motorcycle = motorcycleProfile ?: return false
+        val stored = TBoxCapabilityStore(appContext).load(motorcycle)?.capabilities
+        return TBoxClockAskRegistry.asksForTime(appContext, TBoxWireLadder.fingerprintOf(stored))
     }
 
     /**
@@ -543,6 +561,14 @@ class RideDaemonTransport(
                 // its firmware strings are identical to the panels the answer does fix. Read
                 // per session, so flipping the setting takes effect on the next connect.
                 setSkipDashClockSync(!MotoHubSettings.dashClockSync(appContext))
+                // A dashboard that asked for the time in an earlier session must not be raced by
+                // the unsolicited push: it wins the grace period sometimes and loses it others,
+                // and losing hands it a second clock packet on top of the answer it asked for -
+                // which can overwrite a clock the rider set by hand on the dash. The grace period
+                // is a margin against a slow handshake; this is the fact that makes the margin
+                // unnecessary once we have met the firmware once. Read from the LAST session's
+                // stored CLIENT_INFO, because this one has not happened yet.
+                setDashAsksForTime(dashKnownToAskForTime())
             }
             // A companion-driven session pushes its settings only after this point, so the channel
             // re-evaluates itself again from IpcBridgeService; see EcBtpClockChannel.
@@ -2022,6 +2048,17 @@ class RideDaemonTransport(
                     }
                 }
             }
+            if (type == PXC_EVENT_SOURCE && command == PXC_QUERY_TIME_COMMAND) {
+                // Filed against the firmware, not the bike, and only the first time: from the next
+                // session on, the daemon is told up front not to push the time unasked.
+                if (TBoxClockAskRegistry.recordAsked(appContext, sessionDashFingerprint)) {
+                    ProjectionEventLog.record(
+                        "TBOX",
+                        "This dashboard ($sessionDashFingerprint) asks for the time itself; from " +
+                            "the next connection MOTO-HUB will only answer, never offer."
+                    )
+                }
+            }
             if (type == PXC_EVENT_SOURCE && command == PXC_HUD_CONFIG_COMMAND) {
                 val capabilities = payload?.let(::decodeTBoxCapabilities)
                 if (capabilities == null) {
@@ -2101,6 +2138,7 @@ class RideDaemonTransport(
                             "Profile scores: ${TBoxModelProfile.scoreBreakdown(capabilities)}."
                         )
                     }
+                    sessionDashFingerprint = TBoxWireLadder.fingerprintOf(capabilities)
                     motorcycleProfile?.let { motorcycle ->
                         // Kept HERE, not only in the session services that observe this event:
                         // when the companion app drives the session over the AIDL bridge none of
@@ -2278,6 +2316,10 @@ class RideDaemonTransport(
         dashVideoSocketOpened.set(false)
         pxcStallReported.set(false)
         pxcQuietDashReported.set(false)
+        // Cleared with the rest of the per-session state so a QUERY_TIME that somehow
+        // arrives before this session's CLIENT_INFO is never filed against the dashboard
+        // the last session met - a rider can change bikes between two connections.
+        sessionDashFingerprint = null
         unknownCommandsLogged.clear()
         // The tally belongs to the session that produced it: reported before it is dropped, so a
         // log does not end on beats that were counted and never mentioned, and so the next
@@ -2417,6 +2459,7 @@ class RideDaemonTransport(
         const val PXC_CLOCK_KEEPALIVE_COMMAND = 0x10600L
         const val MEDIA_CONTROL_PING_COMMAND = 64L
         const val PXC_HUD_CONFIG_COMMAND = 65_552L
+        const val PXC_QUERY_TIME_COMMAND = 0x10450L
         const val MEDIA_CAPTURE_CONFIG_COMMAND = 16L
         const val MEDIA_TOUCH_COMMAND = 32L
         const val MEDIA_STREAM_START_COMMAND = 112L

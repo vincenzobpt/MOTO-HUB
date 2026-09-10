@@ -1,32 +1,32 @@
 # Generated dependency record. Update this file whenever hudlib.aar is rebuilt.
 source_repository=https://github.com/vincenzobpt/ridedaemon-lib
-source_commit=b85b61744c7701b7e9bcbf07f420aa1f83c1eb12
+source_commit=6f4ad6d9ef646660f42c04139e482b6cde101880
 source_dirty=false
 source_checkout=refs/ridedaemon-lib-motohub
 gomobile_android_api=31
 artifact=apps/android/app/libs/hudlib.aar
-sha256=dec1a9e7d29cd5e8ff393894ea3966bbc14829f41acec1e79393373b96388867
+sha256=a6a32396f6cdec3d9387dc6664c8258cc4186de1931c2c58a465c1605df04b71
 license=GPL-3.0-only
 
-# Rebuilt 2026-09-09 on top of PR #1 (vuzasyanin), merged as 1b97156.
+# Rebuilt 2026-09-10: the unsolicited clock push no longer races a dashboard that
+# asks for the time itself.
 #
-# Two SSDQ01-0120 Voge panels fail the clock in opposite ways. One reconnects
-# through CHECK_SN and never sends 0x10450 at all, so the solicited QUERY_TIME
-# handler never runs and the TFT stays on 01.01.1970. The daemon now waits two
-# seconds after CLIENT_INFO and, if currentHUTime still reads as an uptime
-# counter and no request arrived, pushes one unsolicited 0x10451 carrying the
-# same JSON the asking path already builds. A panel that does ask is marked
-# answered first, so it never receives a second packet.
+# The push waits a grace period after CLIENT_INFO and fires only if 0x10450 never
+# arrived. Two seconds was measured to be the wrong number: a VOGE-040785 log
+# (2026-09-09, seven handshakes in eight minutes) has that dash asking at +1.964s
+# through +2.465s, so six of the seven were handed an unsolicited packet on top of
+# the answer they had asked for - which can overwrite a clock the rider set by hand.
 #
-# The other panel asks, is answered, and ignores it. SkipDashClockSync - new in
-# MobileConfig, default false, not yet set by this app - answers such a unit
-# with an empty ACK and never pushes, so a clock the rider set by hand is not
-# overwritten. Nothing changes for any dash until that flag is wired to a
-# setting.
+# Two changes. The grace is five seconds, more than twice the slowest ask on record;
+# waiting longer only costs a dash that never asks three more seconds of the 1970 it
+# was already showing. And MobileConfig.DashAsksForTime lets the host say this
+# firmware has asked before, which skips the push entirely - the host remembers it
+# per dashboard fingerprint, because a session cannot remember the one before it.
 #
-# HUDConfig.CurrentHUTime widened from uint to uint64: on the 32-bit gomobile
-# ABI a set wall clock (~1.7e12 ms) was overflowing and reading as uptime.
+# source_commit is on the public origin (pushed 2026-09-10), so anyone can fetch the
+# exact source this artifact was built from.
 #
-# Same build shape as the previous artifact: -androidapi 31, 4 ABIs, binding
-# surface unchanged apart from the two SkipDashClockSync accessors.
-source_note=proactive-query-time-ack-if-dash-silent
+# Same build shape as the previous artifact: -androidapi 31, 4 ABIs. Binding surface
+# diffed against the old AAR with javap: purely additive, exactly
+# get/setDashAsksForTime on api.MobileConfig, every other class and method identical.
+source_note=query-time-grace-and-dash-asks
