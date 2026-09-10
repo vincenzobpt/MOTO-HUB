@@ -44,7 +44,6 @@ class AoaAccessorySession private constructor(
     }
 
     companion object {
-        private const val AUTOLINK_PACKAGE = "com.link.autolink"
         private const val ACTION_USB_PERMISSION =
             "io.motohub.android.action.AOA_USB_PERMISSION"
 
@@ -54,13 +53,7 @@ class AoaAccessorySession private constructor(
             val accessory = usbManager.accessoryList?.firstOrNull()
                 ?: error("AOA USB accessory not found. Make sure the head unit is connected and close Autolink first.")
 
-            try {
-                applicationContext.getSystemService(android.app.ActivityManager::class.java)
-                    .killBackgroundProcesses(AUTOLINK_PACKAGE)
-                ProjectionEventLog.record("AOA_SERVICE", "Requested background stop of $AUTOLINK_PACKAGE.")
-            } catch (failure: Exception) {
-                ProjectionEventLog.warning("AOA_SERVICE", "Unable to stop Autolink: ${failure.message}")
-            }
+            requestAutolinkStop(applicationContext)
 
             if (!usbManager.hasPermission(accessory)) {
                 val granted = requestPermission(applicationContext, usbManager, accessory)

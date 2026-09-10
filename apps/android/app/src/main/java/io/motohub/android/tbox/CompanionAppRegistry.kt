@@ -14,9 +14,16 @@ import android.provider.Settings
  * Every one of them binds the same three local reverse ports (10920-10922) and keeps them while it
  * is merely in the recent-apps list, so whichever one a rider has installed is the likely holder
  * when [TBoxConflictDiagnostics.isPortConflict] fires. There is no programmatic "close": since
- * Android 14 (this app's minSdk) killBackgroundProcesses only affects the caller's own packages,
- * so the only real remedy is the rider force-stopping it from its App info screen
- * ([openAppSettings]).
+ * Android 14 killBackgroundProcesses only affects the caller's own packages, and even before that
+ * it never touched a foreground app or foreground service - which a companion app holding the
+ * link invariably is. So the only real remedy is the rider force-stopping it from its App info
+ * screen ([openAppSettings]).
+ *
+ * "(this app's minSdk)" used to stand after Android 14 here, and stopped being true when CORE
+ * dropped to minSdk 31 in 1.1.75. It read as "therefore the call is dead everywhere", which sent
+ * a later reader to delete a call in [io.motohub.android.externaldisplay.AutolinkStop] that still
+ * works on Android 12 and 13. The version that matters for the API is 14; the version this app
+ * installs on is 12.
  *
  * This used to know one package, CFMOTO's. A Zontes rider's field log of 2026-08-23 is what made
  * the cost visible: the ports were held for four minutes across six connection attempts, and

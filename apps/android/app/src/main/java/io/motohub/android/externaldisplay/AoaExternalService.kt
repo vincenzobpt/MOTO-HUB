@@ -132,8 +132,8 @@ class AoaExternalService : Service() {
                     "and close Autolink first."
             )
 
-            // 3. Kill Autolink if running (releases any stale AOA claim)
-            killAutolink()
+            // 3. Ask Autolink to let go of the accessory, where the platform still allows it
+            requestAutolinkStop(this)
 
             // 4. Request USB permission and open the accessory stream
             val usbManager = getSystemService(UsbManager::class.java)
@@ -269,23 +269,6 @@ class AoaExternalService : Service() {
         result[0]
     }
 
-    /** Attempts to stop Autolink so it releases its AOA claim. */
-    private fun killAutolink() {
-        try {
-            val am = getSystemService(android.app.ActivityManager::class.java)
-            am.killBackgroundProcesses(AUTOLINK_PACKAGE)
-            ProjectionEventLog.record(
-                "AOA_SERVICE",
-                "Requested background stop of $AUTOLINK_PACKAGE."
-            )
-        } catch (e: Exception) {
-            ProjectionEventLog.warning(
-                "AOA_SERVICE",
-                "Unable to stop Autolink: ${e.message}"
-            )
-        }
-    }
-
     /** Returns the first AOA accessory, or null if none is connected. */
     private fun openAccessory(): UsbAccessory? {
         val usbManager = getSystemService(UsbManager::class.java)
@@ -377,7 +360,6 @@ class AoaExternalService : Service() {
             "io.motohub.android.action.AOA_USB_PERMISSION"
         private const val EXTRA_RESULT_CODE = "result_code"
         private const val EXTRA_RESULT_DATA = "result_data"
-        private const val AUTOLINK_PACKAGE = "com.link.autolink"
 
         // Autolink-compatible video parameters
         private const val EXTERNAL_WIDTH = 1280
