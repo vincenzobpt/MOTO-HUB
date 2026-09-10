@@ -1,0 +1,1990 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Locale: tr-TR. -->
+    <!-- Application identity -->
+    <string name="app_name">MOTO-HUB</string>
+
+    <!-- Settings > General > Language. Names are kept in their native form. -->
+    <string name="language_system_default">Sistem varsayılanı</string>
+    <string name="language_english">English</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_korean">한국어 (대한민국)</string>
+    <string name="language_french">Français</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_dutch">Nederlands</string>
+    <string name="language_czech">Čeština</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="language_title">Dil</string>
+    <string name="language_description">MOTO-HUB\'un kullandığı dili seçin</string>
+    <string name="language_detail_description">MOTO-HUB varsayılan olarak telefonun dilini izler. Yalnızca bu uygulama için değiştirmek üzere aşağıdan bir dil seçin.</string>
+
+    <!-- Settings main page -->
+    <string name="legacy_download_anyway_c17b27fb">Yine de indir</string>
+    <string name="legacy_download_over_1_s_23fdd550">%1$s üzerinden indirilsin mi?</string>
+    <string name="legacy_moto_hub_1_s_is_2_s_and_right_now_the_only_conne_8ebbc51c">MOTO-HUB %1$s %2$s boyutunda ve şu anda İnternet\'e ulaşan tek bağlantı, operatörünüzün ücretlendirdiği %3$s. Motosiklet üzerindeyken bu normaldir: gösterge panelinin Wi-Fi ağında hiç İnternet yoktur.</string>
+    <string name="legacy_waiting_for_wi_fi_costs_nothing_the_update_stays_3f38fec8">Wi-Fi beklemenin bir bedeli yok: güncelleme bu listede kalır.</string>
+    <string name="settings_configuration">YAPILANDIRMA</string>
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_general">Genel</string>
+    <string name="settings_general_description">Dil, kesintisiz devam ve uygulama davranışı</string>
+
+    <!-- Settings > General -->
+    <string name="settings_general_title">Genel</string>
+    <string name="settings_check_updates_on_launch">Açılışta güncellemeleri denetle</string>
+    <string name="settings_check_updates_on_launch_description">GitHub sürümlerini otomatik denetle, en fazla 24 saatte bir</string>
+    <string name="settings_enable_seamless_resume">Kesintisiz devamı etkinleştir</string>
+    <string name="settings_seamless_resume_enabled_description">Android Auto, uzun bir T-Box kesintisinden sonra ekran kapalıyken devam edebilir</string>
+    <string name="settings_seamless_resume_disabled_description">Motosiklet geri geldiğinde Android Auto\'nun arka planda devam etmesine izin ver; ilk etkinleştirmede izin gerekir</string>
+
+    <!-- Settings option labels. These are also used by the route and projection pickers. -->
+    <string name="video_quality_smoother">Daha akıcı</string>
+    <string name="video_quality_smoother_description">Daha düşük bit hızı, daha az ısı ve ağ yükü.</string>
+    <string name="video_quality_balanced">Dengeli</string>
+    <string name="video_quality_balanced_description">Geçerli MOTO-HUB kalitesi ve önerilen varsayılan.</string>
+    <string name="video_quality_sharper">Daha keskin</string>
+    <string name="video_quality_sharper_description">Daha net harita ve yazı için daha yüksek bit hızı.</string>
+    <string name="video_power_auto">Otomatik</string>
+    <string name="video_power_auto_description">Bit hızını ve kare hızını telefon sıcaklığına ve Wi-Fi kalitesine göre ayarla.</string>
+    <string name="video_power_smooth">Akıcı</string>
+    <string name="video_power_smooth_description">Seçilen video kalitesiyle 30 FPS.</string>
+    <string name="video_power_balanced">Dengeli</string>
+    <string name="video_power_balanced_description">Seçilen video kalitesiyle sabit 24 FPS.</string>
+    <string name="video_power_saver">Tasarruf</string>
+    <string name="video_power_saver_description">Daha az ısı ve pil tüketimi için 20 FPS.</string>
+    <string name="android_auto_resolution_auto">Otomatik</string>
+    <string name="android_auto_resolution_auto_description">Öğrenilen T-Box geometrisine dayanan otomatik MOTO-HUB yönlendirmesini koru.</string>
+    <string name="android_auto_resolution_landscape_sd">Yatay 800 x 480</string>
+    <string name="android_auto_resolution_landscape_sd_description">Standart yatay Android Auto kaynağı.</string>
+    <string name="android_auto_resolution_landscape_hd">Yatay 1280 x 720</string>
+    <string name="android_auto_resolution_landscape_hd_description">Daha keskin HD yatay kaynak, telefon yükü daha yüksek.</string>
+    <string name="android_auto_resolution_landscape_fhd">Yatay 1920 x 1080</string>
+    <string name="android_auto_resolution_landscape_fhd_description">Full HD yatay kaynak. Bilinen hiçbir gösterge panelinde doğrulanmadı.</string>
+    <string name="android_auto_resolution_landscape_qhd">Yatay 2560 x 1440</string>
+    <string name="android_auto_resolution_landscape_qhd_description">Quad HD yatay kaynak. Telefon için ağır ve bilinen hiçbir gösterge panelinde doğrulanmadı.</string>
+    <string name="android_auto_resolution_landscape_uhd">Yatay 3840 x 2160</string>
+    <string name="android_auto_resolution_landscape_uhd_description">4K yatay kaynak. Telefon aynı anda 4K kodlar ve çözer; ısınma ve kare kaybı bekleyin.</string>
+    <string name="android_auto_resolution_portrait_sd">Dikey 720 x 1280</string>
+    <string name="android_auto_resolution_portrait_sd_description">Standart dikey Android Auto kaynağı.</string>
+    <string name="android_auto_resolution_portrait_hd">Dikey 1080 x 1920</string>
+    <string name="android_auto_resolution_portrait_hd_description">Daha keskin HD dikey kaynak, telefon yükü daha yüksek.</string>
+    <string name="android_auto_resolution_portrait_qhd">Dikey 1440 x 2560</string>
+    <string name="android_auto_resolution_portrait_qhd_description">Quad HD dikey kaynak. Telefon için ağır ve bilinen hiçbir gösterge panelinde doğrulanmadı.</string>
+    <string name="android_auto_resolution_portrait_uhd">Dikey 2160 x 3840</string>
+    <string name="android_auto_resolution_portrait_uhd_description">4K dikey kaynak. Telefon aynı anda 4K kodlar ve çözer; ısınma ve kare kaybı bekleyin.</string>
+    <string name="android_auto_density_auto">Otomatik</string>
+    <string name="android_auto_density_auto_description">Seçilen çözünürlükle gelen yoğunluğu kullan.</string>
+    <string name="android_auto_density_120">120 dpi</string>
+    <string name="android_auto_density_120_description">En küçük arayüz, ekranda en çok harita. Küçük bir TFT\'de okumak zordur.</string>
+    <string name="android_auto_density_160">160 dpi</string>
+    <string name="android_auto_density_160_description">Küçük arayüz. Yatay kaynakların varsayılan olarak kullandığı yoğunluk.</string>
+    <string name="android_auto_density_213">213 dpi</string>
+    <string name="android_auto_density_213_description">Küçük ile standart arası. 160 fazla sıkışık, 240 fazla kaba geldiğinde işe yarar.</string>
+    <string name="android_auto_density_240">240 dpi</string>
+    <string name="android_auto_density_240_description">Standart arayüz. Dikey kaynakların varsayılan olarak kullandığı yoğunluk.</string>
+    <string name="android_auto_density_320">320 dpi</string>
+    <string name="android_auto_density_320_description">Büyük arayüz, okuması ve eldivenle dokunması daha kolay. Ekranda daha az harita.</string>
+    <string name="android_auto_density_480">480 dpi</string>
+    <string name="android_auto_density_480_description">En büyük arayüz. Yalnızca yüksek çözünürlüklü kaynaklarda anlamlıdır.</string>
+    <string name="android_auto_insets_auto">Otomatik</string>
+    <string name="android_auto_insets_auto_description">Android Auto kaynağının tamamını kullan; T-Box yansıtma alanı hiç AA kenar boşluğu eklemez.</string>
+    <string name="android_auto_insets_manual">Elle</string>
+    <string name="android_auto_insets_manual_description">Motosiklete özgü TFT Güvenli Kenar Boşluklarını Android Auto\'ya bildir.</string>
+    <string name="distance_units_kilometers">Kilometre</string>
+    <string name="distance_units_kilometers_description">Mesafeler ve hızlar km ve km/s cinsinden.</string>
+    <string name="distance_units_miles">Mil</string>
+    <string name="distance_units_miles_description">Mesafeler ve hızlar mi ve mph cinsinden.</string>
+    <string name="route_preference_fastest">En hızlı</string>
+    <string name="route_preference_fastest_description">En kısa süreli rota, otoyollara izin verilir.</string>
+    <string name="route_preference_scenic">Manzaralı</string>
+    <string name="route_preference_scenic_description">Tali yolları tercih eder, otoyollardan kaçınır.</string>
+
+    <!-- Core/Pro bridge notification -->
+    <string name="core_bridge_channel_name">MOTO-HUB Core köprüsü</string>
+    <string name="core_bridge_channel_description">MOTO-HUB Pro kullanırken T-Box bağlantısını canlı tutar</string>
+    <string name="core_bridge_notification_title">MOTO-HUB Core etkin</string>
+    <string name="core_bridge_notification_text">MOTO-HUB Pro\'ya hizmet veriyor.</string>
+
+    <!-- Projection notifications -->
+    <string name="projection_channel_name">MOTO-HUB yansıtma</string>
+    <string name="projection_channel_description">Motosiklet ekranı için akış durumu</string>
+    <string name="projection_notification_title">MOTO-HUB etkin</string>
+    <string name="projection_notification_text">Ekran yansıtma etkin.</string>
+    <string name="projection_notification_dimmed_text">Yansıtma etkin, telefon ekranı karartıldı.</string>
+    <string name="stop_projection">Durdur</string>
+    <string name="dim_phone_display">Ekranı karart</string>
+    <string name="restore_phone_display">Ekranı geri getir</string>
+
+    <!-- Android Auto notifications -->
+    <string name="android_auto_channel_name">MOTO-HUB Android Auto</string>
+    <string name="android_auto_notification_title">MOTO-HUB Android Auto oturumu</string>
+    <string name="android_auto_notification_text">Oturum etkin. Canlı yansıtma durumu için MOTO-HUB\'u açın.</string>
+    <string name="stop_android_auto">Android Auto\'yu durdur</string>
+
+    <!-- Ride Dashboard notifications -->
+    <string name="ride_dashboard_channel_name">MOTO-HUB Ride Dashboard</string>
+    <string name="ride_dashboard_channel_description">Canlı sürüş verisi akış durumu</string>
+    <string name="ride_dashboard_notification_title">MOTO-HUB Ride Dashboard</string>
+    <string name="ride_dashboard_notification_text">GPS telemetrisi ve gösterge paneli akışı etkin.</string>
+    <string name="stop_ride_dashboard">Paneli durdur</string>
+    <!-- Source: MainActivity.kt -->
+    <string name="legacy_moto_hub_diagnostics_ba6420b1">MOTO-HUB tanılama</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_about_the_project_2feef1f7">PROJE HAKKINDA</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_check_for_updates_66a2b53b">Güncellemeleri denetle</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_close_3e2edd8">Kapat</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_experimental_software_e22071df">DENEYSEL YAZILIM</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_no_network_called_1_s_has_been_seen_but_this_pho_3174d343">“%1$s” adlı bir ağ görülmedi, ancak bu telefon yalnızca boşluklarıyla ayrılan “%2$s” ağını biliyor. Yazdığınızı korumak için yeniden kaydedin.</string>
+    <string name="legacy_open_github_repository_80f9bf71">GitHub deposunu aç</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_platform_9e635873">PLATFORM</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_source_support_aa797bf0">KAYNAK &amp; DESTEK</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_use_1_s_ef5e7994">%1$s kullan</string>
+    <string name="legacy_version_3fc0a8b8">SÜRÜM</string>
+    <!-- Source: feature/androidauto/AndroidAutoPreviewScreen.kt -->
+    <string name="legacy_fullscreen_7d6157db">Tam ekran</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_address_or_coordinates_9e7a90a">Adres veya koordinatlar</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_back_1f7907">Geri</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_controls_e20faad6">Kumandalar</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_cycle_panels_c623ab89">Panelleri değiştir</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_everything_on_this_page_controls_the_projection__88534bf1">Bu sayfadaki her şey, motosiklette şu anda gösterilen yansıtmayı denetler.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_exit_fullscreen_b7c93dd">Tam ekrandan çık</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_fullscreen_map_bafc2397">Tam ekran harita</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_handlebar_controls_cf2abe6b">Gidon kumandaları</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_home_2268ff">Ana sayfa</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_open_glove_friendly_fullscreen_controller_2d746356">Eldivenle kullanılabilen tam ekran kumandayı aç</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_reset_default_mapping_bd7464fe">Varsayılan eşlemeye sıfırla</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_scroll_ebe1cfb8">Kaydır +</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_scroll_ebe1f19f">Kaydır −</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_the_value_is_restored_when_handlebar_capture_is__ea95c499">Gidon yakalama kapatıldığında değer geri yüklenir.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_timing_9551dc6a">Zamanlama</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_use_the_motorcycle_buttons_without_looking_down__1b06094c">Motosiklet düğmelerini aşağı bakmadan kullanın. Komutları önce etkin yansıtma alır.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_voice_4eff112">Ses</string>
+    <!-- Source: feature/controls/MediaButtonBridge.kt -->
+    <string name="legacy_motorcycle_buttons_control_targetname_c5bca78f">Motosiklet düğmeleri $targetName ögesini denetliyor</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_application_logs_ca54c69f">Uygulama günlükleri</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_clear_3e2c62d">Temizle</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_copy_log_e59a8039">Günlüğü kopyala</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_no_diagnostic_events_have_been_recorded_290567d5">Hiç tanılama olayı kaydedilmedi.</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_persistent_events_from_wi_fi_t_box_mirroring_enc_679d01c0">Wi-Fi, T-Box, aynalama, kodlayıcı ve Android Auto kaynaklı kalıcı olaylar.</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_share_4c25fbf">Paylaş</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_troubleshooting_f6bb8e3a">SORUN GİDERME</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_check_t_box_and_cellular_routes_without_starting_7ae11348">VPN başlatmadan veya varsayılan ağı değiştirmeden T-Box ve hücresel yolları denetleyin.</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_network_diagnostics_a4fc929a">Ağ tanılaması</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_no_network_snapshot_available_5baf5bb0">Ağ anlık görüntüsü yok.</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_result_8fe0bc1d">SONUÇ</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_system_lab_433267fc">SİSTEM LABORATUVARI</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_start_a_projection_to_populate_the_log_23fff8de">Günlüğü doldurmak için bir yansıtma başlatın.</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_add_a_motorcycle_by_scanning_its_t_box_qr_code_a77ba91f">T-Box QR kodunu tarayarak bir motosiklet ekleyin.</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_add_motorcycle_397b0e90">Motosiklet ekle</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_edit_20e22a">Düzenle</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_motorcycles_2c9478e2">Motosikletler</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_no_qr_connect_manually_8ad804ea">QR yok mu? Elle bağlanın</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_options_18bf1e7e">Seçenekler</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_saved_motorcycles_181a24a9">KAYITLI MOTOSİKLETLER</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_scan_a_qr_code_5a21ea0a">QR kodu tara</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_use_this_motorcycle_1204179a">Bu motosikleti kullan</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_your_garage_c0aeffb4">GARAJINIZ</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_your_garage_is_empty_f25b99e3">Garajınız boş</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_connection_eeae6ade">BAĞLANTI</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_cancel_77df1a9a">İptal</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_changes_are_saved_immediately_3ab73352">Değişiklikler anında kaydedilir.</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_choose_how_the_complete_android_auto_image_is_fi_cb149112">Eksiksiz Android Auto görüntüsünün TFT\'ye nasıl sığdırılacağını seçin.</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_display_name_6697cf49">Görünen ad</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_exclude_pixels_occupied_by_the_motorcycle_ui_the_c5210089">Motosiklet arayüzünün kapladığı pikselleri dışarıda bırakın. Bu değerler şunun için saklanır: </string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_for_example_300_1aa3b7a">Örneğin: 300</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_for_example_mt700_adventure_4c1ae7c7">Örneğin: MT700 Adventure</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_fuel_2195d6">Yakıt</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_full_tank_range_on_a_fill_up_powers_the_fuel_ran_68a667ae">Tam depoyla gidilebilecek menzil. Navigasyondaki yakıt menzili uyarısını besler.</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_identity_fbc2d4de">Kimlik</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_motorcycle_profile_bd90ddfa">MOTOSİKLET PROFİLİ</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_make_it_yours_9dfd813d">Kendinize göre ayarlayın</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_override_the_automatic_profile_detection_for_thi_dcc5245b">Bu motosiklet için otomatik profil algılamayı geçersiz kılın. Yalnızca şu durumda kullanın: </string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_91afe4a4">Kaldır</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_motorcycle_c0498b52">Motosiklet kaldırılsın mı?</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_photo_7fa92bb6">Fotoğrafı kaldır</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_this_motorcycle_f21e94d7">Bu motosikleti kaldır</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_reset_margins_ff05a94">Kenar boşluklarını sıfırla</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_t_box_identifier_modelid_2c1c9ebd">T-Box tanımlayıcısı: $modelId</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_tank_range_km_f16147b8">Depo menzili (km)</string>
+    <!-- Garage tank-range field label when the rider selects miles. -->
+    <string name="legacy_tank_range_mi_f1614ebe">Depo menzili (mi)</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_the_wi_fi_password_is_stored_securely_on_this_ph_b6fb6382">Wi-Fi parolası bu telefonda güvenli biçimde saklanır.</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_the_name_is_only_used_inside_moto_hub_10a5f3a4">Ad yalnızca MOTO-HUB içinde kullanılır.</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_the_saved_connection_profile_and_its_photo_will__c6d581e2">Kayıtlı bağlantı profili ve fotoğrafı MOTO-HUB\'dan kaldırılacak.</string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_could_not_derive_a_peer_ip_this_network_may_not__3fa3f2d0">Bir eş IP adresi türetilemedi - bu ağda henüz kullanılabilir bir yol olmayabilir.</string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_if_easyconn_discovery_keeps_failing_briefly_reco_ced96e0d">EasyConn keşfi başarısız olmaya devam ederse, bu T-Box\'a kısa süreliğine yeniden bağlanıp şunu yoklayın: </string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_scan_common_easyconn_ports_835f5172">Yaygın EasyConn bağlantı noktalarını tara</string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_t_box_capability_inspector_937ec87d">T-BOX YETENEK İNCELEYİCİSİ</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_another_easyconn_app_can_keep_the_t_box_link_occ_fd2f2f53">Başka bir EasyConn uygulaması, ön plandan çıktıktan sonra bile T-Box bağlantısını meşgul tutabilir.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_connection_failed_3b5c2fbf">BAĞLANTI BAŞARISIZ</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_choose_what_the_ride_dashboard_shows_for_navigat_793eeb07">Ride Dashboard\'un navigasyon için ne göstereceğini seçin.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_connect_your_motorcycle_2e5794e6">Motosikletinizi bağlayın.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_connecting_48965ad8">Bağlanıyor</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_dashboard_map_5dae1b0">Panel haritası</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_disconnect_966f34bc">Bağlantıyı kes</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_first_time_setup_d929eaa7">İLK KURULUM</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_session_actions_bc6aa933">OTURUM EYLEMLERİ</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_scan_the_t_box_qr_code_to_save_the_network_crede_67df5b62">Ağ kimlik bilgilerini otomatik kaydetmek için T-Box QR kodunu tarayın.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_setting_up_network_and_t_box_7769a762">Ağ ve T-Box kuruluyor</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_what_to_show_122be0b9">Ne gösterilsin?</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_back_fe3a848e">‹ Geri</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_arrived_ff08704d">VARILDI</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_calculating_your_route_86fbe56d">Rotanız hesaplanıyor…</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_done_2097a2">Tamam</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_exact_destination_pin_used_for_routing_tap_the_m_10786cc">Rota hesaplamada kullanılan tam varış işareti. Değiştirmek için haritaya dokunun.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_guidance_to_your_destination_will_end_27d69f">Varış noktanıza yönlendirme sona erecek.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_info_225cae">BİLGİ</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_keep_going_6d8f25bf">Devam et</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_live_navigation_70ce19c8">CANLI NAVİGASYON</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_map_location_9df6ea19">HARİTA KONUMU</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_navigation_needs_attention_7f3ab90f">NAVİGASYON İLGİ BEKLİYOR</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_no_9c1">HAYIR</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_name_24eeab">Ad</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_navigation_will_start_either_way_open_the_ride_d_b34bca11">Navigasyon her durumda başlayacak. Ride Dashboard motosiklet TFT ekranında açılsın mı?</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_no_favorites_yet_save_one_from_a_route_preview_o_b8e45fac">Henüz favori yok. Bir rota önizlemesinden veya varış ekranından kaydedin.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_no_matches_e3c700ba">Eşleşme yok.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_not_every_address_number_is_mapped_in_openstreet_cf7708fe">Her kapı numarası henüz OpenStreetMap\'te işaretli değil, bu yüzden işaret </string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_off_route_recalculating_1f5a422b">Rota dışı – yeniden hesaplanıyor…</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_open_ride_dashboard_202629d">Ride Dashboard açılsın mı?</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_optional_label_267da254">İsteğe bağlı etiket</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_route_type_519caed1">ROTA TÜRÜ</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_reroute_a49323d6">Yeniden hesapla</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_27359d">Kaydet</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_a_destination_as_a_favorite_from_a_route_pr_5669fe67">Bir rota önizlemesinden varış noktasını favori olarak kaydedin.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_favorite_85e74bf">Favoriyi kaydet</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_this_route_d63094aa">Bu rotayı kaydet</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_search_address_or_paste_coordinates_daf446f5">Adres arayın veya koordinat yapıştırın</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_start_navigation_2d34b0b2">Navigasyonu başlat</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_stop_277c22">Durdur</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_stop_navigation_8a243dad">Navigasyon durdurulsun mu?</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_tap_to_dismiss_d17702a2">Kapatmak için dokunun</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_work_293b31">İş</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_yes_156c7">EVET</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_you_have_arrived_e0a68436">Vardınız</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_e_g_sunday_loop_1dd6a810">örn. Pazar turu</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_label_27143b17">‹ $label</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_clear_all_5a4e690e">TÜMÜNÜ TEMİZLE</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_dest_2072c2">Varış</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_fit_113f1">Sığdır</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_full_screen_22a47efd">Tam ekran</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_select_all_ba2cd45d">TÜMÜNÜ SEÇ</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_openstreetmap_contributors_692ada40">© OpenStreetMap katkıcıları</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_auto_detects_direct_networks_choose_wi_fi_direct_a24126ac">DIRECT- ağlarını otomatik algılar. P2P Grup Sahibi olan bir gösterge paneli için Wi-Fi Direct\'i seçin.</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_connect_without_a_qr_code_bd61ac9f">QR kodu olmadan bağlan</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_manual_setup_176cc583">ELLE KURULUM</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_some_motorcycles_don_t_show_a_pairing_qr_code_on_c3361949">Bazı motosikletler gösterge panelinde eşleştirme QR kodu göstermez. Zaten biliyorsanız </string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_t_box_wi_fi_transport_2b8fdfb9">T-Box Wi-Fi taşıması</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_wi_fi_network_name_ssid_4e8cc3a7">Wi-Fi ağ adı (SSID)</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_wi_fi_password_aa1722dd">Wi-Fi parolası</string>
+    <!-- Source: feature/pairing/TBoxQrScannerScreen.kt -->
+    <string name="legacy_t_box_scan_eb4ea12b">T-BOX TARAMA</string>
+    <!-- Source: feature/ridedashboard/RideDashboardPreviewScreen.kt -->
+    <string name="legacy_uses_this_phone_s_gps_no_t_box_needed_same_rende_58537da7">Bu telefonun GPS\'ini kullanır - T-Box gerekmez. Aynı işleyici ve yön yukarı/yakınlaştırma </string>
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_elevation_last_hour_10deed1a">YÜKSELTİ / SON SAAT</string>
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_now_12eb6">ŞİMDİ</string>
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_waiting_for_gnss_elevation_f069100e">GNSS YÜKSELTİSİ BEKLENİYOR</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_battery_7593afdc">$battery%</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_g_force_fca415c5">G KUVVETİ</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_motion_sensors_b224e96f">HAREKET SENSÖRLERİ</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_phone_system_b2b20c1d">TELEFON // SİSTEM</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_turn_rate_9cfa82a3">DÖNÜŞ HIZI</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_ahead_3b5bda1">İLERİ</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_compass_sun_45d9eeda">PUSULA // GÜNEŞ</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_left_239807">SOL</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_right_4a5c9fc">SAĞ</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_sun_horizon_6a3f3196">GÜNEŞ / UFUK</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_sun_behind_2679a1ae">GÜNEŞ ARKADA</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_waiting_for_position_heading_75ece8e0">KONUM + YÖN BEKLENİYOR</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_dashboard_customization_b85f9307">PANEL ÖZELLEŞTİRME</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_grant_41dd0fc">İzin ver</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_live_layout_cdba0cde">CANLI YERLEŞİM</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_map_1293c">HARİTA</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_map_stays_in_the_centre_f108a4fb">Harita ortada kalır</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_needs_notification_access_44d40c16">Bildirim erişimi gerekir</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_reset_defaults_6000a23">Varsayılanlara dön</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_swap_2785b3">Yer değiştir</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_tap_to_assign_d1b41d7">ATAMAK İÇİN DOKUN</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_widget_library_cb7316bf">WIDGET KİTAPLIĞI</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_current_location_5f369a9c">GEÇERLİ KONUM</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_eta_10d72">VARIŞ</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_nav_route_20ffc4db">NAV / ROTA</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_off_route_recalculating_7a9dcf5c">ROTA DIŞI — YENİDEN HESAPLANIYOR</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_remaining_d9f0bdd6">KALAN</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_rise_2662c9">DOĞUŞ</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_set_14042">BATIŞ</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_sun_1422c">GÜNEŞ</string>
+    <!-- Source: feature/ridedashboard/widget/NowPlayingWidget.kt -->
+    <string name="legacy_no_media_session_5cbc8365">-- MEDYA OTURUMU YOK --</string>
+    <!-- Source: feature/ridedashboard/widget/NowPlayingWidget.kt -->
+    <string name="legacy_no_artwork_2acf3875">KAPAK YOK</string>
+    <!-- Source: feature/ridedashboard/widget/NowPlayingWidget.kt -->
+    <string name="legacy_now_playing_media_session_45191bd6">ÇALIYOR // MEDYA OTURUMU</string>
+    <!-- Source: feature/ridedashboard/widget/SatelliteWidget.kt -->
+    <string name="legacy_signal_coverage_fef46060">SİNYAL KAPSAMI</string>
+    <!-- Source: feature/ridedashboard/widget/SpeedGaugeWidget.kt -->
+    <string name="legacy_ground_speed_gps_c8f77ac7">YER HIZI / GPS</string>
+    <!-- Source: feature/ridedashboard/widget/SpeedGaugeWidget.kt -->
+    <string name="legacy_km_h_233edb">KM/H</string>
+    <!-- Speed-unit label when the rider selects miles in Settings. -->
+    <string name="legacy_mph_12b05">MPH</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_average_km_h_d2517b1e">ORT. KM/H</string>
+    <!-- Trip-metrics average-speed label when the rider selects miles. -->
+    <string name="legacy_average_mph_6c8da62">ORT. MPH</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_recent_8fd93a5b">SON</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_speed_profile_2c1ba290">HIZ PROFİLİ</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_trip_performance_8c26f32b">YOLCULUK // PERFORMANS</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_waiting_for_speed_data_91032a2d">HIZ VERİSİ BEKLENİYOR</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_check_cellular_data_b94ccb68">HÜCRESEL VERİYİ DENETLE</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_live_23a8ec">CANLI</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_loading_3edc6d1c">YÜKLENİYOR</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_open_meteo_gps_2cc3134f">OPEN-METEO • GPS</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_rain_probability_9ad3fd28">YAĞMUR $probability%</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_retrying_every_15s_e5e3f7a4">15 SN\'DE BİR DENENİYOR</string>
+    <!-- Source: feature/safety/SafetyDisclaimerDialog.kt -->
+    <string name="legacy_i_understand_and_continue_7ea73adb">Anladım ve devam ediyorum</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_android_auto_content_insets_7046c7dd">ANDROID AUTO İÇERİK KENAR BOŞLUKLARI</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_choose_image_detail_and_how_moto_hub_balances_sm_577123e1">Görüntü ayrıntısını ve MOTO-HUB\'un akıcılık, ısı, pil ve Wi-Fi yükü arasındaki dengeyi nasıl kuracağını seçin.</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_default_route_type_b528b630">VARSAYILAN ROTA TÜRÜ</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_motorcycle_features_1ef519ec">MOTOSİKLET ÖZELLİKLERİ</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_power_mode_357a57fe">GÜÇ MODU</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_resolution_bd8b64ac">ÇÖZÜNÜRLÜK</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_turn_by_turn_routing_uses_your_own_stadia_maps_a_76117a71">Adım adım rota hesaplama, hiçbir zaman ortak bir anahtar değil, kendi Stadia Maps API </string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_units_4d25f4f">BİRİMLER</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_delete_79cb71cb">Sil</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_delete_this_trip_b2d7ee2d">Bu yolculuk silinsin mi?</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_delete_trip_1d14595a">Yolculuğu sil</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_discard_c6d7a07e">Vazgeç</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_export_gpx_83319643">GPX dışa aktar</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_finish_save_39e52944">Bitir &amp; kaydet</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_gps_logging_works_with_the_phone_locked_37383170">GPS kaydı telefon kilitliyken de çalışır</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_not_saved_d22da6ba">KAYDEDİLMEDİ</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_name_this_ride_9a657605">Bu sürüşü adlandır</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_opening_the_saved_trip_now_c583b843">Kaydedilen yolculuk şimdi açılıyor.</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_recorded_rides_823a26eb">KAYITLI SÜRÜŞLER</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_recording_unavailable_9bbb7461">KAYIT KULLANILAMIYOR</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_ride_archive_c06bf17a">SÜRÜŞ ARŞİVİ</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_record_a_ride_ce0c4be6">Bir sürüş kaydet</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_recording_was_too_short_to_keep_6761ae14">Kayıt saklanamayacak kadar kısaydı</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_rename_trip_584eaba7">Yolculuğu yeniden adlandır</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_ride_recordings_need_at_least_100_m_15_s_of_move_260f0993">Sürüş kayıtları için en az 100 m, 15 sn hareket ve iki GPS noktası gerekir.</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_saved_4b07667">KAYDEDİLDİ</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_start_new_recording_36e83013">Yeni kayıt başlat</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_start_recording_836b8b93">Kaydı başlat</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_track_details_6b05b82d">İZ AYRINTILARI</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_the_gps_trace_and_all_recorded_statistics_will_b_6d59f1b7">GPS izi ve kaydedilen tüm istatistikler kalıcı olarak silinecek.</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trip_name_5c3de586">Yolculuk adı</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trip_saved_to_recorded_rides_31c5533c">Yolculuk, Kayıtlı sürüşlere kaydedildi</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trips_4d520ce">Yolculuklar</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_try_again_25aeb09b">Yeniden dene</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_view_2832a5">GÖRÜNTÜLE</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trips_ca1b8627">‹ Yolculuklar</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_allow_apk_installation_a3116df5">APK kurulumuna izin ver</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_checking_github_releases_7e509ccb">GitHub sürümleri denetleniyor...</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_moto_hub_updates_c98ab24f">MOTO-HUB güncellemeleri</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_no_apk_asset_attached_to_this_release_7a89904d">Bu sürüme ekli APK dosyası yok.</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_no_newer_version_is_available_b79316a1">Daha yeni bir sürüm yok.</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_pre_release_6bd19a9d">ÖN SÜRÜM</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_retry_4b33288">Yeniden dene</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_skip_this_version_c2d1da37">Bu sürümü atla</string>
+    <!-- Source: session/ProjectionForegroundService.kt -->
+    <string name="legacy_projection_is_running_8c249b1a">Yansıtma çalışıyor</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_fill_and_crop_8b8b5d16">Doldur ve kırp</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_preserve_aspect_ratio_b340e377">En boy oranını koru</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_show_the_complete_image_with_black_side_bars_whe_90d880eb">Gerektiğinde siyah yan bantlarla eksiksiz görüntüyü göster.</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_stretch_display_45b17e87">Ekranı genişlet</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_use_the_whole_tft_and_keep_all_content_visible_w_6c1c6337">TFT\'nin tamamını kullan ve hafif bir genişletmeyle tüm içeriği görünür tut.</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_use_the_whole_tft_without_stretching_crop_the_ed_8f0ac706">TFT\'nin tamamını genişletmeden kullan; en boy oranları farklı olduğunda kenarları kırp.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_adjust_the_phone_media_level_while_handlebar_cap_a55dd55a">Gidon yakalama etkinken telefon medya düzeyini ayarlayın.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_advanced_handlebar_mapping_d94a5a3b">Gelişmiş gidon eşlemesi</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_choose_the_day_night_style_used_by_android_auto_c4b5df26">Android Auto\'nun kullandığı gündüz/gece stilini seçin.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_customize_double_taps_holds_and_android_auto_com_59078421">Çift dokunuşları, basılı tutmaları ve Android Auto komutlarını özelleştirin.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_destinations_available_to_one_press_handlebar_na_19306aee">Tek basışla gidon navigasyonuna açık varış noktaları.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_double_tap_a52552f4">Çift dokunuş</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_map_appearance_b4c189c8">Harita görünümü</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_media_volume_142f4af6">Medya ses düzeyi</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_saved_places_f8158025">Kayıtlı yerler</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_select_hold_6cc41543">Select basılı tutma</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_detected_networks_fa8527c3">Algılanan ağlar</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_session_events_1a7f9e03">Oturum olayları</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_android_auto_display_56c75982">Android Auto Ekranı</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_choose_widgets_for_each_side_panel_c04b42c9">Her yan panel için widget seçin</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_customize_dashboard_3d094ab7">Paneli Özelleştir</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_endpoint_geometry_protocol_and_feature_flags_7f197859">Uç nokta, geometri, protokol ve özellik bayrakları</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_exclude_pixels_occupied_by_the_motorcycle_ui_c69e3740">Motosiklet arayüzünün kapladığı pikselleri dışarıda bırak</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_how_the_complete_android_auto_image_fits_the_tft_11c8bbf2">Eksiksiz Android Auto görüntüsünün TFT\'ye nasıl sığdığı</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_override_automatic_profile_detection_b102be5">Otomatik profil algılamayı geçersiz kıl</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_t_box_capability_inspector_e5159c9d">T-Box Yetenek İnceleyicisi</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_t_box_profile_override_f6f6b251">T-Box Profil Geçersiz Kılma</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_tft_safe_margins_d1e86e30">TFT Güvenli Kenar Boşlukları</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_motorcycle_15a347f8">‹ Motosiklet</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_customize_d780ac23">Özelleştir</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_dim_phone_display_4f190e58">Telefon ekranını karart</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_draw_recorded_points_on_the_dashboard_map_d0764c05">Kaydedilen noktaları panel haritasına çiz.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_keep_the_tft_active_while_reducing_phone_distrac_f9df0d5a">Telefonun dikkat dağıtmasını azaltırken TFT\'yi etkin tut.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_open_the_on_screen_android_auto_controls_55f559a3">Ekran üzerindeki Android Auto kumandalarını aç.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_preview_50417ba8">Önizleme</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_preview_touch_c103ae4d">Önizleme &amp; dokunma</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_show_gps_track_2ed7fcf2">GPS izini göster</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_view_android_auto_and_interact_from_your_phone_1e4d3a53">Android Auto\'yu telefonunuzdan görün ve kullanın.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_review_your_route_before_starting_guidance_48917adb">Yönlendirmeyi başlatmadan önce rotanızı gözden geçirin.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_take_me_home_bb1e43ee">Beni eve götür</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_about_moto_hub_6966e1f8">MOTO-HUB hakkında</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_android_auto_cb210d00">Android Auto</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_announce_upcoming_maneuvers_while_navigating_7c1d9f50">Navigasyon sırasında yaklaşan manevraları seslendir</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_connect_on_launch_9e7cd0e0">Açılışta otomatik bağlan</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_connect_recovery_trip_recording_1bf7551f">Otomatik bağlanma, kurtarma, yolculuk kaydı</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_record_rides_3d1b712a">Sürüşleri otomatik kaydet</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_recover_stalled_android_auto_and_ride_dashb_5da6ea2d">Takılan Android Auto ve Ride Dashboard akışlarını otomatik kurtar</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_bluetooth_capture_and_mapping_3e23fd19">Bluetooth yakalama ve eşleme</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_connect_and_discover_t_box_when_app_opens_fe05f1ea">Uygulama açıldığında bağlan ve T-Box\'ı keşfet</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_connection_automation_93f3bb33">Bağlantı &amp; otomasyon</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_diagnostics_3748418c">Tanılama</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_disable_touchscreen_4f636f13">Dokunmatik ekranı devre dışı bırak</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_draw_detected_curved_segments_in_a_distinct_colo_906c94c">Algılanan virajlı kesimleri TFT haritasında ayrı bir renkle çiz</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_enable_logging_e57825e2">Günlük kaydını etkinleştir</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_encoder_detail_and_power_mode_for_all_streams_9c18fdcf">Tüm akışlar için kodlayıcı ayrıntısı ve güç modu</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_fuel_range_warning_e301d2ef">Yakıt menzili uyarısı</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_full_client_info_every_candidate_profile_s_score_fb2a321f">Eksiksiz CLIENT_INFO, her aday profilin puanı, bilinmeyen komut </string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_golden_hour_hint_26c00b9f">Altın saat ipucu</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_highlight_curvy_roads_6d7866a">Virajlı yolları vurgula</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_master_switch_for_the_diagnostic_log_off_means_n_1d7e2b81">Tanılama günlüğünün ana anahtarı. Kapalıyken hiçbir şey kaydedilmez </string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_navigation_e5d7e634">Navigasyon</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_network_tests_and_application_logs_6064f99">Ağ testleri ve uygulama günlükleri</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_preview_ride_dashboard_cf294e4">Ride Dashboard önizlemesi</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_recovery_watchdog_eb0fb218">Kurtarma bekçisi</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_resolution_and_display_mode_70f7a2be">Çözünürlük ve ekran modu</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_review_copy_share_or_clear_events_fa00934b">Olayları gözden geçir, kopyala, paylaş veya temizle</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_routes_through_fossgis_s_free_public_valhalla_se_5f3fb227">Rotaları şunun yerine FOSSGIS\'in ücretsiz genel Valhalla sunucusu üzerinden hesaplar: </string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_see_the_tft_render_on_this_phone_using_its_own_g_d21ea9ba">TFT çizimini bu telefonda, kendi GPS\'iyle görün - T-Box gerekmez</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_show_forecast_conditions_at_your_destination_in__d467471f">Rota önizlemesinde varış noktanızdaki hava tahminini göster</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_show_minutes_to_the_nearest_sunrise_sunset_golde_840f15d">En yakın gün doğumu/batımı altın saatine kalan dakikayı göster</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_start_gps_logging_with_projection_sessions_1c3d9c89">GPS kaydını yansıtma oturumlarıyla birlikte başlat</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_t_box_discovery_wi_fi_binding_cellular_routes_32d84d5f">T-Box keşfi, Wi-Fi bağlama, hücresel yollar</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_try_without_a_key_demo_server_74e379d4">Anahtarsız dene (tanıtım sunucusu)</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_use_focus_and_handlebar_controls_even_when_the_t_d1be0479">T-Box dokunmatik ekran bildirse bile odak ve gidon kumandalarını kullan</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_verbose_t_box_logging_ee12f7b3">Ayrıntılı T-Box günlüğü</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_video_quality_3ed2f63a">Video kalitesi</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_voice_guidance_a2d4eea6">Sesli yönlendirme</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_warn_when_a_route_would_exceed_your_motorcycle_s_c31a0f09">Bir rota motosikletinizin depo menzilini aşacaksa uyar (Garaj\'da ayarlanır)</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_weather_at_arrival_44ffc4d8">Varışta hava durumu</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_your_own_routing_api_key_for_turn_by_turn_94d8b202">Adım adım yönlendirme için kendi rota API anahtarınız</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_settings_7469104a">‹ Ayarlar</string>
+    <!-- Source: feature/trips/TripRecordingService.kt -->
+    <string name="legacy_gps_ride_recording_and_trip_statistics_28992d34">GPS sürüş kaydı ve yolculuk istatistikleri</string>
+    <!-- Source: session/PhoneDisplayDimmer.kt -->
+    <string name="legacy_moto_hub_display_dimmer_57b6244b">MOTO-HUB ekran karartıcı</string>
+    <!-- Dynamic UI templates. Keep positional placeholders unchanged. -->
+    <string name="legacy_filter_1_d_497daa14">FİLTRE %1$d</string>
+    <string name="legacy_recording_1_s_b01f3573">KAYIT · %1$s</string>
+    <string name="legacy_1_d_optimized_gps_points_de88df06">%1$d iyileştirilmiş GPS noktası</string>
+    <string name="legacy_place_1_d_name_6bdc57c6">Yer %1$d adı</string>
+    <string name="legacy_save_place_1_d_39c7a048">Yer %1$d kaydet</string>
+    <string name="legacy_t_box_identifier_1_s_531e2638">T-Box tanımlayıcısı: %1$s</string>
+    <string name="legacy_1_s_fe2c9a02">‹ %1$s</string>
+    <string name="legacy_motorcycle_buttons_control_1_s_6e2f90ac">Motosiklet düğmeleri %1$s ögesini denetliyor</string>
+    <string name="legacy_rain_1_d_84b55e18">YAĞMUR %1$d%%</string>
+    <string name="legacy_1_d_c_41e7b8ff">%1$d°C</string>
+    <string name="legacy_1_d_km_h_6ce8c40f">%1$d KM/H</string>
+    <!-- Weather forecast wind speed when the rider selects miles. -->
+    <string name="legacy_1_d_mph_669c2f51">%1$d MPH</string>
+    <string name="legacy_moto_hub_258caaa5">MOTO-HUB</string>
+    <string name="legacy_recording_this_ride_1aceedab">Bu sürüş kaydediliyor</string>
+    <string name="legacy_moto_hub_controls_f72ba5d1">MOTO-HUB kumandaları</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_available_e7e32615">%1$d kullanılabilir</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_remaining_e0c291">%1$s kaldı</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_2_s_a1c6054a">%1$s · %2$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1000_mt_x_cfdl26_a07555df">1000 MT-X (CFDL26)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_200_ms_snappier_singles_bddf5c9a">200 ms - daha çevik tek basış</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_300_ms_balanced_17f78a68">300 ms - dengeli</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_450_ms_forgiving_doubles_3234effd">450 ms - hoşgörülü çift basış</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_500_ms_quicker_hold_a1cbda27">500 ms - daha hızlı basılı tutma</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_600_ms_balanced_9f5246b">600 ms - dengeli</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_800_ms_deliberate_hold_32e73399">800 ms - bilinçli basılı tutma</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_800mt_cfdl26_9a9a6453">800MT (CFDL26)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_800nk_advanced_cfdl26_8796cfe5">800NK Advanced (CFDL26)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_active_profile_dcb9be6f">ETKİN PROFİL</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_4d461ce0">ANDROID AUTO</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_atms_1ed139">ATM\'ler</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_avg_feb2">ORT</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_avg_speed_7231cd39">ORT. HIZ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_access_point_2a7fd7f4">Erişim noktası</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_airports_db81a128">Havaalanları</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_album_cover_current_track_and_progress_5704cf2c">Albüm kapağı, çalan parça ve ilerleme</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_altitude_7d3daec2">Yükseklik</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_map_9e2be3c">Android Auto haritası</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_arc_speedometer_bearing_and_gnss_lock_status_a1dab290">Yay biçimli hız göstergesi, yön ve GNSS kilit durumu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_assistant_ccab92be">Asistan</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_attractions_ab6135cc">Gezilecek yerler</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_auto_1f51cf">Otomatik</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_auto_day_night_808f223b">Otomatik (gündüz/gece)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_backward_left_7f90d6f7">Geri - Sol</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_backward_double_tap_left_bf920c29">Geri çift dokunuş - Sol</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bakery_7628ee00">Fırın</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_banks_3cfd197">Bankalar</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bars_pubs_8301b610">Barlar &amp; publar</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_battery_phone_fc45d1a1">Pil &amp; Telefon</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_battery_charging_connectivity_temperature_and_mo_59cfa2d5">Pil, şarj, bağlantı, sıcaklık ve hareket sensörleri</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bicycle_rental_cee64385">Bisiklet kiralama</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_absolute_volume_change_3096ab72">Bluetooth mutlak ses düzeyi değişikliği</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_next_track_command_7a7046ee">Bluetooth sonraki parça komutu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_play_pause_command_a9252e58">Bluetooth çal/duraklat komutu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_previous_track_command_d68a66f2">Bluetooth önceki parça komutu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl16_450sr_style_non_touch_b3fdf770">CFDL16 / 450SR tarzı dokunmatik olmayan</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl16_legacy_b0fd3b8a">CFDL16 / Eski</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl26_motoplay_landscape_touch_a52d575c">CFDL26 MotoPlay yatay dokunmatik</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl26_motoplay_portrait_handlebar_primary_c724cad9">CFDL26 MotoPlay dikey, gidon öncelikli</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfmoto_800nk_97f23a55">CFMOTO 800NK</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cl_c450_5c8b3190">CL-C450</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_crcp_sdk_0_9_23_x_non_touch_5621c1f8">CRCP / sdk 0.9.23.x dokunmatik olmayan</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_campsites_75e7180b">Kamp alanları</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_car_service_917649">Oto servisi</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_charging_5973c691">Şarj istasyonları</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_choose_a_widget_for_1_s_26345a66">%1$s için bir widget seçin</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_compass_9bdfd4f2">Pusula</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_current_conditions_wind_humidity_via_open_meteo_4e58c8f3">Open-Meteo üzerinden anlık hava durumu, rüzgâr, nem</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_down_1de05778">Yön tuşu aşağı</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_left_1de3d2dd">Yön tuşu sol</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_right_9eecea06">Yön tuşu sağ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_up_a8ebfef1">Yön tuşu yukarı</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d29c">Yön tuşu ▲</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d2a0">Yön tuşu ▶</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d2a6">Yön tuşu ▼</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d2aa">Yön tuşu ◀</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_dist_2005a6">MESAFE</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_distance_3fd77bf5">MESAFE</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_day_light_2f4e1b57">Gündüz (açık)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_detect_from_the_motorcycle_recommended_9fd07c6f">Motosikletten algıla (önerilir)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_development_simulator_profile_45f9bdc8">Geliştirme simülatörü profili</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_do_nothing_a83eb158">Hiçbir şey yapma</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_double_press_c52a55d2">Aşağı çift basış</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_press_6ec23765">Aşağı basış</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_double_f6f5f8f8">Aşağı · çift</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_single_1037016f">Aşağı · tek</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_drinking_water_6ae0dde1">İçme suyu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_elapsed_c777dd5c">GEÇEN</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_elevation_857ea708">YÜKSELTİ +</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_editing_1_s_a5399c23">%1$s düzenleniyor</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_elevation_profile_climb_rate_and_gps_accuracy_d7b5d893">Yükselti profili, tırmanma hızı ve GPS doğruluğu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_favorites_3baf7a37">FAVORİLER</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_favorite_427c2dbc">Favori</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_fire_stations_e5a3dc49">İtfaiyeler</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_food_21807e">Yemek</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_forward_right_ed1ba1ce">İleri - Sağ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_forward_double_tap_right_50824858">İleri çift dokunuş - Sağ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_gnss_satellite_visibility_and_fix_status_55616e56">GNSS uydu görünürlüğü ve konum kilidi durumu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_gps_search_f2175dfe">GPS ARAMA</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_gps_1_d_m_85cd2614">GPS ±%1$d m</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_guiding_to_destination_1328e050">Varış noktasına yönlendiriliyor</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_heading_sun_altitude_and_rider_relative_sun_posi_8620d321">Yön, güneşin yüksekliği ve sürücüye göre güneşin konumu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_hospitals_466ae959">Hastaneler</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_hotels_stays_e91bd2ff">Oteller &amp; konaklama</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_in_use_1_s_9a0bc66d">KULLANIMDA • %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_key_configured_d2c8ebf">ANAHTAR AYARLI</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_large_glove_friendly_actions_for_the_active_dash_ae3e3599">Etkin gösterge paneli için büyük, eldivenle kullanılabilir eylemler.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_larger_absolute_volume_change_c11a1729">Daha büyük mutlak ses düzeyi değişikliği</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_left_panel_9dcb38cb">Sol panel</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_left_double_f4a67f33">Sol · çift</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_left_single_de787aa">Sol · tek</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_log_copied_to_clipboard_a7cbe711">Günlük panoya kopyalandı</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_max_12944">MAKS</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_max_speed_6338424b">MAKS HIZ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_mode_2431a3">MOD</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_moto_hub_simulator_72ee829">MOTO-HUB Simülatörü</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_moving_87e69c4e">HAREKETTE</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_manage_88ef8985">Yönet</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_manage_guidance_search_a_new_destination_or_resu_7899102a">Yönlendirmeyi yönetin, yeni bir varış noktası arayın veya rotanıza devam edin.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_manual_recording_73634e37">Elle kayıt</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_mirroring_8b513fa3">Aynalama</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_mirrors_android_auto_s_own_map_5091f0fa">Android Auto\'nun kendi haritasını aynalar</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_motoplay_landscape_cfdl16_47ddf145">MotoPlay Yatay (CFDL16)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_motorcycle_service_4f005f46">Motosiklet servisi</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigation_8beff614">NAVİGASYON</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_no_key_set_25cc0b82">ANAHTAR AYARLANMADI</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_native_turn_by_turn_navigation_rendered_on_the_t_96caa565">TFT üzerinde çizilen yerel adım adım navigasyon</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_nav_place_1_9c6fda12">Nav · yer 1</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_nav_place_2_9c6fda13">Nav · yer 2</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_nav_place_3_9c6fda14">Nav · yer 3</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigate_place_1_8cdacefb">Git → yer 1</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigate_place_2_8cdacefc">Git → yer 2</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigate_place_3_8cdacefd">Git → yer 3</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_near_square_panel_544x512_7dfae4b9">Kareye yakın panel, 544x512</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_near_square_touch_panel_720x712_644c47fc">Kareye yakın dokunmatik panel, 720x712</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_next_turn_eta_sun_position_daylight_remaining_48ea2589">Sonraki dönüş, varış saati, güneşin konumu, kalan gün ışığı</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_night_dark_e807e573">Gece (koyu)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_none_252358">Yok</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_now_playing_774920a4">Şimdi Çalıyor</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ok_select_85c307d1">OK / seç</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_off_1354f">Kapalı</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_openstreetmap_12cdd70f">OpenStreetMap</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_phone_489454e">TELEFON</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_pad_fullscreen_screen_stays_on_tap_exit_to_leave_fed4fb3e">Tam ekran kumanda — ekran açık kalır. Çıkmak için Çıkış\'a dokunun.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_parking_33f14b98">Otoparklar</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_pharmacies_3d1e90b1">Eczaneler</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_picnic_8e7a005e">Piknik</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_police_8ed2913e">Polis</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_post_offices_828381d7">Postaneler</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_quick_controls_b6d227a9">Hızlı kumandalar</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_recent_destinations_4acda7ca">SON VARIŞ NOKTALARI</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_recorded_route_823d22b9">KAYITLI ROTA</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ride_dashboard_7a0ca94c">RIDE DASHBOARD</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rides_4a5be5b">SÜRÜŞLER</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_route_options_30bc2f87">ROTA SEÇENEKLERİ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_route_preview_683e8cb1">ROTA ÖNİZLEMESİ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_requires_a_real_bluetooth_key_up_e9aa900c">Gerçek bir Bluetooth tuş bırakma sinyali gerektirir</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rest_areas_9d275e5a">Dinlenme tesisleri</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ride_dashboard_ae928d6c">Ride Dashboard</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_right_panel_f3a982e0">Sağ panel</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_right_double_8bb580fe">Sağ · çift</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_right_single_a4f68975">Sağ · tek</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rotary_back_875f5656">Döner düğme geri</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rotary_forward_5bd716f6">Döner düğme ileri</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_saved_routes_18cdcb23">KAYITLI ROTALAR</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_search_results_3469955e">ARAMA SONUÇLARI</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_selected_for_1_s_49f82b77">%1$s İÇİN SEÇİLDİ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_satellites_110a3ab8">Uydular</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_save_route_5f739206">Rotayı kaydet</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_search_a_destination_pick_a_favorite_or_start_fr_a4048c1b">Bir varış noktası arayın, bir favori seçin veya kayıtlı bir rotadan başlayın.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_ok_6ca8fff1">Select / OK</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_double_tap_enter_star_8a562c06">Select çift dokunuş - Enter / Yıldız</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_hold_enter_star_217fe7bb">Select basılı tutma - Enter / Yıldız</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_tap_enter_star_b26a1adf">Select dokunuş - Enter / Yıldız</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_double_44fd35de">Select · çift</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_hold_ce87ce0c">Select · basılı tut</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_tap_2ff408b6">Select · dokunuş</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_send_navigation_and_selection_commands_to_androi_887e42f0">Android Auto\'ya navigasyon ve seçim komutları gönderin.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_speed_gauge_85be8ba0">Hız Göstergesi</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_start_android_auto_to_enable_the_controller_2a5eb409">Kumandayı etkinleştirmek için Android Auto\'yu başlatın.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_start_the_dashboard_to_enable_these_actions_1fe53fdf">Bu eylemleri etkinleştirmek için gösterge panelini başlatın.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_supermarkets_5e8b87fc">Süpermarketler</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_connected_35a5911b">T-Box bağlandı</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_time_274acd">SÜRE</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_total_4c4e324">TOPLAM</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_toilets_1eefa3e6">Tuvaletler</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_touch_controller_53c8733d">Dokunmatik kumanda</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_trip_metrics_7c88c7c8">Yolculuk Ölçümleri</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_trip_distance_duration_average_speed_and_speed_p_97ed123f">Yolculuk mesafesi, süresi, ortalama hız ve hız profili</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_two_next_track_presses_inside_the_window_7db072f9">Süre içinde iki sonraki parça basışı</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_two_presses_inside_the_double_tap_window_cc11c279">Çift dokunuş süresi içinde iki basış</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_create_log_file_9dac9184">Günlük dosyası oluşturulamadı</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_save_the_motorcycle_photo_d9e617d">Motosiklet fotoğrafı kaydedilemedi</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_double_press_5e63a079">Yukarı çift basış</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_press_df788a9e">Yukarı basış</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_double_6854af1f">Yukarı · çift</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_single_8195b796">Yukarı · tek</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_viewpoints_390623e8">Manzara noktaları</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_weather_ac24cfd4">Hava durumu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_where_are_you_going_f697966b">Nereye gidiyorsunuz?</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_wi_fi_direct_p2p_5247f7ce">Wi-Fi Direct (P2P)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_your_route_is_live_e56afe3e">Rotanız etkin</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_modelid_66660742_wi_fi_direct_non_touch_f23f0c0b">modelId 66660742, Wi-Fi Direct, dokunmatik değil</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_absolute_volume_change_53b165a0">mutlak ses düzeyi değişikliği</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_play_pause_command_31202f86">çal/duraklat komutu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_previous_track_command_f9a52120">önceki parça komutu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_next_track_command_26b481c">sonraki parça komutu</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_both_1f3381">HER İKİSİ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_live_564f882c">ANDROID AUTO CANLI</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_standby_9525974d">ANDROID AUTO BEKLEMEDE</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_phone_preview_live_290cbf6">TELEFON ÖNİZLEMESİ CANLI</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_7d22d040">BAŞLATILIYOR</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_live_on_tft_d375f015">TFT\'DE CANLI</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_preparing_69cf13e4">HAZIRLANIYOR</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_recording_route_df2cfb1a">ROTA KAYDEDİLİYOR</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_is_ready_to_connect_6b95609b">%1$s bağlanmaya hazır.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_allow_moto_hub_notifications_to_keep_streaming_v_4700fc1e">Akışın görünür ve denetlenebilir kalması için MOTO-HUB bildirimlerine izin verin.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_allow_nearby_devices_and_location_to_detect_the__a4c1fa2c">T-Box Wi-Fi ağını algılamak için Yakındaki cihazlar ve Konum izinlerini verin.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_is_requesting_a_connection_to_1_s_ffe67969">Android, %1$s ağına bağlantı istiyor.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_camera_permission_is_required_to_read_the_t_box__4e87d105">T-Box QR kodunu okumak için kamera izni gerekir.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_connection_cancelled_you_can_try_again_at_any_ti_19906357">Bağlantı iptal edildi. İstediğiniz zaman yeniden deneyebilirsiniz.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_disconnected_372b4933">Bağlantı kesildi.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_motorcycle_8dd33db1">Motosiklet</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_network_connected_searching_for_the_easyconn_ser_851763f6">Ağa bağlanıldı. EasyConn hizmeti aranıyor.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_no_known_phone_location_yet_move_outdoors_and_re_47df6139">Telefonun konumu henüz bilinmiyor; açık alana çıkıp yeniden deneyin.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_pair_a_motorcycle_in_garage_before_starting_navi_76f923b3">Navigasyonu başlatmadan önce Garaj\'da bir motosiklet eşleştirin.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_permission_granted_starting_the_capture_session_4805d845">İzin verildi. Yakalama oturumu başlatılıyor.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_profile_saved_connect_to_the_t_box_network_and_s_a9069261">Profil kaydedildi. T-Box ağına bağlanıp keşfi başlatın.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_qr_code_scanned_but_the_profile_was_not_saved_1__e3b6164f">QR kodu tarandı, ancak profil kaydedilmedi: %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ride_dashboard_streaming_is_active_on_the_motorc_3729a921">Ride Dashboard akışı motosiklet TFT ekranında etkin.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_set_up_the_motorcycle_network_to_get_started_32bb831">Başlamak için motosiklet ağını kurun.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_sharing_cancelled_by_the_user_72c1171e">Paylaşım kullanıcı tarafından iptal edildi.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_something_went_wrong_try_again_b634c6cc">Bir şeyler ters gitti. Yeniden deneyin.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_the_ride_dashboard_pipeline_f27c3ca7">Ride Dashboard işlem hattı başlatılıyor.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_the_native_ride_dashboard_d28cae88">Yerel Ride Dashboard başlatılıyor.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_the_projection_pipeline_bcc6994a">Yansıtma işlem hattı başlatılıyor.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_stop_the_current_mirroring_or_android_auto_sessi_5390e262">Ride Dashboard\'u buradan açmadan önce geçerli aynalama veya Android Auto oturumunu durdurun.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_streaming_active_to_the_motorcycle_tft_b881d9a3">Motosiklet TFT ekranına akış etkin.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_qr_code_scanned_and_saved_1_s_is_ready_to__d28dd75d">T-Box QR kodu tarandı ve kaydedildi. %1$s bağlanmaya hazır.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_connection_lost_reconnect_to_the_motorcycl_cb4aa98e">T-Box bağlantısı koptu. Motosiklet ağına yeniden bağlanın.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_found_you_can_now_choose_an_app_or_screen__163f7c13">T-Box bulundu. Artık paylaşmak için bir uygulama veya ekran seçebilirsiniz.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_not_found_1_s_656efb68">T-Box bulunamadı: %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_that_search_is_too_long_try_a_shorter_search_e54badba">Bu arama çok uzun. Daha kısa bir arama deneyin.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_curved_segments_detected_af1abc2b">%1$d virajlı kesim algılandı</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_entries_newest_first_7c18f089">%1$d kayıt  /  en yeni önce</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_km_remaining_after_this_route_1b9e2ebf">Bu rotadan sonra %1$d km kalır</string>
+    <!-- Fuel-range warning when the rider selects miles. -->
+    <string name="legacy_1_d_mi_remaining_after_this_route_aaf9da45">Bu rotadan sonra %1$d mi kalır</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_2_s_3_s_4fcb415a">%1$s  %2$s: %3$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_2_d_c_4859b80e">%1$s · %2$d°C</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_connect_a_motorcycle_before_customizing_its_dash_cc281859">Gösterge panelini özelleştirmeden önce bir motosiklet bağlayın.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_curvy_roads_ahead_15524f7">İleride virajlı yollar</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_golden_hour_in_1_d_min_5c769914">Altın saate %1$d dk</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_golden_hour_now_ab52d7b1">Altın saat şimdi</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_installed_version_1_s_2_d_29cd3201">Kurulu sürüm: %1$s (%2$d)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_location_and_notifications_are_required_while_re_4f6ceb2b">Yolculuk kaydı sırasında konum ve bildirim izinleri gerekir</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_opening_in_1_d_s_42389c34">%1$d sn içinde açılıyor…</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_peer_1_s_2_s_521b5084">Eş %1$s -&gt; %2$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_port_1_d_b6522e8b">Bağlantı noktası %1$d</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_open_github_8bdb9881">GitHub açılamadı</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_open_wi_fi_settings_537aaf03">Wi-Fi ayarları açılamadı</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_open_the_companion_app_settings_c0a83e03">Eşlik eden uygulamanın ayarları açılamadı</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_no_open_ports_found_8533cd9d">açık bağlantı noktası bulunamadı</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_open_1_s_e55a596b">açık: %1$s</string>
+    <!-- Android Auto pre-flight: an OEM companion app is installed, but may not be active. %1$s is
+         its name as shown on the phone (CFMOTO, Zontes Smart, Carbit Ride, ...). -->
+    <string name="legacy_1_s_detected_66208287">%1$s algılandı</string>
+    <string name="legacy_moto_hub_starts_google_android_auto_not_1_s_3a77813f">MOTO-HUB, %1$s uygulamasını değil Google Android Auto\'yu başlatır.</string>
+    <string name="legacy_1_s_can_still_take_over_the_dashboard_connection_5bc85002">%1$s arka plandayken bile gösterge paneli bağlantısını devralabilir. Güvenilir bir yansıtma için devam etmeden önce Android ayarlarından zorla durdurun.</string>
+    <string name="legacy_continue_with_android_auto_f6c7ef01">Android Auto ile devam et</string>
+    <string name="legacy_open_1_s_settings_470b74f2">%1$s ayarlarını aç</string>
+    <string name="legacy_do_not_show_this_warning_again_d3abf59b">Bu uyarıyı bir daha gösterme</string>
+    <!-- Source: tbox/ProfileOverride.kt -->
+    <string name="legacy_generic_dashboard_53d1376b">Genel gösterge paneli</string>
+    <!-- Source: tbox/ProfileOverride.kt -->
+    <string name="legacy_neutral_defaults_for_a_dashboard_that_is_not_rec_8d299cf0">Tanınmayan bir gösterge paneli için yansız varsayılanlar</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_unfamiliar_pairing_code_714f8ce7">Tanıdık olmayan eşleştirme kodu</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_this_code_carries_wi_fi_details_for_1_s_but_it_w_422a5994">Bu kod %1$s için Wi-Fi bilgilerini taşıyor, ancak MOTO-HUB\'un tanıdığı gösterge panellerindeki gibi bir Carbit adresi tarafından verilmemiş.</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_several_manufacturers_ship_the_same_dashboard_so_49305d38">Birkaç üretici aynı gösterge paneli yazılımını kendi markasıyla dağıtır, dolayısıyla bu sizin motosikletiniz olabilir. Yalnızca kendi gösterge panelinizden taradıysanız devam edin.</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_use_these_details_52f852ac">Bu bilgileri kullan</string>
+
+    <!-- ===========================================================         Catalogue sweep, 2026-08-13: strings this worktree draws but had
+         no identifier for. Values come from the pro-poc catalogues, where
+         the same source strings are already translated.
+         ================================================================== -->
+
+    <!-- Source: MainActivity.kt -->
+    <string name="legacy_unable_to_open_discord_50e2e02e">Discord açılamadı</string>
+
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_d_taps_away_from_the_prototype_779bf960">Prototipe %d dokunuş kaldı</string>
+    <string name="legacy_community_source_fe28bfcc">TOPLULUK &amp; KAYNAK</string>
+    <string name="legacy_discord_c6d7d50c">Discord</string>
+    <string name="legacy_github_7f258fe3">GitHub</string>
+    <string name="legacy_map_rendering_by_maplibre_native_bsd_2_clause_ve_1f7cda7f">Harita çizimi MapLibre Native (BSD-2-Clause) ile. Vektör karolar OpenFreeMap\'ten, OpenMapTiles şemasına göre; raster karolar OpenStreetMap Foundation\'dan. Adres araması Photon ile. Rota hesaplama Valhalla ile, Stadia Maps veya FOSSGIS tanıtım sunucusunda barındırılır. Yerler Overpass\'tan. Hava durumu Open-Meteo\'dan. Akaryakıt fiyatları İspanya Ministerio para la Transición Ecológica, Portekiz DGEG, Fransa Ministère de l\'Économie ve İtalya MIMIT tarafından açık veri olarak yayımlanır. DGEG verileri ticari olarak kullanılamaz.</string>
+    <string name="legacy_maps_data_b256210d">HARİTALAR &amp; VERİ</string>
+    <string name="legacy_maps_addresses_and_routes_are_built_on_data_by_o_f0b02b91">Haritalar, adresler ve rotalar © OpenStreetMap katkıcılarının ODbL lisanslı verilerine dayanır.</string>
+    <string name="legacy_prototype_unlocked_856a4841">Prototip açıldı</string>
+
+    <!-- Source: feature/androidauto/AndroidAutoHelpScreen.kt -->
+    <string name="legacy_a_notification_confirms_the_server_is_running_le_eacf82e">Bir bildirim, sunucunun çalıştığını doğrular. Çalışır durumda bırakın: siz durdurana veya telefonu yeniden başlatana kadar açık kalır.</string>
+    <string name="legacy_android_auto_17_4_removed_the_way_an_app_can_ask_890c8f24">Android Auto 17.4, bir uygulamanın yansıtma istemesini sağlayan yolu kaldırdı. MOTO-HUB yine de dener ve eski sürümlerde çalışır — ancak çalışmadığında Android Auto kendi geliştirici menüsünden başlatılabilir. Hiçbir şey kurmanız gerekmez.</string>
+    <string name="legacy_android_auto_does_not_start_2266b70e">Android Auto başlamıyor</string>
+    <string name="legacy_every_time_android_auto_will_not_start_18ff3ab9">ANDROID AUTO HER BAŞLAMADIĞINDA</string>
+    <string name="legacy_go_back_to_moto_hub_and_start_android_auto_it_co_ff8cc50d">MOTO-HUB\'a dönüp Android Auto\'yu başlatın. Birkaç saniye içinde kendiliğinden bağlanır — başka bir şeye basmanız gerekmez.</string>
+    <string name="legacy_in_android_auto_s_developer_settings_open_the_me_1ea3a8cf">Android Auto\'nun Geliştirici ayarlarında sağ üstteki ⋮ menüsünü açın ve \"Start head unit server\" seçeneğini seçin. Altındaki ayar listesinde değil, o menüdedir.</string>
+    <string name="legacy_in_developer_settings_turn_on_add_new_cars_to_an_19f79566">Geliştirici ayarlarında \"Add new cars to Android Auto\" seçeneğini açın (eski sürümlerde adı \"Unknown sources\").</string>
+    <string name="legacy_jumps_straight_to_the_app_where_the_menu_above_l_7c8b2093">Yukarıdaki menünün bulunduğu uygulamaya doğrudan gider</string>
+    <string name="legacy_normally_moto_hub_waits_and_asks_android_auto_to_6c183bab">Normalde MOTO-HUB bekler ve Android Auto\'dan kendisine bağlanmasını ister. 17.4 sürümü bu kapıyı yalnızca bu uygulamaya değil, bu türden her uygulamaya kapattı. Head unit sunucusu yönü tersine çevirir — Android Auto bekler, MOTO-HUB ona bağlanır — ve bu, Google\'ın kendi test araçları için açık bıraktığı bir kapıdır.</string>
+    <string name="legacy_one_time_setup_ca24c531">TEK SEFERLİK KURULUM</string>
+    <string name="legacy_open_android_auto_settings_48a5120d">Android Auto ayarlarını aç</string>
+    <string name="legacy_open_the_android_auto_app_scroll_to_the_bottom_a_69ae9e53">Android Auto uygulamasını açın, en alta inin ve \"Version\" ögesine on kez dokunun. Geliştirici ayarları görünür.</string>
+    <string name="legacy_why_14fa8">NEDEN</string>
+
+    <!-- Source: feature/controls/BluetoothStatus.kt -->
+    <string name="legacy_allow_bluetooth_access_so_the_app_can_see_whethe_8754f4c2">Uygulamanın motosikletin bağlı olup olmadığını görebilmesi için Bluetooth erişimine izin verin.</string>
+    <string name="legacy_bluetooth_is_off_turn_it_on_then_pair_the_motorc_5375bc65">Bluetooth kapalı — açın, sonra motosikleti eşleştirin.</string>
+    <string name="legacy_connected_now_1_s_if_that_is_the_motorcycle_the__cd016af1">Şu anda bağlı: %1$s. Bu motosikletse, gidon düğmeleri telefona ulaşabilir.</string>
+    <string name="legacy_no_audio_device_is_connected_right_now_with_the__7d4f4d3e">Şu anda bağlı bir ses aygıtı yok. Motosiklet açıkken gösterge paneli burada görünmelidir — hiç görünmüyorsa Bluetooth ayarlarından eşleştirin.</string>
+    <string name="legacy_this_phone_has_no_bluetooth_b42f7e85">Bu telefonda Bluetooth yok.</string>
+
+    <!-- Source: feature/controls/HandlebarMappingScreen.kt -->
+    <string name="legacy_a_button_the_app_has_not_been_taught_yet_53060697">Uygulamaya henüz öğretilmemiş bir düğme</string>
+    <string name="legacy_a_single_press_acts_immediately_instead_of_waiti_ebd37a80">Tek basış, çift basış süresini beklemeden hemen etki eder. Çift basış yine çalışır - yalnızca önce tek basış çalışır.</string>
+    <string name="legacy_allow_bluetooth_bbde9a57">Bluetooth\'a izin ver</string>
+    <string name="legacy_bluetooth_settings_ed5eb975">Bluetooth ayarları</string>
+    <string name="legacy_checking_bluetooth_ce222d3e">Bluetooth denetleniyor…</string>
+    <string name="legacy_choose_what_this_press_does_4e74fce9">Bu basışın ne yapacağını seçin.</string>
+    <string name="legacy_done_1_d_presses_learned_dd4b86bd">Bitti - %1$d basış öğrenildi.</string>
+    <string name="legacy_double_press_window_a8b0763c">Çift basış süresi</string>
+    <string name="legacy_every_card_now_describes_your_handlebar_buttons__f70bd7b3">Artık her kart sizin gidonunuzu anlatıyor. Yok olarak işaretlediğiniz düğmeler kaldırıldı.</string>
+    <string name="legacy_finish_7d6e78b3">Bitir</string>
+    <string name="legacy_handlebar_7b449ccb">Gidon</string>
+    <string name="legacy_hold_gestures_a5df4e6b">Basılı tutma hareketleri</string>
+    <string name="legacy_hold_time_bba08d6e">Basılı tutma süresi</string>
+    <string name="legacy_how_long_the_app_waits_before_deciding_a_press_w_fbe08ef2">Uygulamanın bir basışı çift ya da basılı tutma sayması için ne kadar beklediği.</string>
+    <string name="legacy_motorcycle_bluetooth_88c59adf">Motosiklet Bluetooth</string>
+    <string name="legacy_not_detected_yet_d1e8f877">henüz algılanmadı</string>
+    <string name="legacy_not_on_my_bike_49509421">Benim motorumda yok</string>
+    <string name="legacy_nothing_happens_some_dashboards_keep_a_button_fo_c80119d0">Hiçbir şey olmuyor mu? Bazı gösterge panelleri bir düğmeyi kendine saklar ve telefona hiçbir şey göndermez - bir CFMOTO CFDL16\'da KISA rocker basışı tam olarak bunu yapar. Yok olarak işaretleyin, yer kaplamayı bıraksın.</string>
+    <string name="legacy_on_the_motorcycle_do_this_5d34555e">Motosiklette şunu yapın</string>
+    <string name="legacy_one_card_per_button_with_what_a_press_a_double_p_e88303f5">Düğme başına bir kart; basış, çift basış ve basılı tutmanın ne yaptığını gösterir. Uygulamanın sizin gidonunuzda hangi düğmelerin gerçekten olduğunu bilmesi için gidonu öğretin.</string>
+    <string name="legacy_press_a_handlebar_button_fd958503">Bir gidon düğmesine basın</string>
+    <string name="legacy_reset_actions_to_defaults_95ecb43">Eylemleri varsayılanlara sıfırla</string>
+    <string name="legacy_skip_27599f">Atla</string>
+    <string name="legacy_snappy_singles_330a9d7e">Çevik tek basışlar</string>
+    <string name="legacy_step_1_d_of_2_d_72bf41f6">ADIM %1$d / %2$d</string>
+    <string name="legacy_stop_here_d51e892e">Burada dur</string>
+    <string name="legacy_teach_my_handlebar_51393162">Gidonumu öğret</string>
+    <string name="legacy_timing_937fe44a">ZAMANLAMA</string>
+    <string name="legacy_turn_off_if_your_handlebar_needs_a_long_physical_c92718d1">Gidonunuz her tıklama için uzun bir fiziksel basış gerektiriyorsa kapatın - aksi hâlde bu basışlar basılı tutma sayılır.</string>
+    <string name="legacy_controls_fd1b9add">‹ Kumandalar</string>
+    <string name="legacy_handlebar_c1b6ada4">‹ Gidon</string>
+
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_add_your_first_motorcycle_to_get_rolling_b8e9f267">Yola çıkmak için ilk motosikletinizi ekleyin.</string>
+    <string name="legacy_no_motorcycle_no_problem_4346def1">MOTOSİKLET YOK MU? SORUN DEĞİL</string>
+
+    <!-- Source: feature/home/CoreAvailability.kt -->
+    <string name="legacy_advanced_needs_moto_hub_core_installed_and_paire_722fef7d">Advanced\'in bağlanabilmesi, aynalama yapabilmesi veya Android Auto çalıştırabilmesi için MOTO-HUB (Core) kurulu ve T-Box\'ınızla eşleştirilmiş olmalıdır.</string>
+    <string name="legacy_couldn_t_open_the_browser_3e0fae25">Tarayıcı açılamadı.</string>
+    <string name="legacy_download_moto_hub_core_976f62e2">MOTO-HUB Core\'u indir</string>
+    <string name="legacy_moto_hub_core_not_found_b76c3f4f">MOTO-HUB CORE BULUNAMADI</string>
+
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_android_auto_17_4_removed_the_way_apps_ask_it_to_b5455068">Android Auto 17.4, uygulamaların yansıtma istemesini sağlayan yolu kaldırdı. Yine de Android Auto\'nun kendi geliştirici menüsünden başlatılabilir.</string>
+    <string name="legacy_one_possible_cause_1_s_is_installed_and_can_keep_47cef163">Olası bir neden: %1$s kurulu ve arka plandayken bile gösterge paneli bağlantısını meşgul tutabilir. Bağlantı başarısız olmayı sürdürürse, Uygulama bilgisi sayfasından zorla durdurup yeniden deneyin.</string>
+    <string name="legacy_open_1_s_app_info_33a7c01c">%1$s uygulama bilgisini aç</string>
+    <string name="legacy_retry_connection_54743f76">Bağlantıyı yeniden dene</string>
+    <string name="legacy_some_dashboards_never_broadcast_a_network_of_the_787ecd2c">Bazı gösterge panelleri hiçbir zaman kendi ağını yayınlamaz: gösterge panelinde yazan SSID ve Parola ile telefonunuzun kurduğu bir hotspot\'a katılırlar. Sizinki \"Android hotspot\'u açın\" diyorsa bunu deneyin.</string>
+    <string name="legacy_1_s_is_installed_and_may_be_holding_the_dashboar_2c02bb10">%1$s kurulu ve gösterge panelini tutuyor olabilir. Uygulama bilgisi sayfasından zorla durdurup yeniden deneyin.</string>
+    <string name="legacy_try_my_phone_hosts_the_hotspot_d4f6db66">Deneyin: hotspot\'u telefonum barındırsın</string>
+
+    <!-- Source: feature/home/HubViewModel.kt -->
+    <string name="legacy_network_connected_pairing_over_bluetooth_and_wai_5b4c6259">Ağa bağlanıldı. Bluetooth üzerinden eşleştiriliyor ve gösterge paneli bekleniyor.</string>
+
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_altitude_ft_89feab0c">RAKIM FT</string>
+    <string name="legacy_altitude_m_caa51e4f">RAKIM M</string>
+    <string name="legacy_distance_ft_552284d9">MESAFE FT</string>
+    <string name="legacy_distance_km_5522856d">MESAFE KM</string>
+    <string name="legacy_distance_m_a7e856e2">MESAFE M</string>
+    <string name="legacy_distance_mi_552285a7">MESAFE Mİ</string>
+    <string name="legacy_max_km_h_45403037">MAKS KM/H</string>
+    <string name="legacy_max_mph_5d129e29">MAKS MPH</string>
+
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_connect_and_recovery_57ed0872">Otomatik bağlanma ve kurtarma</string>
+    <string name="legacy_auto_recover_stalled_android_auto_streams_bd3e2d8e">Takılan Android Auto akışlarını otomatik kurtar</string>
+    <string name="legacy_button_mapping_815600">Düğme eşlemesi</string>
+    <string name="legacy_buttons_control_android_auto_3dc44642">Düğmeler Android Auto\'yu denetler</string>
+    <string name="legacy_drive_android_auto_with_the_motorcycle_s_buttons_ec16509d">Android Auto\'yu motosikletin düğmeleriyle kullanın</string>
+    <string name="legacy_handlebar_buttons_47b4fd2c">Gidon düğmeleri</string>
+    <string name="legacy_managed_by_the_companion_app_its_controls_screen_9ad80a75">Eşlik eden uygulama tarafından yönetiliyor: onun Kumandalar ekranı, her oturum başladığında kendi gidon yapılandırmasını yeniden uygular ve burada ayarlananın üzerine yazar. Gidonu oradan yapılandırın.</string>
+    <string name="legacy_music_volume_9fa56d95">MÜZİK SES DÜZEYİ</string>
+    <string name="legacy_off_means_the_mode_picker_stays_exactly_as_befor_c93efb5c">Kapalıyken mod seçici tıpkı eskisi gibi kalır.</string>
+    <string name="legacy_on_9ff">Açık</string>
+    <string name="legacy_put_a_screen_on_the_tft_as_soon_as_the_motorcycl_60bf969c">Motosiklet bağlanır bağlanmaz TFT\'ye bir ekran koy</string>
+    <string name="legacy_requires_the_phone_paired_to_the_motorcycle_s_bl_dda6960a">Telefonun motosikletin Bluetooth\'una eşleştirilmiş olmasını gerektirir. Müzik çalmayı sürdürür, ancak bir oturum sürerken düğmeleri yakalanır.</string>
+    <string name="legacy_set_the_dash_clock_over_bluetooth_experimental_3431b284">Gösterge paneli saatini Bluetooth üzerinden ayarla (deneysel)</string>
+    <string name="legacy_set_the_dash_clock_over_wi_fi_292a2ca5">Gösterge paneli saatini Wi-Fi üzerinden ayarla</string>
+    <string name="legacy_on_by_default_and_what_sets_the_time_on_most_das_6234cd82">Varsayılan olarak açıktır ve çoğu gösterge panelinde saati bu ayarlar. Yalnızca gösterge paneliniz MOTO-HUB\'dan saati isteyip yanıtı yok sayıyor ve yine 01.01.1970 gösteriyorsa kapatın: bu ünitelerde saati yazmak hiçbir şeyi değiştirmez ve gösterge panelinde elle ayarladığınız saatin üzerine yazabilir. Bu kapalıyken motosiklet normal bağlanır, yalnızca saatin kaç olduğu ona hiç söylenmez.</string>
+    <string name="legacy_settings_595d2043">Ayarlar</string>
+    <string name="legacy_some_dashboards_ask_for_the_time_over_bluetooth__b44ce43b">Bazı gösterge panelleri saati Wi-Fi yerine Bluetooth üzerinden ister ve o olmadan 00:00\'da kalır. Motosikletin bu telefona Android\'in Bluetooth ayarlarında zaten eşleştirilmiş olması gerekir. Varsayılan olarak kapalıdır; MOTO-HUB yalnızca gösterge panelinin kendi protokolüyle soran bir aygıta yanıt verir.</string>
+    <string name="legacy_some_dashboards_forget_settings_like_the_clock_w_76d95842">Bazı gösterge panelleri, Wi-Fi Direct bağlantısı tümüyle koptuğunda saat gibi ayarları unutur. Bu seçenek, siz uygulamadan çıkana veya Wi-Fi\'yi kapatana kadar telefonu motosikletin ağına bağlı tutar. Varsayılan olarak kapalıdır; yalnızca gösterge paneliniz bağlantı kesildikten sonra saati yitiriyorsa açın.</string>
+    <string name="legacy_start_automatically_2cb44c45">Otomatik başlat</string>
+    <string name="legacy_start_on_connect_94487a47">Bağlanınca başlat</string>
+    <string name="legacy_stay_linked_to_the_bike_s_wi_fi_after_disconnect_81b0e941">Bağlantı kesildikten sonra motosikletin Wi-Fi ağına bağlı kal</string>
+    <string name="legacy_the_motorcycle_s_buttons_reach_the_phone_over_bl_356cbf0d">Motosikletin düğmeleri telefona Bluetooth üzerinden medya tuşu olarak ulaşır. Bir oturum akarken MOTO-HUB bunları yakalayıp müzik çalar yerine Android Auto navigasyonunu kullanabilir.</string>
+    <string name="legacy_what_each_press_double_press_and_hold_does_97201ad9">Her basış, çift basış ve basılı tutmanın ne yaptığı</string>
+    <string name="legacy_what_to_do_when_android_auto_refuses_to_project_fa692d1b">Android Auto yansıtmayı reddettiğinde ne yapmalı</string>
+    <string name="legacy_what_to_start_5b78fc39">NE BAŞLATILSIN</string>
+    <string name="legacy_while_capture_is_on_the_volume_buttons_navigate__9e410bf">Yakalama açıkken ses düğmeleri ses düzeyini değiştirmek yerine gezinmeyi sağlar — dinleme düzeyinizi buradan ayarlayın.</string>
+    <string name="legacy_with_this_on_moto_hub_skips_the_what_should_i_sh_498b0614">Bu açıkken MOTO-HUB \"ne göstereyim?\" ekranını atlar ve motosiklet bağlantısı kurulur kurulmaz seçilen ekranı TFT\'ye koyar. Uygulama açılışı başına bir kez çalışır - bir ekranı durdurduğunuzda denetim yine sizde olur.</string>
+
+    <!-- Source: ui/components/SystemKillNotice.kt -->
+    <string name="legacy_dismiss_c6dc4a6a">Kapat</string>
+    <string name="legacy_stopped_by_your_phone_37b2b157">TELEFONUNUZ TARAFINDAN DURDURULDU</string>
+    <string name="legacy_your_last_session_ended_at_1_s_because_the_phone_8386f49c">Son oturumunuz %1$s saatinde sona erdi; nedeni uygulamadaki bir hata değil, telefonun %2$s ögesini kapatmasıydı.</string>
+
+    <!-- ==================================================================
+         Catalogue sweep, 2026-08-13 (second pass): source strings that sit
+         inside an if/when/arrayOf within the lookup call.
+         ================================================================== -->
+
+    <!-- Source: feature/ai/AiSettingsScreen.kt -->
+    <string name="legacy_api_key_fb0d9b39">API anahtarı</string>
+    <string name="legacy_replace_api_key_d64eadad">API anahtarını değiştir</string>
+
+    <!-- Source: feature/androidauto/AndroidAutoPreviewScreen.kt -->
+    <string name="legacy_hide_controls_2dc943b4">Kumandaları gizle</string>
+
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_1_d_rpm_2_d_km_h_3_d_c_coolant_60ed46da">%1$d rpm · %2$d km/h · %3$d °C soğutma sıvısı</string>
+    <string name="legacy_obd_adapter_connected_29e365e9">OBD adaptörü bağlandı</string>
+    <string name="legacy_saved_4bf7e67">Kaydedildi</string>
+    <string name="legacy_the_dashboard_shows_why_on_the_motorcycle_442e8daa">Nedenini gösterge paneli motosiklette gösterir.</string>
+    <string name="legacy_waiting_for_the_obd_adapter_b3b01207">OBD adaptörü bekleniyor</string>
+
+    <!-- Source: feature/controls/HandlebarMappingScreen.kt -->
+    <string name="legacy_listening_2ece009b">Dinleniyor</string>
+    <string name="legacy_received_d3a64e01">Alındı</string>
+    <string name="legacy_teach_again_4fb10bd5">Yeniden öğret</string>
+
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_bluetooth_is_turned_off_so_the_obd_adapter_canno_5a8640c">Bluetooth kapalı, bu yüzden OBD adaptörüne ulaşılamıyor.</string>
+    <string name="legacy_customizable_vector_map_rendered_on_the_tft_bfa6e220">TFT üzerinde çizilen, özelleştirilebilir vektör harita</string>
+    <string name="legacy_gps_following_8ad5867b">GPS izleme</string>
+    <string name="legacy_moto_hub_needs_bluetooth_access_to_reach_the_obd_af681be3">MOTO-HUB\'un OBD adaptörüne ulaşması için Bluetooth erişimi gerekir.</string>
+    <string name="legacy_no_map_live_engine_data_from_a_paired_elm327_ada_8ecf531c">Harita yok: eşleştirilmiş bir ELM327 adaptöründen canlı motor verisi</string>
+    <string name="legacy_no_paired_obd_adapter_found_pair_the_elm327_dong_90029f7c">Eşleştirilmiş OBD adaptörü bulunamadı. Önce ELM327 donanımını eşleştirin.</string>
+    <string name="legacy_restore_gps_76fc23d8">GPS\'i geri getir</string>
+
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_mute_24c639">Sessize al</string>
+    <string name="legacy_voice_on_8e4723ad">Ses açık</string>
+
+    <!-- Source: feature/obd/ObdFuelAirScreen.kt -->
+    <string name="legacy_the_ecu_is_adding_fuel_steadily_worth_a_look_if__da08dd7">ECU sürekli yakıt ekliyor. Yükselmeyi sürdürürse bakmaya değer.</string>
+    <string name="legacy_the_ecu_is_taking_fuel_away_steadily_worth_a_loo_b2e06214">ECU sürekli yakıt kısıyor. Düşmeyi sürdürürse bakmaya değer.</string>
+
+    <!-- Source: feature/obd/ObdFullScanScreen.kt -->
+    <string name="legacy_last_scan_1c6351c7">SON TARAMA</string>
+    <string name="legacy_run_full_scan_62e71f9">Tam tarama çalıştır</string>
+    <string name="legacy_scanning_f99dc8b1">TARANIYOR</string>
+    <string name="legacy_scanning_b757d75">Taranıyor…</string>
+
+    <!-- Source: feature/obd/ObdHubScreen.kt -->
+    <string name="legacy_bluetooth_is_turned_off_92ceda3f">Bluetooth kapalı.</string>
+    <string name="legacy_connected_and_reading_1e53c68c">Bağlı ve okuyor</string>
+    <string name="legacy_connecting_ca35204e">Bağlanıyor…</string>
+    <string name="legacy_moto_hub_needs_bluetooth_access_to_reach_the_ada_8763b3f4">MOTO-HUB\'un adaptöre ulaşması için Bluetooth erişimi gerekir.</string>
+    <string name="legacy_no_paired_obd_adapter_found_72c35314">Eşleştirilmiş OBD adaptörü bulunamadı.</string>
+    <string name="legacy_not_connected_273cf5d2">Bağlı değil.</string>
+
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_1h_af24">-1S</string>
+    <string name="legacy_climbing_6536490d">TIRMANIYOR</string>
+    <string name="legacy_descending_da6096f8">ALÇALIYOR</string>
+    <string name="legacy_gnss_live_7bc47fe5">GNSS CANLI</string>
+    <string name="legacy_level_44fa364">DÜZ</string>
+    <string name="legacy_no_fix_8982dd16">KONUM YOK</string>
+    <string name="legacy_vertical_speed_427682fd">DİKEY HIZ</string>
+
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_battery_level_508e0b71">PİL DÜZEYİ</string>
+    <string name="legacy_charging_843f5271">ŞARJ OLUYOR</string>
+    <string name="legacy_external_power_41cdb450">HARİCİ GÜÇ</string>
+    <string name="legacy_hot_1182d">SICAK</string>
+    <string name="legacy_low_power_483394f9">PİL ZAYIF</string>
+    <string name="legacy_no_sensor_69b15af9">SENSÖR YOK</string>
+    <string name="legacy_normal_8999b0e7">NORMAL</string>
+    <string name="legacy_warm_288a85">ILIK</string>
+
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_east_205bfd">DOĞU</string>
+    <string name="legacy_glare_risk_8e426920">PARLAMA RİSKİ</string>
+    <string name="legacy_gnss_stale_fd32d3a0">GNSS ESKİMİŞ</string>
+    <string name="legacy_ne_9b7">KD</string>
+    <string name="legacy_no_gnss_a6d94c86">GNSS YOK</string>
+    <string name="legacy_north_47050e5">KUZEY</string>
+    <string name="legacy_nw_9c9">KB</string>
+    <string name="legacy_se_a52">GD</string>
+    <string name="legacy_south_4b6d1ad">GÜNEY</string>
+    <string name="legacy_sun_tracking_5fd65e2b">GÜNEŞ İZLEME</string>
+    <string name="legacy_sw_a64">GB</string>
+    <string name="legacy_west_2899af">BATI</string>
+
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_off_for_1_s_a8aabb23">%1$s için kapalı</string>
+    <string name="legacy_one_widget_pinned_on_1_s_9ab92ad6">%1$s üzerinde tek widget sabit</string>
+    <string name="legacy_rotating_on_1_s_c5e75b74">%1$s üzerinde dönüyor</string>
+    <string name="legacy_this_panel_cycles_through_the_1_d_ticked_widgets_3a2b2d0e">Bu panel, işaretli %1$d widget arasında döner.</string>
+    <string name="legacy_this_panel_shows_that_one_widget_and_never_rotat_f3acc606">Bu panel yalnızca o widget\'ı gösterir ve hiç dönmez. Döngüyü başlatmak için bir tane daha işaretleyin.</string>
+    <string name="legacy_tick_widgets_below_to_build_this_panel_s_carouse_ab0f3111">Bu panelin döngüsünü kurmak için aşağıdaki widget\'ları işaretleyin. Her panelin kendi döngüsü vardır.</string>
+
+    <!-- Source: feature/ridedashboard/widget/SatelliteWidget.kt -->
+    <string name="legacy_2d_fix_weak_geometry_e5b0cd1f">2B KONUM  •  ZAYIF GEOMETRİ</string>
+    <string name="legacy_3d_fix_navigation_ready_bff99e13">3B KONUM  •  NAVİGASYONA HAZIR</string>
+    <string name="legacy_scan_26be7d">TARA</string>
+    <string name="legacy_searching_for_satellites_f009ee35">UYDULAR ARANIYOR</string>
+
+    <!-- Source: feature/ridedashboard/widget/SpeedGaugeWidget.kt -->
+    <string name="legacy_gnss_ok_35ac4b15">GNSS TAMAM</string>
+    <string name="legacy_n_4e">K</string>
+    <string name="legacy_w_57">B</string>
+
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_session_live_5f7f2456">OTURUM CANLI</string>
+
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_capture_84285f26">Yakala</string>
+    <string name="legacy_capturing_561c2223">Yakalanıyor…</string>
+    <string name="legacy_recalibrate_ceebf5d4">Yeniden kalibre et</string>
+
+    <!-- Source: feature/trips/TripLibraryUi.kt -->
+    <string name="legacy_enhanced_9c6c8376">GELİŞMİŞ</string>
+    <string name="legacy_gps_only_e6f03982">YALNIZCA GPS</string>
+         description; rendered outside the app's own Compose runtime, so it is a plain string
+         resource rather than a motoHubText() call). -->
+    <string name="handlebar_hid_capture_description">Gidon düğmeleri ayarlarında HID modu seçiliyken, MOTO-HUB\'un bir Bluetooth HID gidon kumandasından yön tuşu basışlarını okumasını sağlar.</string>
+
+    <!-- ==================================================================
+         Handlebar HID mode, phone-only Android Auto and the teach
+         prerequisite dialog (PR #8, rebased 2026-08-18).
+         ================================================================== -->
+    <string name="legacy_android_auto_isn_t_running_9f167e30">Android Auto çalışmıyor</string>
+    <string name="legacy_teaching_the_handlebar_needs_a_live_android_auto_697217d0">Gidonu öğretmek için basışları yakalayacak canlı bir Android Auto oturumu gerekir. Motosiklete bağlanın ya da T-Box olmadan bu telefonda başlatın.</string>
+    <string name="legacy_connect_to_1_s_579387aa">%1$s ağına bağlan</string>
+    <string name="legacy_start_on_this_phone_no_t_box_f1bcc79f">Bu telefonda başlat (T-Box yok)</string>
+    <string name="legacy_bluetooth_is_off_turn_it_on_then_pair_the_remote_356459fc">Bluetooth kapalı — açın, sonra kumandayı klavye olarak eşleştirin.</string>
+    <string name="legacy_allow_bluetooth_access_so_the_app_can_read_the_r_bf160fa2">Uygulamanın kumandanın tuş basışlarını okuyabilmesi için Bluetooth erişimine izin verin.</string>
+    <string name="legacy_bluetooth_is_on_a_hid_remote_doesn_t_show_up_her_77795af8">Bluetooth açık. Bir HID kumanda burada bağlı aygıt olarak görünmez — basışlar yine de tanınmıyorsa, sistem Bluetooth ayarlarında eşleştirilmiş olduğunu ve Erişilebilirlik\'in açık olduğunu denetleyin.</string>
+    <string name="legacy_or_right_now_without_the_t_box_21ba0502">YA DA HEMEN ŞİMDİ, T-BOX OLMADAN</string>
+    <string name="legacy_android_auto_straight_to_your_phone_f0cc540c">Android Auto — doğrudan telefonunuza</string>
+    <string name="legacy_input_protocol_8ff4fe4e">GİRİŞ PROTOKOLÜ</string>
+    <string name="legacy_most_dashboards_send_buttons_as_avrcp_media_keys_6e1dd82c">Çoğu gösterge paneli düğmeleri AVRCP medya tuşu olarak gönderir — bunu AVRCP\'de bırakın. HID\'yi yalnızca kumanda Bluetooth klavye olarak eşleşiyorsa ve basışları aşağıda hiç görünmüyorsa seçin.</string>
+    <string name="legacy_hid_mode_also_needs_moto_hub_s_accessibility_ser_c0cdf4cc">HID modu ayrıca MOTO-HUB\'un Erişilebilirlik Hizmeti\'nin açık olmasını gerektirir, yoksa basışlar görülmez.</string>
+    <string name="legacy_open_accessibility_settings_a01c954b">Erişilebilirlik ayarlarını aç</string>
+    <string name="legacy_turn_on_moto_hub_so_handlebar_presses_reach_the__b41c5310">Gidon basışlarının her ekrandan uygulamaya ulaşması için MOTO-HUB\'u açın</string>
+    <string name="legacy_was_moto_hub_s_switch_greyed_out_android_blocks__b5233420">MOTO-HUB\'un anahtarı soluk mu görünüyordu? Android bunu mağazadan kurulmamış uygulamalar için engeller ve MOTO-HUB GitHub\'dan indirilir. Uygulama bilgisi\'ni açın, sağ üstteki ⋮ simgesine dokunun, \"Kısıtlı ayarlara izin ver\" seçeneğini seçin, sonra geri dönüp anahtarı açın.</string>
+    <string name="legacy_open_app_info_7c77c863">Uygulama bilgisini aç</string>
+    <string name="legacy_where_allow_restricted_settings_lives_8f29fea1">\"Kısıtlı ayarlara izin ver\" nerede</string>
+    <string name="legacy_avrcp_media_keys_f50e20c7">AVRCP (medya tuşları)</string>
+    <string name="legacy_hid_d_pad_a247f04a">HID (yön tuşu)</string>
+    <string name="legacy_default_the_dashboard_sends_bluetooth_media_key__ccbdfbf7">Varsayılan. Gösterge paneli çal/duraklat, parça ve ses düzeyi için Bluetooth medya tuşu komutları gönderir.</string>
+    <string name="legacy_for_remotes_that_pair_as_a_bluetooth_keyboard_an_25055a66">Bluetooth klavye olarak eşleşen ve yön tuşu basışları gönderen kumandalar için. Aşağıdaki MOTO-HUB Erişilebilirlik Hizmeti\'nin açılmasını gerektirir.</string>
+
+    <!-- External display service (USB AOA) - notification channel and ongoing notification -->
+    <string name="legacy_moto_hub_external_display_streaming_1be823ca">MOTO-HUB harici ekran akışı</string>
+    <string name="legacy_streaming_to_external_display_via_usb_ab5c31c6">USB üzerinden harici ekrana akış</string>
+    <string name="legacy_stop_external_display_c050e9ab">Harici ekranı durdur</string>
+    <string name="legacy_aap_accessory_probe_running_bcf6ccd1">AAP aksesuar yoklaması çalışıyor</string>
+
+    <!-- About screen -->
+    <string name="legacy_your_phone_your_motorcycle_display_c5956fcb">Telefonunuz.\nMotosiklet ekranınız.</string>
+    <string name="legacy_follow_development_join_our_community_report_iss_b8b8fffa">Geliştirmeyi izleyin, topluluğumuza katılın, sorun bildirin ve sürümleri indirin.</string>
+    <string name="legacy_moto_hub_is_an_independent_project_it_is_not_aff_9e4c2633">MOTO-HUB bağımsız bir projedir. Carbit, CFMOTO, gösterge panelinde EasyConn kullanan başka bir üretici, Google veya Android Auto ile bağlantılı değildir, onlar tarafından onaylanmamış ve desteklenmemektedir. Tüm ürün adları ve markalar kendi sahiplerine aittir.</string>
+    <string name="legacy_moto_hub_is_an_experimental_proof_of_concept_not_34b4b321">MOTO-HUB deneysel bir kavram kanıtıdır, üretim düzeyinde bir ürün değildir.</string>
+    <string name="legacy_development_and_testing_happen_on_a_cfmoto_700mt_ac58afbf">Geliştirme ve sınama, OnePlus 13 / Galaxy Z Fold4 telefonlarla bir CFMOTO 700MT-ADV gösterge panelinde yapılır. Başka motosikletler, markalar, T-Box yazılım sürümleri ve telefonlar burada denenmemiştir: farklı davranış, yeniden denemeler ya da hiç bağlantı kurulamaması beklenebilir. Gösterge paneli bir eşleştirme QR kodu gösteriyorsa denemeye değer.</string>
+    <string name="legacy_do_not_rely_on_it_as_your_only_source_of_critica_39775433">Kritik navigasyon için tek kaynağınız olarak buna güvenmeyin. Navigasyonu park hâlindeyken yapılandırın ve yazılımı kendi sorumluluğunuzda kullanın.</string>
+
+    <!-- Garage - hero tiles -->
+    <string name="legacy_scan_motorcycle_qr_code_cc47d360">Motosiklet QR kodunu tara</string>
+    <string name="legacy_point_your_camera_at_the_t_box_sticker_1fc1811">Kameranızı T-Box etiketine doğrultun</string>
+    <string name="legacy_no_qr_manual_setup_e8495cc4">QR yok mu? Elle kurulum</string>
+    <string name="legacy_type_the_network_in_yourself_b35606b3">Ağı kendiniz yazın</string>
+    <string name="legacy_scan_its_t_box_qr_code_ca4d32e3">T-Box QR kodunu tarayın</string>
+    <string name="legacy_no_qr_manual_1dd2a7a7">QR yok mu? Elle</string>
+    <string name="legacy_type_the_network_in_b00b50ec">Ağı yazın</string>
+    <string name="legacy_used_by_phone_only_display_modes_without_a_t_box_13ed383e">T-Box olmadan, yalnızca telefon kullanan ekran modlarında kullanılır</string>
+    <string name="legacy_talk_to_a_second_phone_over_your_own_hotspot_2aec1606">Kendi hotspot\'unuz üzerinden ikinci bir telefonla konuşun</string>
+    <string name="legacy_default_settings_a0578342">Varsayılan ayarlar</string>
+    <string name="legacy_group_intercom_c81733c6">Grup interkom</string>
+
+    <!-- Motorcycle details - photo and Android Auto format buttons (short labels) -->
+    <string name="legacy_add_photo_203b2dd3">Fotoğraf ekle</string>
+    <string name="legacy_change_photo_ad0735e2">Fotoğrafı değiştir</string>
+    <string name="legacy_motorcycle_photo_4fd6c703">Motosiklet fotoğrafı</string>
+    <string name="legacy_fit_10ff1">SIĞDIR</string>
+    <string name="legacy_stretch_baa072e5">GENİŞLET</string>
+    <string name="legacy_crop_1fb290">KIRP</string>
+
+    <!-- T-Box capability inspector - section titles and row labels -->
+    <string name="legacy_a_read_only_view_of_data_observed_directly_from__eb0959e6">Doğrudan bu T-Box\'tan gözlenen verilerin salt okunur görünümü.</string>
+    <string name="legacy_wi_fi_network_68c4e1ac">Wi-Fi ağı</string>
+    <string name="legacy_easyconn_endpoint_f9ecbf07">EasyConn uç noktası</string>
+    <string name="legacy_nsd_package_bfb67045">NSD paketi</string>
+    <string name="legacy_last_discovered_a02851f2">Son keşif</string>
+    <string name="legacy_diagnostics_54322d8c">TANILAMA</string>
+    <string name="legacy_if_easyconn_discovery_keeps_failing_briefly_reco_b8d938f8">EasyConn keşfi başarısız olmaya devam ederse, bu T-Box\'a kısa süreliğine yeniden bağlanıp bilinen bağlantı noktalarını (10915-10935) doğrudan yoklayın; böylece hangisinin gerçekten yanıt verdiğini görürsünüz.</string>
+    <string name="legacy_display_8e70a4a2">EKRAN</string>
+    <string name="legacy_tft_capture_area_ad3b6865">TFT yakalama alanı</string>
+    <string name="legacy_orientation_d9c9db0">Yönlendirme</string>
+    <string name="legacy_reported_dpi_4b722c90">Bildirilen DPI</string>
+    <string name="legacy_dpi_mode_9e4a5ea6">DPI modu</string>
+    <string name="legacy_screen_type_5d60ca4e">Ekran türü</string>
+    <string name="legacy_reported_identity_b41296b">BİLDİRİLEN KİMLİK</string>
+    <string name="legacy_head_unit_name_1d44c987">Ana ünite adı</string>
+    <string name="legacy_vehicle_brand_1ca30d73">Araç markası</string>
+    <string name="legacy_vehicle_model_1d3cbd15">Araç modeli</string>
+    <string name="legacy_these_values_are_shown_exactly_as_reported_by_th_16427b8c">Bu değerler T-Box\'ın bildirdiği biçimde gösterilir. MOTO-HUB, QR kodundan veya ağ adından bir motosiklet modeli çıkarmaz.</string>
+    <string name="legacy_software_protocol_2108716b">YAZILIM &amp; PROTOKOL</string>
+    <string name="legacy_pxc_version_5fba84f3">PXC sürümü</string>
+    <string name="legacy_sdk_version_aacf3ed2">SDK sürümü</string>
+    <string name="legacy_software_version_8135c77f">Yazılım sürümü</string>
+    <string name="legacy_version_code_301c55">Sürüm kodu</string>
+    <string name="legacy_reported_package_ec9e7619">Bildirilen paket</string>
+    <string name="legacy_product_type_42ccc3eb">Ürün türü</string>
+    <string name="legacy_transport_type_33b665f1">Taşıma türü</string>
+    <string name="legacy_function_mask_a68c5a14">İşlev maskesi</string>
+    <string name="legacy_wi_fi_socket_timeout_c3c69476">Wi-Fi yuva zaman aşımı</string>
+    <string name="legacy_feature_flags_3e60189d">ÖZELLİK BAYRAKLARI</string>
+    <string name="legacy_screen_mirroring_3102b12f">Ekran aynalama</string>
+    <string name="legacy_screen_touch_4eb406ab">Ekran dokunuşu</string>
+    <string name="legacy_overlay_touch_d474eb4f">Katman dokunuşu</string>
+    <string name="legacy_mirror_reconnect_e70c0c56">Aynalamayı yeniden bağlama</string>
+    <string name="legacy_landscape_adaptive_4f69625b">Yataya uyarlanır</string>
+    <string name="legacy_socket_authentication_94d326a5">Yuva kimlik doğrulaması</string>
+    <string name="legacy_microphone_c888754a">Mikrofon</string>
+    <string name="legacy_hid_input_9c332ccd">HID girişi</string>
+    <string name="legacy_third_party_apps_a5fc13b2">Üçüncü taraf uygulamalar</string>
+    <string name="legacy_phone_signal_e87f95ba">Telefon sinyali</string>
+    <string name="legacy_time_synchronization_62f3fb2d">Saat eşitleme</string>
+    <string name="legacy_bluetooth_calls_f80c25c3">Bluetooth çağrıları</string>
+    <string name="legacy_sensitive_client_info_fields_are_intentionally_e_4b966321">Hassas CLIENT_INFO alanları, saklamadan ve görüntülemeden bilinçli olarak çıkarılmıştır.</string>
+    <string name="legacy_capability_report_captured_65a39462">Yetenek raporu yakalandı</string>
+    <string name="legacy_t_box_discovered_cd525276">T-Box keşfedildi</string>
+    <string name="legacy_no_observations_yet_d99ce56e">Henüz gözlem yok</string>
+    <string name="legacy_client_info_was_captured_during_an_easyconn_hand_f72a40e8">CLIENT_INFO bir EasyConn el sıkışması sırasında yakalandı.</string>
+    <string name="legacy_start_mirroring_or_android_auto_once_to_capture__cd900a4a">CLIENT_INFO yakalamak için aynalamayı ya da Android Auto\'yu bir kez başlatın.</string>
+    <string name="legacy_connect_this_motorcycle_then_start_mirroring_or__176c21dd">Bu motosikleti bağlayın, sonra aynalamayı ya da Android Auto\'yu bir kez başlatın.</string>
+    <string name="legacy_wait_288975">BEKLE</string>
+    <string name="legacy_observed_1_s_43b8d8b3">Gözlendi %1$s</string>
+    <string name="legacy_not_reported_7aaeba0">Bildirilmedi</string>
+    <string name="legacy_supported_a4e9e48e">DESTEKLENİYOR</string>
+    <string name="legacy_not_supported_14e0b361">DESTEKLENMİYOR</string>
+    <string name="legacy_not_reported_108c5fa0">BİLDİRİLMEDİ</string>
+
+    <!-- QR pairing - photo fallback dialog and live scanner -->
+    <string name="legacy_analyzing_qr_photo_aa205a9c">QR fotoğrafı çözümleniyor…</string>
+    <string name="legacy_removing_display_patterns_and_trying_qr_recognit_b1c3a1e8">Ekran desenleri kaldırılıyor ve QR tanıma deneniyor</string>
+    <string name="legacy_attempt_1_d_of_2_d_e7c367b5">Deneme %1$d / %2$d</string>
+    <string name="legacy_flash_on_64bdb02f">Flaş AÇIK</string>
+    <string name="legacy_flash_40cffd0">Flaş</string>
+    <string name="legacy_zoom_1_s_d659e688">Yakınlaştırma %1$s</string>
+    <string name="legacy_max_12d44">Maks</string>
+    <string name="legacy_tap_the_qr_code_to_focus_use_zoom_if_it_is_small_2607a78c">Odaklamak için QR koduna dokunun • Küçükse yakınlaştırmayı kullanın</string>
+
+    <!-- Safety disclaimer shown on first launch -->
+    <string name="legacy_safety_warning_243ef82e">GÜVENLİK UYARISI</string>
+    <string name="legacy_riding_requires_your_full_attention_never_intera_96038a24">Motosiklet sürmek tüm dikkatinizi ister. Motosiklet hareket hâlindeyken MOTO-HUB, Android Auto, navigasyon, aynalama, yolculuk kaydı veya ekrandaki herhangi bir denetimle asla etkileşime girmeyin.</string>
+    <string name="legacy_configure_and_verify_everything_only_while_parke_57e1b31b">Her şeyi yalnızca park hâlindeyken yapılandırın ve doğrulayın. Bu uygulamayı yalnızca tümüyle güvenli ve denetimli bir durumda kullanın. Koşullar tümüyle güvenli değilse kullanmayın.</string>
+    <string name="legacy_moto_hub_is_not_a_safety_device_and_cannot_preve_a3d43f2f">MOTO-HUB bir güvenlik aygıtı değildir ve dikkat dağınıklığını, kazaları, yaralanmayı veya hasarı önleyemez. Güvenli sürmekten ve geçerli tüm yasalara uymaktan yalnızca siz sorumlusunuz.</string>
+    <string name="legacy_i_understand_do_not_show_this_warning_again_e4526192">Anladım — bu uyarıyı bir daha gösterme</string>
+
+    <!-- GitHub update dialog -->
+    <string name="legacy_downloading_fe585f4">İndiriliyor...</string>
+    <string name="legacy_download_and_install_508990da">İndir ve kur</string>
+
+    <!-- Home and shared UI -->
+    <string name="legacy_no_motorcycle_b58a6930">Motosiklet yok</string>
+    <string name="legacy_stop_streaming_3eba75e4">Akışı durdur</string>
+    <string name="legacy_touch_the_preview_to_control_android_auto_91609ae0">Android Auto\'yu denetlemek için önizlemeye dokunun</string>
+
+    <!-- Handlebar mapping - action short labels, family headers and calibration hints -->
+    <string name="legacy_up_abb">Yukarı</string>
+    <string name="legacy_down_2098c2">Aşağı</string>
+    <string name="legacy_left_241427">Sol</string>
+    <string name="legacy_right_4b4d1fc">Sağ</string>
+    <string name="legacy_ok_9dc">OK</string>
+    <string name="legacy_place_1_45c34f38">Yer 1</string>
+    <string name="legacy_place_2_45c34f39">Yer 2</string>
+    <string name="legacy_place_3_45c34f3a">Yer 3</string>
+    <string name="legacy_move_the_cursor_78e625b4">İMLECİ HAREKET ETTİR</string>
+    <string name="legacy_system_92af662f">SİSTEM</string>
+    <string name="legacy_navigate_to_f20c4b8a">ŞURAYA GİT</string>
+    <string name="legacy_this_button_has_no_hold_skipping_automatically_44873c53">Bu düğmede basılı tutma yok - otomatik olarak atlanıyor.</string>
+    <string name="legacy_that_was_a_single_press_press_twice_quickly_for__e774e0f2">Bu tek basıştı - çift için hızlıca iki kez basın.</string>
+    <string name="legacy_that_was_a_quick_tap_press_and_hold_a_moment_lon_5b9c9d4d">Bu hızlı bir dokunuştu - biraz daha uzun basılı tutun.</string>
+    <string name="legacy_open_hotspot_settings_7d1f3d4a">Hotspot ayarlarını aç</string>
+    <!-- The "MOTO-HUB is still looking" notification shown while a connection attempt runs,
+         and the hosted-network wording that tells the rider not to close the app. %1$s is
+         the motorcycle network name. -->
+    <string name="legacy_moto_hub_connection_progress_c260af34">MOTO-HUB bağlantı ilerlemesi</string>
+    <string name="legacy_looking_for_1_s_9983a22f">%1$s aranıyor</string>
+    <string name="legacy_connecting_to_1_s_2f10e3b8">%1$s ağına bağlanılıyor</string>
+    <string name="legacy_keep_moto_hub_open_closing_it_stops_the_search_54ec507">MOTO-HUB\'u açık tutun - kapatmak aramayı durdurur.</string>
+    <string name="legacy_hotspot_is_up_searching_it_for_the_dashboard_thi_caab4cd3">Hotspot açık. Gösterge paneli için taranıyor - bu 90 saniyeye kadar sürebilir, bu yüzden MOTO-HUB\'u açık tutun.</string>
+    <!-- Asked once per video format tried, after a session that looked healthy from the phone:
+         only the rider can see whether the dashboard actually displayed it. %1$s is the
+         motorcycle name. -->
+    <string name="legacy_did_it_show_up_on_the_dashboard_f341c05">Gösterge panelinde göründü mü?</string>
+    <string name="legacy_last_time_you_connected_to_1_s_everything_looked_46fc9a09">%1$s ağına en son bağlandığınızda bu telefondan bakıldığında her şey doğru görünüyordu. MOTO-HUB\'un gösterge panelinin ekranını görmesi olanaksız, bu yüzden size sorması gereken tek şey bu.</string>
+    <string name="legacy_if_it_stayed_on_the_pairing_screen_moto_hub_will_40398b69">Eşleştirme ekranında kaldıysa, MOTO-HUB bir sonraki sürüşte farklı bir video biçimi deneyecek ve biri çalışana kadar sürdürecek.</string>
+    <string name="legacy_yes_i_saw_it_625527f4">Evet, gördüm</string>
+    <string name="legacy_no_nothing_appeared_f92c88fc">Hayır, hiçbir şey görünmedi</string>
+    <!-- Shown when the video-format search cannot progress because every session so far ran the
+         Ride Dashboard, which sends its own format. -->
+    <string name="legacy_the_video_format_search_is_waiting_ac28c9a">Video biçimi araması bekliyor</string>
+    <string name="legacy_moto_hub_is_still_looking_for_a_video_format_you_44b4c53c">MOTO-HUB hâlâ gösterge panelinizin gösterebileceği bir video biçimi arıyor, ancak bunu yalnızca Android Auto çalışırken sınayabilir - Ride Dashboard her zaman kendi biçimini gönderir.</string>
+    <string name="legacy_connect_once_with_android_auto_and_the_search_mo_71871380">Android Auto ile bir kez bağlanın, arama kendiliğinden ilerlesin.</string>
+    <string name="legacy_got_it_7f79855f">Anladım</string>
+
+    <!-- ===========================================================
+         Catalogue sweep, 2026-08-24: strings this worktree draws but had no
+         identifier for. The photo-picker values come from the pro-poc
+         catalogues, where the same source strings are already translated;
+         the About paragraph is this worktree's own, rewritten when CORE
+         dropped to Android 12.
+         ================================================================== -->
+
+    <!-- Source: MainActivity.kt -->
+    <string name="legacy_camera_permission_is_required_to_take_a_photo_951c5abe">Fotoğraf çekmek için kamera izni gerekir</string>
+
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_browse_files_e6b23981">Dosyalara göz at</string>
+    <string name="legacy_choose_from_gallery_1d40e025">Galeriden seç</string>
+    <string name="legacy_downloads_cloud_drives_and_any_other_folder_eb4e2c46">İndirilenler, bulut sürücüleri ve diğer tüm klasörler.</string>
+    <string name="legacy_open_the_camera_and_shoot_it_now_75ae0eed">Kamerayı açıp şimdi çekin.</string>
+    <string name="legacy_pick_one_of_your_photos_913c1c70">Fotoğraflarınızdan birini seçin.</string>
+    <string name="legacy_take_a_photo_cefc733a">Fotoğraf çek</string>
+
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_moto_hub_connects_an_android_12_phone_to_a_motor_b791c32e">MOTO-HUB, Android 12+ bir telefonu EasyConn üzerinden eşleşen bir motosiklet gösterge paneline bağlar — birçok üreticinin, aralarında CFMOTO\'nun da bulunduğu, dağıttığı Carbit yazılımı. Ekran ve uygulama aynalama, Android Auto yansıtma, kayıtlı motosiklet profilleri ve aygıt üzerinde tanılama destekler.</string>
+
+    <!-- Source: feature/controls — a controller button stands in for a handlebar press -->
+    <string name="legacy_handlebar_presses_32db65bc">GİDON BASIŞLARI</string>
+    <string name="legacy_backward_hold_left_72d8761e">Geri basılı tutma - Sol</string>
+    <string name="legacy_forward_hold_right_3f058b83">İleri basılı tutma - Sağ</string>
+
+    <!-- Source: feature/diagnostics/BleExplorerScreen.kt — the Bluetooth LE workbench -->
+    <string name="legacy_bluetooth_le_explorer_2ab1f074">Bluetooth LE gezgini</string>
+    <string name="legacy_find_any_bluetooth_le_device_open_it_and_see_wha_ff9d191c">Herhangi bir Bluetooth LE aygıtı bulun, açın ve gerçekte nelerden oluştuğunu görün: hizmetleri, özellikleri ve gönderdiği her bayt. Kendisi hakkında hiçbir şey bildirmeyen kumandalar için yapıldı - abone olmuşken düğmelerine basın, protokol kendini günlüğe yazsın.</string>
+    <string name="legacy_devices_1_d_c9f468d8">AYGITLAR (%1$d)</string>
+    <string name="legacy_filter_by_name_address_or_service_5c4953c4">Ada, adrese veya hizmete göre filtrele</string>
+    <string name="legacy_not_connectable_a36d7984">  - bağlanılamaz</string>
+    <string name="legacy_services_99327804">hizmetler: </string>
+    <string name="legacy_manufacturer_5ba47ab7">üretici: </string>
+    <string name="legacy_service_data_703f501b">hizmet verisi: </string>
+    <string name="legacy_connected_839202e9">BAĞLI</string>
+    <string name="legacy_rediscover_cece7f3c">Yeniden keşfet</string>
+    <string name="legacy_mtu_517_7d540d89">MTU 517</string>
+    <string name="legacy_read_rssi_318ccc81">RSSI oku</string>
+    <string name="legacy_read_26cdb6">Oku</string>
+    <string name="legacy_write_4ff67bf">Yaz</string>
+    <string name="legacy_write_to_1_s_716e199f">%1$s ögesine yaz</string>
+    <string name="legacy_bytes_in_hex_01_ff_0a_01ff0a_and_0x01_0xff_all_w_69a0e8b2">Onaltılık baytlar - \"01 FF 0A\", \"01ff0a\" ve \"0x01,0xFF\" hepsi çalışır. Bu doğrudan aygıta yazar: bazı donanımlarda yanlış bir değer, geri almanın zor olduğu ayarları değiştirir.</string>
+    <string name="legacy_hex_11afb">Onaltılık</string>
+    <string name="legacy_not_valid_hex_yet_f28e24dc">Henüz geçerli onaltılık değil.</string>
+    <string name="legacy_1_d_byte_s_f2d64482">%1$d bayt</string>
+    <string name="legacy_no_response_bdcb77a0">Yanıt yok</string>
+    <string name="legacy_traffic_eb2daddd">TRAFİK</string>
+    <string name="legacy_nothing_yet_dc65bed9">Henüz bir şey yok.</string>
+    <string name="legacy_every_line_here_is_also_in_the_application_log_s_f3e682dd">Buradaki her satır uygulama günlüğünde de bulunur, böylece bir oturum tanılama raporunda gönderilebilir.</string>
+    <string name="legacy_dash_clock_lab_a1a0638d">Gösterge saati laboratuvarı</string>
+    <string name="legacy_experiments_for_dashes_that_reset_the_clock_zont_a4c75a39">Saati sıfırlayan gösterge panelleri için deneyler (Zontes, Voge)</string>
+    <string name="legacy_scan_connect_and_read_any_ble_device_byte_by_byt_c47fb770">Herhangi bir BLE aygıtını tarayın, bağlanın ve bayt bayt okuyun</string>
+
+    <!-- Source: strings the extractor used to miss inside if/else expressions -->
+    <string name="legacy_stop_scanning_93cac2ef">Taramayı durdur</string>
+    <string name="legacy_scan_for_devices_883edf83">Aygıtları tara</string>
+    <string name="legacy_showing_named_devices_only_18320ef1">Yalnızca adlandırılmış aygıtlar gösteriliyor</string>
+    <string name="legacy_showing_every_device_ab347b96">Tüm aygıtlar gösteriliyor</string>
+    <string name="legacy_nothing_yet_a_remote_that_sleeps_only_advertises_231ea04a">Henüz bir şey yok. Uyuyan bir kumanda, yalnızca bir düğmeye basıldıktan sonra birkaç saniye yayın yapar - birine basın ve yakın tutun.</string>
+    <string name="legacy_start_a_scan_to_see_what_is_around_bd69ed5b">Çevrede ne olduğunu görmek için bir tarama başlatın.</string>
+    <string name="legacy_unsubscribe_862dd2b1">Abonelikten çık</string>
+    <string name="legacy_subscribe_9621fd2a">Abone ol</string>
+
+    <!-- Source: feature/controls — actions that drive the Ride Dashboard itself -->
+    <string name="legacy_dashboard_next_panel_8f5432b1">Panel: sonraki bölme</string>
+    <string name="legacy_dashboard_fullscreen_map_1bd08691">Panel: tam ekran harita</string>
+    <string name="legacy_dashboard_zoom_the_map_on_me_4f78353">Panel: haritayı üzerime yakınlaştır</string>
+    <string name="legacy_dashboard_change_the_left_widget_2ac18bf8">Panel: sol widget\'ı değiştir</string>
+    <string name="legacy_dashboard_change_the_right_widget_e40e68ad">Panel: sağ widget\'ı değiştir</string>
+    <string name="legacy_panel_33b634ef">Panel +</string>
+    <string name="legacy_map_full_b08caf3">Tam harita</string>
+    <string name="legacy_zoom_me_5ca904e5">Bana yakınlaş</string>
+    <string name="legacy_widget_l_b0744190">Widget S</string>
+    <string name="legacy_widget_r_b0744196">Widget R</string>
+
+    <!-- Source: feature/controls — actions that drive the rider's music -->
+    <string name="legacy_music_464f605">MÜZİK</string>
+    <string name="legacy_music_play_pause_f246dd44">Müzik: çal / duraklat</string>
+    <string name="legacy_music_next_track_516d3c09">Müzik: sonraki parça</string>
+    <string name="legacy_music_previous_track_dab94b8d">Müzik: önceki parça</string>
+    <string name="legacy_music_volume_up_f45c31d6">Müzik: sesi artır</string>
+    <string name="legacy_music_volume_down_4e0f651d">Müzik: sesi azalt</string>
+    <string name="legacy_play_25ff54">Çal</string>
+    <string name="legacy_next_24ff13">Sonraki</string>
+    <string name="legacy_previous_b7ee1f17">Önceki</string>
+    <string name="legacy_vol_4eff3fe">Ses +</string>
+    <string name="legacy_vol_4f015e5">Ses −</string>
+
+    <!-- Source: feature/controls — the three input sources, and which one is live -->
+    <string name="legacy_motorcycle_handlebar_dc90fcfc">MOTOSİKLET GİDONU</string>
+    <string name="legacy_android_auto_17_4_removed_the_way_an_app_can_ask_217ec1b2">Android Auto 17.4, bir uygulamanın yansıtma istemesini sağlayan yolu kaldırdı. MOTO-HUB yine de dener ve eski sürümlerde çalışır — ancak çalışmadığında aşağıdaki dört adım, Android Auto\'yu kendi geliştirici menüsünden başlatır. Başka hiçbir şey işe yaramadığında işe yarayan bölüm budur ve hiçbir şey kurmanız gerekmez.</string>
+    <string name="legacy_start_android_auto_yourself_3b0dffe1">ANDROID AUTO\'YU KENDİNİZ BAŞLATIN</string>
+    <string name="legacy_open_the_android_auto_app_s_settings_scroll_to_t_4ef36207">Android Auto uygulamasının ayarlarını açın, en alta inin ve \"Version\" ögesine on kez dokunun. Bu, geliştirici seçeneklerini açar — yalnızca bir kez yapmanız yeter.</string>
+    <string name="legacy_stay_on_that_same_android_auto_settings_screen_o_2c08cebc">Aynı Android Auto ayarlar ekranında kalın, sağ üstteki üç nokta menüsünü açın ve \"Start head unit server\" seçeneğini seçin. Geliştirici ayarlarının içinde değil, o menüdedir. İşi yapan adım budur.</string>
+    <string name="legacy_while_you_are_in_there_629f07a5">ORADAYKEN</string>
+    <string name="legacy_open_developer_settings_from_that_same_screen_an_4629699">Aynı ekrandan Geliştirici ayarlarını açın ve \"Add new cars to Android Auto\" seçeneğini açın (eski sürümlerde adı \"Unknown sources\"). Android Auto 17.2 ve öncesinde çoğu zaman tek başına bu anahtar yeter. 17.3\'ten sonra yetmez — asıl adım 2\'dir — bu yüzden Android Auto hâlâ başlamıyorsa burada durmayın.</string>
+
+    <!-- Source: androidauto/AndroidAutoSelfModeHelp — the step the home screen and the
+         Android Auto preview draw when projection needs the rider to do something -->
+    <string name="legacy_start_head_unit_server_da7b299f">\"head unit server\" başlatın</string>
+    <string name="legacy_the_three_dot_menu_at_the_top_right_of_android_a_d6625ac7">Android Auto\'nun kendi ayarlarının sağ üstündeki üç nokta menüsü</string>
+    <string name="legacy_unlock_android_auto_s_developer_options_first_op_2865efda">Önce Android Auto\'nun geliştirici seçeneklerini açın: ayarlarını açın, en alta inin ve \"Version\" ögesine on kez dokunun.</string>
+    <string name="legacy_enable_add_new_cars_to_android_auto_75bf90fa">\"Add new cars to Android Auto\" seçeneğini etkinleştirin</string>
+    <string name="legacy_android_auto_then_developer_settings_f55db1c8">Android Auto, sonra Geliştirici ayarları</string>
+
+    <!-- Source: feature/androidauto/AndroidAutoPreviewScreen — the preview's own status line -->
+    <string name="legacy_android_auto_is_not_running_start_a_session_from_e803c9ee">Android Auto çalışmıyor. Ana sayfadan bir oturum başlatın.</string>
+    <string name="legacy_preparing_android_auto_db146bea">Android Auto hazırlanıyor…</string>
+    <string name="legacy_waiting_for_android_auto_to_start_projecting_b7646bd0">Android Auto\'nun yansıtmaya başlaması bekleniyor…</string>
+    <string name="legacy_live_preview_touch_enabled_73752c4b">Canlı önizleme · dokunma etkin</string>
+
+    <!-- Source: failure text the home screen's error banner draws. Declared as constants and compared by
+         identity on the way there, so the catalogue is the only place they can be translated -->
+    <string name="legacy_google_android_auto_never_connected_to_moto_hub__bd46b5a3">Google Android Auto MOTO-HUB\'a hiç bağlanmadı. Yeni Android Auto sürümleri, uygulamaların yansıtma istemesini sağlayan yolu kaldırdı; bu yüzden onu Android Auto\'nun kendisinden başlatın. Android Auto uygulamasının ayarlarını açın, en alta inin ve geliştirici seçeneklerini açmak için \"Version\" ögesine on kez dokunun. Sonra aynı ayarlar ekranında sağ üstteki üç nokta menüsünü açıp \"Start head unit server\" seçeneğini seçin - menü, Geliştirici ayarlarının içinde değil, Android Auto\'nun normal ayarlar ekranındadır. MOTO-HUB\'u çalışır bırakın: birkaç saniye içinde kendiliğinden bağlanır ve sunucuyu bir sonraki sefer için açık bırakabilirsiniz.</string>
+    <string name="legacy_google_android_auto_took_moto_hub_s_request_and__ae0978d0">Google Android Auto, MOTO-HUB\'un isteğini aldı ve sonra yok saydı. Güvenmesi söylenmemiş bir ana üniteye yaptığı budur. Android Auto uygulamasının ayarlarını açın, en alta inin ve geliştirici seçeneklerini açmak için \"Version\" ögesine on kez dokunun, Geliştirici ayarlarını açıp \"Add new cars to Android Auto\" seçeneğini açın (eski derlemelerde adı \"Unknown sources\"), sonra Android Auto\'yu MOTO-HUB\'dan yeniden başlatın. Yine hiçbir şey olmazsa Android Auto ayarlar ekranına dönüp sağ üstteki üç nokta menüsünü kullanın: \"Start head unit server\".</string>
+    <string name="legacy_google_android_auto_took_moto_hub_s_request_and__3e12afc0">Google Android Auto, MOTO-HUB\'un isteğini aldı ve sonra yok saydı; bu sürümün onunla yaptığı tek şey bu: Android Auto 17.3 ve sonrası, bir uygulamanın yansıtma istemesini sağlayan yolu kaldırdı. Onun yerine Android Auto\'dan başlatın. Android Auto uygulamasının ayarlarını açın, en alta inin ve geliştirici seçeneklerini açmak için \"Version\" ögesine on kez dokunun, sonra aynı ayarlar ekranının sağ üstündeki üç nokta menüsünü açıp \"Start head unit server\" seçeneğini seçin. MOTO-HUB\'u çalışır bırakın: birkaç saniye içinde kendiliğinden bağlanır. Oradayken Geliştirici ayarlarındaki \"Add new cars to Android Auto\" da açık olmalı.</string>
+    <string name="legacy_another_easyconn_session_is_already_using_the_lo_fa50b26f">Başka bir EasyConn oturumu yerel bağlantı noktalarını (10920-10922) zaten kullanıyor. Etkin MOTO-HUB oturumlarını durdurun ya da motosikletinizin kendi eşlik eden uygulamasını (CFMOTO, Zontes Smart, Carbit Ride ve diğer markaların dağıttığı eşdeğerleri) zorla durdurun, sonra bağlantıyı yeniden deneyin.</string>
+    <string name="legacy_phone_wi_fi_is_off_turn_it_on_then_tap_connect_a_5fd21cc0">Telefonun Wi-Fi bağlantısı kapalı. Açın, sonra yeniden Bağlan\'a dokunun.</string>
+    <string name="legacy_phone_hotspot_is_off_turn_it_on_then_tap_connect_683a58f1">Telefonun hotspot\'u kapalı. Açın, sonra yeniden Bağlan\'a dokunun.</string>
+    <string name="legacy_action_needed_a446e8df">EYLEM GEREKİYOR</string>
+    <string name="legacy_do_this_in_android_auto_9a49aaee">BUNU ANDROID AUTO\'DA YAPIN</string>
+    <string name="legacy_show_me_how_73baf02b">Nasıl yapıldığını göster</string>
+    <string name="legacy_for_dashes_that_reset_their_clock_at_every_ignit_64c2ff15">Saatini her kontak çevriminde sıfırlayan gösterge panelleri için (özellikle Zontes ve Voge). Gösterge paneli açıkken laboratuvar Bluetooth üzerinden bağlanır, dinler, sonra saati beş farklı biçimde gönderir ve her baytı kaydeder. Sürün, kontağı kapatıp açın ve uygulama günlüğünü paylaşın: gösterge panelinin hangi biçimi kabul ettiğini söyleyecektir.</string>
+    <string name="legacy_run_clock_experiments_8ad4688f">Saat deneylerini çalıştır</string>
+    <string name="legacy_live_log_831d05f0">CANLI GÜNLÜK</string>
+    <string name="legacy_nothing_yet_power_the_dash_on_then_run_the_exper_b1ec5c8f">Henüz bir şey yok. Gösterge panelini açın, sonra deneyleri çalıştırın.</string>
+    <string name="legacy_moto_hub_closed_unexpectedly_30f439d7">MOTO-HUB beklenmedik biçimde kapandı</string>
+    <string name="legacy_the_last_time_you_used_moto_hub_it_stopped_becau_8448d27c">MOTO-HUB\'u en son kullandığınızda bir hata yüzünden durdu. Geliştiricinin nedenini bulmasını sağlayan şey, tanılama raporunu göndermenizdir.</string>
+    <string name="legacy_the_report_contains_your_motorcycle_s_dashboard__f4208b9f">Rapor motosikletinizin gösterge paneli modelini, telefon modelinizi, Android ve Android Auto sürümlerini, kurulu MOTO-HUB sürümlerini ve hatayı da içeren uygulama günlüğünü içerir. Parolalar, konumlar ve donanım adresleri hiçbir zaman içerilmez.</string>
+    <string name="legacy_send_reports_automatically_from_now_on_7cdd2209">Bundan sonra raporları otomatik gönder</string>
+    <string name="legacy_send_report_55908cac">Raporu gönder</string>
+    <string name="legacy_how_your_data_is_handled_ff77c87f">Verilerinizin nasıl işlendiği</string>
+    <string name="legacy_not_now_e202d7e9">Şimdi değil</string>
+    <string name="legacy_help_improve_moto_hub_9bf5292c">MOTO-HUB\'u geliştirmeye yardım edin</string>
+    <string name="legacy_moto_hub_can_send_a_diagnostics_report_to_the_de_36cc6ba6">MOTO-HUB geliştiriciye bir tanılama raporu gönderebilir: motosikletinizin gösterge paneli modeli, telefon modeliniz, Android, Android Auto ve kurulu MOTO-HUB sürümleri ve uygulama günlüğü. Parolalar, konumlar ve donanım adresleri hiçbir zaman içerilmez.</string>
+    <string name="legacy_reports_go_out_at_most_once_a_day_after_an_updat_6fc12b8d">Raporlar günde en fazla bir kez, bir güncellemeden sonra ya da bir çökmeden sonra ve yalnızca İnternet erişimi olan bir bağlantı üzerinden gönderilir. Destek kimliğiniz Ayarlar ▸ Tanılama altında gösterilir; bu seçenek oradan istediğiniz zaman açılıp kapatılabilir.</string>
+    <string name="legacy_send_reports_5c810947">Rapor gönder</string>
+    <string name="legacy_diagnostics_privacy_notice_1f708f84">Tanılama gizlilik bildirimi</string>
+    <string name="legacy_support_id_5239972c">Destek kimliği</string>
+    <string name="legacy_moto_hub_support_id_7149b87">MOTO-HUB Destek kimliği</string>
+    <string name="legacy_tap_to_copy_quote_it_when_asking_for_help_it_ide_edc7231">Kopyalamak için dokunun. Yardım isterken belirtin; bu telefonu ve motosikleti tanımlar.</string>
+    <string name="legacy_support_id_copied_63da1e38">Destek kimliği kopyalandı</string>
+    <string name="legacy_what_gets_sent_f4a13bbf">Ne gönderiliyor</string>
+    <string name="legacy_read_what_a_report_contains_then_choose_whether__e679dae">Bir raporun neler içerdiğini okuyun, sonra gönderip göndermeyeceğinize karar verin</string>
+    <string name="legacy_who_holds_your_reports_how_long_they_are_kept_an_ea54a6b7">Raporlarınızı kimin tuttuğu, ne kadar saklandıkları ve nasıl sildirileceği</string>
+    <string name="legacy_send_diagnostics_now_9368c9ea">Tanılamayı şimdi gönder</string>
+    <string name="legacy_this_build_has_no_collector_configured_e224996">Bu derlemede yapılandırılmış bir collector yok</string>
+    <string name="legacy_logging_is_off_the_log_would_end_at_1_s_c9d7198e">Günlük kaydı kapalı; günlük %1$s tarihinde biterdi</string>
+    <string name="legacy_logging_is_off_there_is_no_log_to_send_eca8d32d">Günlük kaydı kapalı; gönderilecek günlük yok</string>
+    <string name="legacy_send_diagnostics_automatically_880f35b7">Tanılamayı otomatik gönder</string>
+    <string name="legacy_sends_the_report_above_to_the_developer_at_most__8689def0">Yukarıdaki raporu geliştiriciye günde en fazla bir kez, bir güncellemeden sonra ya da bir çökmeden sonra gönderir - yalnızca İnternet erişimi olan bir bağlantı üzerinden. Gösterge paneli ve telefon modelleri, uygulama sürümleri ve uygulama günlüğü; parolalar, konumlar ya da donanım adresleri asla.</string>
+    <string name="legacy_logging_is_off_d9325d5a">GÜNLÜK KAYDI KAPALI</string>
+    <string name="legacy_nothing_has_been_recorded_since_1_s_what_was_log_1be484ac">%1$s tarihinden bu yana hiçbir şey kaydedilmedi. O tarihten önce günlüğe yazılanlar saklanır - günlük kaydını kapatmak yeni girdileri durdurur, eskileri asla silmez.</string>
+    <string name="legacy_nothing_has_been_recorded_and_there_is_no_earlie_dd873fa0">Hiçbir şey kaydedilmedi ve daha eski bir günlük de yok.</string>
+    <string name="legacy_a_report_sent_now_carries_that_log_so_it_says_no_cb65d9dc">Şimdi gönderilen bir rapor o günlüğü taşır, dolayısıyla uygulamanın bugün ne yaptığı hakkında hiçbir şey söylemez. Bir sorunu bildirmek için Günlük kaydını etkinleştir seçeneğini yeniden açın, sorunu yeniden yaşatın, sonra gönderin.</string>
+    <string name="legacy_that_worked_keep_it_b0100883">İşe yaradı - kalsın mı?</string>
+    <string name="legacy_your_dashboard_is_now_accepting_the_picture_on_t_a2e41389">Gösterge paneliniz artık görüntüyü %1$s profilinde kabul ediyor. Bu motosiklet için kullanmayı sürdürelim mi?</string>
+    <string name="legacy_you_have_just_found_out_something_moto_hub_could_5d173f67">MOTO-HUB\'un kendi başına bulamadığı bir şeyi az önce öğrendiniz: bu gösterge panelinin gerçekte hangi profili kabul ettiğini. Günlüğünüzü göndermek bunu paylaşır, böylece sizin motosikletinize sahip bir sonraki sürücü ilk seferde doğrusunu bulur.</string>
+    <string name="legacy_send_my_log_now_80f590fe">Günlüğümü şimdi gönder</string>
+    <string name="legacy_send_logs_automatically_from_now_on_1efdfbe9">Bundan sonra günlükleri otomatik gönder</string>
+    <string name="legacy_keep_it_318f8786">Kalsın</string>
+    <string name="legacy_undo_284d04">Geri al</string>
+    <string name="legacy_try_another_profile_2632e907">Başka bir profil dene</string>
+    <string name="legacy_the_connection_to_your_motorcycle_is_fine_the_da_6a78bba4">Motosikletinizle bağlantı sorunsuz - gösterge paneli yalnızca görüntüyü gönderildiği biçimde kabul etmiyor. Farklı bir profil o biçimi değiştirir. Birini seçmek hemen yeniden bağlanır ve gösterge paneli görüntüyü göstermeye başlarsa MOTO-HUB size onu tutmak isteyip istemediğinizi sorar.</string>
+    <string name="legacy_your_dashboard_is_not_showing_this_9765fbe3">GÖSTERGE PANELİNİZ BUNU GÖSTERMİYOR</string>
+    <string name="legacy_connected_but_the_picture_is_being_refused_tap_t_b17b1097">Bağlı, ancak görüntü kabul edilmiyor. Başka bir profil denemek için dokunun.</string>
+    <string name="legacy_connected_not_displaying_53b322ca">BAĞLI, GÖSTERMİYOR</string>
+    <string name="legacy_your_dashboard_refused_1_d_of_the_picture_it_was_beaebc06">Gösterge paneliniz gönderilen görüntünün %1$d%% kadarını reddetti (%3$d karenin %2$d tanesi).</string>
+    <string name="legacy_this_is_what_your_dashboard_reports_itself_to_be_8dfdffdd">Gösterge paneliniz kendini böyle bildiriyor.</string>
+    <string name="legacy_speaks_the_same_protocol_your_motorcycle_is_alre_7a13c9ca">Motosikletinizin zaten kullandığı protokolü konuşur.</string>
+    <string name="legacy_plain_settings_no_assumptions_a_good_thing_to_fa_3d3a2213">Yalın ayarlar, varsayım yok - geri dönmek için iyi bir seçenek.</string>
+    <string name="legacy_an_experiment_for_one_dashboard_s_open_question__1eafa773">Bir gösterge panelinin açık sorusu için bir deney. Hiçbir şey yapmayabilir.</string>
+    <string name="legacy_navigation_active_on_tft_b6221bcf">Navigasyon TFT\'de etkin</string>
+    <string name="legacy_tft_is_receiving_your_screen_56fd381">TFT ekranınızı alıyor</string>
+    <string name="legacy_android_auto_is_waiting_for_one_step_from_you_31eacac3">Android Auto sizden bir adım bekliyor</string>
+    <string name="legacy_session_is_being_prepared_742c490a">Oturum hazırlanıyor</string>
+    <string name="legacy_button_presses_are_off_2952e766">DÜĞME BASIŞLARI KAPALI</string>
+    <string name="legacy_moto_hub_advanced_owns_this_setting_and_writes_i_b8e328f7">Bu ayarın sahibi MOTO-HUB ADVANCED\'dir ve kendi değerini bunun üzerine yazar, bu yüzden burada değil orada açın.</string>
+    <string name="legacy_turn_presses_back_on_9d506146">Basışları yeniden aç</string>
+    <string name="legacy_these_drive_the_ride_dashboard_so_they_do_nothin_d4d30d86">Bunlar Ride Dashboard\'u kullanır, dolayısıyla o çalışmadıkça hiçbir şey yapmazlar - tek başına bir Android Auto oturumu yetmez.</string>
+    <string name="legacy_show_button_presses_on_the_dashboard_4ed2cd5e">Düğme basışlarını gösterge panelinde göster</string>
+
+    <!-- Source: feature/controls — the handlebar page after the Bluetooth controller was removed -->
+    <string name="legacy_your_motorcycle_s_own_handlebar_drives_moto_hub__f19519f3">MOTO-HUB\'u motosikletinizin kendi gidonu kullanır. Bir kez öğretin, sonra her düğmeye istediğiniz eylemi verin.</string>
+    <string name="legacy_presses_still_arrive_and_still_show_up_on_this_p_62dfa27d">Basışlar yine gelir ve bu sayfada yine görünür - onlarla hiçbir şey yapılmaz.</string>
+    <string name="legacy_every_handlebar_press_432fb397">Her gidon basışı </string>
+    <!-- Home: MOTO-HUB ADVANCED promo card and dialog -->
+    <string name="legacy_couldn_t_open_moto_hub_advanced_89c059e1">MOTO-HUB ADVANCED açılamadı.</string>
+    <string name="legacy_moto_hub_advanced_1cc3b73d">MOTO-HUB ADVANCED</string>
+    <string name="legacy_dashboard_navigation_and_trips_installed_on_this_7ffa5bb9">Gösterge paneli, navigasyon ve yolculuklar - bu telefona kurulu.</string>
+    <string name="legacy_free_companion_app_dashboard_navigation_trips_an_256e51cd">Ücretsiz eşlik eden uygulama: gösterge paneli, navigasyon, yolculuklar ve daha fazlası.</string>
+    <string name="legacy_open_259a6a">Aç</string>
+    <string name="legacy_see_what_it_adds_c8867b38">Neler kattığını görün</string>
+    <string name="legacy_a_second_free_app_that_installs_next_to_moto_hub_96f5853f">MOTO-HUB\'un yanına kurulan ve aynı gösterge panelini eksiksiz bir sürüş bilgisayarına dönüştüren ikinci bir ücretsiz uygulama. Ek donanım gerektirmez.</string>
+    <string name="legacy_ride_dashboard_gps_speed_live_map_and_trip_stats_e664cbab">Ride Dashboard - TFT üzerinde GPS hızı, canlı harita ve yolculuk istatistikleri</string>
+    <string name="legacy_navigation_search_motorcycle_routing_and_route_p_269dbf5a">Navigasyon - arama, motosiklete göre rota ve rota önizlemesi</string>
+    <string name="legacy_on_the_route_weather_fuel_prices_and_speed_camer_1ec23092">Rota üzerinde - hava durumu, akaryakıt fiyatları ve hız kameraları</string>
+    <string name="legacy_trips_recording_replay_analysis_and_gpx_export_ec08e237">Yolculuklar - kayıt, yeniden oynatma, çözümleme ve GPX dışa aktarma</string>
+    <string name="legacy_ai_place_discovery_and_a_post_ride_riding_coach_34d4ea13">AI ile yer keşfi ve sürüş sonrası Sürüş Koçu</string>
+    <string name="legacy_group_intercom_rider_to_rider_voice_70e92f1a">Grup interkom - sürücüden sürücüye ses</string>
+    <string name="legacy_moto_hub_stays_in_charge_of_the_motorcycle_pairi_6ccf9308">Motosikletin denetimi MOTO-HUB\'da kalır: eşleştirme, bağlantı ve Android Auto burada çalışmayı sürdürür. İkisinin de aynı sürümünü kurun.</string>
+    <string name="legacy_download_advanced_66a9c89a">ADVANCED\'i indir</string>
+    <string name="legacy_resolution_177354cc">Çözünürlük</string>
+    <string name="legacy_the_video_source_android_auto_sends_to_the_dashb_a90d80a4">Android Auto\'nun gösterge paneline gönderdiği video kaynağı</string>
+    <string name="legacy_interface_size_7aea8aa8">Arayüz boyutu</string>
+    <string name="legacy_how_large_android_auto_draws_itself_on_that_sour_2161eca0">Android Auto\'nun o kaynak üzerinde kendini ne kadar büyük çizdiği</string>
+    <string name="legacy_landscape_fb5e029b">YATAY</string>
+    <string name="legacy_portrait_5a1dab9b">DİKEY</string>
+    <string name="legacy_experimental_f1ae3108">Deneysel</string>
+    <!-- Source: catalogue catch-up 2026-09-06 - handlebar profiles, companion display, Home Assistant Torque, trip phone health, and the reworded wire verdict -->
+    <string name="legacy_1_s_is_holding_the_dashboard_connection_f85acc07">%1$s gösterge paneli bağlantısını tutuyor</string>
+    <string name="legacy_another_app_is_holding_the_dashboard_connection_2f8f3870">Başka bir uygulama gösterge paneli bağlantısını tutuyor</string>
+    <string name="legacy_force_stop_your_motorcycle_s_own_companion_app_f_47bc5899">Motosikletinizin kendi eşlik eden uygulamasını Uygulama bilgisi sayfasından zorla durdurup yeniden deneyin - Android bir uygulamanın başka bir uygulamanın bağlantısını bırakmasına izin vermez.</string>
+    <string name="legacy_if_it_stayed_on_the_pairing_screen_moto_hub_keep_74219a6">Eşleştirme ekranında kaldıysa, MOTO-HUB biri çalışana kadar video biçimlerini denemeyi sürdürür. Aynı gösterge paneline sahip başka sürücüler bunu zaten doğruladıysa, ilerlemeden önce size bir kez daha sorar.</string>
+    <string name="legacy_if_your_other_moto_hub_app_is_running_a_session__263cbf82">Diğer MOTO-HUB uygulamanız bu telefonda bir oturum çalıştırıyorsa, onun yerine onu durdurun.</string>
+    <string name="legacy_import_qr_from_an_image_65acae9a">Bir görüntüden QR içe aktar</string>
+    <string name="legacy_moto_hub_will_connect_on_its_own_when_the_dashbo_9f3fe52b">Gösterge paneli açıldığında MOTO-HUB kendiliğinden bağlanacak.</string>
+    <string name="legacy_on_this_phone_that_is_almost_always_1_s_force_st_26b6b463">Bu telefonda bu neredeyse her zaman %1$s olur. Uygulama bilgisi sayfasından zorla durdurup yeniden deneyin - Android bir uygulamanın başka bir uygulamanın bağlantısını bırakmasına izin vermez.</string>
+    <string name="legacy_shown_while_moto_hub_watches_for_the_motorcycle__5410550d">MOTO-HUB motosikletin Wi-Fi ağını beklerken gösterilir.</string>
+    <string name="legacy_the_three_local_ports_moto_hub_needs_for_the_das_ac32b51a">MOTO-HUB\'un gösterge paneli için gereksindiği üç yerel bağlantı noktası (%1$s) şu anda kullanımda, bu yüzden bağlantı başarısız olurdu.</string>
+    <string name="legacy_try_anyway_909523a8">Yine de dene</string>
+    <string name="legacy_waiting_for_s_c5c92cf8">%s bekleniyor</string>
+    <string name="legacy_waiting_for_the_motorcycle_24d361aa">Motosiklet bekleniyor</string>
+    <!-- Source: trips/TripAnalysisScreen.kt, home/HubHomeScreen.kt, companion, ai/AiPreset, and the service notifications - literals that reached a lookup indirectly, or were never wrapped -->
+    <string name="legacy_1_s_in_moto_hub_advanced_is_coming_soon_use_moto_6bcb37c0">MOTO-HUB Advanced\'de %1$s yakında geliyor (şimdilik MOTO-HUB Core\'u kullanın).</string>
+    <string name="legacy_import_qr_6b03505c">QR içe aktar</string>
+    <string name="legacy_scan_new_qr_ed7e6784">Yeni QR tara</string>
+    <!-- Source: feature/home - the secondary actions under the pairing and projection cards -->
+    <string name="legacy_how_to_start_android_auto_e44c5dd3">Android Auto nasıl başlatılır</string>
+    <string name="legacy_open_wi_fi_settings_299670db">Wi-Fi ayarlarını aç</string>
+</resources>

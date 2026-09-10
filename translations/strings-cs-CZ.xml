@@ -15,6 +15,7 @@
     <string name="language_german">Deutsch</string>
     <string name="language_dutch">Nederlands</string>
     <string name="language_czech">Čeština</string>
+    <string name="language_turkish">Türkçe</string>
     <string name="language_title">Jazyk</string>
     <string name="language_description">Vyberte jazyk používaný aplikací MOTO-HUB</string>
     <string name="language_detail_description">MOTO-HUB se výchozím nastavením řídí jazykem telefonu. Výběrem jazyka níže jej pro tuto aplikaci přepíšete.</string>
