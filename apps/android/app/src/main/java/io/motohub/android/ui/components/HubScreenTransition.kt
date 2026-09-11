@@ -4,6 +4,7 @@
 package io.motohub.android.ui.components
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -123,6 +124,32 @@ fun <T> ScreenSlideTransition(
         transitionSpec = { screenSlideTransform(isBase) },
         label = label
     ) { shown ->
+        savedScreenState.SaveableStateProvider(stateKey(shown)) {
+            content(shown)
+        }
+    }
+}
+
+/**
+ * A crossfade between screens that keeps each one's place.
+ *
+ * The same saved-state contract as [ScreenSlideTransition], for the dispatchers where sliding
+ * would be wrong - the bottom tabs, which are siblings rather than a stack, and where a card
+ * covering another would say something untrue about how they relate.
+ *
+ * Without the holder each tab was rebuilt from scratch on every switch: a rider who scrolled half
+ * way down one tab, glanced at another and came back landed at the top again.
+ */
+@Composable
+fun <T> ScreenCrossfade(
+    screen: T,
+    modifier: Modifier = Modifier,
+    label: String = "screen-crossfade",
+    stateKey: (T) -> Any = { "$it" },
+    content: @Composable (T) -> Unit
+) {
+    val savedScreenState = rememberSaveableStateHolder()
+    Crossfade(targetState = screen, modifier = modifier, label = label) { shown ->
         savedScreenState.SaveableStateProvider(stateKey(shown)) {
             content(shown)
         }

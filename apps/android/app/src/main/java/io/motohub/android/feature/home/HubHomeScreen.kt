@@ -87,6 +87,7 @@ import io.motohub.android.ui.components.MotoHubBackground
 import io.motohub.android.ui.components.MotoHubCardGroup
 import io.motohub.android.ui.components.MotoHubNotice
 import io.motohub.android.ui.components.NoticeTone
+import io.motohub.android.ui.components.ScreenCrossfade
 import io.motohub.android.ui.components.ScreenSlideTransition
 import io.motohub.android.ui.components.StatusPill
 import io.motohub.android.ui.theme.MotoHubAndroidAuto
@@ -195,7 +196,7 @@ fun HubHomeScreen(
             }
 
             Box(Modifier.weight(1f)) {
-                Crossfade(targetState = selectedTab, label = "tab") { tab ->
+                ScreenCrossfade(screen = selectedTab, label = "tab") { tab ->
                     when (tab) {
                         HubTab.RIDE, HubTab.NAV, HubTab.TRIPS -> HomeTabContent(
                             state = state,

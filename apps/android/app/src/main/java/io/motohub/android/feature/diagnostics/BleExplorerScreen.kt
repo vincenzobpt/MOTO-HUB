@@ -34,6 +34,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -72,6 +73,14 @@ import java.util.Locale
 fun BleExplorerScreen(onBack: () -> Unit) {
     BackHandler(onBack = onBack)
     val context = LocalContext.current
+    // A scan left running after the screen is gone keeps the radio awake with nobody watching.
+    // Leaving the screen ends the scan and the link the same way the learn wizard does.
+    DisposableEffect(Unit) {
+        onDispose {
+            BleExplorer.stopScan(context)
+            BleExplorer.disconnect()
+        }
+    }
 
     val scanning by BleExplorer.scanning.collectAsState()
     val devices by BleExplorer.devices.collectAsState()
