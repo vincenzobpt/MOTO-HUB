@@ -379,6 +379,14 @@ class RideDaemonTransport(
      */
     @Volatile
     private var sessionDashFingerprint: String? = null
+    /**
+     * Whether the clock answer this session puts on the wire actually carries a time. With the
+     * rider's Wi-Fi clock switch off the daemon replies to QUERY_TIME with an empty body, and a
+     * dashboard that goes on counting after that has thrown nothing away - so the verdict in
+     * [TBoxClockAskRegistry] must not be drawn from such a session.
+     */
+    @Volatile
+    private var sessionAnswersClock: Boolean = false
     /** Elapsed-time mark for the running session, so its length can be judged when it ends. */
     private val sessionStartedElapsed = AtomicLong(0L)
     /**
@@ -560,7 +568,8 @@ class RideDaemonTransport(
                 // hand on the dash. The rider's own switch is the only way to tell it apart -
                 // its firmware strings are identical to the panels the answer does fix. Read
                 // per session, so flipping the setting takes effect on the next connect.
-                setSkipDashClockSync(!MotoHubSettings.dashClockSync(appContext))
+                sessionAnswersClock = MotoHubSettings.dashClockSync(appContext)
+                setSkipDashClockSync(!sessionAnswersClock)
                 // A dashboard that asked for the time in an earlier session must not be raced by
                 // the unsolicited push: it wins the grace period sometimes and loses it others,
                 // and losing hands it a second clock packet on top of the answer it asked for -
@@ -2058,6 +2067,11 @@ class RideDaemonTransport(
                             "the next connection MOTO-HUB will only answer, never offer."
                     )
                 }
+                // The daemon answers this on its own, immediately; all that is kept here is that
+                // it did, so the next CLIENT_INFO can say whether the dashboard used the answer.
+                if (sessionAnswersClock) {
+                    TBoxClockAskRegistry.noteAnswered(appContext, sessionDashFingerprint)
+                }
             }
             if (type == PXC_EVENT_SOURCE && command == PXC_HUD_CONFIG_COMMAND) {
                 val capabilities = payload?.let(::decodeTBoxCapabilities)
@@ -2139,6 +2153,25 @@ class RideDaemonTransport(
                         )
                     }
                     sessionDashFingerprint = TBoxWireLadder.fingerprintOf(capabilities)
+                    // Filed against the firmware rather than the bike, and outside the block
+                    // below on purpose: a dashboard's answer to the clock question is the same
+                    // whether or not this transport was told which motorcycle it is serving.
+                    if (TBoxClockAskRegistry.onDashboardClockSeen(
+                            appContext,
+                            sessionDashFingerprint,
+                            capabilities.huUptimeMillis
+                        )
+                    ) {
+                        ProjectionEventLog.record(
+                            "TBOX",
+                            "This dashboard ($sessionDashFingerprint) discards the time it asks " +
+                                "for: it was answered with the phone's clock in the previous " +
+                                "handshake and still reports its own as " +
+                                "${capabilities.huUptimeMillis} ms since power-on, without having " +
+                                "restarted in between. Nothing this phone sends will set it, and " +
+                                "the Wi-Fi dash clock setting changes nothing on this firmware."
+                        )
+                    }
                     motorcycleProfile?.let { motorcycle ->
                         // Kept HERE, not only in the session services that observe this event:
                         // when the companion app drives the session over the AIDL bridge none of
@@ -2320,6 +2353,7 @@ class RideDaemonTransport(
         // arrives before this session's CLIENT_INFO is never filed against the dashboard
         // the last session met - a rider can change bikes between two connections.
         sessionDashFingerprint = null
+        sessionAnswersClock = false
         unknownCommandsLogged.clear()
         // The tally belongs to the session that produced it: reported before it is dropped, so a
         // log does not end on beats that were counted and never mentioned, and so the next

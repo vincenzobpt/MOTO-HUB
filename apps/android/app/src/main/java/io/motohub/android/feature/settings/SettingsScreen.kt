@@ -55,7 +55,11 @@ import io.motohub.android.feature.controls.HandlebarInputMode
 import io.motohub.android.feature.controls.HandlebarMappingScreen
 import io.motohub.android.feature.controls.MediaButtonBridge
 import io.motohub.android.feature.diagnostics.report.SupportIdSection
+import io.motohub.android.data.MotorcycleProfileStore
 import io.motohub.android.session.ProjectionEventLog
+import io.motohub.android.tbox.TBoxCapabilityStore
+import io.motohub.android.tbox.TBoxClockAskRegistry
+import io.motohub.android.tbox.TBoxWireLadder
 import io.motohub.android.ui.components.MonoLabel
 import io.motohub.android.ui.components.MotoHubActionRow
 import io.motohub.android.ui.components.MotoHubCardGroup
@@ -496,6 +500,17 @@ private fun AutomationDetail(onBack: () -> Unit) {
     var keepWifiDirect by remember { mutableStateOf(MotoHubSettings.keepWifiDirectAfterDisconnect(context)) }
     var bluetoothClock by remember { mutableStateOf(MotoHubSettings.bluetoothClockSync(context)) }
     var dashClock by remember { mutableStateOf(MotoHubSettings.dashClockSync(context)) }
+    // Some firmware asks MOTO-HUB for the time, is answered, and goes on counting from its own
+    // power-on anyway. On those the switch below cannot do anything in either position, and a
+    // rider with no way of knowing that spends the evening toggling it - so it is said here,
+    // from what that dashboard has actually been seen doing on this phone.
+    val dashDiscardsClock = remember {
+        runCatching {
+            val motorcycle = MotorcycleProfileStore(context).load()
+            val capabilities = motorcycle?.let { TBoxCapabilityStore(context).load(it)?.capabilities }
+            TBoxClockAskRegistry.discardsTime(context, TBoxWireLadder.fingerprintOf(capabilities))
+        }.getOrDefault(false)
+    }
     MotoHubDetailScreen(title = motoHubText("Connection & automation"), backLabel = motoHubText("‹ Settings"), onBack = onBack) {
         ToggleRow(
             title = motoHubText("Auto-connect on launch"),
@@ -519,13 +534,22 @@ private fun AutomationDetail(onBack: () -> Unit) {
         )
         ToggleRow(
             title = motoHubText("Set the dash clock over Wi-Fi"),
-            description = motoHubText(
-                "On by default, and what sets the time on most dashboards. Turn it off only if " +
-                    "your dash asks MOTO-HUB for the time, ignores the answer, and shows " +
-                    "01.01.1970 anyway: on those units writing the clock changes nothing and can " +
-                    "overwrite a time you set by hand on the dashboard itself. With this off the " +
-                    "bike connects normally, it is simply never told what time it is."
-            ),
+            description = if (dashDiscardsClock) {
+                motoHubText(
+                    "Your dashboard has been seen asking for the time, being answered, and going " +
+                        "on counting from its own power-on regardless. This switch changes " +
+                        "nothing on it in either position: that clock is kept by the dashboard, " +
+                        "not by the phone."
+                )
+            } else {
+                motoHubText(
+                    "On by default, and what sets the time on most dashboards. Turn it off only if " +
+                        "your dash asks MOTO-HUB for the time, ignores the answer, and shows " +
+                        "01.01.1970 anyway: on those units writing the clock changes nothing and can " +
+                        "overwrite a time you set by hand on the dashboard itself. With this off the " +
+                        "bike connects normally, it is simply never told what time it is."
+                )
+            },
             checked = dashClock,
             onCheckedChange = {
                 dashClock = it
