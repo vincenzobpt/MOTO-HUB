@@ -9,7 +9,6 @@ import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattDescriptor
-import android.bluetooth.BluetoothGattService
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothProfile
 import android.bluetooth.le.BluetoothLeScanner
@@ -307,10 +306,9 @@ internal class EcBtpClockLab(
 
             override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
                 dumpGattTable(label, gatt)
-                val service = EcBtpTimeLink.SERVICE_UUIDS.firstNotNullOfOrNull { uuid ->
-                    runCatching { gatt.getService(uuid) }.getOrNull()
-                }
-                val known = service?.let { dataCharacteristicOf(it) }?.let { it to it }
+                // Carbit's own pairs first, every listed service considered, write and notify
+                // sides chosen by property - the same resolution EcBtpTimeLink runs in production.
+                val known = EcBtpTimeLink.serialPairOf(gatt)
                 // The seven known UUIDs come from Carbit's own app, so they name the dashes we
                 // have already met and nothing else. Support case f014ce61: the VOGE's BLE side
                 // carries 5fe695f1-fd7b-4f9b-98cc-ee6cf57a776e with one write and one notify
@@ -496,11 +494,6 @@ internal class EcBtpClockLab(
             EcBtpProtocol.queryTimeReply(Date(), TimeZone.getDefault())
         }
     )
-
-    private fun dataCharacteristicOf(service: BluetoothGattService): BluetoothGattCharacteristic? =
-        EcBtpTimeLink.CHARACTERISTIC_UUIDS.firstNotNullOfOrNull { uuid ->
-            runCatching { service.getCharacteristic(uuid) }.getOrNull()
-        }
 
     private fun savedMotorcycles(): List<MotorcycleProfile> =
         runCatching { MotorcycleProfileStore(appContext).loadAll() }.getOrElse { emptyList() }

@@ -9,7 +9,6 @@ import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattDescriptor
-import android.bluetooth.BluetoothGattService
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothProfile
 import android.bluetooth.le.BluetoothLeScanner
@@ -231,8 +230,12 @@ internal class EcBtpTimeLink(
             /** Set once this peer has proven it speaks EC-BTP; nothing is written before that. */
             private val proven = AtomicBoolean(false)
 
+            /** Where replies are written; on a V2 dash a different characteristic from [notifyCharacteristic]. */
             @Volatile
-            private var dataCharacteristic: BluetoothGattCharacteristic? = null
+            private var writeCharacteristic: BluetoothGattCharacteristic? = null
+
+            @Volatile
+            private var notifyCharacteristic: BluetoothGattCharacteristic? = null
 
             override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
                 if (newState == BluetoothProfile.STATE_CONNECTED) {
@@ -247,20 +250,26 @@ internal class EcBtpTimeLink(
             }
 
             override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
-                val service = SERVICE_UUIDS.firstNotNullOfOrNull { uuid ->
-                    runCatching { gatt.getService(uuid) }.getOrNull()
-                }
-                val characteristic = service?.let { dataCharacteristicOf(it) }
-                if (characteristic == null) {
+                val pair = serialPairOf(gatt)
+                if (pair == null) {
                     // Not a dashboard, or not one that speaks this protocol. Let go at once rather
-                    // than sitting on someone's intercom.
+                    // than sitting on someone's intercom - but say what was there first. The
+                    // Cyclone RX2 (support case 901bdf88) sat in this branch for nine days, and
+                    // the one-line "no data characteristic" left no way to tell which of
+                    // Carbit's tables its firmware actually follows.
                     log("EC-BTP: $label exposes no EC-BTP data characteristic; disconnecting.")
+                    describeGattTable(gatt).forEach { line -> log("EC-BTP: $label $line") }
                     runCatching { gatt.disconnect() }
                     return
                 }
-                dataCharacteristic = characteristic
-                subscribe(gatt, characteristic)
-                log("EC-BTP: listening to $label on ${characteristic.uuid}.")
+                val (write, notify) = pair
+                writeCharacteristic = write
+                notifyCharacteristic = notify
+                subscribe(gatt, notify)
+                log(
+                    "EC-BTP: listening to $label on ${notify.uuid}" +
+                        (if (write.uuid == notify.uuid) "." else ", answering on ${write.uuid}.")
+                )
             }
 
             /**
@@ -309,14 +318,9 @@ internal class EcBtpTimeLink(
                     else -> null
                 }
                 if (reply == null) return
-                val target = dataCharacteristic ?: return
+                val target = writeCharacteristic ?: return
                 val written = runCatching {
-                    BleCompat.writeCharacteristic(
-                        gatt,
-                        target,
-                        reply,
-                        BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
-                    )
+                    BleCompat.writeCharacteristic(gatt, target, reply, writeTypeFor(target))
                 }.getOrNull()
                 log("EC-BTP: answered $label's clock request with ${reply.size} byte(s) (result $written).")
             }
@@ -339,10 +343,25 @@ internal class EcBtpTimeLink(
         }
     }
 
-    private fun dataCharacteristicOf(service: BluetoothGattService): BluetoothGattCharacteristic? =
-        CHARACTERISTIC_UUIDS.firstNotNullOfOrNull { uuid ->
-            runCatching { service.getCharacteristic(uuid) }.getOrNull()
+    private fun writeTypeFor(characteristic: BluetoothGattCharacteristic): Int =
+        if (characteristic.properties and BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE != 0) {
+            BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
+        } else {
+            BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
         }
+
+    private fun describeGattTable(gatt: BluetoothGatt): List<String> {
+        val services = runCatching { gatt.services }.getOrNull().orEmpty()
+        return buildList {
+            add("GATT table, ${services.size} service(s):")
+            services.forEach { service ->
+                add("  service ${service.uuid}")
+                service.characteristics.orEmpty().forEach { characteristic ->
+                    add("    char ${characteristic.uuid} [${describeProperties(characteristic.properties)}]")
+                }
+            }
+        }
+    }
 
     private fun subscribe(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic) {
         runCatching { gatt.setCharacteristicNotification(characteristic, true) }
@@ -374,7 +393,17 @@ internal class EcBtpTimeLink(
          */
         const val SCAN_WINDOW_MILLIS = 30_000L
 
-        /** Carbit's service list (`pe/a.java:17`), in its own order. */
+        /**
+         * Carbit's two BLE service tables, in their own order.
+         *
+         * Carbit Ride runs two Nordic managers over the same EC-BTP framing: `WrcNSManager`
+         * (`pe/a.java:17`), the handlebar-remote channel, and `HudNSManager` (`ne/a.java:11`),
+         * the dashboard channel that `sendSyncTime()` actually writes through. The first seven
+         * entries are the remote's table; the last two are the dashboard's. `fff0` sits in both,
+         * which is how the Cyclone RX2 (`BLE-ZS-049485`, support case 901bdf88) was recognised
+         * as a candidate for nine days and then dropped: its characteristics are from the
+         * dashboard table below, and only the remote's were being looked for.
+         */
         val SERVICE_UUIDS = listOf(
             UUID.fromString("00001c00-d102-11e1-9b23-000efb0000b2"),
             UUID.fromString("0000474d-0000-1000-8000-00805f9b34fb"),
@@ -382,18 +411,92 @@ internal class EcBtpTimeLink(
             UUID.fromString("0000474e-0000-1000-8000-00805f9b34fb"),
             UUID.fromString("00001c00-d102-11e1-9b23-000efb0000c6"),
             UUID.fromString("0000ffe0-0000-1000-8000-00805f9b34fb"),
-            UUID.fromString("0000fff0-0000-1000-8000-00805f9b34fb")
+            UUID.fromString("0000fff0-0000-1000-8000-00805f9b34fb"),
+            UUID.fromString("0000b360-d6d8-c7ec-bdf0-eab1bfc6bcbc"),
+            UUID.fromString("00006967-0000-1000-8000-00805f9b34fb")
         )
 
-        /** The matching data characteristics (`pe/a.java:20`). */
+        /**
+         * The matching data characteristics: the remote's (`pe/a.java:20`) followed by the
+         * dashboard's (`ne/a.java:14-23`). `HudNSManager` accepts three layouts of the latter -
+         * V1: `b362` carries both notify and write; V2: `b364` notifies, `b363` is written;
+         * V3: `b364` does both - which is why [serialPair] chooses by property rather than by
+         * position in this list.
+         */
         val CHARACTERISTIC_UUIDS = listOf(
             UUID.fromString("00001c0f-d102-11e1-9b23-000efb0000b2"),
             UUID.fromString("00004b59-0000-1000-8000-00805f9b34fb"),
             UUID.fromString("00001c0f-d102-11e1-9b23-000efb0000c6"),
             UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb"),
-            UUID.fromString("0000fff1-0000-1000-8000-00805f9b34fb")
+            UUID.fromString("0000fff1-0000-1000-8000-00805f9b34fb"),
+            UUID.fromString("0000b362-d6d8-c7ec-bdf0-eab1bfc6bcbc"),
+            UUID.fromString("0000b363-d6d8-c7ec-bdf0-eab1bfc6bcbc"),
+            UUID.fromString("0000b364-d6d8-c7ec-bdf0-eab1bfc6bcbc")
         )
 
         val CCC_UUID: UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
+
+        /**
+         * The (write, notify) characteristic UUIDs to use on a peripheral whose GATT table is
+         * [services] - each entry a service UUID with its characteristics as (UUID, properties) -
+         * or null when no service in [SERVICE_UUIDS] carries a characteristic in
+         * [CHARACTERISTIC_UUIDS].
+         *
+         * Every listed service is examined, not just the first one present: a dash carrying
+         * `ffe0` for something else and `fff0` for EC-BTP was previously abandoned at `ffe0`.
+         * Within a service the write side is the first known characteristic that can be written
+         * and the notify side the first that can notify or indicate; a known characteristic
+         * whose firmware declares no properties at all still counts for both, which is what the
+         * remote-table dashes were relying on before this had a notion of properties.
+         */
+        internal fun serialPair(services: List<Pair<UUID, List<Pair<UUID, Int>>>>): Pair<UUID, UUID>? {
+            SERVICE_UUIDS.forEach { serviceUuid ->
+                services.filter { (uuid, _) -> uuid == serviceUuid }.forEach { (_, characteristics) ->
+                    val known = characteristics.filter { (uuid, _) -> CHARACTERISTIC_UUIDS.contains(uuid) }
+                    if (known.isEmpty()) return@forEach
+                    val write = known.firstOrNull { (_, properties) -> properties and WRITE_PROPERTIES != 0 }
+                    val notify = known.firstOrNull { (_, properties) -> properties and NOTIFY_PROPERTIES != 0 }
+                    val bare = known.firstOrNull { (_, properties) -> properties == 0 }
+                    val writeUuid = (write ?: bare)?.first ?: return@forEach
+                    val notifyUuid = (notify ?: bare)?.first ?: return@forEach
+                    return writeUuid to notifyUuid
+                }
+            }
+            return null
+        }
+
+        /**
+         * [serialPair] applied to a live connection: the (write, notify) characteristics to use,
+         * or null when the peripheral offers none of Carbit's pairs.
+         */
+        internal fun serialPairOf(gatt: BluetoothGatt): Pair<BluetoothGattCharacteristic, BluetoothGattCharacteristic>? {
+            val services = runCatching { gatt.services }.getOrNull().orEmpty()
+            val shape = services.map { service ->
+                service.uuid to service.characteristics.orEmpty().map { it.uuid to it.properties }
+            }
+            val (writeUuid, notifyUuid) = serialPair(shape) ?: return null
+            val write = services.firstNotNullOfOrNull { service ->
+                runCatching { service.getCharacteristic(writeUuid) }.getOrNull()
+            } ?: return null
+            val notify = services.firstNotNullOfOrNull { service ->
+                runCatching { service.getCharacteristic(notifyUuid) }.getOrNull()
+            } ?: return null
+            return write to notify
+        }
+
+        internal fun describeProperties(properties: Int): String = buildList {
+            if (properties and BluetoothGattCharacteristic.PROPERTY_READ != 0) add("read")
+            if (properties and BluetoothGattCharacteristic.PROPERTY_WRITE != 0) add("write")
+            if (properties and BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE != 0) add("write-nr")
+            if (properties and BluetoothGattCharacteristic.PROPERTY_NOTIFY != 0) add("notify")
+            if (properties and BluetoothGattCharacteristic.PROPERTY_INDICATE != 0) add("indicate")
+        }.ifEmpty { listOf("none") }.joinToString("+")
+
+        private const val WRITE_PROPERTIES =
+            BluetoothGattCharacteristic.PROPERTY_WRITE or
+                BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE
+        private const val NOTIFY_PROPERTIES =
+            BluetoothGattCharacteristic.PROPERTY_NOTIFY or
+                BluetoothGattCharacteristic.PROPERTY_INDICATE
     }
 }
