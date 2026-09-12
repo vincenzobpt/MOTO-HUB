@@ -1428,6 +1428,7 @@
     <string name="legacy_set_the_dash_clock_over_bluetooth_experimental_3431b284">Bluetooth로 계기판 시계 맞추기(실험적)</string>
     <string name="legacy_set_the_dash_clock_over_wi_fi_292a2ca5">Wi-Fi로 계기판 시계 맞추기</string>
     <string name="legacy_on_by_default_and_what_sets_the_time_on_most_das_6234cd82">기본값은 켜짐이며, 대부분의 계기판에서 시간을 맞추는 것이 바로 이 기능입니다. 계기판이 MOTO-HUB에 시간을 물어보고 그 답을 무시한 채 여전히 01.01.1970을 표시하는 경우에만 끄세요. 그런 기기에서는 시계를 써 넣어도 아무것도 바뀌지 않으며, 계기판에서 직접 손으로 맞춘 시간을 덮어쓸 수 있습니다. 이 설정을 끄면 오토바이는 평소대로 연결되고, 다만 지금 몇 시인지 전달받지 못할 뿐입니다.</string>
+    <string name="legacy_your_dashboard_has_been_seen_asking_for_the_time_c02f4d97">이 계기판은 시간을 물어보고 답을 받은 뒤에도 계속 자체 전원이 켜진 시점부터 시간을 세는 것으로 확인되었습니다. 이 설정은 어느 쪽에 두어도 계기판에 아무런 영향을 주지 않습니다. 그 시계는 휴대폰이 아니라 계기판이 관리합니다.</string>
     <string name="legacy_settings_595d2043">설정</string>
     <string name="legacy_some_dashboards_ask_for_the_time_over_bluetooth__b44ce43b">일부 계기판은 시간을 Wi-Fi가 아니라 Bluetooth로 물어보며, 없으면 00:00에 머뭅니다. Android Bluetooth 설정에서 오토바이가 이미 이 휴대폰과 페어링되어 있어야 합니다. 기본값은 꺼짐이며, MOTO-HUB는 계기판 고유 프로토콜로 묻는 기기에만 응답합니다.</string>
     <string name="legacy_some_dashboards_forget_settings_like_the_clock_w_76d95842">일부 계기판은 Wi-Fi Direct 연결이 완전히 끊기면 시계 같은 설정을 잊어버립니다. 앱을 나가거나 Wi-Fi를 끌 때까지 휴대폰을 오토바이 네트워크에 붙여 둡니다. 기본값은 꺼짐이며, 연결 해제 후 계기판이 시간을 잃는 경우에만 켜세요.</string>
