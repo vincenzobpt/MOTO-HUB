@@ -3,6 +3,7 @@
 // Part of MOTO-HUB. Free software under the GNU AGPL v3; see LICENSE.
 package io.motohub.android.androidauto
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -10,6 +11,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.os.IBinder
 import android.os.PowerManager
@@ -169,13 +171,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
         // kills the service, START_STICKY restarts it, and it fails the same way forever. Give up
         // once and say so instead: a session that cannot hold a foreground service cannot stream
         // anyway, and the loop only drains the battery while hiding the real cause.
-        val foreground = runCatching {
-            startForeground(
-                NOTIFICATION_ID,
-                createNotification(),
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE
-            )
-        }
+        val foreground = runCatching { startForegroundWithVoiceCapture() }
         foreground.exceptionOrNull()?.let { failure ->
             ProjectionEventLog.error(
                 "ANDROID AUTO",
@@ -1527,6 +1523,61 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
     private fun releaseWakeLock() {
         runCatching { if (wakeLock?.isHeld == true) wakeLock?.release() }
         wakeLock = null
+    }
+
+    /**
+     * Goes foreground with the `microphone` type whenever Android allows it, and without it
+     * otherwise - never failing the session over it.
+     *
+     * The Assistant's voice capture ([io.motohub.android.aa.AaMicrophone]) runs in this process,
+     * which is a background app whenever the rider drives it from another app or with the
+     * screen off. Since Android 11 (and checked against the type actually passed here since 14)
+     * a background app may record only through a foreground service whose *running* type
+     * includes `microphone`; with any other type the AudioRecord starts normally and reads
+     * zeros. That silence is what one rider heard as "Gemini never hears me" on every attempt
+     * (ticket 9d030574): the manifest declared the type, this call did not pass it.
+     *
+     * The type is refused with a SecurityException when RECORD_AUDIO is not granted (Android
+     * 14+) or when the service is not in the while-in-use eligible state at start (started from
+     * the background). Both are recoverable for video, so fall back to the plain type and say
+     * so - the rider then gets a log line naming why voice input is silent instead of a session
+     * that refuses to start.
+     */
+    private fun startForegroundWithVoiceCapture() {
+        val plain = ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE
+        val microphoneGranted = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.RECORD_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
+        if (!microphoneGranted) {
+            startForeground(NOTIFICATION_ID, createNotification(), plain)
+            ProjectionEventLog.warning(
+                "ANDROID AUTO",
+                "Foreground service started without the microphone type: RECORD_AUDIO is not " +
+                    "granted, so Assistant voice input will be silent this session."
+            )
+            return
+        }
+        try {
+            startForeground(
+                NOTIFICATION_ID,
+                createNotification(),
+                plain or ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE
+            )
+            ProjectionEventLog.record(
+                "ANDROID AUTO",
+                "Foreground service started with the microphone type; Assistant voice input " +
+                    "can capture."
+            )
+        } catch (refused: SecurityException) {
+            startForeground(NOTIFICATION_ID, createNotification(), plain)
+            ProjectionEventLog.warning(
+                "ANDROID AUTO",
+                "Android refused the microphone foreground type (${refused.message}); running " +
+                    "without it, so Assistant voice input will be silent this session. Start " +
+                    "Android Auto from the app with the screen on to get it back."
+            )
+        }
     }
 
     private fun createNotificationChannel() {

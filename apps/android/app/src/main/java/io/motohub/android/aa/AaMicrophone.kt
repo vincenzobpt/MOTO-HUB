@@ -19,6 +19,7 @@ import io.motohub.android.aa.proto.Media
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import kotlin.concurrent.thread
+import kotlin.math.abs
 
 /** Streams the phone or Bluetooth helmet microphone to Android Auto when Assistant opens it. */
 class AaMicrophone(
@@ -29,6 +30,10 @@ class AaMicrophone(
     companion object {
         const val SAMPLE_RATE = 16_000
         private const val CHUNK_SAMPLES = SAMPLE_RATE / 50
+        private const val CHUNK_MS = 1000 / 50
+        /** First level report half a second in, then one every five seconds. */
+        private const val FIRST_LEVEL_REPORT_CHUNK = 500 / CHUNK_MS
+        private const val LEVEL_REPORT_EVERY_CHUNKS = 5_000 / CHUNK_MS
     }
 
     @Volatile private var recording = false
@@ -129,20 +134,56 @@ class AaMicrophone(
         }
     }
 
+    /**
+     * Reads chunks and ships them; also measures what it ships. The peak over the window and
+     * Android's own "silenced" flag are logged together because they separate the three ways a
+     * voice session can be deaf that all look identical downstream: a peak of 0 with
+     * `silenced=true` is Android muting a background capture (wrong foreground-service type),
+     * a peak of 0 with `silenced=false` is a route that carries nothing (a SCO link that never
+     * came up), and a healthy peak means the rider was heard and the problem is past the wire.
+     * One rider's twelve identical 8.6 s Assistant timeouts were unreadable without this.
+     */
     private fun pump(activeRecorder: AudioRecord) {
         val samples = ShortArray(CHUNK_SAMPLES)
+        var chunks = 0
+        var peak = 0
         while (recording) {
             val count = runCatching {
                 activeRecorder.read(samples, 0, samples.size)
             }.getOrDefault(0)
             if (count > 0) {
+                for (index in 0 until count) {
+                    val level = abs(samples[index].toInt())
+                    if (level > peak) peak = level
+                }
                 runCatching { transport.send(micData(samples, count)) }
                     .onFailure {
                         log("[MIC] send failed: $it")
                         recording = false
                     }
+                chunks++
+                if (chunks == FIRST_LEVEL_REPORT_CHUNK || chunks % LEVEL_REPORT_EVERY_CHUNKS == 0) {
+                    log(
+                        "[MIC] ${chunks * CHUNK_MS} ms: peak=$peak/${Short.MAX_VALUE} " +
+                            captureStatus(activeRecorder)
+                    )
+                    peak = 0
+                }
             }
         }
+    }
+
+    /** Android's view of this capture: whether it is silenced, and which input it is bound to. */
+    private fun captureStatus(activeRecorder: AudioRecord): String {
+        val silenced = runCatching {
+            val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            audioManager.activeRecordingConfigurations
+                .firstOrNull { it.clientAudioSessionId == activeRecorder.audioSessionId }
+                ?.isClientSilenced
+        }.getOrNull()
+        val device = runCatching { activeRecorder.routedDevice }.getOrNull()
+        return "silenced=${silenced ?: "?"} input=" +
+            (device?.let { "${it.productName}/type${it.type}" } ?: "none")
     }
 
     private fun micData(samples: ShortArray, count: Int): AapMessage {
@@ -181,8 +222,23 @@ class AaMicrophone(
                     it.type == AudioDeviceInfo.TYPE_BLUETOOTH_SCO
                 }
                 if (bluetooth != null) {
-                    audioManager.setCommunicationDevice(bluetooth)
-                    log("[MIC] using Bluetooth headset microphone")
+                    // The result matters: OEM audio layers (Samsung One UI, some Xiaomi/OPPO
+                    // builds) answer false or accept and ignore, and either way the log used
+                    // to claim the headset regardless.
+                    val accepted = audioManager.setCommunicationDevice(bluetooth)
+                    log(
+                        if (accepted) {
+                            "[MIC] using Bluetooth headset microphone (${bluetooth.productName})"
+                        } else {
+                            "[MIC] Android refused the Bluetooth headset microphone " +
+                                "(${bluetooth.productName}); recording on the default input"
+                        }
+                    )
+                } else {
+                    log(
+                        "[MIC] no Bluetooth headset available for voice; recording on the " +
+                            "default input"
+                    )
                 }
             } else {
                 @Suppress("DEPRECATION")
