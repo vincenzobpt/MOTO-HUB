@@ -28,7 +28,10 @@ import io.motohub.android.feature.pairing.TBoxQrPayload
 import io.motohub.android.androidauto.AndroidAutoRuntime
 import io.motohub.android.tbox.SelectingTBoxTransport
 import io.motohub.android.tbox.TBoxCapabilityStore
+import io.motohub.android.tbox.TBoxAccessPointMemory
+import io.motohub.android.tbox.TBoxLink
 import io.motohub.android.tbox.TBoxLinkResolver
+import io.motohub.android.tbox.shouldOfferPhoneHotspot
 import io.motohub.android.tbox.TBoxModelProfile
 import io.motohub.android.tbox.TBoxProtocolMemory
 import io.motohub.android.tbox.ThinkerRideGate
@@ -110,6 +113,7 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
     // exclusive Wi-Fi requests on the air whenever the companion app connected beside this UI.
     // Teardown goes through TBoxNetworkConnectors.release, never connector.disconnect().
     private val networkConnector = TBoxNetworkConnectors.shared(application)
+    private val accessPointMemory = TBoxAccessPointMemory(application)
     private val transport = SelectingTBoxTransport(application)
     private val capabilityStore = TBoxCapabilityStore(application)
     private var connectJob: Job? = null
@@ -647,21 +651,33 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
                         // can ever produce - and it is indistinguishable from a dash that is off.
                         // Offer the other mode instead of leaving the rider to find it.
                         //
-                        // Not on Wi-Fi Direct, though. A P2P Group Owner hosts the network; a
-                        // phone-hotspot dash joins one. They are opposite topologies, and this
-                        // mode is now set by a code that said so ([TBoxQrTopology]), so the offer
-                        // would contradict the dash's own claim. The QJ rider of field log
-                        // 6b345de4 said exactly that back to us: "non e' il modo in cui posso
-                        // connettere la moto".
-                        offerPhoneHotspotRetry = profile.connectionMode !=
-                            TBoxConnectionMode.PHONE_HOTSPOT &&
-                            profile.connectionMode != TBoxConnectionMode.WIFI_DIRECT
+                        // But only when the app does not already know better. Saving that mode is
+                        // a one-way door, and this offer used to open it on a single failed join:
+                        // case 94e45e62 went through it on 2026-09-09, a day after joining that
+                        // same dash's access point in 4796ms, and spent three days hunting for a
+                        // hotspot that was never going to exist. What the offer is guessing at -
+                        // "is this dash a Wi-Fi client?" - is usually already answered by a dash
+                        // this phone has reached before, or one it can see broadcasting right
+                        // now. See [shouldOfferPhoneHotspot].
+                        offerPhoneHotspotRetry = shouldOfferPhoneHotspot(
+                            mode = profile.connectionMode,
+                            reachedBefore = accessPointMemory.hasBeenReached(profile.ssid),
+                            broadcastingNow = networkConnector.isDashBroadcasting(profile),
+                            consecutiveFailures = accessPointMemory.noteFailedJoin(profile.ssid)
+                        )
                     )
                     return@launch
                 }
 
                 establishedLink = connected.getOrThrow()
                 ProjectionEventLog.record("NETWORK", "T-Box link established (${establishedLink.label}).")
+                // Proof, kept for good, that this motorcycle has an access point of its own -
+                // including when the phone-hotspot fallback is what found it, which is the case
+                // that most needs remembering. It is what stops the offer above from ever asking
+                // this rider to host a network for a dash that hosts its own.
+                if (establishedLink is TBoxLink.Infrastructure) {
+                    accessPointMemory.rememberReached(profile.ssid)
+                }
 
                 ConnectionProgressNotification.show(getApplication(), profile.ssid, searching = true)
                 mutableUiState.value = mutableUiState.value.copy(

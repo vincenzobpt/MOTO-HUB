@@ -11,6 +11,7 @@ import io.motohub.android.session.ProjectionEventLog
 import io.motohub.android.session.TBoxConnectionMode
 import java.net.Inet4Address
 import java.net.InetAddress
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * Single decision point for how to reach a T-Box. A profile can explicitly select Auto, AP, or
@@ -42,7 +43,7 @@ object TBoxLinkResolver {
         formedGroup: FormedP2pGroup? = null
     ): Result<TBoxLink> =
         if (profile.connectionMode == TBoxConnectionMode.BLE_PROVISIONED) {
-            bluetoothProvisionedLink(context).recoverCatching { bluetoothFailure ->
+            bluetoothProvisionedLink(context).recoverUnlessCancelled { bluetoothFailure ->
                 // No dash answered the scan. The mirror of the PHONE_HOTSPOT fallback below, and it
                 // exists for the same reason: a Carbit code that names no network reaches both the
                 // dashes that hand their credentials over on Bluetooth and the dashes that print an
@@ -57,16 +58,51 @@ object TBoxLinkResolver {
                 hostedLink(context).getOrElse { throw bluetoothFailure }
             }
         } else if (profile.connectionMode == TBoxConnectionMode.PHONE_HOTSPOT) {
-            hostedLink(context).recoverCatching { hostedFailure ->
-                // Nothing is hosted. Before telling the rider to turn a hotspot on - which some
-                // dashes give them no credentials for - see whether this is a dash that hands its
-                // network over on Bluetooth instead. It only costs a scan, and it creates nothing
-                // unless a dash actually answers and asks for a network.
-                bluetoothProvisionedLink(context, FALLBACK_SCAN_MILLIS)
-                    .recoverCatching {
-                        accessPointFallback(context, networkConnector, profile, hostedFailure).getOrThrow()
-                    }
-                    .getOrThrow()
+            hostedLink(context).recoverUnlessCancelled { hostedFailure ->
+                // Nothing is hosted. The dash's own access point is tried first now, but only on
+                // proof that it HAS one - and that reordering is the whole of case 94e45e62.
+                //
+                // The Bluetooth detour below used to run first, unconditionally, on the promise
+                // that it "only costs a scan". It does not. FALLBACK_SCAN_MILLIS shortens the
+                // SCAN and nothing shortens what follows it, so the moment any dash answers the
+                // advertisement, EcBtpNetLink.provision() spends a full EXCHANGE_TIMEOUT_MS on
+                // it. A Zontes 125X sat behind a dash that advertised the EasyConn setup service
+                // on every single connect and never once completed the handshake: ~51s before
+                // this road was reached, every time, while the motorcycle's own ZT663590 was
+                // broadcasting at -46dBm on 5180MHz. The rider gave up at 31s and reported that
+                // the app no longer connected to a bike it had joined in 4796ms a day earlier.
+                //
+                // Narrow on purpose. A sighting proves this dash HAS an access point, so taking
+                // it cannot be worse than provisioning a network for a dash that already has
+                // one. Without that proof nothing changes: the Bluetooth road runs exactly as it
+                // did, and a dash that can prove nothing still ends on the hotspot message.
+                val sighted = sightAccessPoint(networkConnector, profile)
+                if (sighted.evidence != AccessPointEvidence.NONE) {
+                    accessPointFallback(context, networkConnector, profile, sighted.evidence).getOrThrow()
+                } else {
+                    // Before telling the rider to turn a hotspot on - which some dashes give them
+                    // no credentials for - see whether this is a dash that hands its network over
+                    // on Bluetooth instead. It creates nothing unless a dash actually answers and
+                    // asks for a network.
+                    bluetoothProvisionedLink(context, FALLBACK_SCAN_MILLIS)
+                        .recoverUnlessCancelled {
+                            // Asked again rather than reused: the detour just spent seconds on the
+                            // radio, and a scan Android was throttling when this connect started
+                            // can have refreshed in the meantime.
+                            val afterBluetooth = sightAccessPoint(networkConnector, profile)
+                            if (afterBluetooth.evidence == AccessPointEvidence.NONE) {
+                                declineAccessPoint(networkConnector, profile, afterBluetooth.broadcasting)
+                                throw hostedFailure
+                            }
+                            accessPointFallback(
+                                context,
+                                networkConnector,
+                                profile,
+                                afterBluetooth.evidence
+                            ).getOrThrow()
+                        }
+                        .getOrThrow()
+                }
             }
         } else if (usesWifiDirect(profile)) {
             ProjectionEventLog.record(
@@ -256,38 +292,30 @@ object TBoxLinkResolver {
     }
 
     /**
-     * Takes the access-point road after the phone-hosted one led nowhere, but only on proof that
-     * the dash is broadcasting.
+     * What [sightAccessPoint] found, and the raw scan answer behind it.
      *
-     * PHONE_HOTSPOT is a one-way door today, and that is the defect: HubViewModel offers the
-     * mode after a single failed join, saves it, and nothing ever offers the way back. A rider
-     * whose dash has a perfectly good access point - one transient timeout ago - is then told to
-     * turn on a hotspot forever. Field log 2026-08-06 (OnePlus CPH2653, EASYCONN_5G-F3116E): every
-     * connect from the saved profile failed instantly with "no hotspot is running" while, in the
-     * same log and the same minute, an AUTO-mode profile joined the same dash's AP, resolved it
-     * over NSD and reached READY.
-     *
-     * Deliberately narrow. It runs only on evidence that this dash HAS an access point - a
-     * network still held for its SSID, or a scan that actually saw it. An unknown answer leaves
-     * the original hotspot message standing, because "turn your hotspot on" is the right advice
-     * for the rider whose dash really is a Wi-Fi client. See [accessPointEvidence].
-     *
-     * It used to stop there, on the rule that a mode the rider chose is theirs to keep. That rule
-     * cost field log 6662-E47B-06D0 three weeks: a CFMOTO 800MT-X saved as PHONE_HOTSPOT on
-     * 2026-08-21 after one timed-out join, still saved that way on 2026-09-04, with every single
-     * connect in between taking this fallback and reaching the dash's access point. The advice
-     * to change it back was written into a log the rider never reads, and there is no screen that
-     * can act on it either - see [io.motohub.android.feature.home.HubViewModel]'s one-way
-     * phone-hotspot offer. So the streak below rewrites the mode, and the rule survives where it
-     * was actually protecting someone: a hotspot-only dash has no access point to join, so it can
-     * never produce even one success here, let alone [AP_FALLBACKS_BEFORE_REWRITE] in a row.
+     * [broadcasting] travels with the verdict because [declineAccessPoint] needs to tell two very
+     * different silences apart: a scan that ran and did not see the dash, and a scan Android
+     * handed back empty. [AccessPointEvidence.NONE] alone cannot.
      */
-    private suspend fun accessPointFallback(
-        context: Context,
+    private data class ApSighting(
+        val evidence: AccessPointEvidence,
+        val broadcasting: Boolean?
+    )
+
+    /**
+     * What this phone can prove, right now, about the profile's dash having an access point of
+     * its own.
+     *
+     * Split out of [accessPointFallback] so the question can be asked BEFORE the Bluetooth detour
+     * as well as after it. It is cheap - three local reads, no radio work this app has not
+     * already done - while the detour it is now allowed to skip is anything but; see the comment
+     * on the PHONE_HOTSPOT branch of [connect].
+     */
+    private fun sightAccessPoint(
         networkConnector: TBoxNetworkConnector,
-        profile: MotorcycleProfile,
-        hostedFailure: Throwable
-    ): Result<TBoxLink> {
+        profile: MotorcycleProfile
+    ): ApSighting {
         // The scan is not the only evidence, and it is not the best one. A network this connector
         // is STILL HOLDING for this very SSID is the dash's access point, joined and measurable,
         // and no scan throttle can withdraw it - so it is asked first and the scan is not asked
@@ -318,27 +346,81 @@ object TBoxLinkResolver {
         } else {
             networkConnector.isDashBroadcasting(profile)
         }
-        val evidence = accessPointEvidence(holdsNetwork, associatedToSsid, broadcasting)
-        if (evidence == AccessPointEvidence.NONE) {
-            // The silence here was a hole. Five identical "no hotspot is running" errors in a
-            // rider log (samsung SM-S948B, qj-5G-d8cf, 2026-08-23) said nothing about whether
-            // this road had even been considered, let alone which of its two answers had closed
-            // it - and those two answers point at opposite problems. The snapshot is the same one
-            // the access-point join records before it starts, so a hotspot-mode log finally
-            // carries the scan a Wi-Fi-client dash would be found in.
-            networkConnector.logVisibleApSnapshot(profile)
-            ProjectionEventLog.record(
-                "NETWORK",
-                "Staying on the phone-hosted transport: the access-point fallback only runs on a " +
-                    "positive sighting, and " +
-                    if (broadcasting == false) {
-                        "${profile.ssid} was not in the phone's latest scan."
-                    } else {
-                        "this phone handed back no usable scan at all."
-                    }
-            )
-            return Result.failure(hostedFailure)
-        }
+        return ApSighting(
+            evidence = accessPointEvidence(holdsNetwork, associatedToSsid, broadcasting),
+            broadcasting = broadcasting
+        )
+    }
+
+    /**
+     * Records why the access-point road stayed shut, on the way to failing with the hotspot
+     * message the rider is about to read.
+     *
+     * The silence here was a hole. Five identical "no hotspot is running" errors in a rider log
+     * (samsung SM-S948B, qj-5G-d8cf, 2026-08-23) said nothing about whether this road had even
+     * been considered, let alone which of its two answers had closed it - and those two answers
+     * point at opposite problems. The snapshot is the same one the access-point join records
+     * before it starts, so a hotspot-mode log finally carries the scan a Wi-Fi-client dash would
+     * be found in.
+     */
+    private fun declineAccessPoint(
+        networkConnector: TBoxNetworkConnector,
+        profile: MotorcycleProfile,
+        broadcasting: Boolean?
+    ) {
+        networkConnector.logVisibleApSnapshot(profile)
+        ProjectionEventLog.record(
+            "NETWORK",
+            "Staying on the phone-hosted transport: the access-point fallback only runs on a " +
+                "positive sighting, and " +
+                if (broadcasting == false) {
+                    "${profile.ssid} was not in the phone's latest scan."
+                } else {
+                    "this phone handed back no usable scan at all."
+                }
+        )
+    }
+
+    /**
+     * Takes the access-point road after the phone-hosted one led nowhere, but only on proof that
+     * the dash is broadcasting.
+     *
+     * PHONE_HOTSPOT is a one-way door today, and that is the defect: HubViewModel offers the
+     * mode after a single failed join, saves it, and nothing ever offers the way back. A rider
+     * whose dash has a perfectly good access point - one transient timeout ago - is then told to
+     * turn on a hotspot forever. Field log 2026-08-06 (OnePlus CPH2653, EASYCONN_5G-F3116E): every
+     * connect from the saved profile failed instantly with "no hotspot is running" while, in the
+     * same log and the same minute, an AUTO-mode profile joined the same dash's AP, resolved it
+     * over NSD and reached READY.
+     *
+     * Deliberately narrow. It runs only on evidence that this dash HAS an access point - a
+     * network still held for its SSID, or a scan that actually saw it - which [sightAccessPoint]
+     * gathers and the caller checks, so that an unknown answer leaves the original hotspot
+     * message standing: "turn your hotspot on" is the right advice for the rider whose dash
+     * really is a Wi-Fi client. See [accessPointEvidence] and [declineAccessPoint].
+     *
+     * It used to stop there, on the rule that a mode the rider chose is theirs to keep. That rule
+     * cost field log 6662-E47B-06D0 three weeks: a CFMOTO 800MT-X saved as PHONE_HOTSPOT on
+     * 2026-08-21 after one timed-out join, still saved that way on 2026-09-04, with every single
+     * connect in between taking this fallback and reaching the dash's access point. The advice
+     * to change it back was written into a log the rider never reads, and there is no screen that
+     * can act on it either - see [io.motohub.android.feature.home.HubViewModel]'s one-way
+     * phone-hotspot offer. So the streak below rewrites the mode, and the rule survives where it
+     * was actually protecting someone: a hotspot-only dash has no access point to join, so it can
+     * never produce even one success here, let alone [AP_FALLBACKS_BEFORE_REWRITE] in a row.
+     *
+     * That streak only counts what this road actually wins, which is why case 94e45e62 sat
+     * outside it for three days: the road was reached once, at the instant the rider cancelled,
+     * and died 9ms later without a win to count. Both halves of that are fixed above - the
+     * sighting now runs before the Bluetooth detour, and [recoverUnlessCancelled] keeps a cancel
+     * from being mistaken for a road worth retrying.
+     */
+    private suspend fun accessPointFallback(
+        context: Context,
+        networkConnector: TBoxNetworkConnector,
+        profile: MotorcycleProfile,
+        evidence: AccessPointEvidence
+    ): Result<TBoxLink> {
         ProjectionEventLog.record(
             "NETWORK",
             (
@@ -427,6 +509,34 @@ object TBoxLinkResolver {
         TBoxHotspotScan.addressesInUse(context)
 }
 
+/**
+ * [Result.recoverCatching] without the coroutine footgun.
+ *
+ * `runCatching` and everything built on it catch [Throwable], and a cancelled coroutine
+ * throws one. So a recovery block written for "this road failed, try the other one" also runs
+ * when the rider pressed Cancel - inside a job that is already cancelled, where the first
+ * suspension point of the alternative road throws again immediately. The alternative is not
+ * tried; it is spent.
+ *
+ * Case 94e45e62 is what that reads like in a log. HubViewModel.cancelConnection() cancelled
+ * the connect job at 00:45:13.648. Ten milliseconds later the access-point fallback recorded
+ * that it was joining ZT663590's access point - a dash measured at -46dBm on 5180MHz that
+ * moment - and nine milliseconds after that the attempt ended as "T-Box AP connection failed:
+ * A20 was cancelled". The rider's own cancel was reported back to them as a fault of the
+ * motorcycle's access point, and the one road that would have worked was burned on a job that
+ * could never carry it.
+ *
+ * At file scope, and internal, for the same reason [accessPointEvidence] is: it is a rule and
+ * not plumbing, so a test can hold it to that rule with no coroutine and no Wi-Fi stack in
+ * sight.
+ */
+internal inline fun <T> Result<T>.recoverUnlessCancelled(
+    transform: (Throwable) -> T
+): Result<T> {
+    val failure = exceptionOrNull() ?: return this
+    if (failure is CancellationException) throw failure
+    return runCatching { transform(failure) }
+}
 /**
  * Which evidence, if any, opens the access-point road for a motorcycle saved as PHONE_HOTSPOT.
  *
