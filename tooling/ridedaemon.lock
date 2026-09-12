@@ -1,32 +1,39 @@
 # Generated dependency record. Update this file whenever hudlib.aar is rebuilt.
 source_repository=https://github.com/vincenzobpt/ridedaemon-lib
-source_commit=6f4ad6d9ef646660f42c04139e482b6cde101880
+source_commit=ee609e506980eab57b57aea171adaff1d5a7cbdd
 source_dirty=false
 source_checkout=refs/ridedaemon-lib-motohub
 gomobile_android_api=31
 artifact=apps/android/app/libs/hudlib.aar
-sha256=a6a32396f6cdec3d9387dc6664c8258cc4186de1931c2c58a465c1605df04b71
+sha256=89c9ba0a1107319c40c4aa34bf78e93e0c8e10ec1615ddb7e52bd998e1aa49a4
 license=GPL-3.0-only
 
-# Rebuilt 2026-09-10: the unsolicited clock push no longer races a dashboard that
-# asks for the time itself.
+# Rebuilt 2026-09-12: the phone now states its mirroring state to the head unit, and
+# the capture reply is the length the official app writes.
 #
-# The push waits a grace period after CLIENT_INFO and fires only if 0x10450 never
-# arrived. Two seconds was measured to be the wrong number: a VOGE-040785 log
-# (2026-09-09, seven handshakes in eight minutes) has that dash asking at +1.964s
-# through +2.465s, so six of the seven were handed an unsolicited packet on top of
-# the answer they had asked for - which can overwrite a clock the rider set by hand.
+# Three changes, all read out of the CarbitRide APK rather than guessed:
 #
-# Two changes. The grace is five seconds, more than twice the slowest ask on record;
-# waiting longer only costs a dash that never asks three more seconds of the 1970 it
-# was already showing. And MobileConfig.DashAsksForTime lets the host say this
-# firmware has asked before, which skips the push entirely - the host remembers it
-# per dashboard fingerprint, because a session cannot remember the one before it.
+#  1. ECP_P2C_APPSTATUS_BACKGROUND (0x20030). kh/b.java, sent by the official app twice
+#     per connection - mode 2 when PXC comes up (vf.s.b0()) and mode 1 when
+#     REQ_RV_DATA_START has been answered 113 (n0.setTrueMirror()). It is the only
+#     statement the app ever volunteers that a mirror exists. No reference
+#     implementation sends it and neither did this daemon. Opt-in per profile through
+#     MobileConfig.AppStatusNotifyEnabled, with the phone's display metrics supplied by
+#     the host in PhoneScreenWidth/Height/Rotation.
+#  2. RLY_RV_CONFIG_CAPTURE is 8 bytes when the dash declares supportExtendProtocol=0.
+#     Protocol.RlyConfigCapture.size() appends the framing byte only when it is
+#     non-zero; this daemon sent 9 either way, so every dashboard in that family was
+#     handed a trailing zero the official app never writes.
+#  3. supportFunction is stated in CLIENT_INFO_RLY. ECP_C2P_CLIENT_INFO.g0() always
+#     writes it and open-cflink's captured handshake carries it; this daemon computed
+#     the value and put it only in the MEDIA_CONTROL 0x60 reply, which firmware running
+#     without the extend protocol never asks for.
 #
-# source_commit is on the public origin (pushed 2026-09-10), so anyone can fetch the
+# source_commit is on the public origin (pushed 2026-09-12), so anyone can fetch the
 # exact source this artifact was built from.
 #
 # Same build shape as the previous artifact: -androidapi 31, 4 ABIs. Binding surface
 # diffed against the old AAR with javap: purely additive, exactly
-# get/setDashAsksForTime on api.MobileConfig, every other class and method identical.
-source_note=query-time-grace-and-dash-asks
+# get/setAppStatusNotifyEnabled and get/setPhoneScreenWidth|Height|Rotation on
+# api.MobileConfig; api.MobileSession and api.Api byte-identical.
+source_note=app-status-notify-and-capture-reply-length

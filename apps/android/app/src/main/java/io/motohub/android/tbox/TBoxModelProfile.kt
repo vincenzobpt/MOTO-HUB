@@ -121,6 +121,33 @@ enum class TBoxModelProfile(
      */
     val sendsPageSwitchProbe: Boolean = false,
     /**
+     * Tell the head unit that the phone is mirroring, the way the official EasyConn app does.
+     *
+     * `ECP_P2C_APPSTATUS_BACKGROUND` (`0x20030`) is the only command the official app pushes at
+     * the phone's own initiative around a projection, and the only statement it ever makes that
+     * a mirror exists at all. From `kh/b.java` in the CarbitRide APK the body is
+     * `{"mode":n,"displayRotation":r,"width":w,"height":h,"enableAccessibility":b,"enableAOAHid":b}`,
+     * and the app sends it twice per connection: mode 2 the moment PXC comes up
+     * (`net.easyconn.carman.vf.s.b0()`), then mode 1 - "the picture you are pulling is live" -
+     * from `n0.setTrueMirror()`, once `REQ_RV_DATA_START` has been answered `113`.
+     *
+     * No reference implementation sends it: not open-cflink, not open-cfmoto, not
+     * open-cfmoto-zanderp, and not this app until now. It is on here for the one dashboard family
+     * whose EasyConn client runs to completion - handshake, capture negotiation, video socket,
+     * frames pulled at 30 Hz - while its panel stays blank, which is what a UI that was never told
+     * the mirror went live looks like from this side.
+     *
+     * Unlike [sendsPageSwitchProbe] this one carries its own readout. `0x20030` is even, so the
+     * dash owes it `0x20031`, and the SDK's own `y0.getResponseProcessType` puts the command in
+     * the group the official app blocks on - it expects that acknowledgement. An ack in a rider's
+     * log therefore says the firmware knows the command, whatever the panel does, which is the
+     * instrument the page experiment never had.
+     *
+     * Off everywhere else: it puts an unsolicited command on a wire that every dashboard painting
+     * a picture today has never seen it on.
+     */
+    val announcesMirrorState: Boolean = false,
+    /**
      * Encode exactly [fallbackTBoxVideoArea]'s dimensions instead of the 16-aligned canvas.
      * ThinkerRide declares the stream size to the dash in a header, and the reference app
      * encodes precisely what it declares (600x1024); we used to declare 600 and stream 592.
@@ -151,10 +178,19 @@ enum class TBoxModelProfile(
      * asked for H.264, and send the display as JPEG stills.
      *
      * Unlike [yunmoJpegVideo] this contradicts the dashboard: the QJ 5-inch panel asks for
-     * `wantEncoder=2` and is given stills anyway. What makes that worth a rider's session is that
-     * it asks for H.264, pulls every frame of the H.264 it is sent - 680 pulls at ~30 Hz with no
-     * gap, `frameTimeouts=0`, `frameRejections=0` - and paints none of it, through six chapters of
-     * field logs that have retired framing, rate, GOP, codec identity and the page plane.
+     * `wantEncoder=2` and would be given stills anyway. What made that worth a rider's session is
+     * that it asks for H.264, pulls every frame of the H.264 it is sent - 680 pulls at ~30 Hz with
+     * no gap, `frameTimeouts=0`, `frameRejections=0` - and paints none of it, through six chapters
+     * of field logs that had retired framing, rate, GOP, codec identity and the page plane.
+     *
+     * It ran on that dash on 2026-09-10 and did not work: report 6264-6CB4-AA1E shows the stills
+     * really leaving the phone in both sessions, and the dash pulling them at the same 23-35 Hz,
+     * with the same `frameTimeouts=0` / `frameRejections=0` / `mediaCtrlRx=2` and the same blank
+     * panel, as if nothing had changed - because for it nothing did. See [TBoxModelProfile.QJ_SRK921_RR]
+     * for the reading. So no profile sets it any more, and a test holds that.
+     *
+     * The code stays because the measurement was worth making and the next Carbit firmware that
+     * drains a stream without painting it may answer differently.
      *
      * The format is not invented. EasyConn's own `ECTinyPlus.proto` declares
      * `VideoCodecType { NONE=0, JEPG=1, H264=2, MP4=3 }`, and `net.easyconn.carman`'s mirror
@@ -474,15 +510,42 @@ enum class TBoxModelProfile(
      * `CHECK_SN` with `CHECK_SN_RESULT isOk:true` the way open-cflink does - and which may simply
      * be optional on this firmware.
      *
-     * Six chapters in, this side has done everything the reference implementations do, in every
-     * combination, and the dash still runs its entire EasyConn client - NSD, PXC handshake,
+     * The seventh experiment was the payload format itself, and it too has been tried and has
+     * failed. The X-Cape 1200 and the KOVE 625X are the exact precedent - a dash that accepts
+     * everything on the socket and paints none of it, because the OEM app sends JPEG stills and
+     * never H.264 - so [easyConnJpegStills] was switched on here and the capture negotiation
+     * answered `encoder=1` to a dash that had asked for `2`. Report 6264-6CB4-AA1E (support id
+     * 81d3f550, 2026-09-10, ADV+CORE 1.1.116) ran it in both sessions and the stills really did
+     * leave the phone: 121 and 140 of them, 7-8 fps, 17-33 KB each, 142-245 KB/s, `0 held back`.
+     * The second session arrived over AIDL from ADVANCED and carries the same JPEG lines, so
+     * [usesJpegStills] reached the companion path too - the trap that gave the X-Cape three rounds
+     * of "JPEG does not work" without a single JPEG ever leaving the phone did not repeat here.
+     *
+     * **The dash did not change one number.** It pulled at 23-35 Hz exactly as it does on H.264,
+     * `frameTimeouts=0`, `frameRejections=0`, `mediaCtrlRx=2` (`CAPTURE_CONFIG` and `STREAM_START`,
+     * nothing else), never closed the socket, still no `CHECK_SN_DONE` - and the rider still saw
+     * nothing. An H.264 decoder fed JPEG errors, stalls or hangs up; a JPEG renderer fed JPEG
+     * paints. This did neither. **The consumer of the video socket is blind to the format: it
+     * drains whatever it is given at a fixed cadence**, which is what a process that reads and
+     * discards looks like from this side. There was not even the cheap signal that closed the
+     * Morini and the KOVE - the acks carrying a non-zero frame id - because `supportExtendProtocol=0`
+     * means plain framing and no index on the wire, so the panel was again the only instrument.
+     * The flag is off here again and the H.264 settings above are back in force, so the next log
+     * from this bike measures the stream six chapters of field logs were written against.
+     *
+     * Seven chapters in, this side has done everything the reference implementations do, in every
+     * combination - framing, rate and GOP, codec identity, the `0x2xxxx` page block, and now the
+     * payload format - and the dash still runs its entire EasyConn client - NSD, PXC handshake,
      * `CHECK_SN`, `CAPTURE_CONFIG`, `STREAM_START`, video socket, 680 pulls at 30 Hz with no gap -
-     * while nothing whatsoever reaches the panel. The mirroring process runs headless. What is
-     * left is not a wire experiment: a mirror surface on a display that is not the physical panel
-     * (`displayId=0`, `dpi=0`, `enableDPI=false`), a Carbit stack not licensed for this vehicle
-     * (`package_name linux_no_package`, `token 0`), or a page that has to be opened on the dash
-     * itself. The next useful move is the control nobody has run in six chapters: whether the
-     * official QJ/Carbit/CFMOTO app paints on this same dash from this same phone.
+     * while nothing whatsoever reaches the panel. The mirroring process runs headless.
+     * **Nothing on the wire is left to try from the phone's side.** What remains is a mirror
+     * surface on a display that is not the physical panel (`displayId=0`, `dpi=0`,
+     * `enableDPI=false`), a Carbit stack not licensed for this vehicle (`package_name
+     * linux_no_package`, `token 0`), or a page that has to be opened on the dash itself. The next
+     * useful move is not code: it is the control nobody has run in seven chapters - whether the
+     * official QJ/Carbit/CFMOTO app paints on this same dash from this same phone - together with
+     * the question open since 2026-09-09, whether the panel is black or shows the bike's own
+     * dashboard with the phone simply never appearing on top of it.
      *
      * It is not `0x10020`, which briefly looked like a candidate because it is declared in the
      * daemon and never sent by us. It is a bike-to-phone notification and always was: open-cflink,
@@ -525,10 +588,9 @@ enum class TBoxModelProfile(
         encoderFrameRate = 10,
         encoderBitRate = 2_000_000,
         encoderPlainGopWithoutIntraRefresh = true,
-        // The picture is not H.264 at all while this is on - the settings above describe the
-        // encoder that is never built. They stay because turning the experiment off has to
-        // restore exactly the stream six chapters of field logs were written against.
-        easyConnJpegStills = true
+        // Seventh experiment, and the first one drawn from the official app's own behaviour
+        // rather than from the wire: the phone never told this dash a mirror had started.
+        announcesMirrorState = true
     ),
     /**
      * KOVE 800X (and, until they earn their own profiles, other ThinkerRide-family dashes): a

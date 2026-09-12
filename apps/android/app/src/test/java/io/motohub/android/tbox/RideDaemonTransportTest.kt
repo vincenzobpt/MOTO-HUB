@@ -220,13 +220,27 @@ class RideDaemonTransportTest {
     }
 
     @Test
-    fun `only the QJ dash is told JPEG when it asked for H264`() {
+    fun `only the QJ dash announces its mirroring state`() {
+        // ECP_P2C_APPSTATUS_BACKGROUND is unsolicited: it goes out whether or not the dash
+        // asked anything. Every other EasyConn dashboard in the fleet paints a picture today
+        // without ever having seen it from us, and none of them has a field log asking for it.
+        assertTrue(TBoxModelProfile.QJ_SRK921_RR.announcesMirrorState)
+        val others = TBoxModelProfile.entries.filter { it != TBoxModelProfile.QJ_SRK921_RR }
+        assertTrue(others.none { it.announcesMirrorState })
+    }
+
+    @Test
+    fun `no dash is told JPEG when it asked for H264`() {
         // Every other EasyConn dashboard in the fleet paints an H.264 stream today. Answering
         // the capture negotiation with encoder=1 anywhere else would change the wire format of
         // all of them at once, and none of them has a field log asking for it.
-        assertTrue(TBoxModelProfile.QJ_SRK921_RR.easyConnJpegStills)
-        val others = TBoxModelProfile.entries.filter { it != TBoxModelProfile.QJ_SRK921_RR }
-        assertTrue(others.none { it.easyConnJpegStills })
+        //
+        // The QJ 5-inch dash did have one, and the experiment ran on it on 2026-09-10 and
+        // failed: report 6264-6CB4-AA1E shows the stills leaving the phone in both sessions and
+        // the dash pulling them at the same rate, with the same counters and the same blank
+        // panel, as it does on H.264. Leaving the flag on would have every later log from that
+        // bike measure a dead experiment on an 8 fps stream nothing else is written against.
+        assertTrue(TBoxModelProfile.entries.none { it.easyConnJpegStills })
     }
 
     @Test
@@ -236,7 +250,6 @@ class RideDaemonTransportTest {
         // the others - which is how three rounds of X-Cape field tests reported "JPEG does not
         // work" without a single JPEG leaving the phone.
         val stillProfiles = TBoxModelProfile.entries.filter { it.usesJpegStills }
-        assertTrue(TBoxModelProfile.QJ_SRK921_RR in stillProfiles)
         assertTrue(TBoxModelProfile.MORINI_XCAPE_1200_JPEG in stillProfiles)
         assertTrue(TBoxModelProfile.KOVE_625X in stillProfiles)
         assertTrue(

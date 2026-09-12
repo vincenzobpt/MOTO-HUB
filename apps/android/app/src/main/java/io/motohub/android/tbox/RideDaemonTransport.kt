@@ -471,6 +471,57 @@ class RideDaemonTransport(
      * command that preceded it, and so a probe that never fired is distinguishable from one
      * that fired and achieved nothing.
      */
+    /**
+     * Narrate one `ECP_P2C_APPSTATUS_BACKGROUND` the phone put on the wire.
+     *
+     * This is the half we can see. The other half is the dashboard's `0x20031`, which arrives on
+     * the PXC event stream like any other response and is named in [PXC_COMMAND_NAMES] - so a
+     * rider's log answers, without anyone watching the panel, whether this firmware knows the
+     * command at all. That is the difference between this experiment and the page one.
+     */
+    private fun logAppStatusNotify(payload: ByteArray?) {
+        val mode = payload?.getOrNull(0)?.toInt() ?: -1
+        val delivered = payload?.getOrNull(1)?.toInt() == 1
+        when (mode) {
+            APP_STATUS_BACKGROUND -> ProjectionEventLog.record(
+                "TBOX",
+                "Told the dashboard the phone is connected but not yet mirroring " +
+                    "(ECP_P2C_APPSTATUS_BACKGROUND 0x20030, mode 2)" + probeOutcome(delivered) +
+                    " The official app sends this the moment PXC comes up; this app never has."
+            )
+            APP_STATUS_MIRROR_LIVE -> ProjectionEventLog.record(
+                "TBOX",
+                "Told the dashboard the mirror is now live " +
+                    "(ECP_P2C_APPSTATUS_BACKGROUND 0x20030, mode 1)" + probeOutcome(delivered) +
+                    " Watch for APP_STATUS_ACK (0x20031) in this log: if it comes back, this " +
+                    "firmware understands the command and a blank panel is not caused by " +
+                    "never having been told."
+            )
+            else -> ProjectionEventLog.warning(
+                "TBOX",
+                "Could not tell the dashboard the phone's mirroring state: there was no open " +
+                    "PXC connection to send ECP_P2C_APPSTATUS_BACKGROUND on."
+            )
+        }
+    }
+
+    /**
+     * The phone's own display, as the official app reads it: `Display.getRealSize()` and
+     * `getRotation()`, which is what goes inside the notification above. Falls back to zeroes
+     * rather than to a plausible-looking guess - the daemon sends what it is given, and a field
+     * log has to be able to tell a real measurement from a missing one.
+     */
+    private fun readPhoneScreen(): Triple<Int, Int, Int> {
+        val windowManager = appContext.getSystemService(android.view.WindowManager::class.java)
+            ?: return Triple(0, 0, 0)
+        val bounds = windowManager.maximumWindowMetrics.bounds
+        // An application context has no display of its own on some OEM builds; a rotation of
+        // 0 is then a guess, but a harmless one - the geometry beside it is measured, and 0 is
+        // what the official app reports for an upright phone, which is how a bike is ridden.
+        val rotation = appContext.display?.rotation ?: 0
+        return Triple(bounds.width(), bounds.height(), rotation)
+    }
+
     private fun logPageSwitchProbe(payload: ByteArray?) {
         val step = payload?.getOrNull(0)?.toInt() ?: -1
         val delivered = payload?.getOrNull(1)?.toInt() == 1
@@ -548,6 +599,17 @@ class RideDaemonTransport(
                 // encoder; if the two ever disagreed, one side would be putting JPEGs inside a
                 // frame the other negotiated as an access unit.
                 setJpegStillsEnabled(profile.easyConnJpegStills)
+                // The official app states the phone's mirroring state to the head unit and
+                // carries the phone's own display metrics inside it. Only Android can read
+                // those, and a wrong size stated confidently is worse than an honest zero,
+                // so they are measured here rather than guessed in the daemon.
+                setAppStatusNotifyEnabled(profile.announcesMirrorState)
+                if (profile.announcesMirrorState) {
+                    val screen = readPhoneScreen()
+                    setPhoneScreenWidth(screen.first.toLong())
+                    setPhoneScreenHeight(screen.second.toLong())
+                    setPhoneScreenRotation(screen.third.toLong())
+                }
                 // The dash asks for wall-clock time over PXC and the daemon answers it,
                 // but only Android knows the zone: Go's local location on a device is
                 // UTC and carries no usable name. The id alone was not enough - it only
@@ -1965,6 +2027,10 @@ class RideDaemonTransport(
                     logPageSwitchProbe(payload)
                     return
                 }
+                if (command == TRANSPORT_APP_STATUS_COMMAND) {
+                    logAppStatusNotify(payload)
+                    return
+                }
                 if (command == TRANSPORT_VIDEO_FRAMING_COMMAND) {
                     val extendByte = payload?.getOrNull(0)?.toInt() ?: -1
                     val plainApplied = payload?.getOrNull(1)?.toInt() == 1
@@ -2485,6 +2551,10 @@ class RideDaemonTransport(
         const val PAGE_PROBE_JUMP_TO_CAR_PAGE = 2
         const val PAGE_PROBE_SWITCH_TO_MAIN_PAGE = 3
         const val PAGE_PROBE_NO_CONTROL_CHANNEL = 4
+        /** Payload: [mode, ok]; modes below, from kh.b.a(int) in the CarbitRide APK. */
+        const val TRANSPORT_APP_STATUS_COMMAND = 4L
+        const val APP_STATUS_MIRROR_LIVE = 1
+        const val APP_STATUS_BACKGROUND = 2
         /** Bounds for the always-on first-occurrence dump of unknown protocol commands. */
         const val UNKNOWN_COMMAND_LOG_LIMIT = 32
         const val UNKNOWN_COMMAND_PREVIEW_BYTES = 64
@@ -2533,7 +2603,13 @@ class RideDaemonTransport(
             // Nothing should be gated on a particular opcode being "the" keepalive: the same log
             // carries zero 0x10600, while a CFDL16 sends six PXC messages in total and then stops.
             0x10630L to "PERIODIC_NOTIFY",
-            0x10430L to "PERIODIC_NOTIFY_ALT",
+            // 0x10430 is NOT a keepalive. It is ECP_C2P_QUERY_GPS (ih/m0.java, cmd 66608): the
+            // dash asking the phone where it is, and the official app answers it with
+            // {"status":true,"lit":lon,"lat":lat,"speed","altitude","course","time",...} or
+            // {"status":false} when it has no fix. This app answers with an empty body through
+            // the daemon's default even-command branch, which is a real gap - the dash asks a
+            // question and gets nothing back. Naming it is the first half of fixing it.
+            0x10430L to "QUERY_GPS",
             // Seen twice each in the same session, both empty; named only so a field log stops
             // reading as a wall of UNKNOWN. open-cfmoto's notes list 0x10450 as empty too, and
             // 0x10040 as carrying {maxNaviIcon, supportFunction}.
@@ -2545,7 +2621,14 @@ class RideDaemonTransport(
             0x10450L to "QUERY_TIME",
             0x10451L to "QUERY_TIME_ACK",
             0x104a0L to "NOTIFY_104A0",
-            0x10040L to "NAVI_CAPS"
+            // ECP_C2P_ENABLE_DOWNLOAD_PHONE_HUD (ih/t.java), not a navigation capability
+            // exchange - the name it carried before the CarbitRide APK settled it.
+            0x10040L to "ENABLE_DOWNLOAD_PHONE_HUD",
+            // The phone-to-car mirroring state and the acknowledgement it is owed. The command
+            // is ours; the ack is the dashboard's answer and the only readout this experiment
+            // has that does not depend on a rider watching the panel.
+            0x20030L to "APP_STATUS",
+            0x20031L to "APP_STATUS_ACK"
         )
 
         private val MEDIA_CONTROL_COMMAND_NAMES = mapOf(
