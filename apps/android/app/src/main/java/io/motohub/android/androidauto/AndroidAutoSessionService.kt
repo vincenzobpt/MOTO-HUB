@@ -1032,6 +1032,14 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
             resumeAfterStartupNetworkLoss(handle)
             return
         }
+        if (!shouldAutoRecoverAndroidAuto(
+                hasReachedStreaming = hasReachedStreaming,
+                enabled = MotoHubSettings.autoRecovery(this)
+            )
+        ) {
+            fail("T-Box Wi-Fi connection lost.")
+            return
+        }
         if (!MotoHubSettings.seamlessResume(this)) {
             fail("T-Box Wi-Fi connection lost; seamless resume is disabled.")
             return
