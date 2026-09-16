@@ -1,15 +1,21 @@
+> [!CAUTION]
+> **MOTO-HUB CORE is deprecated. On Android 14 or newer, use [MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases) instead.**
+> ADV-SOLO is one free app that does the work of CORE and ADVANCED together, and new features land only there. [MOTO-HUB ADVANCED](https://github.com/vincenzobpt/MOTO-HUB-PRO-releases) is retired.
+> **Android 12 or 13?** ADV-SOLO needs Android 14, so CORE stays available for you. It keeps getting fixes, but no new features.
+
 <div align="center">
 
 <img src="media/logo.png" alt="MOTO-HUB logo" width="120">
 
 # MOTO-HUB
 
-**Android Auto, live dashboards and motorcycle navigation on your bike's TFT display — free.**
+**Deprecated. On Android 14+, MOTO-HUB CORE is replaced by [MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases).**
 
 [![Latest release](https://img.shields.io/github/v/release/vincenzobpt/MOTO-HUB?label=release&color=44cc11)](https://github.com/vincenzobpt/MOTO-HUB/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/vincenzobpt/MOTO-HUB/total?color=44cc11)](https://github.com/vincenzobpt/MOTO-HUB/releases)
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue)](LICENSE)
 [![Android 12+](https://img.shields.io/badge/Android-12%2B-3DDC84?logo=android&logoColor=white)](#requirements)
+[![Deprecated](https://img.shields.io/badge/status-deprecated%20on%20Android%2014%2B-lightgrey)](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases)
 [![6 languages](https://img.shields.io/badge/languages-6-orange)](#what-moto-hub-does)
 [![Discord](https://img.shields.io/badge/Discord-join%20the%20community-5865F2?logo=discord&logoColor=white)](https://discord.gg/jYv7Z2chtP)
 
@@ -23,11 +29,11 @@ and control it all from the **handlebar buttons** you already have.
 
 <br>
 
-[![Download MOTO-HUB](https://img.shields.io/badge/Download%20MOTO--HUB-free%20·%20open%20source-2ea44f?style=for-the-badge&logo=android&logoColor=white)](https://github.com/vincenzobpt/MOTO-HUB/releases/latest)
+[![Get MOTO-HUB ADV-SOLO](https://img.shields.io/badge/Android%2014%2B-get%20MOTO--HUB%20ADV--SOLO-e10600?style=for-the-badge&logo=android&logoColor=white)](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases/releases/latest)
 &nbsp;
-[![Add MOTO-HUB ADVANCED](https://img.shields.io/badge/Add%20MOTO--HUB%20ADVANCED-free%20companion%20app-e10600?style=for-the-badge&logo=android&logoColor=white)](https://github.com/vincenzobpt/MOTO-HUB-PRO-releases/releases/latest)
+[![Download MOTO-HUB CORE](https://img.shields.io/badge/Android%2012–13-download%20MOTO--HUB%20CORE-2ea44f?style=for-the-badge&logo=android&logoColor=white)](https://github.com/vincenzobpt/MOTO-HUB/releases/latest)
 
-<sub>On the release page, expand **Assets** and download the file ending in `.apk`.</sub>
+<sub>On the release page, expand **Assets** and download the file ending in `.apk`. The rest of this page describes CORE and ADVANCED as they were: everything here, and more, is in ADV-SOLO.</sub>
 
 <br>
 
@@ -46,9 +52,12 @@ and control it all from the **handlebar buttons** you already have.
 
 1. **Install** the MOTO-HUB APK from the [latest release](https://github.com/vincenzobpt/MOTO-HUB/releases/latest). Android will ask you to allow installs from this source — that is the normal prompt for apps outside Google Play.
 2. **Pair** by scanning the QR code your dashboard shows (or import a photo of it, or enter the network manually). Your bike is saved to the garage.
-3. **Ride** — start Android Auto or mirror your phone on the TFT. Add [MOTO-HUB ADVANCED](https://github.com/vincenzobpt/MOTO-HUB-PRO-releases/releases/latest) for the Ride Dashboard, navigation, trips and everything below.
+3. **Ride** — start Android Auto or mirror your phone on the TFT. On Android 14+, [MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases/releases/latest) does all of this in one app, plus the Ride Dashboard, navigation, trips and everything below.
 
 ## Two apps, one ride
+
+> [!NOTE]
+> **This split is retired.** ADVANCED is no longer developed, and [MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases) now does the work of both apps in one. This section describes how CORE and ADVANCED used to work together.
 
 MOTO-HUB is deliberately split in two:
 
@@ -85,6 +94,9 @@ MOTO-HUB is deliberately split in two:
 </div>
 
 ## MOTO-HUB ADVANCED — everything your TFT was waiting for
+
+> [!NOTE]
+> ADVANCED is retired. Every feature below, and more, is in [MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases).
 
 *All of this is implemented, working, and free. It builds on the rider's own GPS — the motorcycle needs no extra hardware.*
 
@@ -180,7 +192,7 @@ ADVANCED hides one more toy: a complete **OBD-II diagnostics suite**, tucked beh
 
 <div align="center">
 
-[![Add MOTO-HUB ADVANCED](https://img.shields.io/badge/Get%20all%20of%20this%20—%20MOTO--HUB%20ADVANCED-free-e10600?style=for-the-badge&logo=android&logoColor=white)](https://github.com/vincenzobpt/MOTO-HUB-PRO-releases/releases/latest)
+[![Get MOTO-HUB ADV-SOLO](https://img.shields.io/badge/Get%20all%20of%20this%20—%20MOTO--HUB%20ADV--SOLO-free-e10600?style=for-the-badge&logo=android&logoColor=white)](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases/releases/latest)
 
 </div>
 
@@ -206,7 +218,7 @@ The open-source core is a complete product on its own:
 - **In-app updates** — the app checks GitHub releases and shows the notes before installing.
 - **6 languages** — English, Italian, Spanish, French, Portuguese, Korean.
 
-<a id="requirements"></a>**Requirements:** Android 12 or newer and a motorcycle with a compatible dashboard (see below). ADVANCED additionally requires Android 14+.
+<a id="requirements"></a>**Requirements:** Android 12 or newer and a motorcycle with a compatible dashboard (see below). [MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases), which replaces CORE and ADVANCED, requires Android 14+.
 
 ## Supported motorcycles
 
