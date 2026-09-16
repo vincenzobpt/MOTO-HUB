@@ -51,34 +51,36 @@ import io.motohub.android.ui.components.MotoHubDetailScreen
 import io.motohub.android.ui.theme.MotoHubManual
 import io.motohub.android.ui.theme.MotoHubMirror
 
-// The one in IpcBridgeContract, not a second copy: three files had grown their own.
-private val ADVANCED_PACKAGE_NAME = io.motohub.android.ipc.IpcBridgeContract.ADVANCED_PACKAGE_NAME
+// ADV-SOLO, not ADVANCED: ADVANCED is deprecated, and ADV-SOLO replaces both it and this app.
+private const val ADVANCED_PACKAGE_NAME = "io.motohub.android.solo"
 private const val ADVANCED_RELEASES_URL =
-    "https://github.com/vincenzobpt/MOTO-HUB-PRO-releases/releases/latest"
+    "https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases/releases/latest"
 
-/** The edition accent from MotoHubUi's title treatment, so the promo reads as ADVANCED's colour. */
+/** The edition accent from MotoHubUi's title treatment, so the promo keeps the colour riders know it by. */
 private val ADVANCED_RED = Color(0xFFFF4A38)
 
 /**
- * Whether MOTO-HUB ADVANCED is on the phone.
+ * Whether MOTO-HUB ADV-SOLO is on the phone.
  *
  * Requires the `<package>` entry for [ADVANCED_PACKAGE_NAME] in the manifest's `<queries>`:
  * without it Android hides the package from `getPackageInfo` and every rider - including the
- * ones who already installed ADVANCED - would keep being offered the download.
+ * ones who already installed ADV-SOLO - would keep being offered the download.
  */
 private fun isAdvancedInstalled(context: Context): Boolean =
     runCatching { context.packageManager.getPackageInfo(ADVANCED_PACKAGE_NAME, 0) }.isSuccess
 
 /**
- * The mirror image of [CoreMissingBanner]: ADVANCED tells a rider it needs Core, and this is
- * how Core tells a rider ADVANCED exists at all.
+ * How Core tells a rider ADV-SOLO exists: the app that replaces it.
  *
- * One row, two jobs, decided by whether ADVANCED is installed: a rider who doesn't have it gets
+ * It pointed at ADVANCED until ADVANCED was deprecated (1.1.119). The names below still say
+ * "advanced" because the screen they belong to is the same one; what it offers is ADV-SOLO.
+ *
+ * One row, two jobs, decided by whether ADV-SOLO is installed: a rider who doesn't have it gets
  * the pitch (the dialog, then the release page), and a rider who does gets a shortcut that just
  * opens it - being sold an app you already run is the fastest way to make this row feel like an
  * advert to scroll past. Deliberately the last thing in the Home column, so a rider who came here
  * to connect a motorcycle never has to step around it. Rechecks on resume, so it flips by itself
- * when the rider comes back from installing ADVANCED.
+ * when the rider comes back from installing ADV-SOLO.
  */
 @Composable
 fun AdvancedPromoCard(onOpenDetails: () -> Unit) {
@@ -103,7 +105,7 @@ fun AdvancedPromoCard(onOpenDetails: () -> Unit) {
             .fillMaxWidth()
             .clickable {
                 if (installed) {
-                    // Between the resume recheck and this tap ADVANCED could have been
+                    // Between the resume recheck and this tap ADV-SOLO could have been
                     // uninstalled, so a missing launcher intent falls back to the pitch rather
                     // than doing nothing at all.
                     val launch = context.packageManager
@@ -112,7 +114,7 @@ fun AdvancedPromoCard(onOpenDetails: () -> Unit) {
                         runCatching { context.startActivity(launch) }.onFailure {
                             Toast.makeText(
                                 context,
-                                motoHubText("Couldn't open MOTO-HUB ADVANCED."),
+                                motoHubText("Couldn't open MOTO-HUB ADV-SOLO."),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -142,7 +144,7 @@ fun AdvancedPromoCard(onOpenDetails: () -> Unit) {
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 Text(
-                    motoHubText("MOTO-HUB ADVANCED"),
+                    motoHubText("MOTO-HUB ADV-SOLO"),
                     style = MaterialTheme.typography.labelSmall,
                     color = ADVANCED_RED,
                     fontFamily = FontFamily.Monospace,
@@ -152,7 +154,7 @@ fun AdvancedPromoCard(onOpenDetails: () -> Unit) {
                     if (installed) {
                         motoHubText("Dashboard, navigation and trips - installed on this phone.")
                     } else {
-                        motoHubText("Free companion app: dashboard, navigation, trips and more.")
+                        motoHubText("Free app that replaces this one: dashboard, navigation, trips and more.")
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -211,7 +213,7 @@ fun AdvancedPromoScreen(onBack: () -> Unit) {
             }
     }
 
-    MotoHubDetailScreen(title = motoHubText("MOTO-HUB ADVANCED"), onBack = onBack) {
+    MotoHubDetailScreen(title = motoHubText("MOTO-HUB ADV-SOLO"), onBack = onBack) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = ADVANCED_RED.copy(alpha = 0.10f)),
@@ -223,23 +225,23 @@ fun AdvancedPromoScreen(onBack: () -> Unit) {
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
-                    motoHubText(if (installed) "INSTALLED ON THIS PHONE" else "FREE COMPANION APP"),
+                    motoHubText(if (installed) "INSTALLED ON THIS PHONE" else "FREE APP"),
                     style = MaterialTheme.typography.labelMedium,
                     color = ADVANCED_RED,
                     fontFamily = FontFamily.Monospace,
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
-                    motoHubText("A second dashboard for the same motorcycle."),
+                    motoHubText("Everything MOTO-HUB does, and a full riding computer."),
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     motoHubText(
-                        "MOTO-HUB ADVANCED is a free app that installs next to this one and " +
-                            "turns your TFT into a full riding computer: its own dashboard, " +
-                            "navigation, recorded trips. No subscription, no account, and no " +
-                            "extra hardware - it uses the T-Box you already have."
+                        "MOTO-HUB ADV-SOLO is a free app that replaces this one and turns your " +
+                            "TFT into a full riding computer: its own dashboard, navigation, " +
+                            "recorded trips. No subscription, no account, and no extra hardware - " +
+                            "it uses the T-Box you already have."
                     ),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
@@ -281,7 +283,7 @@ fun AdvancedPromoScreen(onBack: () -> Unit) {
             )
         }
 
-        MonoLabel(motoHubText("HOW THE TWO WORK TOGETHER"))
+        MonoLabel(motoHubText("MOVING TO ADV-SOLO"))
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -293,18 +295,18 @@ fun AdvancedPromoScreen(onBack: () -> Unit) {
             ) {
                 Text(
                     motoHubText(
-                        "MOTO-HUB stays in charge of the motorcycle. Pairing, the Wi-Fi " +
-                            "connection, the handlebar buttons and Android Auto all keep running " +
-                            "here; ADVANCED asks this app for the screen when it needs it."
+                        "ADV-SOLO connects to the motorcycle on its own: pairing, the Wi-Fi " +
+                            "connection, the handlebar buttons and Android Auto all run inside it. " +
+                            "It does not need this app."
                     ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     motoHubText(
-                        "That is also why the two versions have to match: they talk to each " +
-                            "other, so install the same version number of both and update them " +
-                            "together."
+                        "Install it and connect your motorcycle there, then remove MOTO-HUB - " +
+                            "ADV-SOLO offers to do it. Motorcycles paired here do not move across: " +
+                            "pair them again in ADV-SOLO."
                     ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -316,7 +318,7 @@ fun AdvancedPromoScreen(onBack: () -> Unit) {
         MotoHubCardGroup {
             if (installed) {
                 HeroOptionRow(
-                    title = "Open MOTO-HUB ADVANCED",
+                    title = "Open MOTO-HUB ADV-SOLO",
                     description = "It is already installed on this phone.",
                     icon = "Dashboard",
                     color = ADVANCED_RED,
@@ -329,7 +331,7 @@ fun AdvancedPromoScreen(onBack: () -> Unit) {
                             runCatching { context.startActivity(launch) }.onFailure {
                                 Toast.makeText(
                                     context,
-                                    motoHubText("Couldn't open MOTO-HUB ADVANCED."),
+                                    motoHubText("Couldn't open MOTO-HUB ADV-SOLO."),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -338,7 +340,7 @@ fun AdvancedPromoScreen(onBack: () -> Unit) {
                 )
             } else {
                 HeroOptionRow(
-                    title = "Download ADVANCED",
+                    title = "Download ADV-SOLO",
                     description = "The latest release, straight from the project's own page.",
                     icon = "Import",
                     color = ADVANCED_RED,

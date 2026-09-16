@@ -1988,4 +1988,22 @@
     <!-- Source: feature/home - the secondary actions under the pairing and projection cards -->
     <string name="legacy_how_to_start_android_auto_e44c5dd3">Jak spustit Android Auto</string>
     <string name="legacy_open_wi_fi_settings_299670db">Otevřít nastavení Wi-Fi</string>
+    <string name="legacy_couldn_t_open_moto_hub_adv_solo_67eb730a">MOTO-HUB ADV-SOLO se nepodařilo otevřít.</string>
+    <string name="legacy_moto_hub_adv_solo_1bac54f4">MOTO-HUB ADV-SOLO</string>
+    <string name="legacy_free_app_that_replaces_this_one_dashboard_naviga_f14ef8b3">Bezplatná aplikace, která nahrazuje tuto: přístrojovka, navigace, jízdy a další.</string>
+    <string name="legacy_installed_on_this_phone_136503e7">NAINSTALOVÁNO V TOMTO TELEFONU</string>
+    <string name="legacy_free_app_d2eb824d">BEZPLATNÁ APLIKACE</string>
+    <string name="legacy_everything_moto_hub_does_and_a_full_riding_compu_5afce456">Vše, co umí MOTO-HUB, a k tomu plnohodnotný palubní počítač.</string>
+    <string name="legacy_moto_hub_adv_solo_is_a_free_app_that_replaces_th_9d1bc46c">MOTO-HUB ADV-SOLO je bezplatná aplikace, která nahrazuje tuto a z vašeho TFT udělá plnohodnotný palubní počítač: vlastní přístrojovka, navigace, zaznamenané jízdy. Žádné předplatné, žádný účet ani další hardware - využívá T-Box, který už máte.</string>
+    <string name="legacy_what_it_adds_cdd0b86b">CO PŘIDÁVÁ</string>
+    <string name="legacy_moving_to_adv_solo_21f5a90c">PŘECHOD NA ADV-SOLO</string>
+    <string name="legacy_adv_solo_connects_to_the_motorcycle_on_its_own_p_ad9d6a7e">ADV-SOLO se k motocyklu připojí sám: párování, připojení Wi-Fi, tlačítka na řídítkách i Android Auto běží uvnitř něj. Tuto aplikaci nepotřebuje.</string>
+    <string name="legacy_install_it_and_connect_your_motorcycle_there_the_526ab2e">Nainstalujte ho, připojte v něm motocykl a pak odeberte MOTO-HUB - ADV-SOLO vám to nabídne. Motocykly spárované tady se nepřenesou: spárujte je znovu v ADV-SOLO.</string>
+    <string name="legacy_links_4515799">ODKAZY</string>
+    <string name="legacy_more_ways_to_start_dfa7360e">DALŠÍ ZPŮSOBY, JAK ZAČÍT</string>
+    <string name="legacy_one_step_is_waiting_for_you_ad249079">Čeká na vás jeden krok</string>
+    <string name="legacy_starting_android_auto_330884c0">SPOUŠTÍM ANDROID AUTO</string>
+    <string name="legacy_dashboard_navigation_and_trips_the_free_app_that_141e7bbe">Přístrojovka, navigace a jízdy - bezplatná aplikace, která nahrazuje tuto</string>
+    <string name="legacy_less_8775b50b">Méně ▲</string>
+    <string name="legacy_details_1d7b33e">Podrobnosti ▼</string>
 </resources>

@@ -238,13 +238,13 @@ private fun SettingsMainList(
                 description = "v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
                 onClick = onOpenAbout
             )
-            // The always-reachable way to the ADVANCED page. The promo card at the foot of Home
+            // The always-reachable way to the ADV-SOLO page. The promo card at the foot of Home
             // is the one a rider meets by accident; this is the one they come looking for - and
             // it costs no slot in a bottom bar a gloved thumb has to hit.
             if (!BuildConfig.IS_PRO) {
                 MotoHubActionRow(
-                    title = motoHubText("MOTO-HUB ADVANCED"),
-                    description = motoHubText("Dashboard, navigation and trips - the free companion app"),
+                    title = motoHubText("MOTO-HUB ADV-SOLO"),
+                    description = motoHubText("Dashboard, navigation and trips - the free app that replaces this one"),
                     onClick = onOpenAdvanced
                 )
             }

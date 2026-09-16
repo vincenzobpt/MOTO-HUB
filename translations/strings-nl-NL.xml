@@ -1980,4 +1980,22 @@
     <!-- Source: feature/home - the secondary actions under the pairing and projection cards -->
     <string name="legacy_how_to_start_android_auto_e44c5dd3">Hoe je Android Auto start</string>
     <string name="legacy_open_wi_fi_settings_299670db">Wifi-instellingen openen</string>
+    <string name="legacy_couldn_t_open_moto_hub_adv_solo_67eb730a">MOTO-HUB ADV-SOLO kon niet worden geopend.</string>
+    <string name="legacy_moto_hub_adv_solo_1bac54f4">MOTO-HUB ADV-SOLO</string>
+    <string name="legacy_free_app_that_replaces_this_one_dashboard_naviga_f14ef8b3">Gratis app die deze vervangt: dashboard, navigatie, ritten en meer.</string>
+    <string name="legacy_installed_on_this_phone_136503e7">GEÏNSTALLEERD OP DEZE TELEFOON</string>
+    <string name="legacy_free_app_d2eb824d">GRATIS APP</string>
+    <string name="legacy_everything_moto_hub_does_and_a_full_riding_compu_5afce456">Alles wat MOTO-HUB doet, plus een volwaardige boordcomputer.</string>
+    <string name="legacy_moto_hub_adv_solo_is_a_free_app_that_replaces_th_9d1bc46c">MOTO-HUB ADV-SOLO is een gratis app die deze vervangt en je TFT verandert in een volwaardige boordcomputer: een eigen dashboard, navigatie, opgenomen ritten. Geen abonnement, geen account en geen extra hardware - het gebruikt de T-Box die je al hebt.</string>
+    <string name="legacy_what_it_adds_cdd0b86b">WAT HET TOEVOEGT</string>
+    <string name="legacy_moving_to_adv_solo_21f5a90c">OVERSTAPPEN NAAR ADV-SOLO</string>
+    <string name="legacy_adv_solo_connects_to_the_motorcycle_on_its_own_p_ad9d6a7e">ADV-SOLO maakt zelf verbinding met de motor: koppelen, de wifiverbinding, de stuurknoppen en Android Auto draaien er allemaal in. Deze app is niet nodig.</string>
+    <string name="legacy_install_it_and_connect_your_motorcycle_there_the_526ab2e">Installeer het en verbind daar je motor, verwijder daarna MOTO-HUB - ADV-SOLO biedt dat aan. Hier gekoppelde motoren gaan niet mee: koppel ze opnieuw in ADV-SOLO.</string>
+    <string name="legacy_links_4515799">LINKS</string>
+    <string name="legacy_more_ways_to_start_dfa7360e">MEER MANIEREN OM TE BEGINNEN</string>
+    <string name="legacy_one_step_is_waiting_for_you_ad249079">Er wacht één stap op je</string>
+    <string name="legacy_starting_android_auto_330884c0">ANDROID AUTO WORDT GESTART</string>
+    <string name="legacy_dashboard_navigation_and_trips_the_free_app_that_141e7bbe">Dashboard, navigatie en ritten - de gratis app die deze vervangt</string>
+    <string name="legacy_less_8775b50b">Minder ▲</string>
+    <string name="legacy_details_1d7b33e">Details ▼</string>
 </resources>

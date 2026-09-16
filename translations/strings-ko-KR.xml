@@ -1974,4 +1974,22 @@
     <!-- Source: feature/home - the secondary actions under the pairing and projection cards -->
     <string name="legacy_how_to_start_android_auto_e44c5dd3">Android Auto 시작 방법</string>
     <string name="legacy_open_wi_fi_settings_299670db">Wi-Fi 설정 열기</string>
+    <string name="legacy_couldn_t_open_moto_hub_adv_solo_67eb730a">MOTO-HUB ADV-SOLO를 열 수 없습니다.</string>
+    <string name="legacy_moto_hub_adv_solo_1bac54f4">MOTO-HUB ADV-SOLO</string>
+    <string name="legacy_free_app_that_replaces_this_one_dashboard_naviga_f14ef8b3">이 앱을 대체하는 무료 앱: 대시보드, 내비게이션, 주행 기록 등.</string>
+    <string name="legacy_installed_on_this_phone_136503e7">이 휴대폰에 설치됨</string>
+    <string name="legacy_free_app_d2eb824d">무료 앱</string>
+    <string name="legacy_everything_moto_hub_does_and_a_full_riding_compu_5afce456">MOTO-HUB의 모든 기능에 완전한 주행 컴퓨터까지.</string>
+    <string name="legacy_moto_hub_adv_solo_is_a_free_app_that_replaces_th_9d1bc46c">MOTO-HUB ADV-SOLO는 이 앱을 대체하는 무료 앱으로, TFT를 완전한 주행 컴퓨터로 바꿔 줍니다. 자체 대시보드, 내비게이션, 주행 기록을 제공합니다. 구독, 계정, 추가 하드웨어가 필요 없으며 이미 있는 T-Box를 사용합니다.</string>
+    <string name="legacy_what_it_adds_cdd0b86b">추가 기능</string>
+    <string name="legacy_moving_to_adv_solo_21f5a90c">ADV-SOLO로 옮기기</string>
+    <string name="legacy_adv_solo_connects_to_the_motorcycle_on_its_own_p_ad9d6a7e">ADV-SOLO는 혼자서 오토바이에 연결합니다. 페어링, Wi-Fi 연결, 핸들바 버튼, Android Auto가 모두 그 안에서 동작하며 이 앱이 필요 없습니다.</string>
+    <string name="legacy_install_it_and_connect_your_motorcycle_there_the_526ab2e">설치한 뒤 그곳에서 오토바이를 연결하고 MOTO-HUB를 제거하세요. ADV-SOLO가 제거를 안내합니다. 여기서 페어링한 오토바이는 옮겨지지 않으니 ADV-SOLO에서 다시 페어링하세요.</string>
+    <string name="legacy_links_4515799">링크</string>
+    <string name="legacy_more_ways_to_start_dfa7360e">다른 시작 방법</string>
+    <string name="legacy_one_step_is_waiting_for_you_ad249079">기다리고 있는 단계가 하나 있습니다</string>
+    <string name="legacy_starting_android_auto_330884c0">ANDROID AUTO 시작 중</string>
+    <string name="legacy_dashboard_navigation_and_trips_the_free_app_that_141e7bbe">대시보드, 내비게이션, 주행 기록 - 이 앱을 대체하는 무료 앱</string>
+    <string name="legacy_less_8775b50b">접기 ▲</string>
+    <string name="legacy_details_1d7b33e">자세히 ▼</string>
 </resources>

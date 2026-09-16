@@ -1403,4 +1403,22 @@
     <!-- Source: feature/home - the secondary actions under the pairing and projection cards -->
     <string name="legacy_how_to_start_android_auto_e44c5dd3">Come avviare Android Auto</string>
     <string name="legacy_open_wi_fi_settings_299670db">Apri le impostazioni Wi-Fi</string>
+    <string name="legacy_couldn_t_open_moto_hub_adv_solo_67eb730a">Impossibile aprire MOTO-HUB ADV-SOLO.</string>
+    <string name="legacy_moto_hub_adv_solo_1bac54f4">MOTO-HUB ADV-SOLO</string>
+    <string name="legacy_free_app_that_replaces_this_one_dashboard_naviga_f14ef8b3">App gratuita che sostituisce questa: cruscotto, navigazione, viaggi e altro.</string>
+    <string name="legacy_installed_on_this_phone_136503e7">INSTALLATA SU QUESTO TELEFONO</string>
+    <string name="legacy_free_app_d2eb824d">APP GRATUITA</string>
+    <string name="legacy_everything_moto_hub_does_and_a_full_riding_compu_5afce456">Tutto quello che fa MOTO-HUB, più un vero computer di bordo.</string>
+    <string name="legacy_moto_hub_adv_solo_is_a_free_app_that_replaces_th_9d1bc46c">MOTO-HUB ADV-SOLO è un\'app gratuita che sostituisce questa e trasforma il tuo TFT in un vero computer di bordo: cruscotto proprio, navigazione, viaggi registrati. Nessun abbonamento, nessun account e nessun hardware in più: usa la T-Box che hai già.</string>
+    <string name="legacy_what_it_adds_cdd0b86b">COSA AGGIUNGE</string>
+    <string name="legacy_moving_to_adv_solo_21f5a90c">PASSARE AD ADV-SOLO</string>
+    <string name="legacy_adv_solo_connects_to_the_motorcycle_on_its_own_p_ad9d6a7e">ADV-SOLO si collega alla moto da sola: abbinamento, connessione Wi-Fi, pulsanti del manubrio e Android Auto girano tutti al suo interno. Non ha bisogno di questa app.</string>
+    <string name="legacy_install_it_and_connect_your_motorcycle_there_the_526ab2e">Installala e collega lì la moto, poi rimuovi MOTO-HUB: te lo propone ADV-SOLO. Le moto abbinate qui non vengono trasferite: abbinale di nuovo in ADV-SOLO.</string>
+    <string name="legacy_links_4515799">LINK</string>
+    <string name="legacy_more_ways_to_start_dfa7360e">ALTRI MODI PER INIZIARE</string>
+    <string name="legacy_one_step_is_waiting_for_you_ad249079">C\'è un passaggio che ti aspetta</string>
+    <string name="legacy_starting_android_auto_330884c0">AVVIO DI ANDROID AUTO</string>
+    <string name="legacy_dashboard_navigation_and_trips_the_free_app_that_141e7bbe">Cruscotto, navigazione e viaggi - l\'app gratuita che sostituisce questa</string>
+    <string name="legacy_less_8775b50b">Meno ▲</string>
+    <string name="legacy_details_1d7b33e">Dettagli ▼</string>
 </resources>

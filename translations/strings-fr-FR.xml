@@ -1979,4 +1979,22 @@
     <!-- Source: feature/home - the secondary actions under the pairing and projection cards -->
     <string name="legacy_how_to_start_android_auto_e44c5dd3">Comment démarrer Android Auto</string>
     <string name="legacy_open_wi_fi_settings_299670db">Ouvrir les réglages Wi-Fi</string>
+    <string name="legacy_couldn_t_open_moto_hub_adv_solo_67eb730a">Impossible d\'ouvrir MOTO-HUB ADV-SOLO.</string>
+    <string name="legacy_moto_hub_adv_solo_1bac54f4">MOTO-HUB ADV-SOLO</string>
+    <string name="legacy_free_app_that_replaces_this_one_dashboard_naviga_f14ef8b3">App gratuite qui remplace celle-ci : tableau de bord, navigation, trajets et plus.</string>
+    <string name="legacy_installed_on_this_phone_136503e7">INSTALLÉE SUR CE TÉLÉPHONE</string>
+    <string name="legacy_free_app_d2eb824d">APP GRATUITE</string>
+    <string name="legacy_everything_moto_hub_does_and_a_full_riding_compu_5afce456">Tout ce que fait MOTO-HUB, et un véritable ordinateur de bord.</string>
+    <string name="legacy_moto_hub_adv_solo_is_a_free_app_that_replaces_th_9d1bc46c">MOTO-HUB ADV-SOLO est une app gratuite qui remplace celle-ci et transforme votre TFT en véritable ordinateur de bord : son propre tableau de bord, la navigation, les trajets enregistrés. Sans abonnement, sans compte et sans matériel supplémentaire - elle utilise la T-Box que vous avez déjà.</string>
+    <string name="legacy_what_it_adds_cdd0b86b">CE QU\'ELLE AJOUTE</string>
+    <string name="legacy_moving_to_adv_solo_21f5a90c">PASSER À ADV-SOLO</string>
+    <string name="legacy_adv_solo_connects_to_the_motorcycle_on_its_own_p_ad9d6a7e">ADV-SOLO se connecte seule à la moto : appairage, connexion Wi-Fi, boutons du guidon et Android Auto fonctionnent tous à l\'intérieur. Elle n\'a pas besoin de cette app.</string>
+    <string name="legacy_install_it_and_connect_your_motorcycle_there_the_526ab2e">Installez-la et connectez-y votre moto, puis supprimez MOTO-HUB - ADV-SOLO vous le propose. Les motos appairées ici ne sont pas transférées : appairez-les à nouveau dans ADV-SOLO.</string>
+    <string name="legacy_links_4515799">LIENS</string>
+    <string name="legacy_more_ways_to_start_dfa7360e">AUTRES FAÇONS DE COMMENCER</string>
+    <string name="legacy_one_step_is_waiting_for_you_ad249079">Une étape vous attend</string>
+    <string name="legacy_starting_android_auto_330884c0">DÉMARRAGE D\'ANDROID AUTO</string>
+    <string name="legacy_dashboard_navigation_and_trips_the_free_app_that_141e7bbe">Tableau de bord, navigation et trajets - l\'app gratuite qui remplace celle-ci</string>
+    <string name="legacy_less_8775b50b">Moins ▲</string>
+    <string name="legacy_details_1d7b33e">Détails ▼</string>
 </resources>
