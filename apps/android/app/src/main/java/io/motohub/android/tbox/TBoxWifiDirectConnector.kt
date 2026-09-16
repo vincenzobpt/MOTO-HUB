@@ -48,8 +48,9 @@ import kotlinx.coroutines.withTimeoutOrNull
  *
  * Joins by credentials (`setNetworkName` + passphrase from the saved [MotorcycleProfile]) as a
  * legacy P2P client, then resolves:
- *  - the bike gateway (the Group Owner, always `192.168.49.1` by Android's P2P convention), and
- *  - the phone's own `192.168.49.x` address on the `p2p-*` interface.
+ *  - the bike gateway (the Group Owner, which Android names `192.168.49.1` for a group IT
+ *    formed - but here the DASH is the GO and picks its own subnet), and
+ *  - the phone's own address on that gateway's subnet, on the `p2p-*` interface.
  *
  * A P2P group produces no `ConnectivityManager.Network`; the caller binds its sockets to the
  * returned phone address instead (see [TBoxLink.WifiDirect]).
@@ -931,7 +932,7 @@ class TBoxWifiDirectConnector(
     ) {
         // DHCP on the p2p link can lag the "group formed" event; poll off the main thread.
         Thread({
-            val bindIp = pollLocalP2pIpv4(iface)
+            val bindIp = pollLocalP2pIpv4(iface, gateway)
             if (bindIp == null) {
                 // What the process could actually see, not just that it saw nothing: this poll
                 // comes up empty for two very different reasons - DHCP still pending on a group
@@ -942,7 +943,8 @@ class TBoxWifiDirectConnector(
                 settle(
                     Result.failure(
                         IllegalStateException(
-                            "Wi-Fi Direct group formed but no usable 192.168.49.x address appeared on $iface."
+                            "Wi-Fi Direct group formed but no address on " +
+                                "${gateway.hostAddress}'s subnet appeared on $iface."
                         )
                     )
                 )
@@ -964,17 +966,17 @@ class TBoxWifiDirectConnector(
         }, "tbox-p2p-ip").apply { isDaemon = true }.start()
     }
 
-    private fun pollLocalP2pIpv4(iface: String?): Inet4Address? {
+    private fun pollLocalP2pIpv4(iface: String?, gateway: Inet4Address?): Inet4Address? {
         val deadline = System.nanoTime() + IP_POLL_TIMEOUT_MS * 1_000_000
         while (System.nanoTime() < deadline) {
-            localP2pIpv4(iface)?.let { return it }
+            localP2pIpv4(iface, gateway)?.let { return it }
             try {
                 Thread.sleep(IP_POLL_INTERVAL_MS)
             } catch (_: InterruptedException) {
                 return null
             }
         }
-        return localP2pIpv4(iface)
+        return localP2pIpv4(iface, gateway)
     }
 
     /** Every up, non-loopback interface with its IPv4 addresses - or why the list is unavailable. */
@@ -992,18 +994,38 @@ class TBoxWifiDirectConnector(
             .ifBlank { "none" }
     }.getOrElse { "unreadable (${it.javaClass.simpleName}: ${it.message})" }
 
-    private fun localP2pIpv4(iface: String?): Inet4Address? = runCatching {
+    /**
+     * @param gateway the Group Owner's address, as the platform reported it for THIS group. It is
+     *   what tells a p2p address apart from any other private address the phone happens to hold,
+     *   now that the subnet is no longer assumed - see the comment on the fallback below.
+     */
+    private fun localP2pIpv4(iface: String?, gateway: Inet4Address?): Inet4Address? = runCatching {
         for (nic in NetworkInterface.getNetworkInterfaces()) {
             if (!nic.isUp || nic.isLoopback) continue
             val nameMatches = iface == null || nic.name == iface || nic.name.startsWith("p2p")
-            for (address in nic.inetAddresses) {
+            for (binding in nic.interfaceAddresses) {
+                val address = binding.address
                 if (address !is Inet4Address || address.isLoopbackAddress) continue
                 val host = address.hostAddress ?: continue
                 // Never accept the GO's own address as the phone's source: that only happens
-                // when the phone ended up as Group Owner, which the join already rejects.
-                if (host == GROUP_OWNER_IP) continue
+                // when the phone ended up as Group Owner, which the join already rejects. The
+                // literal is the backstop for a caller that could not report a gateway.
+                if (address == gateway || host == GROUP_OWNER_IP) continue
                 if (nic.name == iface) return address
-                if (nameMatches && host.startsWith("192.168.49.")) return address
+                if (!nameMatches) continue
+                // The group named no interface, so the address has to prove it belongs to the
+                // group some other way: by sitting on the Group Owner's own subnet. This used to
+                // require the literal `192.168.49.` prefix, which is only ever right for a group
+                // ANDROID formed - and on these dashes the GO is the dash, free to hand out
+                // whatever it likes. A Zontes 350E puts its GO on 192.168.2.1 and the phone on
+                // 192.168.2.20 (GitHub issue #12); every address on the p2p interface was walked
+                // past and the join died on "no usable 192.168.49.x address".
+                if (gateway != null) {
+                    val prefixLength = binding.networkPrefixLength.toInt()
+                    if (sharesSubnet(address, prefixLength, gateway)) return address
+                } else if (host.startsWith("192.168.49.")) {
+                    return address
+                }
             }
         }
         null
@@ -1287,7 +1309,35 @@ class TBoxWifiDirectConnector(
         private const val IP_POLL_INTERVAL_MS = 500L
         private const val ADOPT_VERIFY_TIMEOUT_MS = 3_000L
         private const val ADOPT_VERIFY_POLL_MS = 300L
+        /**
+         * The Group Owner address of a group ANDROID formed. Kept only as the backstop for a
+         * caller with no gateway to offer: a dash that is itself the GO picks its own subnet, so
+         * this is never the address to match a real one against - [sharesSubnet] is.
+         */
         private const val GROUP_OWNER_IP = "192.168.49.1"
+
+        /**
+         * Whether [local], on a network of [prefixLength] bits, is on the same subnet as
+         * [gateway].
+         *
+         * Plain values rather than the `InterfaceAddress` they come from, because that class is
+         * final with no public constructor: taking it would put this rule behind a mocking
+         * framework, and it is the rule the Zontes 350E turns on.
+         *
+         * A prefix outside 1..32 is what the platform returns for an address it could not
+         * describe (-1 is documented for exactly that), so it answers false rather than guessing
+         * a /24: a wrong yes here hands the session a source address that cannot reach the dash,
+         * and the failure would surface much later as a connect timeout.
+         */
+        internal fun sharesSubnet(local: Inet4Address, prefixLength: Int, gateway: Inet4Address): Boolean {
+            if (prefixLength !in 1..32) return false
+            val mask = -1 shl (32 - prefixLength)
+            return (ipv4ToInt(local) and mask) == (ipv4ToInt(gateway) and mask)
+        }
+
+        private fun ipv4ToInt(address: Inet4Address): Int =
+            address.address.fold(0) { acc, byte -> (acc shl 8) or (byte.toInt() and 0xFF) }
+
         private const val DIRECT_PREFIX = "DIRECT-"
 
         /**

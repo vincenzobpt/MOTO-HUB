@@ -8,6 +8,8 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import android.app.ActivityManager.RunningAppProcessInfo
+import java.net.Inet4Address
+import java.net.InetAddress
 import org.junit.Test
 
 class TBoxWifiDirectConnectorTest {
@@ -255,5 +257,61 @@ class TBoxWifiDirectConnectorTest {
             TBoxWifiDirectConnector.importanceName(RunningAppProcessInfo.IMPORTANCE_FOREGROUND)
         )
         assertEquals("importance 7", TBoxWifiDirectConnector.importanceName(7))
+    }
+
+    private fun ipv4(literal: String): Inet4Address = InetAddress.getByName(literal) as Inet4Address
+
+    /**
+     * GitHub issue #12, Zontes 350E: the dash is the Group Owner and puts its group on
+     * 192.168.2.0/24, not the 192.168.49.0/24 Android uses for a group IT forms. The phone's
+     * 192.168.2.20 used to be walked straight past, and the join died reporting that no
+     * "192.168.49.x" address had appeared.
+     */
+    @Test
+    fun `the phone address is accepted on whatever subnet the dash's group owner chose`() {
+        assertTrue(
+            TBoxWifiDirectConnector.sharesSubnet(ipv4("192.168.2.20"), 24, ipv4("192.168.2.1"))
+        )
+        assertTrue(
+            TBoxWifiDirectConnector.sharesSubnet(ipv4("192.168.49.37"), 24, ipv4("192.168.49.1"))
+        )
+    }
+
+    @Test
+    fun `an address on another subnet is not mistaken for the p2p one`() {
+        // The rider's home Wi-Fi in the same issue: wlan0 holds 192.168.43.197 throughout.
+        assertFalse(
+            TBoxWifiDirectConnector.sharesSubnet(ipv4("192.168.43.197"), 24, ipv4("192.168.2.1"))
+        )
+        assertFalse(
+            TBoxWifiDirectConnector.sharesSubnet(ipv4("192.168.49.37"), 24, ipv4("192.168.2.1"))
+        )
+    }
+
+    @Test
+    fun `the prefix length is honoured, not assumed to be 24`() {
+        assertTrue(
+            TBoxWifiDirectConnector.sharesSubnet(ipv4("192.168.3.20"), 16, ipv4("192.168.2.1"))
+        )
+        assertFalse(
+            TBoxWifiDirectConnector.sharesSubnet(ipv4("192.168.3.20"), 24, ipv4("192.168.2.1"))
+        )
+        assertTrue(
+            TBoxWifiDirectConnector.sharesSubnet(ipv4("10.1.2.3"), 32, ipv4("10.1.2.3"))
+        )
+    }
+
+    /** -1 is what the platform reports for an address it could not describe. Never a match. */
+    @Test
+    fun `an unreadable prefix length matches nothing`() {
+        assertFalse(
+            TBoxWifiDirectConnector.sharesSubnet(ipv4("192.168.2.20"), -1, ipv4("192.168.2.1"))
+        )
+        assertFalse(
+            TBoxWifiDirectConnector.sharesSubnet(ipv4("192.168.2.20"), 0, ipv4("192.168.2.1"))
+        )
+        assertFalse(
+            TBoxWifiDirectConnector.sharesSubnet(ipv4("192.168.2.20"), 33, ipv4("192.168.2.1"))
+        )
     }
 }
