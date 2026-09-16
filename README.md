@@ -1,6 +1,6 @@
 > [!NOTE]
 > **MOTO-HUB CORE carries on** as the free, open-source app for the basics: pairing, Android Auto, screen mirroring and handlebar buttons.
-> **MOTO-HUB ADVANCED is retired.** For the Ride Dashboard, navigation, trips and everything else, get **[MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases)**, a free standalone app for Android 14+.
+> **Want the full experience?** Get **[MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases)**: everything CORE does, plus the Ride Dashboard, navigation, trips, OBD and much more, in one free app for Android 14+. It replaces MOTO-HUB ADVANCED, which is retired.
 
 <div align="center">
 
