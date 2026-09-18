@@ -511,16 +511,18 @@ class RideDaemonTransport(
      * rather than to a plausible-looking guess - the daemon sends what it is given, and a field
      * log has to be able to tell a real measurement from a missing one.
      */
-    private fun readPhoneScreen(): Triple<Int, Int, Int> {
+    private fun readPhoneScreen(): Triple<Int, Int, Int> = runCatching {
         val windowManager = appContext.getSystemService(android.view.WindowManager::class.java)
-            ?: return Triple(0, 0, 0)
+            ?: return@runCatching Triple(0, 0, 0)
         val bounds = windowManager.maximumWindowMetrics.bounds
-        // An application context has no display of its own on some OEM builds; a rotation of
-        // 0 is then a guess, but a harmless one - the geometry beside it is measured, and 0 is
-        // what the official app reports for an upright phone, which is how a bike is ridden.
-        val rotation = appContext.display?.rotation ?: 0
-        return Triple(bounds.width(), bounds.height(), rotation)
-    }
+        // Never `appContext.display`: on an application context Android 11+ THROWS
+        // UnsupportedOperationException instead of returning null, and that exception killed
+        // every EasyConn discovery on the QJ profile in 1.1.118/1.1.119 (support id 67930234,
+        // POCO F6 on Android 16). The default display is what the official app measures too.
+        val rotation = appContext.getSystemService(android.hardware.display.DisplayManager::class.java)
+            ?.getDisplay(android.view.Display.DEFAULT_DISPLAY)?.rotation ?: 0
+        Triple(bounds.width(), bounds.height(), rotation)
+    }.getOrDefault(Triple(0, 0, 0))
 
     private fun logPageSwitchProbe(payload: ByteArray?) {
         val step = payload?.getOrNull(0)?.toInt() ?: -1
