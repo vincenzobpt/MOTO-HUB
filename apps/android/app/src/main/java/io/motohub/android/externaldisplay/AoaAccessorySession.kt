@@ -15,10 +15,11 @@ import androidx.core.content.ContextCompat
 import io.motohub.android.session.ProjectionEventLog
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.coroutines.resume
 
 class AoaAccessorySession private constructor(
     private val fileDescriptor: ParcelFileDescriptor,
@@ -44,9 +45,6 @@ class AoaAccessorySession private constructor(
     }
 
     companion object {
-        private const val ACTION_USB_PERMISSION =
-            "io.motohub.android.action.AOA_USB_PERMISSION"
-
         suspend fun open(context: Context): Result<AoaAccessorySession> = runCatching {
             val applicationContext = context.applicationContext
             val usbManager = applicationContext.getSystemService(UsbManager::class.java)
@@ -56,7 +54,7 @@ class AoaAccessorySession private constructor(
             requestAutolinkStop(applicationContext)
 
             if (!usbManager.hasPermission(accessory)) {
-                val granted = requestPermission(applicationContext, usbManager, accessory)
+                val granted = awaitAccessoryPermission(applicationContext, usbManager, accessory, 30_000L)
                 check(granted) { "USB accessory permission was denied." }
             }
 
@@ -70,42 +68,69 @@ class AoaAccessorySession private constructor(
             val usbManager = context.applicationContext.getSystemService(UsbManager::class.java)
             return usbManager.accessoryList?.isNotEmpty() == true
         }
+    }
+}
 
-        private suspend fun requestPermission(
-            context: Context,
-            usbManager: UsbManager,
-            accessory: UsbAccessory
-        ): Boolean = withContext(Dispatchers.Main) {
-            ProjectionEventLog.record("AOA_SERVICE", "Requesting USB AOA permission.")
-            val latch = CountDownLatch(1)
-            val granted = BooleanArray(1)
-            val receiver = object : BroadcastReceiver() {
-                override fun onReceive(receiverContext: Context, intent: Intent) {
-                    granted[0] = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)
-                    latch.countDown()
+private const val ACTION_USB_PERMISSION = "io.motohub.android.action.AOA_USB_PERMISSION"
+
+/**
+ * Shows Android's "allow this accessory" dialog and waits for the rider's answer.
+ *
+ * Suspends, never blocks: the answer is a broadcast delivered on the main looper, so the old
+ * `CountDownLatch.await()` inside `withContext(Main)` held the very thread the answer had to
+ * arrive on - the app froze for the whole timeout and then reported "denied" even after the
+ * rider tapped Allow. The verdict is read from [UsbManager.hasPermission] as well as from the
+ * extra, because the extra is only filled in when the PendingIntent is mutable.
+ */
+internal suspend fun awaitAccessoryPermission(
+    context: Context,
+    usbManager: UsbManager,
+    accessory: UsbAccessory,
+    timeoutMs: Long
+): Boolean {
+    ProjectionEventLog.record("AOA_SERVICE", "Requesting USB AOA permission.")
+    val answered = withTimeoutOrNull(timeoutMs) {
+        withContext(Dispatchers.Main) {
+            suspendCancellableCoroutine { continuation ->
+                val receiver = object : BroadcastReceiver() {
+                    override fun onReceive(receiverContext: Context, intent: Intent) {
+                        runCatching { context.unregisterReceiver(this) }
+                        val granted = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)
+                        if (continuation.isActive) continuation.resume(granted)
+                    }
                 }
-            }
-            ContextCompat.registerReceiver(
-                context,
-                receiver,
-                IntentFilter(ACTION_USB_PERMISSION),
-                ContextCompat.RECEIVER_NOT_EXPORTED
-            )
-            usbManager.requestPermission(
-                accessory,
-                PendingIntent.getBroadcast(
+                ContextCompat.registerReceiver(
                     context,
-                    0,
-                    Intent(ACTION_USB_PERMISSION),
-                    PendingIntent.FLAG_IMMUTABLE
+                    receiver,
+                    IntentFilter(ACTION_USB_PERMISSION),
+                    ContextCompat.RECEIVER_NOT_EXPORTED
                 )
-            )
-            latch.await(30_000L, TimeUnit.MILLISECONDS)
-            try {
-                context.unregisterReceiver(receiver)
-            } catch (_: Exception) {
+                continuation.invokeOnCancellation {
+                    runCatching { context.unregisterReceiver(receiver) }
+                }
+                usbManager.requestPermission(
+                    accessory,
+                    PendingIntent.getBroadcast(
+                        context,
+                        0,
+                        // Explicit package: Android 14 refuses a mutable PendingIntent around an
+                        // implicit intent, and it has to be mutable for the system to add the
+                        // EXTRA_PERMISSION_GRANTED verdict.
+                        Intent(ACTION_USB_PERMISSION).setPackage(context.packageName),
+                        PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                )
             }
-            granted[0]
         }
     }
+    val granted = answered == true || usbManager.hasPermission(accessory)
+    when {
+        granted -> ProjectionEventLog.record("AOA_SERVICE", "USB AOA permission granted.")
+        answered == null -> ProjectionEventLog.warning(
+            "AOA_SERVICE",
+            "USB AOA permission: no answer from the rider within ${timeoutMs / 1000}s."
+        )
+        else -> ProjectionEventLog.warning("AOA_SERVICE", "USB AOA permission denied by the rider.")
+    }
+    return granted
 }

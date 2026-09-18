@@ -112,9 +112,13 @@
             android:exported="false"
             android:foregroundServiceType="mediaProjection" />
 
+        <!-- Diagnostic probe started by hand with `adb shell am start-foreground-service`.
+             Exported so the shell can reach it, but guarded by DUMP: the adb shell holds it,
+             an installed app never can, so no other app can open an AOA session through it. -->
         <service
             android:name=".externaldisplay.AapAccessoryProbeService"
             android:exported="true"
+            android:permission="android.permission.DUMP"
             android:foregroundServiceType="connectedDevice" />
 
         <!--

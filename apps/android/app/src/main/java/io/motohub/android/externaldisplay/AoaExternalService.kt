@@ -8,10 +8,8 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
 import android.hardware.usb.UsbAccessory
@@ -37,7 +35,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.concurrent.atomic.AtomicBoolean
@@ -119,12 +116,15 @@ class AoaExternalService : Service() {
         try {
             // 1. Acquire partial wake lock so the CPU keeps encoding with screen off
             val powerManager = getSystemService(PowerManager::class.java)
-            wakeLock = powerManager.newWakeLock(
-                PowerManager.PARTIAL_WAKE_LOCK,
-                "MotoHub:AoaWakeLock"
-            ).apply {
-                acquire(/* timeoutHint = */ 2 * 60 * 60 * 1000L) // 2h cap
-            }
+            keep(
+                powerManager.newWakeLock(
+                    PowerManager.PARTIAL_WAKE_LOCK,
+                    "MotoHub:AoaWakeLock"
+                ).apply {
+                    acquire(/* timeoutHint = */ 2 * 60 * 60 * 1000L) // 2h cap
+                },
+                release = { if (it.isHeld) it.release() }
+            ) { wakeLock = it }
 
             // 2. Open the AOA USB accessory
             val accessory = openAccessory() ?: return fail(
@@ -138,12 +138,12 @@ class AoaExternalService : Service() {
             // 4. Request USB permission and open the accessory stream
             val usbManager = getSystemService(UsbManager::class.java)
             if (!usbManager.hasPermission(accessory)) {
-                val granted = requestAoaPermission(usbManager, accessory)
+                val granted = awaitAccessoryPermission(this, usbManager, accessory, 10_000L)
                 if (!granted) return fail("USB accessory permission was denied.")
             }
             val fd = usbManager.openAccessory(accessory)
                 ?: return fail("Unable to open the USB AOA accessory.")
-            aoaFileDescriptor = fd
+            keep(fd, release = { it.close() }) { aoaFileDescriptor = it }
             val outputStream = FileOutputStream(fd.fileDescriptor)
             aoaOutputStream = outputStream
             ProjectionEventLog.record("AOA_SERVICE", "AOA USB accessory opened OK.")
@@ -156,7 +156,10 @@ class AoaExternalService : Service() {
             // runs on a coroutine dispatcher with no Looper. The callback only reports that
             // projection stopped, so the main thread is the right place to receive it.
             projection.registerCallback(projectionCallback, Handler(Looper.getMainLooper()))
-            mediaProjection = projection
+            keep(projection, release = {
+                it.unregisterCallback(projectionCallback)
+                it.stop()
+            }) { mediaProjection = it }
 
             // 6. Build the encoder with Autolink-compatible settings
             val profile = EncoderProfile(
@@ -193,13 +196,13 @@ class AoaExternalService : Service() {
                 }
             )
             activeEncoder.start()
-            encoder = activeEncoder
+            keep(activeEncoder, release = { it.stop() }) { encoder = it }
 
             val surface = activeEncoder.inputSurface
                 ?: error("AVC encoder has no input surface.")
 
             // 7. Create the virtual display – renders the phone screen onto the encoder surface
-            virtualDisplay = projection.createVirtualDisplay(
+            val display = projection.createVirtualDisplay(
                 "MOTO-HUB AOA capture",
                 profile.width,
                 profile.height,
@@ -209,12 +212,18 @@ class AoaExternalService : Service() {
                 null,
                 null
             ) ?: error("Virtual display was not created.")
+            keep(display, release = { it.release() }) { virtualDisplay = it }
 
             AoaExternalRuntime.publish(AoaExternalRuntimeState.Streaming)
             ProjectionEventLog.record(
                 "AOA_SERVICE",
                 "External display streaming ${profile.width}x${profile.height}" +
                     "@${profile.frameRate} to head unit via USB AOA."
+            )
+        } catch (_: StoppedDuringSetup) {
+            ProjectionEventLog.record(
+                "AOA_SERVICE",
+                "Stop arrived while the pipeline was still being built; released what was ready."
             )
         } catch (failure: Throwable) {
             ProjectionEventLog.error(
@@ -228,47 +237,6 @@ class AoaExternalService : Service() {
 
     // ── AOA permission handling ───────────────────────────────────────
 
-    /** Requests USB accessory permission synchronously (with a coroutine suspension). */
-    private suspend fun requestAoaPermission(
-        usbManager: UsbManager,
-        accessory: UsbAccessory
-    ): Boolean = withContext(Dispatchers.Main) {
-        ProjectionEventLog.record("AOA_SERVICE", "Requesting USB AOA permission.")
-        val latch = java.util.concurrent.CountDownLatch(1)
-        val result = BooleanArray(1)
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                result[0] = intent.getBooleanExtra(
-                    UsbManager.EXTRA_PERMISSION_GRANTED,
-                    false
-                )
-                latch.countDown()
-            }
-        }
-        ContextCompat.registerReceiver(
-            this@AoaExternalService,
-            receiver,
-            IntentFilter(ACTION_USB_PERMISSION),
-            ContextCompat.RECEIVER_NOT_EXPORTED
-        )
-        usbManager.requestPermission(
-            accessory,
-            PendingIntent.getBroadcast(
-                this@AoaExternalService,
-                0,
-                Intent(ACTION_USB_PERMISSION),
-                PendingIntent.FLAG_IMMUTABLE
-            )
-        )
-        // Wait up to 10s for the user response
-        latch.await(10_000L, java.util.concurrent.TimeUnit.MILLISECONDS)
-        try { unregisterReceiver(receiver) } catch (_: Exception) {}
-        if (!result[0]) {
-            ProjectionEventLog.warning("AOA_SERVICE", "USB AOA permission denied by user.")
-        }
-        result[0]
-    }
-
     /** Returns the first AOA accessory, or null if none is connected. */
     private fun openAccessory(): UsbAccessory? {
         val usbManager = getSystemService(UsbManager::class.java)
@@ -279,6 +247,28 @@ class AoaExternalService : Service() {
     }
 
     // ── Teardown ──────────────────────────────────────────────────────
+
+    /** Stop won the race against a half-built pipeline; the resource in hand is already released. */
+    private class StoppedDuringSetup : RuntimeException()
+
+    /**
+     * Hands a freshly built resource to the service, under the same lock as [stopSession].
+     *
+     * [startCapture] runs on IO while Stop arrives on main. Without this, a Stop tapped during
+     * setup (the USB permission dialog is the long window) found every field still null,
+     * released nothing, and the setup then went on to publish a live MediaProjection, virtual
+     * display and encoder that nothing would ever release again.
+     */
+    private fun <T> keep(resource: T, release: (T) -> Unit, assign: (T) -> Unit) {
+        synchronized(this) {
+            if (!stopping) {
+                assign(resource)
+                return
+            }
+        }
+        runCatching { release(resource) }
+        throw StoppedDuringSetup()
+    }
 
     private fun fail(message: String) {
         if (stopping) return
@@ -356,8 +346,6 @@ class AoaExternalService : Service() {
         private const val CHANNEL_ID = "aoa_external_display_v1"
         private const val NOTIFICATION_ID = 4201
         private const val ACTION_STOP = "io.motohub.android.action.STOP_AOA"
-        private const val ACTION_USB_PERMISSION =
-            "io.motohub.android.action.AOA_USB_PERMISSION"
         private const val EXTRA_RESULT_CODE = "result_code"
         private const val EXTRA_RESULT_DATA = "result_data"
 

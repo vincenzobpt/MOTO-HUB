@@ -54,27 +54,33 @@ class MotorcycleProfileStore(context: Context) {
     }
 
     fun save(profile: MotorcycleProfile, makeActive: Boolean = true): Result<Unit> = runCatching {
-        val profiles = loadAll()
-            .filterNot { it.id == profile.id }
-            .plus(profile)
-        saveAll(profiles, if (makeActive) profile.id else preferences.getString(KEY_ACTIVE_ID, null))
+        synchronized(WRITE_LOCK) {
+            val profiles = loadAll()
+                .filterNot { it.id == profile.id }
+                .plus(profile)
+            saveAll(profiles, if (makeActive) profile.id else preferences.getString(KEY_ACTIVE_ID, null))
+        }
     }
 
     fun setActive(profileId: String): Result<Unit> = runCatching {
-        check(loadAll().any { it.id == profileId }) { "Motorcycle profile not found." }
-        check(preferences.edit().putString(KEY_ACTIVE_ID, profileId).commit()) {
-            "Android did not update the active motorcycle."
+        synchronized(WRITE_LOCK) {
+            check(loadAll().any { it.id == profileId }) { "Motorcycle profile not found." }
+            check(preferences.edit().putString(KEY_ACTIVE_ID, profileId).commit()) {
+                "Android did not update the active motorcycle."
+            }
         }
     }
 
     fun delete(profileId: String): Result<Unit> = runCatching {
-        val profiles = loadAll().filterNot { it.id == profileId }
-        val activeId = preferences.getString(KEY_ACTIVE_ID, null)
-        val nextActiveId = when {
-            activeId != profileId -> activeId
-            else -> profiles.firstOrNull()?.id
+        synchronized(WRITE_LOCK) {
+            val profiles = loadAll().filterNot { it.id == profileId }
+            val activeId = preferences.getString(KEY_ACTIVE_ID, null)
+            val nextActiveId = when {
+                activeId != profileId -> activeId
+                else -> profiles.firstOrNull()?.id
+            }
+            saveAll(profiles, nextActiveId)
         }
-        saveAll(profiles, nextActiveId)
     }
 
     fun clear() {
@@ -210,6 +216,15 @@ class MotorcycleProfileStore(context: Context) {
     )
 
     private companion object {
+        /**
+         * Every write is read-modify-write of one JSON array, and the store is built fresh by
+         * each caller - the UI, the AIDL binder threads a companion app calls in on. Without
+         * one process-wide lock, a delete from the companion and a rename in the Garage at the
+         * same moment each rewrote the array from their own stale read, and the later commit
+         * silently undid the other.
+         */
+        private val WRITE_LOCK = Any()
+
         const val PREFERENCES_NAME = "motorcycle_profiles"
         const val LEGACY_PREFERENCES_NAME = "motorcycle_profile"
         const val KEY_PROFILES = "profiles"
