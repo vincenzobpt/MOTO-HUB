@@ -10,6 +10,7 @@ import io.motohub.android.session.ProjectionEventLog
 import java.io.IOException
 import java.io.OutputStream
 import java.net.Inet4Address
+import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.NetworkInterface
 import java.net.ServerSocket
@@ -294,6 +295,10 @@ class ThinkerRideTransport(context: Context) : TBoxTransport {
         @Volatile
         var mirrorArea: TBoxEvent.VideoArea? = null
 
+        /** Where the control connection came from: the dash's address on this network. */
+        @Volatile
+        var controlPeer: InetAddress? = null
+
         /** The most recent accepted video socket; [videoConnected] only remembers the first. */
         @Volatile
         var latestVideoSocket: Socket? = null
@@ -421,6 +426,23 @@ class ThinkerRideTransport(context: Context) : TBoxTransport {
                 // exactly that (it dials the registry's host:15456, which on this wire is *us*),
                 // and without this guard that probe was accepted as the dash and the real
                 // connection had nowhere to land.
+                //
+                // Except the dash itself. It opens this channel on its own — six times before any
+                // mirror-start on one KOVE 800X (796efe04), and presumably whenever the rider
+                // starts projection from the dash with a long press on UP, which is exactly what
+                // our own error message tells them to do. It is recognised by coming from the
+                // same address as the control connection, which a probe from this phone never
+                // does. It is kept, not started: start() finds it already waiting.
+                if (mirrorArea == null && isFromTheDash(socket)) {
+                    ProjectionEventLog.record(
+                        "THINKERRIDE",
+                        "The dash opened the video channel before any mirror-start; keeping it " +
+                            "for when projection starts."
+                    )
+                    latestVideoSocket = socket
+                    videoConnected.complete(socket)
+                    return@acceptLoop
+                }
                 if (mirrorArea == null) {
                     ProjectionEventLog.record(
                         "THINKERRIDE",
@@ -440,6 +462,13 @@ class ThinkerRideTransport(context: Context) : TBoxTransport {
             }
         }
 
+        /** Same remote address as the control connection, and not a socket from this phone. */
+        private fun isFromTheDash(socket: Socket): Boolean {
+            val dash = controlPeer ?: return false
+            val peer = socket.inetAddress ?: return false
+            return peer == dash && !peer.isLoopbackAddress
+        }
+
         private fun acceptLoop(label: String, server: ServerSocket?, onAccepted: (Socket) -> Unit) {
             val listening = server ?: return
             Thread({
@@ -457,6 +486,7 @@ class ThinkerRideTransport(context: Context) : TBoxTransport {
 
         private fun runControl(socket: Socket) {
             if (!controlConnected.isCompleted) controlConnected.complete(socket)
+            controlPeer = socket.inetAddress
             val out = socket.getOutputStream()
             writeQuietly(out, ThinkerRideProtocol.controlOpeningQuery())
             Thread({
@@ -467,8 +497,16 @@ class ThinkerRideTransport(context: Context) : TBoxTransport {
                     val read = runCatching { input.read(buffer) }.getOrDefault(-1)
                     if (read <= 0) break
                     logControlPayload(buffer, read)
-                    if (ThinkerRideProtocol.isKeepaliveProbe(buffer, read)) {
-                        writeQuietly(out, ThinkerRideProtocol.KEEPALIVE_PACKET)
+                    val probes = ThinkerRideProtocol.keepaliveProbeCount(buffer, read)
+                    if (probes > 0) {
+                        // One echo per probe, as one write: the dash counts them.
+                        val echo = ByteArray(probes * ThinkerRideProtocol.KEEPALIVE_PACKET.size)
+                        for (index in 0 until probes) {
+                            ThinkerRideProtocol.KEEPALIVE_PACKET.copyInto(
+                                echo, index * ThinkerRideProtocol.KEEPALIVE_PACKET.size
+                            )
+                        }
+                        writeQuietly(out, echo)
                     }
                     if (!handshakeSent) {
                         handshakeSent = true
@@ -608,7 +646,7 @@ class ThinkerRideTransport(context: Context) : TBoxTransport {
             // anything unreadable is hex-dumped instead of discarded.
             // The 6-byte keep-alive arrives every few seconds and is answered, not read; hex
             // dumping it would bury everything else.
-            if (ThinkerRideProtocol.isKeepaliveProbe(buffer, length)) return
+            if (ThinkerRideProtocol.keepaliveProbeCount(buffer, length) > 0) return
             val text = String(buffer, 0, length, StandardCharsets.UTF_8)
             val printable = text.count { it.code in 32..126 }
             if (printable >= length / 2 && text.isNotBlank()) {

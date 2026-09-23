@@ -103,6 +103,20 @@ class ThinkerRideProtocolTest {
     }
 
     @Test
+    fun countsKeepaliveProbesQueuedBackToBack() {
+        val probe = ThinkerRideProtocol.KEEPALIVE_PACKET
+        assertEquals(1, ThinkerRideProtocol.keepaliveProbeCount(probe))
+        // The 108-byte read a KOVE sent (support ID 06DD-823E-D3B9): eighteen probes.
+        val queued = ByteArray(0).let { acc -> (1..18).fold(acc) { bytes, _ -> bytes + probe } }
+        assertEquals(18, ThinkerRideProtocol.keepaliveProbeCount(queued))
+        // A multiple of six that is not all probes is a message, not keep-alives.
+        val mixed = probe + byteArrayOf(0x02, 0x01, 0x00, 0x00, 0x00, 0x07)
+        assertEquals(0, ThinkerRideProtocol.keepaliveProbeCount(mixed))
+        assertEquals(0, ThinkerRideProtocol.keepaliveProbeCount(probe + byteArrayOf(0x02)))
+        assertEquals(0, ThinkerRideProtocol.keepaliveProbeCount(ThinkerRideProtocol.frameControlJson("{}")))
+    }
+
+    @Test
     fun controlHandshakeHasTheFixedLayoutFromTheReferenceCapture() {
         val handshake = ThinkerRideProtocol.controlHandshake("id@example.com")
 

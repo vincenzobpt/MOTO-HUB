@@ -83,6 +83,24 @@ object ThinkerRideProtocol {
     fun isKeepaliveProbe(data: ByteArray, length: Int = data.size): Boolean =
         length == 6 && data[0] == 0x02.toByte() && data[1] == 0x01.toByte() && data[2] == 0x00.toByte()
 
+    /**
+     * How many keep-alives one read carries: 1 for the plain probe, N for N of them queued back
+     * to back, 0 for anything else. The dash does queue them — a KOVE logged 108 bytes that were
+     * exactly 18 probes (support ID 06DD-823E-D3B9) — and a check that only knows the 6-byte
+     * read left every one of those unanswered. Each queued one must be the exact packet, so a
+     * real message that happens to be a multiple of six long and start like one is not mistaken.
+     */
+    fun keepaliveProbeCount(data: ByteArray, length: Int = data.size): Int {
+        if (isKeepaliveProbe(data, length)) return 1
+        if (length < 12 || length % 6 != 0) return 0
+        for (offset in 0 until length step 6) {
+            for (index in KEEPALIVE_PACKET.indices) {
+                if (data[offset + index] != KEEPALIVE_PACKET[index]) return 0
+            }
+        }
+        return length / 6
+    }
+
     // ---- BLE JSON commands -------------------------------------------------------------------
 
     /**
