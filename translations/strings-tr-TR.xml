@@ -16,6 +16,7 @@
     <string name="language_dutch">Nederlands</string>
     <string name="language_czech">Čeština</string>
     <string name="language_turkish">Türkçe</string>
+    <string name="language_russian">Русский</string>
     <string name="language_title">Dil</string>
     <string name="language_description">MOTO-HUB\'un kullandığı dili seçin</string>
     <string name="language_detail_description">MOTO-HUB varsayılan olarak telefonun dilini izler. Yalnızca bu uygulama için değiştirmek üzere aşağıdan bir dil seçin.</string>

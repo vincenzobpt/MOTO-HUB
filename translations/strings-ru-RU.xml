@@ -1,0 +1,2010 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Locale: ru-RU. Machine-translated first pass; pending native review. -->
+    <!-- Application identity -->
+    <string name="app_name">MOTO-HUB</string>
+
+    <!-- Settings > General > Language. Names are kept in their native form. -->
+    <string name="language_system_default">Системный</string>
+    <string name="language_english">English</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_korean">한국어 (대한민국)</string>
+    <string name="language_french">Français</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_dutch">Nederlands</string>
+    <string name="language_czech">Čeština</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_title">Язык</string>
+    <string name="language_description">Выберите язык, который использует MOTO-HUB</string>
+    <string name="language_detail_description">По умолчанию MOTO-HUB использует язык телефона. Выберите язык ниже, чтобы задать его отдельно для этого приложения.</string>
+
+    <!-- Settings main page -->
+    <string name="legacy_download_anyway_c17b27fb">Всё равно скачать</string>
+    <string name="legacy_download_over_1_s_23fdd550">Скачать через %1$s?</string>
+    <string name="legacy_moto_hub_1_s_is_2_s_and_right_now_the_only_conne_8ebbc51c">MOTO-HUB %1$s %2$s, а сейчас единственное подключение, через которое доступен интернет, — %3$s, за которое оператор берёт плату. На мотоцикле это нормально: у Wi-Fi приборной панели вообще нет доступа в интернет.</string>
+    <string name="legacy_waiting_for_wi_fi_costs_nothing_the_update_stays_3f38fec8">Ждать Wi-Fi ничего не стоит: обновление останется в этом списке.</string>
+    <string name="settings_configuration">КОНФИГУРАЦИЯ</string>
+    <string name="settings_title">Настройки</string>
+    <string name="settings_general">Общие</string>
+    <string name="settings_general_description">Язык, бесшовное возобновление и поведение приложения</string>
+
+    <!-- Settings > General -->
+    <string name="settings_general_title">Общие</string>
+    <string name="settings_check_updates_on_launch">Проверять обновления при запуске</string>
+    <string name="settings_check_updates_on_launch_description">Автоматически проверять релизы на GitHub не чаще раза в 24 часа</string>
+    <string name="settings_enable_seamless_resume">Включить бесшовное возобновление</string>
+    <string name="settings_seamless_resume_enabled_description">Android Auto сможет возобновить работу после долгого перерыва в связи с T-Box, даже при выключенном экране</string>
+    <string name="settings_seamless_resume_disabled_description">Разрешить Android Auto возобновляться в фоне, когда мотоцикл снова в сети; при первом включении потребуется разрешение</string>
+
+    <!-- Settings option labels. These are also used by the route and projection pickers. -->
+    <string name="video_quality_smoother">Плавнее</string>
+    <string name="video_quality_smoother_description">Более низкий битрейт, меньше нагрева и нагрузки на сеть.</string>
+    <string name="video_quality_balanced">Сбалансированно</string>
+    <string name="video_quality_balanced_description">Текущее качество MOTO-HUB и рекомендуемое значение по умолчанию.</string>
+    <string name="video_quality_sharper">Чётче</string>
+    <string name="video_quality_sharper_description">Более высокий битрейт для чёткости карт и текста.</string>
+    <string name="video_power_auto">Авто</string>
+    <string name="video_power_auto_description">Подстраивает битрейт и частоту кадров под температуру телефона и качество Wi-Fi.</string>
+    <string name="video_power_smooth">Плавно</string>
+    <string name="video_power_smooth_description">30 кадров/с при выбранном качестве видео.</string>
+    <string name="video_power_balanced">Сбалансированно</string>
+    <string name="video_power_balanced_description">Стабильные 24 кадра/с при выбранном качестве видео.</string>
+    <string name="video_power_saver">Экономия</string>
+    <string name="video_power_saver_description">20 кадров/с для снижения нагрева и расхода аккумулятора.</string>
+    <string name="android_auto_resolution_auto">Авто</string>
+    <string name="android_auto_resolution_auto_description">Оставить автоматическую ориентацию MOTO-HUB на основе изученной геометрии T-Box.</string>
+    <string name="android_auto_resolution_landscape_sd">Альбомная 800 x 480</string>
+    <string name="android_auto_resolution_landscape_sd_description">Стандартный альбомный источник Android Auto.</string>
+    <string name="android_auto_resolution_landscape_hd">Альбомная 1280 x 720</string>
+    <string name="android_auto_resolution_landscape_hd_description">Более чёткий HD-источник в альбомной ориентации с большей нагрузкой на телефон.</string>
+    <string name="android_auto_resolution_landscape_fhd">Альбомная 1920 x 1080</string>
+    <string name="android_auto_resolution_landscape_fhd_description">Альбомный источник Full HD. Не проверен ни на одной известной приборной панели.</string>
+    <string name="android_auto_resolution_landscape_qhd">Альбомная 2560 x 1440</string>
+    <string name="android_auto_resolution_landscape_qhd_description">Альбомный источник Quad HD. Большая нагрузка на телефон, не проверен ни на одной известной приборной панели.</string>
+    <string name="android_auto_resolution_landscape_uhd">Альбомная 3840 x 2160</string>
+    <string name="android_auto_resolution_landscape_uhd_description">Альбомный источник 4K. Телефон одновременно кодирует и декодирует 4K — ожидайте нагрева и пропусков кадров.</string>
+    <string name="android_auto_resolution_portrait_sd">Портретная 720 x 1280</string>
+    <string name="android_auto_resolution_portrait_sd_description">Стандартный портретный источник Android Auto.</string>
+    <string name="android_auto_resolution_portrait_hd">Портретная 1080 x 1920</string>
+    <string name="android_auto_resolution_portrait_hd_description">Более чёткий HD-источник в портретной ориентации с большей нагрузкой на телефон.</string>
+    <string name="android_auto_resolution_portrait_qhd">Портретная 1440 x 2560</string>
+    <string name="android_auto_resolution_portrait_qhd_description">Портретный источник Quad HD. Большая нагрузка на телефон, не проверен ни на одной известной приборной панели.</string>
+    <string name="android_auto_resolution_portrait_uhd">Портретная 2160 x 3840</string>
+    <string name="android_auto_resolution_portrait_uhd_description">Портретный источник 4K. Телефон одновременно кодирует и декодирует 4K — ожидайте нагрева и пропусков кадров.</string>
+    <string name="android_auto_density_auto">Авто</string>
+    <string name="android_auto_density_auto_description">Использовать плотность, соответствующую выбранному разрешению.</string>
+    <string name="android_auto_density_120">120 dpi</string>
+    <string name="android_auto_density_120_description">Самый маленький интерфейс, максимум карты на экране. Трудно читать на маленьком TFT.</string>
+    <string name="android_auto_density_160">160 dpi</string>
+    <string name="android_auto_density_160_description">Маленький интерфейс. Плотность, которую альбомные источники используют по умолчанию.</string>
+    <string name="android_auto_density_213">213 dpi</string>
+    <string name="android_auto_density_213_description">Между маленьким и стандартным. Полезно, когда 160 слишком тесно, а 240 слишком крупно.</string>
+    <string name="android_auto_density_240">240 dpi</string>
+    <string name="android_auto_density_240_description">Стандартный интерфейс. Плотность, которую портретные источники используют по умолчанию.</string>
+    <string name="android_auto_density_320">320 dpi</string>
+    <string name="android_auto_density_320_description">Крупный интерфейс, легче читать и попадать в перчатках. Меньше карты на экране.</string>
+    <string name="android_auto_density_480">480 dpi</string>
+    <string name="android_auto_density_480_description">Самый крупный интерфейс. Имеет смысл только для источников с высоким разрешением.</string>
+    <string name="android_auto_insets_auto">Авто</string>
+    <string name="android_auto_insets_auto_description">Использовать полный источник Android Auto; область проекции T-Box не добавляет отступов AA.</string>
+    <string name="android_auto_insets_manual">Вручную</string>
+    <string name="android_auto_insets_manual_description">Передавать Android Auto безопасные отступы TFT для этого мотоцикла.</string>
+    <string name="distance_units_kilometers">Километры</string>
+    <string name="distance_units_kilometers_description">Расстояния и скорости в км и км/ч.</string>
+    <string name="distance_units_miles">Мили</string>
+    <string name="distance_units_miles_description">Расстояния и скорости в милях и милях/ч.</string>
+    <string name="route_preference_fastest">Самый быстрый</string>
+    <string name="route_preference_fastest_description">Самый быстрый маршрут, автомагистрали разрешены.</string>
+    <string name="route_preference_scenic">Живописный</string>
+    <string name="route_preference_scenic_description">С уклоном в сторону второстепенных дорог и в обход автомагистралей.</string>
+
+    <!-- Core/Pro bridge notification -->
+    <string name="core_bridge_channel_name">Мост MOTO-HUB Core</string>
+    <string name="core_bridge_channel_description">Поддерживает соединение с T-Box, пока его использует MOTO-HUB Pro</string>
+    <string name="core_bridge_notification_title">MOTO-HUB Core активен</string>
+    <string name="core_bridge_notification_text">Обслуживает MOTO-HUB Pro.</string>
+
+    <!-- Projection notifications -->
+    <string name="projection_channel_name">Проекция MOTO-HUB</string>
+    <string name="projection_channel_description">Статус трансляции на дисплей мотоцикла</string>
+    <string name="projection_notification_title">MOTO-HUB активен</string>
+    <string name="projection_notification_text">Проекция экрана активна.</string>
+    <string name="projection_notification_dimmed_text">Проекция активна, экран телефона затемнён.</string>
+    <string name="stop_projection">Стоп</string>
+    <string name="dim_phone_display">Затемнить экран</string>
+    <string name="restore_phone_display">Восстановить экран</string>
+
+    <!-- Android Auto notifications -->
+    <string name="android_auto_channel_name">MOTO-HUB Android Auto</string>
+    <string name="android_auto_notification_title">Сеанс MOTO-HUB Android Auto</string>
+    <string name="android_auto_notification_text">Сеанс активен. Откройте MOTO-HUB, чтобы увидеть статус проекции в реальном времени.</string>
+    <string name="stop_android_auto">Остановить Android Auto</string>
+
+    <!-- Ride Dashboard notifications -->
+    <string name="ride_dashboard_channel_name">MOTO-HUB Ride Dashboard</string>
+    <string name="ride_dashboard_channel_description">Статус трансляции данных поездки в реальном времени</string>
+    <string name="ride_dashboard_notification_title">MOTO-HUB Ride Dashboard</string>
+    <string name="ride_dashboard_notification_text">Трансляция GPS-телеметрии и приборной панели активна.</string>
+    <string name="stop_ride_dashboard">Остановить приборную панель</string>
+    <!-- Source: MainActivity.kt -->
+    <string name="legacy_moto_hub_diagnostics_ba6420b1">Диагностика MOTO-HUB</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_about_the_project_2feef1f7">О ПРОЕКТЕ</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_check_for_updates_66a2b53b">Проверить обновления</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_close_3e2edd8">Закрыть</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_experimental_software_e22071df">ЭКСПЕРИМЕНТАЛЬНОЕ ПО</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_no_network_called_1_s_has_been_seen_but_this_pho_3174d343">Сеть с именем «%1$s» не найдена, но этому телефону известна «%2$s» — отличие только в пробелах. Сохраните ещё раз, чтобы оставить введённое вами.</string>
+    <string name="legacy_open_github_repository_80f9bf71">Открыть репозиторий на GitHub</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_platform_9e635873">ПЛАТФОРМА</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_source_support_aa797bf0">ИСХОДНЫЙ КОД И ПОДДЕРЖКА</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_use_1_s_ef5e7994">Использовать %1$s</string>
+    <string name="legacy_version_3fc0a8b8">ВЕРСИЯ</string>
+    <!-- Source: feature/androidauto/AndroidAutoPreviewScreen.kt -->
+    <string name="legacy_fullscreen_7d6157db">Во весь экран</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_address_or_coordinates_9e7a90a">Адрес или координаты</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_back_1f7907">Назад</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_controls_e20faad6">Управление</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_cycle_panels_c623ab89">Переключить панели</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_everything_on_this_page_controls_the_projection__88534bf1">Всё на этой странице управляет проекцией, которая сейчас показана на мотоцикле.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_exit_fullscreen_b7c93dd">Выйти из полноэкранного режима</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_fullscreen_map_bafc2397">Карта на весь экран</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_handlebar_controls_cf2abe6b">Управление с руля</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_home_2268ff">Дом</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_open_glove_friendly_fullscreen_controller_2d746356">Открыть полноэкранный контроллер для перчаток</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_reset_default_mapping_bd7464fe">Сбросить привязки по умолчанию</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_scroll_ebe1cfb8">Прокрутка +</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_scroll_ebe1f19f">Прокрутка −</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_the_value_is_restored_when_handlebar_capture_is__ea95c499">Значение восстанавливается, когда перехват руля выключен.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_timing_9551dc6a">Тайминг</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_use_the_motorcycle_buttons_without_looking_down__1b06094c">Используйте кнопки мотоцикла, не опуская взгляд. Команды сначала получает активная проекция.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_voice_4eff112">Голос</string>
+    <!-- Source: feature/controls/MediaButtonBridge.kt -->
+    <string name="legacy_motorcycle_buttons_control_targetname_c5bca78f">Кнопки мотоцикла управляют: $targetName</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_application_logs_ca54c69f">Журналы приложения</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_clear_3e2c62d">Очистить</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_copy_log_e59a8039">Скопировать журнал</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_no_diagnostic_events_have_been_recorded_290567d5">Диагностических событий не записано.</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_persistent_events_from_wi_fi_t_box_mirroring_enc_679d01c0">Постоянные события от Wi-Fi, T-Box, зеркалирования, кодера и Android Auto.</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_share_4c25fbf">Поделиться</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_troubleshooting_f6bb8e3a">УСТРАНЕНИЕ НЕПОЛАДОК</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_check_t_box_and_cellular_routes_without_starting_7ae11348">Проверить маршруты T-Box и сотовой сети без запуска VPN и без изменения сети по умолчанию.</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_network_diagnostics_a4fc929a">Диагностика сети</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_no_network_snapshot_available_5baf5bb0">Снимок сети недоступен.</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_result_8fe0bc1d">РЕЗУЛЬТАТ</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_system_lab_433267fc">СИСТЕМНАЯ ЛАБОРАТОРИЯ</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_start_a_projection_to_populate_the_log_23fff8de">Запустите проекцию, чтобы заполнить журнал.</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_add_a_motorcycle_by_scanning_its_t_box_qr_code_a77ba91f">Добавьте мотоцикл, отсканировав QR-код его T-Box.</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_add_motorcycle_397b0e90">Добавить мотоцикл</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_edit_20e22a">Изменить</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_motorcycles_2c9478e2">Мотоциклы</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_no_qr_connect_manually_8ad804ea">Нет QR-кода? Подключить вручную</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_options_18bf1e7e">Параметры</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_saved_motorcycles_181a24a9">СОХРАНЁННЫЕ МОТОЦИКЛЫ</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_scan_a_qr_code_5a21ea0a">Сканировать QR-код</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_use_this_motorcycle_1204179a">Использовать этот мотоцикл</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_your_garage_c0aeffb4">ВАШ ГАРАЖ</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_your_garage_is_empty_f25b99e3">Ваш гараж пуст</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_connection_eeae6ade">ПОДКЛЮЧЕНИЕ</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_cancel_77df1a9a">Отмена</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_changes_are_saved_immediately_3ab73352">Изменения сохраняются сразу.</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_choose_how_the_complete_android_auto_image_is_fi_cb149112">Выберите, как полное изображение Android Auto вписывается в TFT.</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_display_name_6697cf49">Отображаемое имя</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_exclude_pixels_occupied_by_the_motorcycle_ui_the_c5210089">Исключить пиксели, занятые интерфейсом мотоцикла. Эти значения сохраняются для этого </string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_for_example_300_1aa3b7a">Например: 300</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_for_example_mt700_adventure_4c1ae7c7">Например: MT700 Adventure</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_fuel_2195d6">Топливо</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_full_tank_range_on_a_fill_up_powers_the_fuel_ran_68a667ae">Запас хода на полном баке. Используется для предупреждения о запасе топлива в навигации.</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_identity_fbc2d4de">Идентификация</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_motorcycle_profile_bd90ddfa">ПРОФИЛЬ МОТОЦИКЛА</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_make_it_yours_9dfd813d">Сделайте его своим</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_override_the_automatic_profile_detection_for_thi_dcc5245b">Переопределить автоматическое определение профиля для этого мотоцикла. Используйте только если </string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_91afe4a4">Удалить</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_motorcycle_c0498b52">Удалить мотоцикл?</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_photo_7fa92bb6">Удалить фото</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_this_motorcycle_f21e94d7">Удалить этот мотоцикл</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_reset_margins_ff05a94">Сбросить отступы</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_t_box_identifier_modelid_2c1c9ebd">Идентификатор T-Box: $modelId</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_tank_range_km_f16147b8">Запас хода (км)</string>
+    <!-- Garage tank-range field label when the rider selects miles. -->
+    <string name="legacy_tank_range_mi_f1614ebe">Запас хода (мили)</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_the_wi_fi_password_is_stored_securely_on_this_ph_b6fb6382">Пароль Wi-Fi надёжно хранится на этом телефоне.</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_the_name_is_only_used_inside_moto_hub_10a5f3a4">Это имя используется только внутри MOTO-HUB.</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_the_saved_connection_profile_and_its_photo_will__c6d581e2">Сохранённый профиль подключения и его фото будут удалены из MOTO-HUB.</string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_could_not_derive_a_peer_ip_this_network_may_not__3fa3f2d0">Не удалось определить IP-адрес узла — возможно, у этой сети пока нет рабочего маршрута.</string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_if_easyconn_discovery_keeps_failing_briefly_reco_ced96e0d">Если обнаружение EasyConn постоянно не удаётся, ненадолго переподключитесь к этому T-Box и проверьте </string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_scan_common_easyconn_ports_835f5172">Сканировать типичные порты EasyConn</string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_t_box_capability_inspector_937ec87d">ИНСПЕКТОР ВОЗМОЖНОСТЕЙ T-BOX</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_another_easyconn_app_can_keep_the_t_box_link_occ_fd2f2f53">Другое приложение EasyConn может удерживать связь с T-Box занятой, даже уйдя в фон.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_connection_failed_3b5c2fbf">ОШИБКА ПОДКЛЮЧЕНИЯ</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_choose_what_the_ride_dashboard_shows_for_navigat_793eeb07">Выберите, что Ride Dashboard показывает для навигации.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_connect_your_motorcycle_2e5794e6">Подключите мотоцикл.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_connecting_48965ad8">Подключение</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_dashboard_map_5dae1b0">Карта приборной панели</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_disconnect_966f34bc">Отключить</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_first_time_setup_d929eaa7">ПЕРВОНАЧАЛЬНАЯ НАСТРОЙКА</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_session_actions_bc6aa933">ДЕЙСТВИЯ СЕАНСА</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_scan_the_t_box_qr_code_to_save_the_network_crede_67df5b62">Отсканируйте QR-код T-Box, чтобы автоматически сохранить данные сети.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_setting_up_network_and_t_box_7769a762">Настройка сети и T-Box</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_what_to_show_122be0b9">Что показывать?</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_back_fe3a848e">‹ Назад</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_arrived_ff08704d">ПРИБЫТИЕ</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_calculating_your_route_86fbe56d">Расчёт маршрута…</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_done_2097a2">Готово</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_exact_destination_pin_used_for_routing_tap_the_m_10786cc">Точная метка назначения для прокладки маршрута. Нажмите на карту, чтобы изменить её.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_guidance_to_your_destination_will_end_27d69f">Навигация до места назначения завершится.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_info_225cae">ИНФО</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_keep_going_6d8f25bf">Продолжить</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_live_navigation_70ce19c8">НАВИГАЦИЯ В РЕАЛЬНОМ ВРЕМЕНИ</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_map_location_9df6ea19">МЕСТО НА КАРТЕ</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_navigation_needs_attention_7f3ab90f">НАВИГАЦИЯ ТРЕБУЕТ ВНИМАНИЯ</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_no_9c1">НЕТ</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_name_24eeab">Имя</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_navigation_will_start_either_way_open_the_ride_d_b34bca11">Навигация в любом случае запустится. Открыть Ride Dashboard на TFT мотоцикла?</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_no_favorites_yet_save_one_from_a_route_preview_o_b8e45fac">Избранного пока нет. Сохраните его с предпросмотра маршрута или экрана прибытия.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_no_matches_e3c700ba">Совпадений нет.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_not_every_address_number_is_mapped_in_openstreet_cf7708fe">Не все номера домов пока нанесены в OpenStreetMap, поэтому метка </string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_off_route_recalculating_1f5a422b">Не на маршруте — пересчёт…</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_open_ride_dashboard_202629d">Открыть Ride Dashboard?</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_optional_label_267da254">Метка (необязательно)</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_route_type_519caed1">ТИП МАРШРУТА</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_reroute_a49323d6">Перестроить маршрут</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_27359d">Сохранить</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_a_destination_as_a_favorite_from_a_route_pr_5669fe67">Сохраните пункт назначения в избранное с предпросмотра маршрута.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_favorite_85e74bf">Сохранить в избранное</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_this_route_d63094aa">Сохранить этот маршрут</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_search_address_or_paste_coordinates_daf446f5">Поиск адреса или вставка координат</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_start_navigation_2d34b0b2">Начать навигацию</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_stop_277c22">Стоп</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_stop_navigation_8a243dad">Остановить навигацию?</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_tap_to_dismiss_d17702a2">Нажмите, чтобы закрыть</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_work_293b31">Работа</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_yes_156c7">ДА</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_you_have_arrived_e0a68436">Вы прибыли</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_e_g_sunday_loop_1dd6a810">например, воскресный круг</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_label_27143b17">‹ $label</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_clear_all_5a4e690e">ОЧИСТИТЬ ВСЁ</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_dest_2072c2">Цель</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_fit_113f1">По размеру</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_full_screen_22a47efd">Во весь экран</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_select_all_ba2cd45d">ВЫБРАТЬ ВСЁ</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_openstreetmap_contributors_692ada40">© участники OpenStreetMap</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_auto_detects_direct_networks_choose_wi_fi_direct_a24126ac">Автоматически определяет сети DIRECT-. Выберите Wi-Fi Direct, если приборная панель является владельцем P2P-группы.</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_connect_without_a_qr_code_bd61ac9f">Подключиться без QR-кода</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_manual_setup_176cc583">РУЧНАЯ НАСТРОЙКА</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_some_motorcycles_don_t_show_a_pairing_qr_code_on_c3361949">Некоторые мотоциклы не показывают QR-код сопряжения на приборке. Если вы уже знаете </string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_t_box_wi_fi_transport_2b8fdfb9">Транспорт Wi-Fi T-Box</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_wi_fi_network_name_ssid_4e8cc3a7">Имя сети Wi-Fi (SSID)</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_wi_fi_password_aa1722dd">Пароль Wi-Fi</string>
+    <!-- Source: feature/pairing/TBoxQrScannerScreen.kt -->
+    <string name="legacy_t_box_scan_eb4ea12b">СКАНИРОВАНИЕ T-BOX</string>
+    <!-- Source: feature/ridedashboard/RideDashboardPreviewScreen.kt -->
+    <string name="legacy_uses_this_phone_s_gps_no_t_box_needed_same_rende_58537da7">Использует GPS этого телефона — T-Box не нужен. Тот же движок отрисовки и поворот по курсу/масштаб </string>
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_elevation_last_hour_10deed1a">ВЫСОТА / ПОСЛЕДНИЙ ЧАС</string>
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_now_12eb6">СЕЙЧАС</string>
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_waiting_for_gnss_elevation_f069100e">ОЖИДАНИЕ ВЫСОТЫ GNSS</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_battery_7593afdc">$battery%</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_g_force_fca415c5">ПЕРЕГРУЗКА (G)</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_motion_sensors_b224e96f">ДАТЧИКИ ДВИЖЕНИЯ</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_phone_system_b2b20c1d">ТЕЛЕФОН // СИСТЕМА</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_turn_rate_9cfa82a3">СКОРОСТЬ ПОВОРОТА</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_ahead_3b5bda1">ВПЕРЕДИ</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_compass_sun_45d9eeda">КОМПАС // СОЛНЦЕ</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_left_239807">ЛЕВО</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_right_4a5c9fc">ПРАВО</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_sun_horizon_6a3f3196">СОЛНЦЕ / ГОРИЗОНТ</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_sun_behind_2679a1ae">СОЛНЦЕ СЗАДИ</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_waiting_for_position_heading_75ece8e0">ОЖИДАНИЕ ПОЗИЦИИ И КУРСА</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_dashboard_customization_b85f9307">НАСТРОЙКА ПРИБОРНОЙ ПАНЕЛИ</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_grant_41dd0fc">Предоставить</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_live_layout_cdba0cde">ТЕКУЩИЙ МАКЕТ</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_map_1293c">КАРТА</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_map_stays_in_the_centre_f108a4fb">Карта остаётся в центре</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_needs_notification_access_44d40c16">Нужен доступ к уведомлениям</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_reset_defaults_6000a23">Сбросить настройки по умолчанию</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_swap_2785b3">Поменять местами</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_tap_to_assign_d1b41d7">НАЖМИТЕ, ЧТОБЫ НАЗНАЧИТЬ</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_widget_library_cb7316bf">БИБЛИОТЕКА ВИДЖЕТОВ</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_current_location_5f369a9c">ТЕКУЩЕЕ МЕСТОПОЛОЖЕНИЕ</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_eta_10d72">ETA</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_nav_route_20ffc4db">НАВИГАЦИЯ / МАРШРУТ</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_off_route_recalculating_7a9dcf5c">НЕ НА МАРШРУТЕ — ПЕРЕСЧЁТ</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_remaining_d9f0bdd6">ОСТАЛОСЬ</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_rise_2662c9">ВОСХОД</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_set_14042">ЗАКАТ</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_sun_1422c">СОЛНЦЕ</string>
+    <!-- Source: feature/ridedashboard/widget/NowPlayingWidget.kt -->
+    <string name="legacy_no_media_session_5cbc8365">-- НЕТ МЕДИАСЕАНСА --</string>
+    <!-- Source: feature/ridedashboard/widget/NowPlayingWidget.kt -->
+    <string name="legacy_no_artwork_2acf3875">НЕТ ОБЛОЖКИ</string>
+    <!-- Source: feature/ridedashboard/widget/NowPlayingWidget.kt -->
+    <string name="legacy_now_playing_media_session_45191bd6">СЕЙЧАС ИГРАЕТ // МЕДИАСЕАНС</string>
+    <!-- Source: feature/ridedashboard/widget/SatelliteWidget.kt -->
+    <string name="legacy_signal_coverage_fef46060">ПОКРЫТИЕ СИГНАЛА</string>
+    <!-- Source: feature/ridedashboard/widget/SpeedGaugeWidget.kt -->
+    <string name="legacy_ground_speed_gps_c8f77ac7">ПУТЕВАЯ СКОРОСТЬ / GPS</string>
+    <!-- Source: feature/ridedashboard/widget/SpeedGaugeWidget.kt -->
+    <string name="legacy_km_h_233edb">КМ/Ч</string>
+    <!-- Speed-unit label when the rider selects miles in Settings. -->
+    <string name="legacy_mph_12b05">МИЛЬ/Ч</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_average_km_h_d2517b1e">СРЕДНЯЯ КМ/Ч</string>
+    <!-- Trip-metrics average-speed label when the rider selects miles. -->
+    <string name="legacy_average_mph_6c8da62">СРЕДНЯЯ МИЛЬ/Ч</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_recent_8fd93a5b">НЕДАВНИЕ</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_speed_profile_2c1ba290">ПРОФИЛЬ СКОРОСТИ</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_trip_performance_8c26f32b">ПУТЕШЕСТВИЕ // ПОКАЗАТЕЛИ</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_waiting_for_speed_data_91032a2d">ОЖИДАНИЕ ДАННЫХ О СКОРОСТИ</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_check_cellular_data_b94ccb68">ПРОВЕРЬТЕ МОБИЛЬНЫЙ ИНТЕРНЕТ</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_live_23a8ec">LIVE</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_loading_3edc6d1c">ЗАГРУЗКА</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_open_meteo_gps_2cc3134f">OPEN-METEO • GPS</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_rain_probability_9ad3fd28">ДОЖДЬ $probability%</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_retrying_every_15s_e5e3f7a4">ПОВТОР КАЖДЫЕ 15С</string>
+    <!-- Source: feature/safety/SafetyDisclaimerDialog.kt -->
+    <string name="legacy_i_understand_and_continue_7ea73adb">Понимаю и продолжаю</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_android_auto_content_insets_7046c7dd">ОТСТУПЫ КОНТЕНТА ANDROID AUTO</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_choose_image_detail_and_how_moto_hub_balances_sm_577123e1">Выберите детализацию изображения и то, как MOTO-HUB балансирует плавность, нагрев, расход аккумулятора и нагрузку на Wi-Fi.</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_default_route_type_b528b630">ТИП МАРШРУТА ПО УМОЛЧАНИЮ</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_motorcycle_features_1ef519ec">ФУНКЦИИ МОТОЦИКЛА</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_power_mode_357a57fe">РЕЖИМ ПИТАНИЯ</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_resolution_bd8b64ac">РАЗРЕШЕНИЕ</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_turn_by_turn_routing_uses_your_own_stadia_maps_a_76117a71">Пошаговая навигация использует ваш собственный ключ API Stadia Maps, а не </string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_units_4d25f4f">ЕДИНИЦЫ</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_delete_79cb71cb">Удалить</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_delete_this_trip_b2d7ee2d">Удалить это путешествие?</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_delete_trip_1d14595a">Удалить путешествие</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_discard_c6d7a07e">Отменить</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_export_gpx_83319643">Экспорт GPX</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_finish_save_39e52944">Завершить и сохранить</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_gps_logging_works_with_the_phone_locked_37383170">Запись GPS работает при заблокированном телефоне</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_not_saved_d22da6ba">НЕ СОХРАНЕНО</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_name_this_ride_9a657605">Название поездки</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_opening_the_saved_trip_now_c583b843">Открываем сохранённое путешествие.</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_recorded_rides_823a26eb">ЗАПИСАННЫЕ ПОЕЗДКИ</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_recording_unavailable_9bbb7461">ЗАПИСЬ НЕДОСТУПНА</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_ride_archive_c06bf17a">АРХИВ ПОЕЗДОК</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_record_a_ride_ce0c4be6">Записать поездку</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_recording_was_too_short_to_keep_6761ae14">Запись слишком короткая, чтобы её сохранить</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_rename_trip_584eaba7">Переименовать путешествие</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_ride_recordings_need_at_least_100_m_15_s_of_move_260f0993">Для записи поездки нужно как минимум 100 м пути, 15 секунд движения и две точки GPS.</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_saved_4b07667">СОХРАНЕНО</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_start_new_recording_36e83013">Начать новую запись</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_start_recording_836b8b93">Начать запись</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_track_details_6b05b82d">ДЕТАЛИ ТРЕКА</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_the_gps_trace_and_all_recorded_statistics_will_b_6d59f1b7">GPS-трек и вся записанная статистика будут удалены без возможности восстановления.</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trip_name_5c3de586">Название путешествия</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trip_saved_to_recorded_rides_31c5533c">Путешествие сохранено в разделе «Записанные поездки»</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trips_4d520ce">Путешествия</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_try_again_25aeb09b">Повторить</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_view_2832a5">ПРОСМОТР</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trips_ca1b8627">‹ Путешествия</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_allow_apk_installation_a3116df5">Разрешить установку APK</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_checking_github_releases_7e509ccb">Проверка релизов GitHub...</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_moto_hub_updates_c98ab24f">Обновления MOTO-HUB</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_no_apk_asset_attached_to_this_release_7a89904d">К этому релизу не прикреплён APK-файл.</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_no_newer_version_is_available_b79316a1">Более новая версия недоступна.</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_pre_release_6bd19a9d">ПРЕДРЕЛИЗ</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_retry_4b33288">Повторить</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_skip_this_version_c2d1da37">Пропустить эту версию</string>
+    <!-- Source: session/ProjectionForegroundService.kt -->
+    <string name="legacy_projection_is_running_8c249b1a">Проекция запущена</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_fill_and_crop_8b8b5d16">Заполнить и обрезать</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_preserve_aspect_ratio_b340e377">Сохранить пропорции</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_show_the_complete_image_with_black_side_bars_whe_90d880eb">Показывать изображение полностью, при необходимости с чёрными полосами по краям.</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_stretch_display_45b17e87">Растянуть на экран</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_use_the_whole_tft_and_keep_all_content_visible_w_6c1c6337">Использовать весь экран TFT, сохраняя всё содержимое видимым, с небольшим растяжением.</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_use_the_whole_tft_without_stretching_crop_the_ed_8f0ac706">Использовать весь экран TFT без растяжения; обрезать края при несовпадении пропорций.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_adjust_the_phone_media_level_while_handlebar_cap_a55dd55a">Регулировать громкость медиа на телефоне, пока активен захват с руля.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_advanced_handlebar_mapping_d94a5a3b">Расширенная настройка руля</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_choose_the_day_night_style_used_by_android_auto_c4b5df26">Выберите дневной/ночной стиль, используемый Android Auto.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_customize_double_taps_holds_and_android_auto_com_59078421">Настройте двойные нажатия, удержания и команды Android Auto.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_destinations_available_to_one_press_handlebar_na_19306aee">Пункты назначения, доступные для навигации одним нажатием на руле.</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_double_tap_a52552f4">Двойное нажатие</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_map_appearance_b4c189c8">Внешний вид карты</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_media_volume_142f4af6">Громкость медиа</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_saved_places_f8158025">Сохранённые места</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_select_hold_6cc41543">Удержание выбора</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_detected_networks_fa8527c3">Обнаруженные сети</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_session_events_1a7f9e03">События сессии</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_android_auto_display_56c75982">Экран Android Auto</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_choose_widgets_for_each_side_panel_c04b42c9">Выберите виджеты для каждой боковой панели</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_customize_dashboard_3d094ab7">Настроить приборную панель</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_endpoint_geometry_protocol_and_feature_flags_7f197859">Конечная точка, геометрия, протокол и флаги функций</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_exclude_pixels_occupied_by_the_motorcycle_ui_c69e3740">Исключить пиксели, занятые интерфейсом мотоцикла</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_how_the_complete_android_auto_image_fits_the_tft_11c8bbf2">Как полное изображение Android Auto вписывается в экран TFT</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_override_automatic_profile_detection_b102be5">Переопределить автоматическое определение профиля</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_t_box_capability_inspector_e5159c9d">Инспектор возможностей T-Box</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_t_box_profile_override_f6f6b251">Переопределение профиля T-Box</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_tft_safe_margins_d1e86e30">Безопасные поля TFT</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_motorcycle_15a347f8">‹ Мотоцикл</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_customize_d780ac23">Настроить</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_dim_phone_display_4f190e58">Затемнить экран телефона</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_draw_recorded_points_on_the_dashboard_map_d0764c05">Отображать записанные точки на карте приборной панели.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_keep_the_tft_active_while_reducing_phone_distrac_f9df0d5a">Держать экран TFT активным, снижая отвлечение на телефон.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_open_the_on_screen_android_auto_controls_55f559a3">Открыть экранные элементы управления Android Auto.</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_preview_50417ba8">Предпросмотр</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_preview_touch_c103ae4d">Предпросмотр и сенсорное управление</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_show_gps_track_2ed7fcf2">Показывать GPS-трек</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_view_android_auto_and_interact_from_your_phone_1e4d3a53">Просматривайте Android Auto и управляйте им с телефона.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_review_your_route_before_starting_guidance_48917adb">Проверьте маршрут перед началом навигации.</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_take_me_home_bb1e43ee">Домой</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_about_moto_hub_6966e1f8">О MOTO-HUB</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_android_auto_cb210d00">Android Auto</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_announce_upcoming_maneuvers_while_navigating_7c1d9f50">Озвучивать предстоящие манёвры во время навигации</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_connect_on_launch_9e7cd0e0">Автоподключение при запуске</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_connect_recovery_trip_recording_1bf7551f">Автоподключение, восстановление, запись поездок</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_record_rides_3d1b712a">Автозапись поездок</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_recover_stalled_android_auto_and_ride_dashb_5da6ea2d">Автоматически восстанавливать зависшие потоки Android Auto и Ride Dashboard</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_bluetooth_capture_and_mapping_3e23fd19">Захват и назначение Bluetooth</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_connect_and_discover_t_box_when_app_opens_fe05f1ea">Подключаться и искать T-Box при запуске приложения</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_connection_automation_93f3bb33">Подключение и автоматизация</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_diagnostics_3748418c">Диагностика</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_disable_touchscreen_4f636f13">Отключить сенсорный экран</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_draw_detected_curved_segments_in_a_distinct_colo_906c94c">Отображать обнаруженные участки поворотов отдельным цветом на карте TFT</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_enable_logging_e57825e2">Включить ведение журнала</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_encoder_detail_and_power_mode_for_all_streams_9c18fdcf">Детализация кодера и режим энергопотребления для всех потоков</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_fuel_range_warning_e301d2ef">Предупреждение о запасе топлива</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_full_client_info_every_candidate_profile_s_score_fb2a321f">Полная информация CLIENT_INFO, оценка каждого профиля-кандидата, неизвестная команда </string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_golden_hour_hint_26c00b9f">Подсказка о золотом часе</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_highlight_curvy_roads_6d7866a">Выделять извилистые дороги</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_master_switch_for_the_diagnostic_log_off_means_n_1d7e2b81">Главный переключатель диагностического журнала. Выключено — значит ничего не записывается </string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_navigation_e5d7e634">Навигация</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_network_tests_and_application_logs_6064f99">Тесты сети и журналы приложения</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_preview_ride_dashboard_cf294e4">Предпросмотр Ride Dashboard</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_recovery_watchdog_eb0fb218">Наблюдатель восстановления</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_resolution_and_display_mode_70f7a2be">Разрешение и режим отображения</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_review_copy_share_or_clear_events_fa00934b">Просмотр, копирование, отправка или очистка событий</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_routes_through_fossgis_s_free_public_valhalla_se_5f3fb227">Прокладывает маршрут через бесплатный публичный сервер Valhalla от FOSSGIS вместо </string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_see_the_tft_render_on_this_phone_using_its_own_g_d21ea9ba">Просматривайте рендер TFT на этом телефоне, используя его собственный GPS — T-Box не нужен</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_show_forecast_conditions_at_your_destination_in__d467471f">Показывать прогноз погоды в пункте назначения в предпросмотре маршрута</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_show_minutes_to_the_nearest_sunrise_sunset_golde_840f15d">Показывать время в минутах до ближайшего золотого часа восхода/заката</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_start_gps_logging_with_projection_sessions_1c3d9c89">Начинать запись GPS вместе с сеансами проекции</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_t_box_discovery_wi_fi_binding_cellular_routes_32d84d5f">Поиск T-Box, привязка Wi-Fi, маршруты сотовой сети</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_try_without_a_key_demo_server_74e379d4">Попробовать без ключа (демо-сервер)</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_use_focus_and_handlebar_controls_even_when_the_t_d1be0479">Использовать фокус и управление с руля, даже если T-Box сообщает о сенсорном экране</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_verbose_t_box_logging_ee12f7b3">Подробное журналирование T-Box</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_video_quality_3ed2f63a">Качество видео</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_voice_guidance_a2d4eea6">Голосовые подсказки</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_warn_when_a_route_would_exceed_your_motorcycle_s_c31a0f09">Предупреждать, если маршрут превышает запас хода мотоцикла (задаётся в Гараже)</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_weather_at_arrival_44ffc4d8">Погода по прибытии</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_your_own_routing_api_key_for_turn_by_turn_94d8b202">Ваш собственный ключ API маршрутизации для пошаговой навигации</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_settings_7469104a">‹ Настройки</string>
+    <!-- Source: feature/trips/TripRecordingService.kt -->
+    <string name="legacy_gps_ride_recording_and_trip_statistics_28992d34">Запись поездки по GPS и статистика путешествия</string>
+    <!-- Source: session/PhoneDisplayDimmer.kt -->
+    <string name="legacy_moto_hub_display_dimmer_57b6244b">Затемнение экрана MOTO-HUB</string>
+    <!-- Dynamic UI templates. Keep positional placeholders unchanged. -->
+    <string name="legacy_filter_1_d_497daa14">ФИЛЬТР %1$d</string>
+    <string name="legacy_recording_1_s_b01f3573">ЗАПИСЬ · %1$s</string>
+    <string name="legacy_1_d_optimized_gps_points_de88df06">%1$d оптимизированных точек GPS</string>
+    <string name="legacy_place_1_d_name_6bdc57c6">Название места %1$d</string>
+    <string name="legacy_save_place_1_d_39c7a048">Сохранить место %1$d</string>
+    <string name="legacy_t_box_identifier_1_s_531e2638">Идентификатор T-Box: %1$s</string>
+    <string name="legacy_1_s_fe2c9a02">‹ %1$s</string>
+    <string name="legacy_motorcycle_buttons_control_1_s_6e2f90ac">Кнопки мотоцикла управляют %1$s</string>
+    <string name="legacy_rain_1_d_84b55e18">ДОЖДЬ %1$d%%</string>
+    <string name="legacy_1_d_c_41e7b8ff">%1$d°C</string>
+    <string name="legacy_1_d_km_h_6ce8c40f">%1$d КМ/Ч</string>
+    <!-- Weather forecast wind speed when the rider selects miles. -->
+    <string name="legacy_1_d_mph_669c2f51">%1$d МИЛЬ/Ч</string>
+    <string name="legacy_moto_hub_258caaa5">MOTO-HUB</string>
+    <string name="legacy_recording_this_ride_1aceedab">Запись этой поездки</string>
+    <string name="legacy_moto_hub_controls_f72ba5d1">Управление MOTO-HUB</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_available_e7e32615">%1$d доступно</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_remaining_e0c291">Осталось %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_2_s_a1c6054a">%1$s · %2$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1000_mt_x_cfdl26_a07555df">1000 MT-X (CFDL26)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_200_ms_snappier_singles_bddf5c9a">200 мс — более чёткие одиночные нажатия</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_300_ms_balanced_17f78a68">300 мс — сбалансированно</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_450_ms_forgiving_doubles_3234effd">450 мс — снисходительно к двойным нажатиям</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_500_ms_quicker_hold_a1cbda27">500 мс — быстрее срабатывает удержание</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_600_ms_balanced_9f5246b">600 мс — сбалансированно</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_800_ms_deliberate_hold_32e73399">800 мс — осознанное удержание</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_800mt_cfdl26_9a9a6453">800MT (CFDL26)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_800nk_advanced_cfdl26_8796cfe5">800NK Advanced (CFDL26)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_active_profile_dcb9be6f">АКТИВНЫЙ ПРОФИЛЬ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_4d461ce0">ANDROID AUTO</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_atms_1ed139">Банкоматы</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_avg_feb2">СРЕД</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_avg_speed_7231cd39">СРЕД. СКОРОСТЬ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_access_point_2a7fd7f4">Точка доступа</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_airports_db81a128">Аэропорты</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_album_cover_current_track_and_progress_5704cf2c">Обложка альбома, текущий трек и прогресс</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_altitude_7d3daec2">Высота</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_map_9e2be3c">Карта Android Auto</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_arc_speedometer_bearing_and_gnss_lock_status_a1dab290">Дуговой спидометр, курс и статус фиксации GNSS</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_assistant_ccab92be">Ассистент</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_attractions_ab6135cc">Достопримечательности</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_auto_1f51cf">Авто</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_auto_day_night_808f223b">Авто (день/ночь)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_backward_left_7f90d6f7">Назад — влево</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_backward_double_tap_left_bf920c29">Двойное нажатие назад — влево</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bakery_7628ee00">Пекарня</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_banks_3cfd197">Банки</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bars_pubs_8301b610">Бары и пабы</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_battery_phone_fc45d1a1">Аккумулятор и телефон</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_battery_charging_connectivity_temperature_and_mo_59cfa2d5">Аккумулятор, зарядка, подключение, температура и датчики движения</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bicycle_rental_cee64385">Прокат велосипедов</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_absolute_volume_change_3096ab72">Изменение абсолютной громкости Bluetooth</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_next_track_command_7a7046ee">Команда Bluetooth «следующий трек»</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_play_pause_command_a9252e58">Команда Bluetooth «воспроизведение/пауза»</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_previous_track_command_d68a66f2">Команда Bluetooth «предыдущий трек»</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl16_450sr_style_non_touch_b3fdf770">CFDL16 / несенсорный, стиль 450SR</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl16_legacy_b0fd3b8a">CFDL16 / устаревший</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl26_motoplay_landscape_touch_a52d575c">CFDL26 MotoPlay, альбомный, сенсорный</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl26_motoplay_portrait_handlebar_primary_c724cad9">CFDL26 MotoPlay, портретный, управление с руля</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfmoto_800nk_97f23a55">CFMOTO 800NK</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cl_c450_5c8b3190">CL-C450</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_crcp_sdk_0_9_23_x_non_touch_5621c1f8">CRCP / sdk 0.9.23.x, несенсорный</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_campsites_75e7180b">Кемпинги</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_car_service_917649">Автосервис</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_charging_5973c691">Зарядка</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_choose_a_widget_for_1_s_26345a66">Выберите виджет для %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_compass_9bdfd4f2">Компас</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_current_conditions_wind_humidity_via_open_meteo_4e58c8f3">Текущие условия, ветер, влажность через Open-Meteo</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_down_1de05778">D-pad вниз</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_left_1de3d2dd">D-pad влево</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_right_9eecea06">D-pad вправо</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_up_a8ebfef1">D-pad вверх</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d29c">D-pad ▲</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d2a0">D-pad ▶</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d2a6">D-pad ▼</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d2aa">D-pad ◀</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_dist_2005a6">ДИСТ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_distance_3fd77bf5">ДИСТАНЦИЯ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_day_light_2f4e1b57">День (светлая тема)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_detect_from_the_motorcycle_recommended_9fd07c6f">Определить по мотоциклу (рекомендуется)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_development_simulator_profile_45f9bdc8">Профиль симулятора разработки</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_do_nothing_a83eb158">Ничего не делать</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_double_press_c52a55d2">Двойное нажатие вниз</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_press_6ec23765">Нажатие вниз</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_double_f6f5f8f8">Вниз · двойное</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_single_1037016f">Вниз · одиночное</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_drinking_water_6ae0dde1">Питьевая вода</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_elapsed_c777dd5c">ПРОШЛО</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_elevation_857ea708">ВЫСОТА +</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_editing_1_s_a5399c23">Редактирование %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_elevation_profile_climb_rate_and_gps_accuracy_d7b5d893">Профиль высоты, скорость набора и точность GPS</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_favorites_3baf7a37">ИЗБРАННОЕ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_favorite_427c2dbc">Избранное</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_fire_stations_e5a3dc49">Пожарные части</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_food_21807e">Еда</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_forward_right_ed1ba1ce">Вперёд — вправо</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_forward_double_tap_right_50824858">Двойное нажатие вперёд — вправо</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_gnss_satellite_visibility_and_fix_status_55616e56">Видимость спутников GNSS и статус фиксации</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_gps_search_f2175dfe">ПОИСК GPS</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_gps_1_d_m_85cd2614">GPS ±%1$d м</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_guiding_to_destination_1328e050">Ведём к пункту назначения</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_heading_sun_altitude_and_rider_relative_sun_posi_8620d321">Курс, высота солнца и положение солнца относительно водителя</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_hospitals_466ae959">Больницы</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_hotels_stays_e91bd2ff">Отели и проживание</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_in_use_1_s_9a0bc66d">ИСПОЛЬЗУЕТСЯ • %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_key_configured_d2c8ebf">КЛЮЧ НАСТРОЕН</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_large_glove_friendly_actions_for_the_active_dash_ae3e3599">Крупные элементы управления, удобные в перчатках, для активной приборной панели.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_larger_absolute_volume_change_c11a1729">Более крупное изменение абсолютной громкости</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_left_panel_9dcb38cb">Левая панель</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_left_double_f4a67f33">Влево · двойное</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_left_single_de787aa">Влево · одиночное</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_log_copied_to_clipboard_a7cbe711">Журнал скопирован в буфер обмена</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_max_12944">МАКС</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_max_speed_6338424b">МАКС. СКОРОСТЬ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_mode_2431a3">РЕЖИМ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_moto_hub_simulator_72ee829">Симулятор MOTO-HUB</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_moving_87e69c4e">В ДВИЖЕНИИ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_manage_88ef8985">Управление</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_manage_guidance_search_a_new_destination_or_resu_7899102a">Управляйте навигацией, ищите новый пункт назначения или продолжайте маршрут.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_manual_recording_73634e37">Ручная запись</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_mirroring_8b513fa3">Зеркалирование</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_mirrors_android_auto_s_own_map_5091f0fa">Зеркалирует собственную карту Android Auto</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_motoplay_landscape_cfdl16_47ddf145">MotoPlay альбомный (CFDL16)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_motorcycle_service_4f005f46">Мотосервис</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigation_8beff614">НАВИГАЦИЯ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_no_key_set_25cc0b82">КЛЮЧ НЕ ЗАДАН</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_native_turn_by_turn_navigation_rendered_on_the_t_96caa565">Встроенная пошаговая навигация, отображаемая на TFT</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_nav_place_1_9c6fda12">Навигация · место 1</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_nav_place_2_9c6fda13">Навигация · место 2</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_nav_place_3_9c6fda14">Навигация · место 3</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigate_place_1_8cdacefb">Навигация → место 1</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigate_place_2_8cdacefc">Навигация → место 2</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigate_place_3_8cdacefd">Навигация → место 3</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_near_square_panel_544x512_7dfae4b9">Почти квадратная панель, 544x512</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_near_square_touch_panel_720x712_644c47fc">Почти квадратная сенсорная панель, 720x712</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_next_turn_eta_sun_position_daylight_remaining_48ea2589">Следующий поворот, время прибытия, положение солнца, оставшийся световой день</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_night_dark_e807e573">Ночь (тёмная тема)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_none_252358">Нет</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_now_playing_774920a4">Сейчас играет</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ok_select_85c307d1">ОК / выбор</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_off_1354f">Выкл</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_openstreetmap_12cdd70f">OpenStreetMap</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_phone_489454e">ТЕЛЕФОН</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_pad_fullscreen_screen_stays_on_tap_exit_to_leave_fed4fb3e">Полноэкранный режим панели — экран остаётся включённым. Нажмите «Выход», чтобы закрыть.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_parking_33f14b98">Парковка</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_pharmacies_3d1e90b1">Аптеки</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_picnic_8e7a005e">Пикник</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_police_8ed2913e">Полиция</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_post_offices_828381d7">Почтовые отделения</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_quick_controls_b6d227a9">Быстрое управление</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_recent_destinations_4acda7ca">НЕДАВНИЕ МЕСТА</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_recorded_route_823d22b9">ЗАПИСАННЫЙ МАРШРУТ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ride_dashboard_7a0ca94c">RIDE DASHBOARD</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rides_4a5be5b">ПОЕЗДКИ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_route_options_30bc2f87">ПАРАМЕТРЫ МАРШРУТА</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_route_preview_683e8cb1">ПРЕДПРОСМОТР МАРШРУТА</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_requires_a_real_bluetooth_key_up_e9aa900c">Требуется настоящее отпускание кнопки Bluetooth</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rest_areas_9d275e5a">Зоны отдыха</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ride_dashboard_ae928d6c">Ride Dashboard</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_right_panel_f3a982e0">Правая панель</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_right_double_8bb580fe">Вправо · двойное</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_right_single_a4f68975">Вправо · одиночное</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rotary_back_875f5656">Вращение назад</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rotary_forward_5bd716f6">Вращение вперёд</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_saved_routes_18cdcb23">СОХРАНЁННЫЕ МАРШРУТЫ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_search_results_3469955e">РЕЗУЛЬТАТЫ ПОИСКА</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_selected_for_1_s_49f82b77">ВЫБРАНО ДЛЯ %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_satellites_110a3ab8">Спутники</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_save_route_5f739206">Сохранить маршрут</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_search_a_destination_pick_a_favorite_or_start_fr_a4048c1b">Найдите пункт назначения, выберите избранное или начните с сохранённого маршрута.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_ok_6ca8fff1">Выбор / ОК</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_double_tap_enter_star_8a562c06">Двойное нажатие выбора — Enter / Star</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_hold_enter_star_217fe7bb">Удержание выбора — Enter / Star</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_tap_enter_star_b26a1adf">Нажатие выбора — Enter / Star</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_double_44fd35de">Выбор · двойное</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_hold_ce87ce0c">Выбор · удержание</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_tap_2ff408b6">Выбор · нажатие</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_send_navigation_and_selection_commands_to_androi_887e42f0">Отправлять команды навигации и выбора в Android Auto.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_speed_gauge_85be8ba0">Спидометр</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_start_android_auto_to_enable_the_controller_2a5eb409">Запустите Android Auto, чтобы включить контроллер.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_start_the_dashboard_to_enable_these_actions_1fe53fdf">Запустите приборную панель, чтобы включить эти действия.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_supermarkets_5e8b87fc">Супермаркеты</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_connected_35a5911b">T-Box подключён</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_time_274acd">ВРЕМЯ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_total_4c4e324">ВСЕГО</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_toilets_1eefa3e6">Туалеты</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_touch_controller_53c8733d">Сенсорный контроллер</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_trip_metrics_7c88c7c8">Показатели путешествия</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_trip_distance_duration_average_speed_and_speed_p_97ed123f">Расстояние, продолжительность, средняя скорость и профиль скорости путешествия</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_two_next_track_presses_inside_the_window_7db072f9">Два нажатия «следующий трек» в пределах интервала</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_two_presses_inside_the_double_tap_window_cc11c279">Два нажатия в пределах интервала двойного нажатия</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_create_log_file_9dac9184">Не удалось создать файл журнала</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_save_the_motorcycle_photo_d9e617d">Не удалось сохранить фото мотоцикла</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_double_press_5e63a079">Двойное нажатие вверх</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_press_df788a9e">Нажатие вверх</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_double_6854af1f">Вверх · двойное</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_single_8195b796">Вверх · одиночное</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_viewpoints_390623e8">Смотровые площадки</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_weather_ac24cfd4">Погода</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_where_are_you_going_f697966b">Куда вы едете?</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_wi_fi_direct_p2p_5247f7ce">Wi-Fi Direct (P2P)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_your_route_is_live_e56afe3e">Ваш маршрут активен</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_modelid_66660742_wi_fi_direct_non_touch_f23f0c0b">modelId 66660742, Wi-Fi Direct, несенсорный</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_absolute_volume_change_53b165a0">изменение абсолютной громкости</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_play_pause_command_31202f86">команда «воспроизведение/пауза»</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_previous_track_command_f9a52120">команда «предыдущий трек»</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_next_track_command_26b481c">команда «следующий трек»</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_both_1f3381">ОБА</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_live_564f882c">ANDROID AUTO: АКТИВНО</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_standby_9525974d">ANDROID AUTO: ОЖИДАНИЕ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_phone_preview_live_290cbf6">ПРЕДПРОСМОТР АКТИВЕН</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_7d22d040">ЗАПУСК</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_live_on_tft_d375f015">АКТИВНО НА TFT</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_preparing_69cf13e4">ПОДГОТОВКА</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_recording_route_df2cfb1a">ЗАПИСЬ МАРШРУТА</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_is_ready_to_connect_6b95609b">%1$s готов к подключению.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_allow_moto_hub_notifications_to_keep_streaming_v_4700fc1e">Разрешите уведомления MOTO-HUB, чтобы трансляция оставалась видимой и управляемой.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_allow_nearby_devices_and_location_to_detect_the__a4c1fa2c">Разрешите доступ к устройствам поблизости и геолокации, чтобы обнаружить сеть Wi-Fi T-Box.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_is_requesting_a_connection_to_1_s_ffe67969">Android запрашивает подключение к %1$s.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_camera_permission_is_required_to_read_the_t_box__4e87d105">Для считывания QR-кода T-Box требуется разрешение на использование камеры.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_connection_cancelled_you_can_try_again_at_any_ti_19906357">Подключение отменено. Вы можете повторить попытку в любое время.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_disconnected_372b4933">Отключено.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_motorcycle_8dd33db1">Мотоцикл</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_network_connected_searching_for_the_easyconn_ser_851763f6">Сеть подключена. Идёт поиск службы EasyConn.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_no_known_phone_location_yet_move_outdoors_and_re_47df6139">Местоположение телефона ещё не определено; выйдите на улицу и повторите попытку.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_pair_a_motorcycle_in_garage_before_starting_navi_76f923b3">Сопрягите мотоцикл в Гараже перед началом навигации.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_permission_granted_starting_the_capture_session_4805d845">Разрешение получено. Запуск сеанса захвата.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_profile_saved_connect_to_the_t_box_network_and_s_a9069261">Профиль сохранён. Подключитесь к сети T-Box и начните поиск.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_qr_code_scanned_but_the_profile_was_not_saved_1__e3b6164f">QR-код отсканирован, но профиль не сохранён: %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ride_dashboard_streaming_is_active_on_the_motorc_3729a921">Трансляция Ride Dashboard активна на TFT-экране мотоцикла.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_set_up_the_motorcycle_network_to_get_started_32bb831">Настройте сеть мотоцикла, чтобы начать.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_sharing_cancelled_by_the_user_72c1171e">Общий доступ отменён пользователем.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_something_went_wrong_try_again_b634c6cc">Что-то пошло не так. Попробуйте ещё раз.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_the_ride_dashboard_pipeline_f27c3ca7">Запуск конвейера Ride Dashboard.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_the_native_ride_dashboard_d28cae88">Запуск нативного Ride Dashboard.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_the_projection_pipeline_bcc6994a">Запуск конвейера проекции.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_stop_the_current_mirroring_or_android_auto_sessi_5390e262">Остановите текущий сеанс зеркалирования или Android Auto, прежде чем открывать Ride Dashboard отсюда.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_streaming_active_to_the_motorcycle_tft_b881d9a3">Трансляция на TFT-экран мотоцикла активна.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_qr_code_scanned_and_saved_1_s_is_ready_to__d28dd75d">QR-код T-Box отсканирован и сохранён. %1$s готов к подключению.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_connection_lost_reconnect_to_the_motorcycl_cb4aa98e">Соединение с T-Box потеряно. Переподключитесь к сети мотоцикла.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_found_you_can_now_choose_an_app_or_screen__163f7c13">T-Box найден. Теперь можно выбрать приложение или экран для трансляции.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_not_found_1_s_656efb68">T-Box не найден: %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_that_search_is_too_long_try_a_shorter_search_e54badba">Слишком длинный запрос. Попробуйте сократить его.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_curved_segments_detected_af1abc2b">Обнаружено извилистых участков: %1$d</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_entries_newest_first_7c18f089">%1$d записей  /  сначала новые</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_km_remaining_after_this_route_1b9e2ebf">%1$d км останется после этого маршрута</string>
+    <!-- Fuel-range warning when the rider selects miles. -->
+    <string name="legacy_1_d_mi_remaining_after_this_route_aaf9da45">%1$d миль останется после этого маршрута</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_2_s_3_s_4fcb415a">%1$s  %2$s: %3$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_2_d_c_4859b80e">%1$s · %2$d°C</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_connect_a_motorcycle_before_customizing_its_dash_cc281859">Подключите мотоцикл, прежде чем настраивать его приборную панель.</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_curvy_roads_ahead_15524f7">Впереди извилистая дорога</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_golden_hour_in_1_d_min_5c769914">Золотой час через %1$d мин</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_golden_hour_now_ab52d7b1">Сейчас золотой час</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_installed_version_1_s_2_d_29cd3201">Установленная версия: %1$s (%2$d)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_location_and_notifications_are_required_while_re_4f6ceb2b">Во время записи путешествия требуются геолокация и уведомления</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_opening_in_1_d_s_42389c34">Открытие через %1$d с…</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_peer_1_s_2_s_521b5084">Узел %1$s -&gt; %2$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_port_1_d_b6522e8b">Порт %1$d</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_open_github_8bdb9881">Не удалось открыть GitHub</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_open_wi_fi_settings_537aaf03">Не удалось открыть настройки Wi-Fi</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_open_the_companion_app_settings_c0a83e03">Не удалось открыть настройки приложения-компаньона</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_no_open_ports_found_8533cd9d">открытые порты не найдены</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_open_1_s_e55a596b">открыт: %1$s</string>
+    <!-- Android Auto pre-flight: an OEM companion app is installed, but may not be active. %1$s is
+         its name as shown on the phone (CFMOTO, Zontes Smart, Carbit Ride, ...). -->
+    <string name="legacy_1_s_detected_66208287">%1$s обнаружен</string>
+    <string name="legacy_moto_hub_starts_google_android_auto_not_1_s_3a77813f">MOTO-HUB запускает Google Android Auto, а не %1$s.</string>
+    <string name="legacy_1_s_can_still_take_over_the_dashboard_connection_5bc85002">%1$s может по-прежнему перехватить соединение с приборной панелью, даже находясь в фоне. Для надёжной проекции принудительно остановите его в настройках Android перед продолжением.</string>
+    <string name="legacy_continue_with_android_auto_f6c7ef01">Продолжить с Android Auto</string>
+    <string name="legacy_open_1_s_settings_470b74f2">Открыть настройки %1$s</string>
+    <string name="legacy_do_not_show_this_warning_again_d3abf59b">Больше не показывать это предупреждение</string>
+    <!-- Source: tbox/ProfileOverride.kt -->
+    <string name="legacy_generic_dashboard_53d1376b">Базовая приборная панель</string>
+    <!-- Source: tbox/ProfileOverride.kt -->
+    <string name="legacy_neutral_defaults_for_a_dashboard_that_is_not_rec_8d299cf0">Нейтральные настройки по умолчанию для нераспознанной приборной панели</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_unfamiliar_pairing_code_714f8ce7">Незнакомый код сопряжения</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_this_code_carries_wi_fi_details_for_1_s_but_it_w_422a5994">Этот код содержит данные Wi-Fi для %1$s, но он выпущен не с адреса Carbit, как у приборных панелей, известных MOTO-HUB.</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_several_manufacturers_ship_the_same_dashboard_so_49305d38">Несколько производителей поставляют одно и то же программное обеспечение приборной панели под своим брендом, так что это вполне может быть ваш мотоцикл. Продолжайте, только если вы отсканировали код с собственной приборной панели.</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_use_these_details_52f852ac">Использовать эти данные</string>
+
+    <!-- ===========================================================         Catalogue sweep, 2026-08-13: strings this worktree draws but had
+         no identifier for. Values come from the pro-poc catalogues, where
+         the same source strings are already translated.
+         ================================================================== -->
+
+    <!-- Source: MainActivity.kt -->
+    <string name="legacy_unable_to_open_discord_50e2e02e">Не удалось открыть Discord</string>
+
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_d_taps_away_from_the_prototype_779bf960">%d нажатий до прототипа</string>
+    <string name="legacy_community_source_fe28bfcc">СООБЩЕСТВО И ИСХОДНЫЙ КОД</string>
+    <string name="legacy_discord_c6d7d50c">Discord</string>
+    <string name="legacy_github_7f258fe3">GitHub</string>
+    <string name="legacy_map_rendering_by_maplibre_native_bsd_2_clause_ve_1f7cda7f">Рендеринг карты — MapLibre Native (BSD-2-Clause). Векторные тайлы — OpenFreeMap по схеме OpenMapTiles; растровые тайлы — OpenStreetMap Foundation. Поиск адресов — Photon. Построение маршрутов — Valhalla, на серверах Stadia Maps или демо-сервере FOSSGIS. Места — Overpass. Погода — Open-Meteo. Цены на топливо публикуются как открытые данные испанским Ministerio para la Transición Ecológica, португальским DGEG, французским Ministère de l\'Économie и итальянским MIMIT. Данные DGEG нельзя использовать в коммерческих целях.</string>
+    <string name="legacy_maps_data_b256210d">КАРТЫ И ДАННЫЕ</string>
+    <string name="legacy_maps_addresses_and_routes_are_built_on_data_by_o_f0b02b91">Карты, адреса и маршруты построены на данных © участников OpenStreetMap, распространяемых по лицензии ODbL.</string>
+    <string name="legacy_prototype_unlocked_856a4841">Прототип разблокирован</string>
+
+    <!-- Source: feature/androidauto/AndroidAutoHelpScreen.kt -->
+    <string name="legacy_a_notification_confirms_the_server_is_running_le_eacf82e">Уведомление подтверждает, что сервер запущен. Не останавливайте его: он будет работать, пока вы сами его не остановите или не перезагрузите телефон.</string>
+    <string name="legacy_android_auto_17_4_removed_the_way_an_app_can_ask_890c8f24">В Android Auto 17.4 убрали способ, которым приложение может запросить проекцию. MOTO-HUB всё равно пытается это сделать, и на старых версиях это работает — но если не сработало, Android Auto можно запустить вместо этого из собственного меню разработчика. Устанавливать ничего не нужно.</string>
+    <string name="legacy_android_auto_does_not_start_2266b70e">Android Auto не запускается</string>
+    <string name="legacy_every_time_android_auto_will_not_start_18ff3ab9">КАЖДЫЙ РАЗ, КОГДА ANDROID AUTO НЕ ЗАПУСКАЕТСЯ</string>
+    <string name="legacy_go_back_to_moto_hub_and_start_android_auto_it_co_ff8cc50d">Вернитесь в MOTO-HUB и запустите Android Auto. Соединение установится само в течение пары секунд — больше ничего нажимать не нужно.</string>
+    <string name="legacy_in_android_auto_s_developer_settings_open_the_me_1ea3a8cf">В настройках разработчика Android Auto откройте меню ⋮ в правом верхнем углу и выберите «Start head unit server». Этот пункт находится именно в меню, а не в списке настроек под ним.</string>
+    <string name="legacy_in_developer_settings_turn_on_add_new_cars_to_an_19f79566">В настройках разработчика включите «Add new cars to Android Auto» (в старых версиях этот пункт называется «Unknown sources»).</string>
+    <string name="legacy_jumps_straight_to_the_app_where_the_menu_above_l_7c8b2093">Переходит прямо в приложение, где находится это меню</string>
+    <string name="legacy_normally_moto_hub_waits_and_asks_android_auto_to_6c183bab">Обычно MOTO-HUB ждёт и просит Android Auto подключиться к нему. Версия 17.4 закрыла эту возможность для всех подобных приложений, не только для этого. Head unit server меняет направление на противоположное — Android Auto ждёт, а MOTO-HUB подключается к нему сам — эту лазейку Google оставил открытой для собственных инструментов тестирования.</string>
+    <string name="legacy_one_time_setup_ca24c531">ЕДИНОРАЗОВАЯ НАСТРОЙКА</string>
+    <string name="legacy_open_android_auto_settings_48a5120d">Открыть настройки Android Auto</string>
+    <string name="legacy_open_the_android_auto_app_scroll_to_the_bottom_a_69ae9e53">Откройте приложение Android Auto, прокрутите вниз и нажмите «Version» десять раз. Появятся настройки разработчика.</string>
+    <string name="legacy_why_14fa8">ПОЧЕМУ</string>
+
+    <!-- Source: feature/controls/BluetoothStatus.kt -->
+    <string name="legacy_allow_bluetooth_access_so_the_app_can_see_whethe_8754f4c2">Разрешите доступ к Bluetooth, чтобы приложение могло видеть, подключён ли мотоцикл.</string>
+    <string name="legacy_bluetooth_is_off_turn_it_on_then_pair_the_motorc_5375bc65">Bluetooth выключен — включите его, затем выполните сопряжение с мотоциклом.</string>
+    <string name="legacy_connected_now_1_s_if_that_is_the_motorcycle_the__cd016af1">Сейчас подключено: %1$s. Если это мотоцикл, кнопки руля могут управлять телефоном.</string>
+    <string name="legacy_no_audio_device_is_connected_right_now_with_the__7d4f4d3e">Сейчас не подключено ни одно аудиоустройство. При включённом мотоцикле его приборная панель должна появиться здесь — если этого не происходит, выполните сопряжение через настройки Bluetooth.</string>
+    <string name="legacy_this_phone_has_no_bluetooth_b42f7e85">На этом телефоне нет Bluetooth.</string>
+
+    <!-- Source: feature/controls/HandlebarMappingScreen.kt -->
+    <string name="legacy_a_button_the_app_has_not_been_taught_yet_53060697">Кнопка, которую приложение ещё не изучило</string>
+    <string name="legacy_a_single_press_acts_immediately_instead_of_waiti_ebd37a80">Одиночное нажатие срабатывает сразу, не дожидаясь окончания окна двойного нажатия. Двойное нажатие по-прежнему работает — просто сначала выполняется одиночное действие.</string>
+    <string name="legacy_allow_bluetooth_bbde9a57">Разрешить Bluetooth</string>
+    <string name="legacy_bluetooth_settings_ed5eb975">Настройки Bluetooth</string>
+    <string name="legacy_checking_bluetooth_ce222d3e">Проверка Bluetooth…</string>
+    <string name="legacy_choose_what_this_press_does_4e74fce9">Выберите, что делает это нажатие.</string>
+    <string name="legacy_done_1_d_presses_learned_dd4b86bd">Готово — изучено нажатий: %1$d.</string>
+    <string name="legacy_double_press_window_a8b0763c">Окно двойного нажатия</string>
+    <string name="legacy_every_card_now_describes_your_handlebar_buttons__f70bd7b3">Теперь каждая карточка описывает ваш руль. Кнопки, отмеченные как отсутствующие, убраны.</string>
+    <string name="legacy_finish_7d6e78b3">Завершить</string>
+    <string name="legacy_handlebar_7b449ccb">Руль</string>
+    <string name="legacy_hold_gestures_a5df4e6b">Жесты удержания</string>
+    <string name="legacy_hold_time_bba08d6e">Время удержания</string>
+    <string name="legacy_how_long_the_app_waits_before_deciding_a_press_w_fbe08ef2">Сколько времени приложение ждёт, прежде чем решить, что нажатие было двойным или удержанием.</string>
+    <string name="legacy_motorcycle_bluetooth_88c59adf">Bluetooth мотоцикла</string>
+    <string name="legacy_not_detected_yet_d1e8f877">пока не обнаружено</string>
+    <string name="legacy_not_on_my_bike_49509421">Нет на моём мотоцикле</string>
+    <string name="legacy_nothing_happens_some_dashboards_keep_a_button_fo_c80119d0">Ничего не происходит? Некоторые приборные панели оставляют кнопку себе и вообще ничего не отправляют на телефон — на CFMOTO CFDL16 именно так ведёт себя КОРОТКОЕ нажатие качельки. Отметьте её как отсутствующую, и она перестанет занимать место.</string>
+    <string name="legacy_on_the_motorcycle_do_this_5d34555e">На мотоцикле сделайте следующее</string>
+    <string name="legacy_one_card_per_button_with_what_a_press_a_double_p_e88303f5">По одной карточке на каждую кнопку с описанием того, что делают нажатие, двойное нажатие и удержание. Обучите руль, чтобы приложение знало, какие кнопки есть на самом деле.</string>
+    <string name="legacy_press_a_handlebar_button_fd958503">Нажмите кнопку на руле</string>
+    <string name="legacy_reset_actions_to_defaults_95ecb43">Сбросить действия к значениям по умолчанию</string>
+    <string name="legacy_skip_27599f">Пропустить</string>
+    <string name="legacy_snappy_singles_330a9d7e">Быстрые одиночные нажатия</string>
+    <string name="legacy_step_1_d_of_2_d_72bf41f6">ШАГ %1$d ИЗ %2$d</string>
+    <string name="legacy_stop_here_d51e892e">Остановиться здесь</string>
+    <string name="legacy_teach_my_handlebar_51393162">Обучить мой руль</string>
+    <string name="legacy_timing_937fe44a">ТАЙМИНГ</string>
+    <string name="legacy_turn_off_if_your_handlebar_needs_a_long_physical_c92718d1">Отключите, если ваш руль требует долгого физического нажатия для каждого клика — иначе такие нажатия будут восприниматься как удержание.</string>
+    <string name="legacy_controls_fd1b9add">‹ Управление</string>
+    <string name="legacy_handlebar_c1b6ada4">‹ Руль</string>
+
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_add_your_first_motorcycle_to_get_rolling_b8e9f267">Добавьте свой первый мотоцикл, чтобы начать.</string>
+    <string name="legacy_no_motorcycle_no_problem_4346def1">НЕТ МОТОЦИКЛА? НЕ ПРОБЛЕМА</string>
+
+    <!-- Source: feature/home/CoreAvailability.kt -->
+    <string name="legacy_advanced_needs_moto_hub_core_installed_and_paire_722fef7d">Advanced требует установленного и сопряжённого с T-Box MOTO-HUB (Core), чтобы подключаться, зеркалировать экран или запускать Android Auto.</string>
+    <string name="legacy_couldn_t_open_the_browser_3e0fae25">Не удалось открыть браузер.</string>
+    <string name="legacy_download_moto_hub_core_976f62e2">Скачать MOTO-HUB Core</string>
+    <string name="legacy_moto_hub_core_not_found_b76c3f4f">MOTO-HUB CORE НЕ НАЙДЕН</string>
+
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_android_auto_17_4_removed_the_way_apps_ask_it_to_b5455068">Android Auto 17.4 убрал способ, которым приложения запрашивали проекцию. Её всё ещё можно запустить из меню разработчика самого Android Auto.</string>
+    <string name="legacy_one_possible_cause_1_s_is_installed_and_can_keep_47cef163">Одна из возможных причин: установлено приложение %1$s, которое может занимать канал связи с приборной панелью даже в фоне. Если подключение продолжает не удаваться, принудительно остановите его на странице информации о приложении, затем повторите попытку.</string>
+    <string name="legacy_open_1_s_app_info_33a7c01c">Открыть информацию о приложении %1$s</string>
+    <string name="legacy_retry_connection_54743f76">Повторить подключение</string>
+    <string name="legacy_some_dashboards_never_broadcast_a_network_of_the_787ecd2c">Некоторые приборные панели никогда не создают собственную сеть: они подключаются к точке доступа, которую создаёт ваш телефон, используя SSID и пароль, показанные на панели. Если на вашей написано «откройте точку доступа Android», попробуйте сделать это.</string>
+    <string name="legacy_1_s_is_installed_and_may_be_holding_the_dashboar_2c02bb10">Установлено приложение %1$s, которое может удерживать приборную панель. Принудительно остановите его на странице информации о приложении, затем повторите попытку.</string>
+    <string name="legacy_try_my_phone_hosts_the_hotspot_d4f6db66">Попробуйте: мой телефон создаёт точку доступа</string>
+
+    <!-- Source: feature/home/HubViewModel.kt -->
+    <string name="legacy_network_connected_pairing_over_bluetooth_and_wai_5b4c6259">Сеть подключена. Сопряжение по Bluetooth и ожидание приборной панели.</string>
+
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_altitude_ft_89feab0c">ВЫСОТА ФУТ</string>
+    <string name="legacy_altitude_m_caa51e4f">ВЫСОТА М</string>
+    <string name="legacy_distance_ft_552284d9">РАССТОЯНИЕ ФУТ</string>
+    <string name="legacy_distance_km_5522856d">РАССТОЯНИЕ КМ</string>
+    <string name="legacy_distance_m_a7e856e2">РАССТОЯНИЕ М</string>
+    <string name="legacy_distance_mi_552285a7">РАССТОЯНИЕ МИЛИ</string>
+    <string name="legacy_max_km_h_45403037">МАКС КМ/Ч</string>
+    <string name="legacy_max_mph_5d129e29">МАКС МИЛЬ/Ч</string>
+
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_connect_and_recovery_57ed0872">Автоподключение и восстановление</string>
+    <string name="legacy_auto_recover_stalled_android_auto_streams_bd3e2d8e">Автоматически восстанавливать зависшие потоки Android Auto</string>
+    <string name="legacy_button_mapping_815600">Назначение кнопок</string>
+    <string name="legacy_buttons_control_android_auto_3dc44642">Кнопки управляют Android Auto</string>
+    <string name="legacy_drive_android_auto_with_the_motorcycle_s_buttons_ec16509d">Управляйте Android Auto кнопками мотоцикла</string>
+    <string name="legacy_handlebar_buttons_47b4fd2c">Кнопки руля</string>
+    <string name="legacy_managed_by_the_companion_app_its_controls_screen_9ad80a75">Управляется приложением-компаньоном: его экран Controls каждый раз при старте сеанса заново применяет собственную конфигурацию руля, перезаписывая то, что задано здесь. Настраивайте руль там.</string>
+    <string name="legacy_music_volume_9fa56d95">ГРОМКОСТЬ МУЗЫКИ</string>
+    <string name="legacy_off_means_the_mode_picker_stays_exactly_as_befor_c93efb5c">Если выключено, выбор режима остаётся точно таким же, как раньше.</string>
+    <string name="legacy_on_9ff">Вкл</string>
+    <string name="legacy_put_a_screen_on_the_tft_as_soon_as_the_motorcycl_60bf969c">Выводить экран на TFT сразу после подключения мотоцикла</string>
+    <string name="legacy_requires_the_phone_paired_to_the_motorcycle_s_bl_dda6960a">Требует, чтобы телефон был сопряжён с Bluetooth мотоцикла. Музыка продолжает играть, но её кнопки перехватываются, пока идёт сеанс.</string>
+    <string name="legacy_set_the_dash_clock_over_bluetooth_experimental_3431b284">Устанавливать часы приборной панели по Bluetooth (экспериментально)</string>
+    <string name="legacy_set_the_dash_clock_over_wi_fi_292a2ca5">Устанавливать часы приборной панели по Wi-Fi</string>
+    <string name="legacy_on_by_default_and_what_sets_the_time_on_most_das_6234cd82">Включено по умолчанию — так на большинстве приборных панелей устанавливается время. Отключайте только если ваша панель запрашивает время у MOTO-HUB, игнорирует ответ и всё равно показывает 01.01.1970: на таких устройствах запись часов ничего не меняет и может перезаписать время, установленное вручную на самой панели. При выключенной опции мотоцикл подключается как обычно, просто ему никогда не сообщается текущее время.</string>
+    <string name="legacy_your_dashboard_has_been_seen_asking_for_the_time_c02f4d97">Замечено, что ваша приборная панель запрашивает время, получает ответ и всё равно продолжает отсчёт от собственного включения. Этот переключатель ничего не меняет в любом положении: часы хранятся самой панелью, а не телефоном.</string>
+    <string name="legacy_settings_595d2043">Настройки</string>
+    <string name="legacy_some_dashboards_ask_for_the_time_over_bluetooth__b44ce43b">Некоторые приборные панели запрашивают время по Bluetooth вместо Wi-Fi и без этого остаются на 00:00. Требуется, чтобы мотоцикл уже был сопряжён с этим телефоном в настройках Bluetooth Android. Выключено по умолчанию; MOTO-HUB отвечает только устройству, которое запрашивает время в собственном протоколе панели.</string>
+    <string name="legacy_some_dashboards_forget_settings_like_the_clock_w_76d95842">Некоторые приборные панели забывают настройки, например часы, когда соединение Wi-Fi Direct полностью пропадает. Удерживает телефон подключённым к сети мотоцикла, пока вы не выйдете из приложения или не отключите Wi-Fi. Выключено по умолчанию; включайте, только если ваша панель теряет время после отключения.</string>
+    <string name="legacy_start_automatically_2cb44c45">Запускать автоматически</string>
+    <string name="legacy_start_on_connect_94487a47">Запуск при подключении</string>
+    <string name="legacy_stay_linked_to_the_bike_s_wi_fi_after_disconnect_81b0e941">Оставаться подключённым к Wi-Fi мотоцикла после отключения</string>
+    <string name="legacy_the_motorcycle_s_buttons_reach_the_phone_over_bl_356cbf0d">Кнопки мотоцикла передаются на телефон по Bluetooth как медиаклавиши. Пока идёт трансляция сеанса, MOTO-HUB может перехватывать их и управлять навигацией Android Auto вместо музыкального плеера.</string>
+    <string name="legacy_what_each_press_double_press_and_hold_does_97201ad9">Что делают одиночное нажатие, двойное нажатие и удержание</string>
+    <string name="legacy_what_to_do_when_android_auto_refuses_to_project_fa692d1b">Что делать, если Android Auto отказывается запускать проекцию</string>
+    <string name="legacy_what_to_start_5b78fc39">ЧТО ЗАПУСКАТЬ</string>
+    <string name="legacy_while_capture_is_on_the_volume_buttons_navigate__9e410bf">Пока захват включён, кнопки громкости используются для навигации, а не для регулировки звука — уровень прослушивания задайте здесь.</string>
+    <string name="legacy_with_this_on_moto_hub_skips_the_what_should_i_sh_498b0614">Когда это включено, MOTO-HUB пропускает экран «что показать?» и выводит выбранный экран на TFT сразу после установления связи с мотоциклом. Это срабатывает один раз за запуск приложения — остановите экран, и управление снова у вас.</string>
+
+    <!-- Source: ui/components/SystemKillNotice.kt -->
+    <string name="legacy_dismiss_c6dc4a6a">Закрыть</string>
+    <string name="legacy_stopped_by_your_phone_37b2b157">ОСТАНОВЛЕНО ВАШИМ ТЕЛЕФОНОМ</string>
+    <string name="legacy_your_last_session_ended_at_1_s_because_the_phone_8386f49c">Ваш последний сеанс завершился в %1$s, потому что телефон закрыл %2$s, а не из-за сбоя в приложении.</string>
+
+    <!-- ==================================================================
+         Catalogue sweep, 2026-08-13 (second pass): source strings that sit
+         inside an if/when/arrayOf within the lookup call.
+         ================================================================== -->
+
+    <!-- Source: feature/ai/AiSettingsScreen.kt -->
+    <string name="legacy_api_key_fb0d9b39">Ключ API</string>
+    <string name="legacy_replace_api_key_d64eadad">Заменить ключ API</string>
+
+    <!-- Source: feature/androidauto/AndroidAutoPreviewScreen.kt -->
+    <string name="legacy_hide_controls_2dc943b4">Скрыть элементы управления</string>
+
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_1_d_rpm_2_d_km_h_3_d_c_coolant_60ed46da">%1$d об/мин · %2$d км/ч · %3$d °C ОЖ</string>
+    <string name="legacy_obd_adapter_connected_29e365e9">Адаптер OBD подключён</string>
+    <string name="legacy_saved_4bf7e67">Сохранено</string>
+    <string name="legacy_the_dashboard_shows_why_on_the_motorcycle_442e8daa">Причина отображается на приборной панели мотоцикла.</string>
+    <string name="legacy_waiting_for_the_obd_adapter_b3b01207">Ожидание адаптера OBD</string>
+
+    <!-- Source: feature/controls/HandlebarMappingScreen.kt -->
+    <string name="legacy_listening_2ece009b">Прослушивание</string>
+    <string name="legacy_received_d3a64e01">Получено</string>
+    <string name="legacy_teach_again_4fb10bd5">Обучить заново</string>
+
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_bluetooth_is_turned_off_so_the_obd_adapter_canno_5a8640c">Bluetooth выключен, поэтому адаптер OBD недоступен.</string>
+    <string name="legacy_customizable_vector_map_rendered_on_the_tft_bfa6e220">Настраиваемая векторная карта на экране TFT</string>
+    <string name="legacy_gps_following_8ad5867b">Слежение по GPS</string>
+    <string name="legacy_moto_hub_needs_bluetooth_access_to_reach_the_obd_af681be3">MOTO-HUB нужен доступ к Bluetooth, чтобы подключиться к адаптеру OBD.</string>
+    <string name="legacy_no_map_live_engine_data_from_a_paired_elm327_ada_8ecf531c">Без карты: данные двигателя в реальном времени с сопряжённого адаптера ELM327</string>
+    <string name="legacy_no_paired_obd_adapter_found_pair_the_elm327_dong_90029f7c">Сопряжённый адаптер OBD не найден. Сначала сопрягите донгл ELM327.</string>
+    <string name="legacy_restore_gps_76fc23d8">Восстановить GPS</string>
+
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_mute_24c639">Без звука</string>
+    <string name="legacy_voice_on_8e4723ad">Голос включён</string>
+
+    <!-- Source: feature/obd/ObdFuelAirScreen.kt -->
+    <string name="legacy_the_ecu_is_adding_fuel_steadily_worth_a_look_if__da08dd7">ЭБУ стабильно добавляет топливо. Стоит проверить, если показатель продолжает расти.</string>
+    <string name="legacy_the_ecu_is_taking_fuel_away_steadily_worth_a_loo_b2e06214">ЭБУ стабильно убавляет топливо. Стоит проверить, если показатель продолжает падать.</string>
+
+    <!-- Source: feature/obd/ObdFullScanScreen.kt -->
+    <string name="legacy_last_scan_1c6351c7">ПОСЛЕДНЕЕ СКАНИРОВАНИЕ</string>
+    <string name="legacy_run_full_scan_62e71f9">Запустить полное сканирование</string>
+    <string name="legacy_scanning_f99dc8b1">СКАНИРОВАНИЕ</string>
+    <string name="legacy_scanning_b757d75">Сканирование…</string>
+
+    <!-- Source: feature/obd/ObdHubScreen.kt -->
+    <string name="legacy_bluetooth_is_turned_off_92ceda3f">Bluetooth выключен.</string>
+    <string name="legacy_connected_and_reading_1e53c68c">Подключено, идёт считывание</string>
+    <string name="legacy_connecting_ca35204e">Подключение…</string>
+    <string name="legacy_moto_hub_needs_bluetooth_access_to_reach_the_ada_8763b3f4">MOTO-HUB нужен доступ к Bluetooth, чтобы подключиться к адаптеру.</string>
+    <string name="legacy_no_paired_obd_adapter_found_72c35314">Сопряжённый адаптер OBD не найден.</string>
+    <string name="legacy_not_connected_273cf5d2">Не подключено.</string>
+
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_1h_af24">-1Ч</string>
+    <string name="legacy_climbing_6536490d">НАБОР ВЫСОТЫ</string>
+    <string name="legacy_descending_da6096f8">СНИЖЕНИЕ</string>
+    <string name="legacy_gnss_live_7bc47fe5">GNSS АКТИВЕН</string>
+    <string name="legacy_level_44fa364">УРОВЕНЬ</string>
+    <string name="legacy_no_fix_8982dd16">НЕТ ФИКСАЦИИ</string>
+    <string name="legacy_vertical_speed_427682fd">ВЕРТИКАЛЬНАЯ СКОРОСТЬ</string>
+
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_battery_level_508e0b71">УРОВЕНЬ ЗАРЯДА</string>
+    <string name="legacy_charging_843f5271">ЗАРЯДКА</string>
+    <string name="legacy_external_power_41cdb450">ВНЕШНЕЕ ПИТАНИЕ</string>
+    <string name="legacy_hot_1182d">ГОРЯЧИЙ</string>
+    <string name="legacy_low_power_483394f9">НИЗКИЙ ЗАРЯД</string>
+    <string name="legacy_no_sensor_69b15af9">НЕТ ДАТЧИКА</string>
+    <string name="legacy_normal_8999b0e7">НОРМА</string>
+    <string name="legacy_warm_288a85">ТЁПЛЫЙ</string>
+
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_east_205bfd">ВОСТОК</string>
+    <string name="legacy_glare_risk_8e426920">РИСК БЛИКОВ</string>
+    <string name="legacy_gnss_stale_fd32d3a0">GNSS УСТАРЕЛ</string>
+    <string name="legacy_ne_9b7">СВ</string>
+    <string name="legacy_no_gnss_a6d94c86">НЕТ GNSS</string>
+    <string name="legacy_north_47050e5">СЕВЕР</string>
+    <string name="legacy_nw_9c9">СЗ</string>
+    <string name="legacy_se_a52">ЮВ</string>
+    <string name="legacy_south_4b6d1ad">ЮГ</string>
+    <string name="legacy_sun_tracking_5fd65e2b">СЛЕЖЕНИЕ ЗА СОЛНЦЕМ</string>
+    <string name="legacy_sw_a64">ЮЗ</string>
+    <string name="legacy_west_2899af">ЗАПАД</string>
+
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_off_for_1_s_a8aabb23">Выключено для %1$s</string>
+    <string name="legacy_one_widget_pinned_on_1_s_9ab92ad6">Один виджет закреплён на %1$s</string>
+    <string name="legacy_rotating_on_1_s_c5e75b74">Чередование на %1$s</string>
+    <string name="legacy_this_panel_cycles_through_the_1_d_ticked_widgets_3a2b2d0e">Эта панель переключается между %1$d отмеченными виджетами.</string>
+    <string name="legacy_this_panel_shows_that_one_widget_and_never_rotat_f3acc606">Эта панель показывает только этот виджет и никогда не переключается. Отметьте ещё один, чтобы запустить карусель.</string>
+    <string name="legacy_tick_widgets_below_to_build_this_panel_s_carouse_ab0f3111">Отметьте виджеты ниже, чтобы собрать карусель этой панели. У каждой панели своя.</string>
+
+    <!-- Source: feature/ridedashboard/widget/SatelliteWidget.kt -->
+    <string name="legacy_2d_fix_weak_geometry_e5b0cd1f">2D-ФИКСАЦИЯ  •  СЛАБАЯ ГЕОМЕТРИЯ</string>
+    <string name="legacy_3d_fix_navigation_ready_bff99e13">3D-ФИКСАЦИЯ  •  ГОТОВО К НАВИГАЦИИ</string>
+    <string name="legacy_scan_26be7d">СКАНИРОВАТЬ</string>
+    <string name="legacy_searching_for_satellites_f009ee35">ПОИСК СПУТНИКОВ</string>
+
+    <!-- Source: feature/ridedashboard/widget/SpeedGaugeWidget.kt -->
+    <string name="legacy_gnss_ok_35ac4b15">GNSS OK</string>
+    <string name="legacy_n_4e">С</string>
+    <string name="legacy_w_57">З</string>
+
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_session_live_5f7f2456">СЕАНС АКТИВЕН</string>
+
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_capture_84285f26">Захват</string>
+    <string name="legacy_capturing_561c2223">Захват…</string>
+    <string name="legacy_recalibrate_ceebf5d4">Перекалибровать</string>
+
+    <!-- Source: feature/trips/TripLibraryUi.kt -->
+    <string name="legacy_enhanced_9c6c8376">РАСШИРЕННЫЙ</string>
+    <string name="legacy_gps_only_e6f03982">ТОЛЬКО GPS</string>
+         description; rendered outside the app's own Compose runtime, so it is a plain string
+         resource rather than a motoHubText() call). -->
+    <string name="handlebar_hid_capture_description">Позволяет MOTO-HUB считывать нажатия D-pad с Bluetooth HID-пульта на руле, когда в настройках «Кнопки руля» выбран режим HID.</string>
+
+    <!-- ==================================================================
+         Handlebar HID mode, phone-only Android Auto and the teach
+         prerequisite dialog (PR #8, rebased 2026-08-18).
+         ================================================================== -->
+    <string name="legacy_android_auto_isn_t_running_9f167e30">Android Auto не запущен</string>
+    <string name="legacy_teaching_the_handlebar_needs_a_live_android_auto_697217d0">Для обучения руля нужна активная сессия Android Auto, чтобы фиксировать нажатия. Подключитесь к мотоциклу или запустите Android Auto на этом телефоне без T-Box.</string>
+    <string name="legacy_connect_to_1_s_579387aa">Подключиться к %1$s</string>
+    <string name="legacy_start_on_this_phone_no_t_box_f1bcc79f">Запустить на этом телефоне (без T-Box)</string>
+    <string name="legacy_bluetooth_is_off_turn_it_on_then_pair_the_remote_356459fc">Bluetooth выключен — включите его, затем сопрягите пульт как клавиатуру.</string>
+    <string name="legacy_allow_bluetooth_access_so_the_app_can_read_the_r_bf160fa2">Разрешите доступ к Bluetooth, чтобы приложение могло считывать нажатия кнопок пульта.</string>
+    <string name="legacy_bluetooth_is_on_a_hid_remote_doesn_t_show_up_her_77795af8">Bluetooth включён. HID-пульт не отображается здесь как подключённое устройство — если нажатия всё ещё не распознаются, проверьте, что он сопряжён в системных настройках Bluetooth и что специальные возможности включены.</string>
+    <string name="legacy_or_right_now_without_the_t_box_21ba0502">ИЛИ ПРЯМО СЕЙЧАС, БЕЗ T-BOX</string>
+    <string name="legacy_android_auto_straight_to_your_phone_f0cc540c">Android Auto — прямо на ваш телефон</string>
+    <string name="legacy_input_protocol_8ff4fe4e">ПРОТОКОЛ ВВОДА</string>
+    <string name="legacy_most_dashboards_send_buttons_as_avrcp_media_keys_6e1dd82c">Большинство панелей отправляют кнопки как медиаклавиши AVRCP — оставьте здесь AVRCP. Выбирайте HID, только если пульт сопрягается как Bluetooth-клавиатура и его нажатия никогда не регистрируются ниже.</string>
+    <string name="legacy_hid_mode_also_needs_moto_hub_s_accessibility_ser_c0cdf4cc">Режиму HID также нужна включённая специальная возможность (Accessibility Service) MOTO-HUB, иначе нажатия не будут распознаваться.</string>
+    <string name="legacy_open_accessibility_settings_a01c954b">Открыть настройки специальных возможностей</string>
+    <string name="legacy_turn_on_moto_hub_so_handlebar_presses_reach_the__b41c5310">Включите MOTO-HUB, чтобы нажатия руля доходили до приложения с любого экрана</string>
+    <string name="legacy_was_moto_hub_s_switch_greyed_out_android_blocks__b5233420">Переключатель MOTO-HUB серый и неактивен? Android блокирует его для приложений, установленных не из магазина, а MOTO-HUB скачивается с GitHub. Откройте «Сведения о приложении», нажмите ⋮ в правом верхнем углу, выберите «Разрешить ограниченные настройки», затем вернитесь и включите переключатель.</string>
+    <string name="legacy_open_app_info_7c77c863">Открыть сведения о приложении</string>
+    <string name="legacy_where_allow_restricted_settings_lives_8f29fea1">Где находится «Разрешить ограниченные настройки»</string>
+    <string name="legacy_avrcp_media_keys_f50e20c7">AVRCP (медиаклавиши)</string>
+    <string name="legacy_hid_d_pad_a247f04a">HID (D-pad)</string>
+    <string name="legacy_default_the_dashboard_sends_bluetooth_media_key__ccbdfbf7">По умолчанию. Приборная панель отправляет команды Bluetooth-медиаклавиш для воспроизведения/паузы, треков и громкости.</string>
+    <string name="legacy_for_remotes_that_pair_as_a_bluetooth_keyboard_an_25055a66">Для пультов, которые сопрягаются как Bluetooth-клавиатура и отправляют нажатия D-pad. Требует включения службы специальных возможностей MOTO-HUB ниже.</string>
+
+    <!-- External display service (USB AOA) - notification channel and ongoing notification -->
+    <string name="legacy_moto_hub_external_display_streaming_1be823ca">Трансляция MOTO-HUB на внешний дисплей</string>
+    <string name="legacy_streaming_to_external_display_via_usb_ab5c31c6">Трансляция на внешний дисплей через USB</string>
+    <string name="legacy_stop_external_display_c050e9ab">Остановить внешний дисплей</string>
+    <string name="legacy_aap_accessory_probe_running_bcf6ccd1">Выполняется проверка аксессуара AAP</string>
+
+    <!-- About screen -->
+    <string name="legacy_your_phone_your_motorcycle_display_c5956fcb">Ваш телефон.\nВаш дисплей мотоцикла.</string>
+    <string name="legacy_follow_development_join_our_community_report_iss_b8b8fffa">Следите за разработкой, присоединяйтесь к сообществу, сообщайте о проблемах и скачивайте новые версии.</string>
+    <string name="legacy_moto_hub_is_an_independent_project_it_is_not_aff_9e4c2633">MOTO-HUB — независимый проект. Он не связан с Carbit, CFMOTO, каким-либо другим производителем, чья приборная панель использует EasyConn, Google или Android Auto, не одобрен и не спонсируется ими. Все названия продуктов и товарные знаки принадлежат их соответствующим владельцам.</string>
+    <string name="legacy_moto_hub_is_an_experimental_proof_of_concept_not_34b4b321">MOTO-HUB — экспериментальное доказательство концепции, а не готовый к использованию продукт.</string>
+    <string name="legacy_development_and_testing_happen_on_a_cfmoto_700mt_ac58afbf">Разработка и тестирование ведутся на приборной панели CFMOTO 700MT-ADV с телефонами OnePlus 13 / Galaxy Z Fold4. Другие мотоциклы, марки, версии прошивки T-Box и телефоны здесь не тестировались: возможно другое поведение, повторные попытки или полное отсутствие соединения. Если приборная панель показывает QR-код для сопряжения, стоит попробовать.</string>
+    <string name="legacy_do_not_rely_on_it_as_your_only_source_of_critica_39775433">Не полагайтесь на него как на единственный источник критически важной навигации. Настраивайте навигацию только на стоянке и используйте программное обеспечение на свой страх и риск.</string>
+
+    <!-- Garage - hero tiles -->
+    <string name="legacy_scan_motorcycle_qr_code_cc47d360">Сканировать QR-код мотоцикла</string>
+    <string name="legacy_point_your_camera_at_the_t_box_sticker_1fc1811">Наведите камеру на наклейку T-Box</string>
+    <string name="legacy_no_qr_manual_setup_e8495cc4">Нет QR-кода? Настройка вручную</string>
+    <string name="legacy_type_the_network_in_yourself_b35606b3">Введите сеть вручную</string>
+    <string name="legacy_scan_its_t_box_qr_code_ca4d32e3">Сканировать QR-код T-Box</string>
+    <string name="legacy_no_qr_manual_1dd2a7a7">Нет QR-кода? Вручную</string>
+    <string name="legacy_type_the_network_in_b00b50ec">Ввести сеть вручную</string>
+    <string name="legacy_used_by_phone_only_display_modes_without_a_t_box_13ed383e">Используется режимами отображения только на телефоне, без T-Box</string>
+    <string name="legacy_talk_to_a_second_phone_over_your_own_hotspot_2aec1606">Связь со вторым телефоном через собственную точку доступа</string>
+    <string name="legacy_default_settings_a0578342">Настройки по умолчанию</string>
+    <string name="legacy_group_intercom_c81733c6">Групповой интерком</string>
+
+    <!-- Motorcycle details - photo and Android Auto format buttons (short labels) -->
+    <string name="legacy_add_photo_203b2dd3">Добавить фото</string>
+    <string name="legacy_change_photo_ad0735e2">Изменить фото</string>
+    <string name="legacy_motorcycle_photo_4fd6c703">Фото мотоцикла</string>
+    <string name="legacy_fit_10ff1">ВПИСАТЬ</string>
+    <string name="legacy_stretch_baa072e5">РАСТЯНУТЬ</string>
+    <string name="legacy_crop_1fb290">ОБРЕЗАТЬ</string>
+
+    <!-- T-Box capability inspector - section titles and row labels -->
+    <string name="legacy_a_read_only_view_of_data_observed_directly_from__eb0959e6">Представление только для чтения данных, полученных напрямую от этого T-Box.</string>
+    <string name="legacy_wi_fi_network_68c4e1ac">Сеть Wi-Fi</string>
+    <string name="legacy_easyconn_endpoint_f9ecbf07">Конечная точка EasyConn</string>
+    <string name="legacy_nsd_package_bfb67045">Пакет NSD</string>
+    <string name="legacy_last_discovered_a02851f2">Последнее обнаружение</string>
+    <string name="legacy_diagnostics_54322d8c">ДИАГНОСТИКА</string>
+    <string name="legacy_if_easyconn_discovery_keeps_failing_briefly_reco_b8d938f8">Если обнаружение EasyConn постоянно не удаётся, ненадолго переподключитесь к этому T-Box и проверьте его известные порты (10915–10935) напрямую, чтобы увидеть, какой из них действительно отвечает.</string>
+    <string name="legacy_display_8e70a4a2">ДИСПЛЕЙ</string>
+    <string name="legacy_tft_capture_area_ad3b6865">Область захвата TFT</string>
+    <string name="legacy_orientation_d9c9db0">Ориентация</string>
+    <string name="legacy_reported_dpi_4b722c90">Заявленный DPI</string>
+    <string name="legacy_dpi_mode_9e4a5ea6">Режим DPI</string>
+    <string name="legacy_screen_type_5d60ca4e">Тип экрана</string>
+    <string name="legacy_reported_identity_b41296b">ЗАЯВЛЕННЫЕ ДАННЫЕ</string>
+    <string name="legacy_head_unit_name_1d44c987">Имя головного устройства</string>
+    <string name="legacy_vehicle_brand_1ca30d73">Марка мотоцикла</string>
+    <string name="legacy_vehicle_model_1d3cbd15">Модель мотоцикла</string>
+    <string name="legacy_these_values_are_shown_exactly_as_reported_by_th_16427b8c">Эти значения показаны точно так, как их сообщает T-Box. MOTO-HUB не определяет модель мотоцикла по QR-коду или имени сети.</string>
+    <string name="legacy_software_protocol_2108716b">ПРОГРАММНОЕ ОБЕСПЕЧЕНИЕ И ПРОТОКОЛ</string>
+    <string name="legacy_pxc_version_5fba84f3">Версия PXC</string>
+    <string name="legacy_sdk_version_aacf3ed2">Версия SDK</string>
+    <string name="legacy_software_version_8135c77f">Версия ПО</string>
+    <string name="legacy_version_code_301c55">Код версии</string>
+    <string name="legacy_reported_package_ec9e7619">Заявленный пакет</string>
+    <string name="legacy_product_type_42ccc3eb">Тип продукта</string>
+    <string name="legacy_transport_type_33b665f1">Тип транспорта</string>
+    <string name="legacy_function_mask_a68c5a14">Маска функций</string>
+    <string name="legacy_wi_fi_socket_timeout_c3c69476">Таймаут сокета Wi-Fi</string>
+    <string name="legacy_feature_flags_3e60189d">ФЛАГИ ФУНКЦИЙ</string>
+    <string name="legacy_screen_mirroring_3102b12f">Зеркалирование экрана</string>
+    <string name="legacy_screen_touch_4eb406ab">Касание экрана</string>
+    <string name="legacy_overlay_touch_d474eb4f">Касание наложения</string>
+    <string name="legacy_mirror_reconnect_e70c0c56">Переподключение зеркалирования</string>
+    <string name="legacy_landscape_adaptive_4f69625b">Адаптивный альбомный режим</string>
+    <string name="legacy_socket_authentication_94d326a5">Аутентификация сокета</string>
+    <string name="legacy_microphone_c888754a">Микрофон</string>
+    <string name="legacy_hid_input_9c332ccd">Ввод HID</string>
+    <string name="legacy_third_party_apps_a5fc13b2">Сторонние приложения</string>
+    <string name="legacy_phone_signal_e87f95ba">Сигнал телефона</string>
+    <string name="legacy_time_synchronization_62f3fb2d">Синхронизация времени</string>
+    <string name="legacy_bluetooth_calls_f80c25c3">Звонки по Bluetooth</string>
+    <string name="legacy_sensitive_client_info_fields_are_intentionally_e_4b966321">Конфиденциальные поля CLIENT_INFO намеренно исключены из хранения и отображения.</string>
+    <string name="legacy_capability_report_captured_65a39462">Отчёт о возможностях получен</string>
+    <string name="legacy_t_box_discovered_cd525276">T-Box обнаружен</string>
+    <string name="legacy_no_observations_yet_d99ce56e">Пока нет данных наблюдений</string>
+    <string name="legacy_client_info_was_captured_during_an_easyconn_hand_f72a40e8">CLIENT_INFO было получено во время установления соединения EasyConn.</string>
+    <string name="legacy_start_mirroring_or_android_auto_once_to_capture__cd900a4a">Запустите зеркалирование или Android Auto один раз, чтобы получить CLIENT_INFO.</string>
+    <string name="legacy_connect_this_motorcycle_then_start_mirroring_or__176c21dd">Подключите этот мотоцикл, затем запустите зеркалирование или Android Auto один раз.</string>
+    <string name="legacy_wait_288975">ОЖИДАНИЕ</string>
+    <string name="legacy_observed_1_s_43b8d8b3">Обнаружено %1$s</string>
+    <string name="legacy_not_reported_7aaeba0">Не передаётся</string>
+    <string name="legacy_supported_a4e9e48e">ПОДДЕРЖИВАЕТСЯ</string>
+    <string name="legacy_not_supported_14e0b361">НЕ ПОДДЕРЖИВАЕТСЯ</string>
+    <string name="legacy_not_reported_108c5fa0">НЕ СООБЩЕНО</string>
+
+    <!-- QR pairing - photo fallback dialog and live scanner -->
+    <string name="legacy_analyzing_qr_photo_aa205a9c">Анализ фото QR-кода…</string>
+    <string name="legacy_removing_display_patterns_and_trying_qr_recognit_b1c3a1e8">Удаление узоров дисплея и попытка распознавания QR-кода</string>
+    <string name="legacy_attempt_1_d_of_2_d_e7c367b5">Попытка %1$d из %2$d</string>
+    <string name="legacy_flash_on_64bdb02f">ВСПЫШКА ВКЛ</string>
+    <string name="legacy_flash_40cffd0">Вспышка</string>
+    <string name="legacy_zoom_1_s_d659e688">Зум %1$s</string>
+    <string name="legacy_max_12d44">Макс</string>
+    <string name="legacy_tap_the_qr_code_to_focus_use_zoom_if_it_is_small_2607a78c">Нажмите на QR-код для фокусировки • Используйте зум, если он маленький</string>
+
+    <!-- Safety disclaimer shown on first launch -->
+    <string name="legacy_safety_warning_243ef82e">ПРЕДУПРЕЖДЕНИЕ О БЕЗОПАСНОСТИ</string>
+    <string name="legacy_riding_requires_your_full_attention_never_intera_96038a24">Вождение требует полного внимания. Никогда не взаимодействуйте с MOTO-HUB, Android Auto, навигацией, зеркалированием, записью путешествия или любым экранным элементом управления во время движения мотоцикла.</string>
+    <string name="legacy_configure_and_verify_everything_only_while_parke_57e1b31b">Настраивайте и проверяйте всё только на стоянке. Используйте это приложение только в полностью безопасной и контролируемой ситуации. Если условия не являются полностью безопасными, не используйте его.</string>
+    <string name="legacy_moto_hub_is_not_a_safety_device_and_cannot_preve_a3d43f2f">MOTO-HUB не является устройством безопасности и не может предотвратить отвлечение внимания, аварии, травмы или повреждения. Вы несёте единоличную ответственность за безопасное вождение и соблюдение всех применимых законов.</string>
+    <string name="legacy_i_understand_do_not_show_this_warning_again_e4526192">Я понимаю — больше не показывать это предупреждение</string>
+
+    <!-- GitHub update dialog -->
+    <string name="legacy_downloading_fe585f4">Загрузка…</string>
+    <string name="legacy_download_and_install_508990da">Скачать и установить</string>
+
+    <!-- Home and shared UI -->
+    <string name="legacy_no_motorcycle_b58a6930">Нет мотоцикла</string>
+    <string name="legacy_stop_streaming_3eba75e4">Остановить трансляцию</string>
+    <string name="legacy_touch_the_preview_to_control_android_auto_91609ae0">Коснитесь предпросмотра, чтобы управлять Android Auto</string>
+
+    <!-- Handlebar mapping - action short labels, family headers and calibration hints -->
+    <string name="legacy_up_abb">Вверх</string>
+    <string name="legacy_down_2098c2">Вниз</string>
+    <string name="legacy_left_241427">Влево</string>
+    <string name="legacy_right_4b4d1fc">Вправо</string>
+    <string name="legacy_ok_9dc">OK</string>
+    <string name="legacy_place_1_45c34f38">Место 1</string>
+    <string name="legacy_place_2_45c34f39">Место 2</string>
+    <string name="legacy_place_3_45c34f3a">Место 3</string>
+    <string name="legacy_move_the_cursor_78e625b4">ПЕРЕМЕЩЕНИЕ КУРСОРА</string>
+    <string name="legacy_system_92af662f">СИСТЕМА</string>
+    <string name="legacy_navigate_to_f20c4b8a">НАВИГАЦИЯ К</string>
+    <string name="legacy_this_button_has_no_hold_skipping_automatically_44873c53">У этой кнопки нет удержания — пропускается автоматически.</string>
+    <string name="legacy_that_was_a_single_press_press_twice_quickly_for__e774e0f2">Это было одиночное нажатие — нажмите дважды быстро для двойного.</string>
+    <string name="legacy_that_was_a_quick_tap_press_and_hold_a_moment_lon_5b9c9d4d">Это было быстрое касание — нажмите и удерживайте чуть дольше.</string>
+    <string name="legacy_open_hotspot_settings_7d1f3d4a">Открыть настройки точки доступа</string>
+    <!-- The "MOTO-HUB is still looking" notification shown while a connection attempt runs,
+         and the hosted-network wording that tells the rider not to close the app. %1$s is
+         the motorcycle network name. -->
+    <string name="legacy_moto_hub_connection_progress_c260af34">Ход подключения MOTO-HUB</string>
+    <string name="legacy_looking_for_1_s_9983a22f">Поиск %1$s</string>
+    <string name="legacy_connecting_to_1_s_2f10e3b8">Подключение к %1$s</string>
+    <string name="legacy_keep_moto_hub_open_closing_it_stops_the_search_54ec507">Держите MOTO-HUB открытым — закрытие приложения останавливает поиск.</string>
+    <string name="legacy_hotspot_is_up_searching_it_for_the_dashboard_thi_caab4cd3">Точка доступа включена. Идёт поиск приборной панели — это может занять до 90 секунд, поэтому держите MOTO-HUB открытым.</string>
+    <!-- Asked once per video format tried, after a session that looked healthy from the phone:
+         only the rider can see whether the dashboard actually displayed it. %1$s is the
+         motorcycle name. -->
+    <string name="legacy_did_it_show_up_on_the_dashboard_f341c05">Появилось ли это на приборной панели?</string>
+    <string name="legacy_last_time_you_connected_to_1_s_everything_looked_46fc9a09">В прошлый раз при подключении к %1$s с этого телефона всё выглядело правильно. MOTO-HUB не может видеть экран приборной панели, поэтому это единственное, о чём приходится спрашивать вас.</string>
+    <string name="legacy_if_it_stayed_on_the_pairing_screen_moto_hub_will_40398b69">Если он остался на экране сопряжения, MOTO-HUB попробует другой видеоформат в следующей поездке и продолжит попытки, пока один из них не сработает.</string>
+    <string name="legacy_yes_i_saw_it_625527f4">Да, я это видел</string>
+    <string name="legacy_no_nothing_appeared_f92c88fc">Нет, ничего не появилось</string>
+    <!-- Shown when the video-format search cannot progress because every session so far ran the
+         Ride Dashboard, which sends its own format. -->
+    <string name="legacy_the_video_format_search_is_waiting_ac28c9a">Поиск видеоформата приостановлен</string>
+    <string name="legacy_moto_hub_is_still_looking_for_a_video_format_you_44b4c53c">MOTO-HUB всё ещё ищет видеоформат, который может отображать ваша приборная панель, но проверить его можно только при запущенном Android Auto — Ride Dashboard всегда отправляет собственный формат.</string>
+    <string name="legacy_connect_once_with_android_auto_and_the_search_mo_71871380">Подключитесь один раз через Android Auto, и поиск продолжится сам.</string>
+    <string name="legacy_got_it_7f79855f">Понятно</string>
+
+    <!-- ===========================================================
+         Catalogue sweep, 2026-08-24: strings this worktree draws but had no
+         identifier for. The photo-picker values come from the pro-poc
+         catalogues, where the same source strings are already translated;
+         the About paragraph is this worktree's own, rewritten when CORE
+         dropped to Android 12.
+         ================================================================== -->
+
+    <!-- Source: MainActivity.kt -->
+    <string name="legacy_camera_permission_is_required_to_take_a_photo_951c5abe">Для съёмки фото требуется разрешение на использование камеры</string>
+
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_browse_files_e6b23981">Обзор файлов</string>
+    <string name="legacy_choose_from_gallery_1d40e025">Выбрать из галереи</string>
+    <string name="legacy_downloads_cloud_drives_and_any_other_folder_eb4e2c46">Загрузки, облачные хранилища и любые другие папки.</string>
+    <string name="legacy_open_the_camera_and_shoot_it_now_75ae0eed">Откройте камеру и сделайте снимок прямо сейчас.</string>
+    <string name="legacy_pick_one_of_your_photos_913c1c70">Выберите одно из своих фото.</string>
+    <string name="legacy_take_a_photo_cefc733a">Сделать фото</string>
+
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_moto_hub_connects_an_android_12_phone_to_a_motor_b791c32e">MOTO-HUB подключает телефон на Android 12+ к приборной панели мотоцикла, сопрягающейся через EasyConn — программное обеспечение Carbit, которое поставляют несколько производителей, включая CFMOTO. Поддерживает зеркалирование экрана и приложений, проекцию Android Auto, сохранённые профили мотоциклов и диагностику на устройстве.</string>
+
+    <!-- Source: feature/controls — a controller button stands in for a handlebar press -->
+    <string name="legacy_handlebar_presses_32db65bc">НАЖАТИЯ РУЛЯ</string>
+    <string name="legacy_backward_hold_left_72d8761e">Удержание назад — Влево</string>
+    <string name="legacy_forward_hold_right_3f058b83">Удержание вперёд — Вправо</string>
+
+    <!-- Source: feature/diagnostics/BleExplorerScreen.kt — the Bluetooth LE workbench -->
+    <string name="legacy_bluetooth_le_explorer_2ab1f074">Обозреватель Bluetooth LE</string>
+    <string name="legacy_find_any_bluetooth_le_device_open_it_and_see_wha_ff9d191c">Найдите любое устройство Bluetooth LE, откройте его и посмотрите, из чего оно на самом деле состоит: его службы, характеристики и каждый отправленный байт. Создано для пультов, которые ничего о себе не сообщают, — нажимайте их кнопки во время подписки, и протокол сам запишется в журнал.</string>
+    <string name="legacy_devices_1_d_c9f468d8">УСТРОЙСТВА (%1$d)</string>
+    <string name="legacy_filter_by_name_address_or_service_5c4953c4">Фильтр по имени, адресу или службе</string>
+    <string name="legacy_not_connectable_a36d7984">  — не подключается</string>
+    <string name="legacy_services_99327804">службы: </string>
+    <string name="legacy_manufacturer_5ba47ab7">производитель: </string>
+    <string name="legacy_service_data_703f501b">данные службы: </string>
+    <string name="legacy_connected_839202e9">ПОДКЛЮЧЕНО</string>
+    <string name="legacy_rediscover_cece7f3c">Обнаружить заново</string>
+    <string name="legacy_mtu_517_7d540d89">MTU 517</string>
+    <string name="legacy_read_rssi_318ccc81">Считать RSSI</string>
+    <string name="legacy_read_26cdb6">Считать</string>
+    <string name="legacy_write_4ff67bf">Записать</string>
+    <string name="legacy_write_to_1_s_716e199f">Записать в %1$s</string>
+    <string name="legacy_bytes_in_hex_01_ff_0a_01ff0a_and_0x01_0xff_all_w_69a0e8b2">Байты в шестнадцатеричном виде — подойдут «01 FF 0A», «01ff0a» и «0x01,0xFF». Это записывается напрямую в устройство: на некоторых устройствах неверное значение меняет настройки, которые сложно вернуть обратно.</string>
+    <string name="legacy_hex_11afb">Hex</string>
+    <string name="legacy_not_valid_hex_yet_f28e24dc">Пока не является корректным hex.</string>
+    <string name="legacy_1_d_byte_s_f2d64482">%1$d байт(ов)</string>
+    <string name="legacy_no_response_bdcb77a0">Нет ответа</string>
+    <string name="legacy_traffic_eb2daddd">ТРАФИК</string>
+    <string name="legacy_nothing_yet_dc65bed9">Пока ничего нет.</string>
+    <string name="legacy_every_line_here_is_also_in_the_application_log_s_f3e682dd">Каждая строка здесь также есть в журнале приложения, поэтому сессию можно отправить в диагностическом отчёте.</string>
+    <string name="legacy_dash_clock_lab_a1a0638d">Лаборатория часов панели</string>
+    <string name="legacy_experiments_for_dashes_that_reset_the_clock_zont_a4c75a39">Эксперименты для панелей, сбрасывающих часы (Zontes, Voge)</string>
+    <string name="legacy_scan_connect_and_read_any_ble_device_byte_by_byt_c47fb770">Сканируйте, подключайтесь и считывайте любое устройство BLE побайтно</string>
+
+    <!-- Source: strings the extractor used to miss inside if/else expressions -->
+    <string name="legacy_stop_scanning_93cac2ef">Остановить сканирование</string>
+    <string name="legacy_scan_for_devices_883edf83">Сканировать устройства</string>
+    <string name="legacy_showing_named_devices_only_18320ef1">Показаны только именованные устройства</string>
+    <string name="legacy_showing_every_device_ab347b96">Показаны все устройства</string>
+    <string name="legacy_nothing_yet_a_remote_that_sleeps_only_advertises_231ea04a">Пока ничего нет. Пульт в спящем режиме передаёт сигнал всего несколько секунд после нажатия кнопки — нажмите её и держите пульт рядом.</string>
+    <string name="legacy_start_a_scan_to_see_what_is_around_bd69ed5b">Запустите сканирование, чтобы увидеть, что рядом.</string>
+    <string name="legacy_unsubscribe_862dd2b1">Отписаться</string>
+    <string name="legacy_subscribe_9621fd2a">Подписаться</string>
+
+    <!-- Source: feature/controls — actions that drive the Ride Dashboard itself -->
+    <string name="legacy_dashboard_next_panel_8f5432b1">Приборная панель: следующая панель</string>
+    <string name="legacy_dashboard_fullscreen_map_1bd08691">Приборная панель: карта на весь экран</string>
+    <string name="legacy_dashboard_zoom_the_map_on_me_4f78353">Приборная панель: приблизить карту ко мне</string>
+    <string name="legacy_dashboard_change_the_left_widget_2ac18bf8">Приборная панель: сменить левый виджет</string>
+    <string name="legacy_dashboard_change_the_right_widget_e40e68ad">Приборная панель: сменить правый виджет</string>
+    <string name="legacy_panel_33b634ef">Панель +</string>
+    <string name="legacy_map_full_b08caf3">Карта целиком</string>
+    <string name="legacy_zoom_me_5ca904e5">Приблизить</string>
+    <string name="legacy_widget_l_b0744190">Виджет Л</string>
+    <string name="legacy_widget_r_b0744196">Виджет П</string>
+
+    <!-- Source: feature/controls — actions that drive the rider's music -->
+    <string name="legacy_music_464f605">МУЗЫКА</string>
+    <string name="legacy_music_play_pause_f246dd44">Музыка: воспроизведение / пауза</string>
+    <string name="legacy_music_next_track_516d3c09">Музыка: следующий трек</string>
+    <string name="legacy_music_previous_track_dab94b8d">Музыка: предыдущий трек</string>
+    <string name="legacy_music_volume_up_f45c31d6">Музыка: громче</string>
+    <string name="legacy_music_volume_down_4e0f651d">Музыка: тише</string>
+    <string name="legacy_play_25ff54">Воспроизвести</string>
+    <string name="legacy_next_24ff13">Далее</string>
+    <string name="legacy_previous_b7ee1f17">Назад</string>
+    <string name="legacy_vol_4eff3fe">Гром. +</string>
+    <string name="legacy_vol_4f015e5">Гром. −</string>
+
+    <!-- Source: feature/controls — the three input sources, and which one is live -->
+    <string name="legacy_motorcycle_handlebar_dc90fcfc">РУЛЬ МОТОЦИКЛА</string>
+    <string name="legacy_android_auto_17_4_removed_the_way_an_app_can_ask_217ec1b2">В Android Auto 17.4 убрали способ, которым приложение может запросить проекцию. MOTO-HUB всё равно пытается, и на старых версиях это работает — но если не срабатывает, четыре шага ниже запускают Android Auto через его собственное меню разработчика. Этот способ работает, когда ничего другое не помогает, и вам не нужно ничего устанавливать.</string>
+    <string name="legacy_start_android_auto_yourself_3b0dffe1">ЗАПУСТИТЕ ANDROID AUTO САМОСТОЯТЕЛЬНО</string>
+    <string name="legacy_open_the_android_auto_app_s_settings_scroll_to_t_4ef36207">Откройте настройки приложения Android Auto, прокрутите вниз и нажмите «Версия» десять раз. Это разблокирует параметры разработчика — сделать это нужно только один раз.</string>
+    <string name="legacy_stay_on_that_same_android_auto_settings_screen_o_2c08cebc">Оставаясь на том же экране настроек Android Auto, откройте меню из трёх точек в правом верхнем углу и выберите «Start head unit server». Это в этом меню, а не в параметрах разработчика. Именно этот шаг всё решает.</string>
+    <string name="legacy_while_you_are_in_there_629f07a5">РАЗ УЖ ВЫ ТАМ</string>
+    <string name="legacy_open_developer_settings_from_that_same_screen_an_4629699">Откройте параметры разработчика с того же экрана и включите «Add new cars to Android Auto» (в старых версиях это называется «Unknown sources»). В Android Auto 17.2 и более ранних версиях одного этого переключателя часто достаточно. Начиная с версии 17.3 — нет, нужен шаг 2, — поэтому не останавливайтесь здесь, если Android Auto всё ещё не запускается.</string>
+
+    <!-- Source: androidauto/AndroidAutoSelfModeHelp — the step the home screen and the
+         Android Auto preview draw when projection needs the rider to do something -->
+    <string name="legacy_start_head_unit_server_da7b299f">Запустить «head unit server»</string>
+    <string name="legacy_the_three_dot_menu_at_the_top_right_of_android_a_d6625ac7">меню из трёх точек в правом верхнем углу настроек самого Android Auto</string>
+    <string name="legacy_unlock_android_auto_s_developer_options_first_op_2865efda">Сначала разблокируйте параметры разработчика Android Auto: откройте его настройки, прокрутите вниз и нажмите «Версия» десять раз.</string>
+    <string name="legacy_enable_add_new_cars_to_android_auto_75bf90fa">Включить «Add new cars to Android Auto»</string>
+    <string name="legacy_android_auto_then_developer_settings_f55db1c8">Android Auto, затем параметры разработчика</string>
+
+    <!-- Source: feature/androidauto/AndroidAutoPreviewScreen — the preview's own status line -->
+    <string name="legacy_android_auto_is_not_running_start_a_session_from_e803c9ee">Android Auto не запущен. Начните сессию с главного экрана.</string>
+    <string name="legacy_preparing_android_auto_db146bea">Подготовка Android Auto…</string>
+    <string name="legacy_waiting_for_android_auto_to_start_projecting_b7646bd0">Ожидание начала проекции Android Auto…</string>
+    <string name="legacy_live_preview_touch_enabled_73752c4b">Прямой просмотр · касание включено</string>
+
+    <!-- Source: failure text the home screen's error banner draws. Declared as constants and compared by
+         identity on the way there, so the catalogue is the only place they can be translated -->
+    <string name="legacy_google_android_auto_never_connected_to_moto_hub__bd46b5a3">Google Android Auto так и не подключился к MOTO-HUB. В новых версиях Android Auto убрали способ, которым приложения запрашивают проекцию, поэтому запустите его из самого Android Auto. Откройте настройки приложения Android Auto, прокрутите вниз и нажмите «Версия» десять раз, чтобы разблокировать параметры разработчика. Затем на том же экране настроек откройте меню из трёх точек в правом верхнем углу и выберите «Start head unit server» — это меню находится на обычном экране настроек Android Auto, а не в параметрах разработчика. Оставьте MOTO-HUB запущенным: он подключится сам в течение пары секунд, и сервер можно оставить работать до следующего раза.</string>
+    <string name="legacy_google_android_auto_took_moto_hub_s_request_and__ae0978d0">Google Android Auto принял запрос MOTO-HUB и затем проигнорировал его. Именно так он поступает с головным устройством, которому не сказали доверять. Откройте настройки приложения Android Auto, прокрутите вниз и нажмите «Версия» десять раз, чтобы разблокировать параметры разработчика, откройте параметры разработчика и включите «Add new cars to Android Auto» (в старых сборках это называется «Unknown sources»), затем снова запустите Android Auto из MOTO-HUB. Если по-прежнему ничего не происходит, вернитесь на экран настроек Android Auto и используйте меню из трёх точек в правом верхнем углу: «Start head unit server».</string>
+    <string name="legacy_google_android_auto_took_moto_hub_s_request_and__3e12afc0">Google Android Auto принял запрос MOTO-HUB и затем проигнорировал его — это всё, что делает с ним эта версия: в Android Auto 17.3 и новее убрали способ, которым приложение может запросить проекцию. Вместо этого запустите его из Android Auto. Откройте настройки приложения Android Auto, прокрутите вниз и нажмите «Версия» десять раз, чтобы разблокировать параметры разработчика, затем откройте меню из трёх точек в правом верхнем углу того же экрана настроек и выберите «Start head unit server». Оставьте MOTO-HUB запущенным: он подключится сам в течение пары секунд. Пока вы там, «Add new cars to Android Auto» в параметрах разработчика тоже должно быть включено.</string>
+    <string name="legacy_another_easyconn_session_is_already_using_the_lo_fa50b26f">Другая сессия EasyConn уже использует локальные порты подключения (10920–10922). Остановите активную сессию MOTO-HUB или принудительно завершите собственное приложение-компаньон вашего мотоцикла (CFMOTO, Zontes Smart, Carbit Ride и аналоги других марок), затем повторите попытку подключения.</string>
+    <string name="legacy_phone_wi_fi_is_off_turn_it_on_then_tap_connect_a_5fd21cc0">Wi-Fi телефона выключен. Включите его, затем снова нажмите «Подключить».</string>
+    <string name="legacy_phone_hotspot_is_off_turn_it_on_then_tap_connect_683a58f1">Точка доступа телефона выключена. Включите её, затем снова нажмите «Подключить».</string>
+    <string name="legacy_action_needed_a446e8df">ТРЕБУЕТСЯ ДЕЙСТВИЕ</string>
+    <string name="legacy_do_this_in_android_auto_9a49aaee">СДЕЛАЙТЕ ЭТО В ANDROID AUTO</string>
+    <string name="legacy_show_me_how_73baf02b">Покажите как</string>
+    <string name="legacy_for_dashes_that_reset_their_clock_at_every_ignit_64c2ff15">Для панелей, сбрасывающих часы при каждом цикле зажигания (в первую очередь Zontes и Voge). Когда панель включена, лаборатория подключается по Bluetooth, слушает эфир, затем отправляет время в пяти разных форматах и записывает каждый байт. Прокатитесь, включите и выключите зажигание, а затем поделитесь журналом приложения: он покажет, какой формат приняла панель.</string>
+    <string name="legacy_run_clock_experiments_8ad4688f">Запустить эксперименты с часами</string>
+    <string name="legacy_live_log_831d05f0">ЖУРНАЛ В РЕАЛЬНОМ ВРЕМЕНИ</string>
+    <string name="legacy_nothing_yet_power_the_dash_on_then_run_the_exper_b1ec5c8f">Пока ничего нет. Включите панель, затем запустите эксперименты.</string>
+    <string name="legacy_moto_hub_closed_unexpectedly_30f439d7">MOTO-HUB неожиданно закрылся</string>
+    <string name="legacy_the_last_time_you_used_moto_hub_it_stopped_becau_8448d27c">В последний раз при использовании MOTO-HUB работа приложения прервалась из-за ошибки. Отправка диагностического отчёта поможет разработчику выяснить причину.</string>
+    <string name="legacy_the_report_contains_your_motorcycle_s_dashboard__f4208b9f">Отчёт содержит модель приборной панели вашего мотоцикла, модель вашего телефона, версии Android и Android Auto, установленные версии MOTO-HUB, а также журнал приложения с информацией об ошибке. Пароли, позиции и аппаратные адреса никогда не включаются.</string>
+    <string name="legacy_send_reports_automatically_from_now_on_7cdd2209">Отправлять отчёты автоматически впредь</string>
+    <string name="legacy_send_report_55908cac">Отправить отчёт</string>
+    <string name="legacy_how_your_data_is_handled_ff77c87f">Как обрабатываются ваши данные</string>
+    <string name="legacy_not_now_e202d7e9">Не сейчас</string>
+    <string name="legacy_help_improve_moto_hub_9bf5292c">Помогите улучшить MOTO-HUB</string>
+    <string name="legacy_moto_hub_can_send_a_diagnostics_report_to_the_de_36cc6ba6">MOTO-HUB может отправить диагностический отчёт разработчику: модель приборной панели вашего мотоцикла, модель вашего телефона, версии Android, Android Auto, установленные версии MOTO-HUB и журнал приложения. Пароли, позиции и аппаратные адреса никогда не включаются.</string>
+    <string name="legacy_reports_go_out_at_most_once_a_day_after_an_updat_6fc12b8d">Отчёты отправляются не чаще одного раза в день, после обновления или после сбоя, и только через соединение с доступом в интернет. Ваш ID поддержки отображается в разделе Настройки ▸ Диагностика, где это можно включить или выключить в любое время.</string>
+    <string name="legacy_send_reports_5c810947">Отправлять отчёты</string>
+    <string name="legacy_diagnostics_privacy_notice_1f708f84">Уведомление о конфиденциальности диагностики</string>
+    <string name="legacy_support_id_5239972c">ID поддержки</string>
+    <string name="legacy_moto_hub_support_id_7149b87">ID поддержки MOTO-HUB</string>
+    <string name="legacy_tap_to_copy_quote_it_when_asking_for_help_it_ide_edc7231">Нажмите, чтобы скопировать. Указывайте его при обращении за помощью — он идентифицирует этот телефон и мотоцикл.</string>
+    <string name="legacy_support_id_copied_63da1e38">ID поддержки скопирован</string>
+    <string name="legacy_what_gets_sent_f4a13bbf">Что отправляется</string>
+    <string name="legacy_read_what_a_report_contains_then_choose_whether__e679dae">Узнайте, что содержит отчёт, а затем решите, отправлять ли его</string>
+    <string name="legacy_who_holds_your_reports_how_long_they_are_kept_an_ea54a6b7">Кто хранит ваши отчёты, как долго они хранятся и как их удалить</string>
+    <string name="legacy_send_diagnostics_now_9368c9ea">Отправить диагностику сейчас</string>
+    <string name="legacy_this_build_has_no_collector_configured_e224996">В этой сборке не настроен сборщик отчётов</string>
+    <string name="legacy_logging_is_off_the_log_would_end_at_1_s_c9d7198e">Ведение журнала выключено; журнал закончился бы на %1$s</string>
+    <string name="legacy_logging_is_off_there_is_no_log_to_send_eca8d32d">Ведение журнала выключено; отправлять нечего</string>
+    <string name="legacy_send_diagnostics_automatically_880f35b7">Отправлять диагностику автоматически</string>
+    <string name="legacy_sends_the_report_above_to_the_developer_at_most__8689def0">Отправляет указанный выше отчёт разработчику не чаще одного раза в день, после обновления или после сбоя — только через соединение с доступом в интернет. Модели приборной панели и телефона, версии приложения и журнал приложения; никогда пароли, позиции или аппаратные адреса.</string>
+    <string name="legacy_logging_is_off_d9325d5a">ВЕДЕНИЕ ЖУРНАЛА ВЫКЛЮЧЕНО</string>
+    <string name="legacy_nothing_has_been_recorded_since_1_s_what_was_log_1be484ac">С %1$s ничего не записывалось. То, что было записано раньше, сохраняется — выключение ведения журнала останавливает новые записи, но никогда не удаляет старые.</string>
+    <string name="legacy_nothing_has_been_recorded_and_there_is_no_earlie_dd873fa0">Ничего не записано, и более раннего журнала тоже нет.</string>
+    <string name="legacy_a_report_sent_now_carries_that_log_so_it_says_no_cb65d9dc">Отчёт, отправленный сейчас, содержит этот журнал, поэтому он ничего не скажет о том, что приложение делает сегодня. Чтобы сообщить о проблеме, снова включите ведение журнала, повторите ситуацию, а затем отправьте.</string>
+    <string name="legacy_that_worked_keep_it_b0100883">Сработало — оставить?</string>
+    <string name="legacy_your_dashboard_is_now_accepting_the_picture_on_t_a2e41389">Ваша приборная панель теперь принимает изображение в профиле %1$s. Продолжать использовать его для этого мотоцикла?</string>
+    <string name="legacy_you_have_just_found_out_something_moto_hub_could_5d173f67">Вы только что выяснили то, что MOTO-HUB не смог определить сам: какой профиль на самом деле принимает эта приборная панель. Отправка журнала передаёт эту информацию, чтобы следующий владелец такого же мотоцикла получил правильный результат с первого раза.</string>
+    <string name="legacy_send_my_log_now_80f590fe">Отправить мой журнал сейчас</string>
+    <string name="legacy_send_logs_automatically_from_now_on_1efdfbe9">Отправлять журналы автоматически впредь</string>
+    <string name="legacy_keep_it_318f8786">Оставить</string>
+    <string name="legacy_undo_284d04">Отменить</string>
+    <string name="legacy_try_another_profile_2632e907">Попробовать другой профиль</string>
+    <string name="legacy_the_connection_to_your_motorcycle_is_fine_the_da_6a78bba4">Соединение с мотоциклом в порядке — приборная панель просто отказывается принимать изображение в отправляемом формате. Другой профиль меняет этот формат. Выбор профиля сразу переподключает, и если приборная панель начнёт его показывать, MOTO-HUB спросит, оставить ли его.</string>
+    <string name="legacy_your_dashboard_is_not_showing_this_9765fbe3">ВАША ПРИБОРНАЯ ПАНЕЛЬ ЭТОГО НЕ ПОКАЗЫВАЕТ</string>
+    <string name="legacy_connected_but_the_picture_is_being_refused_tap_t_b17b1097">Подключено, но изображение отклоняется. Нажмите, чтобы попробовать другой профиль.</string>
+    <string name="legacy_connected_not_displaying_53b322ca">ПОДКЛЮЧЕНО, НЕ ОТОБРАЖАЕТСЯ</string>
+    <string name="legacy_your_dashboard_refused_1_d_of_the_picture_it_was_beaebc06">Ваша приборная панель отклонила %1$d%% присланного изображения (%2$d кадров из %3$d).</string>
+    <string name="legacy_this_is_what_your_dashboard_reports_itself_to_be_8dfdffdd">Вот что ваша приборная панель сообщает о себе.</string>
+    <string name="legacy_speaks_the_same_protocol_your_motorcycle_is_alre_7a13c9ca">Использует тот же протокол, что уже применяется вашим мотоциклом.</string>
+    <string name="legacy_plain_settings_no_assumptions_a_good_thing_to_fa_3d3a2213">Обычные настройки, без допущений — надёжный вариант по умолчанию.</string>
+    <string name="legacy_an_experiment_for_one_dashboard_s_open_question__1eafa773">Эксперимент для одного открытого вопроса приборной панели. Возможно, он ни на что не повлияет.</string>
+    <string name="legacy_navigation_active_on_tft_b6221bcf">Навигация активна на TFT</string>
+    <string name="legacy_tft_is_receiving_your_screen_56fd381">TFT получает изображение вашего экрана</string>
+    <string name="legacy_android_auto_is_waiting_for_one_step_from_you_31eacac3">Android Auto ждёт от вас одного шага</string>
+    <string name="legacy_session_is_being_prepared_742c490a">Сессия готовится</string>
+    <string name="legacy_button_presses_are_off_2952e766">НАЖАТИЯ КНОПОК ОТКЛЮЧЕНЫ</string>
+    <string name="legacy_moto_hub_advanced_owns_this_setting_and_writes_i_b8e328f7">MOTO-HUB ADVANCED управляет этой настройкой и перезаписывает её своей, поэтому включайте её там, а не здесь.</string>
+    <string name="legacy_turn_presses_back_on_9d506146">Снова включить нажатия</string>
+    <string name="legacy_these_drive_the_ride_dashboard_so_they_do_nothin_d4d30d86">Они управляют Ride Dashboard, поэтому ничего не делают, пока он не запущен — одной сессии Android Auto недостаточно.</string>
+    <string name="legacy_show_button_presses_on_the_dashboard_4ed2cd5e">Показывать нажатия кнопок на приборной панели</string>
+
+    <!-- Source: feature/controls — the handlebar page after the Bluetooth controller was removed -->
+    <string name="legacy_your_motorcycle_s_own_handlebar_drives_moto_hub__f19519f3">Штатный руль вашего мотоцикла управляет MOTO-HUB. Обучите его один раз, затем назначьте каждой кнопке нужное действие.</string>
+    <string name="legacy_presses_still_arrive_and_still_show_up_on_this_p_62dfa27d">Нажатия по-прежнему поступают и отображаются на этой странице — но никаких действий с ними не выполняется.</string>
+    <string name="legacy_every_handlebar_press_432fb397">Каждое нажатие руля </string>
+    <!-- Home: MOTO-HUB ADVANCED promo card and dialog -->
+    <string name="legacy_couldn_t_open_moto_hub_advanced_89c059e1">Не удалось открыть MOTO-HUB ADVANCED.</string>
+    <string name="legacy_moto_hub_advanced_1cc3b73d">MOTO-HUB ADVANCED</string>
+    <string name="legacy_dashboard_navigation_and_trips_installed_on_this_7ffa5bb9">Приборная панель, навигация и путешествия — установлено на этом телефоне.</string>
+    <string name="legacy_free_companion_app_dashboard_navigation_trips_an_256e51cd">Бесплатное приложение-компаньон: приборная панель, навигация, путешествия и многое другое.</string>
+    <string name="legacy_open_259a6a">Открыть</string>
+    <string name="legacy_see_what_it_adds_c8867b38">Что добавляет</string>
+    <string name="legacy_a_second_free_app_that_installs_next_to_moto_hub_96f5853f">Второе бесплатное приложение, устанавливаемое рядом с MOTO-HUB, превращающее ту же приборную панель в полноценный бортовой компьютер. Дополнительное оборудование не требуется.</string>
+    <string name="legacy_ride_dashboard_gps_speed_live_map_and_trip_stats_e664cbab">Ride Dashboard — скорость по GPS, живая карта и статистика поездки на TFT</string>
+    <string name="legacy_navigation_search_motorcycle_routing_and_route_p_269dbf5a">Навигация — поиск, мотоциклетная прокладка маршрута и предпросмотр маршрута</string>
+    <string name="legacy_on_the_route_weather_fuel_prices_and_speed_camer_1ec23092">На маршруте — погода, цены на топливо и камеры контроля скорости</string>
+    <string name="legacy_trips_recording_replay_analysis_and_gpx_export_ec08e237">Путешествия — запись, повтор, анализ и экспорт в GPX</string>
+    <string name="legacy_ai_place_discovery_and_a_post_ride_riding_coach_34d4ea13">AI-поиск мест и Riding Coach после поездки</string>
+    <string name="legacy_group_intercom_rider_to_rider_voice_70e92f1a">Групповое переговорное устройство — голосовая связь между райдерами</string>
+    <string name="legacy_moto_hub_stays_in_charge_of_the_motorcycle_pairi_6ccf9308">MOTO-HUB продолжает управлять мотоциклом: сопряжение, подключение и Android Auto по-прежнему работают здесь. Устанавливайте одинаковую версию обоих приложений.</string>
+    <string name="legacy_download_advanced_66a9c89a">Скачать ADVANCED</string>
+    <string name="legacy_resolution_177354cc">Разрешение</string>
+    <string name="legacy_the_video_source_android_auto_sends_to_the_dashb_a90d80a4">Источник видео, который Android Auto отправляет на приборную панель</string>
+    <string name="legacy_interface_size_7aea8aa8">Размер интерфейса</string>
+    <string name="legacy_how_large_android_auto_draws_itself_on_that_sour_2161eca0">Насколько крупно Android Auto отображает себя на этом источнике</string>
+    <string name="legacy_landscape_fb5e029b">АЛЬБОМНАЯ</string>
+    <string name="legacy_portrait_5a1dab9b">КНИЖНАЯ</string>
+    <string name="legacy_experimental_f1ae3108">Экспериментально</string>
+    <!-- Source: catalogue catch-up 2026-09-06 - handlebar profiles, companion display, Home Assistant Torque, trip phone health, and the reworded wire verdict -->
+    <string name="legacy_1_s_is_holding_the_dashboard_connection_f85acc07">%1$s удерживает соединение с приборной панелью</string>
+    <string name="legacy_another_app_is_holding_the_dashboard_connection_2f8f3870">Соединение с приборной панелью удерживает другое приложение</string>
+    <string name="legacy_force_stop_your_motorcycle_s_own_companion_app_f_47bc5899">Принудительно остановите фирменное приложение мотоцикла на странице «Сведения о приложении» и попробуйте снова — Android не позволяет одному приложению разрывать соединение другого.</string>
+    <string name="legacy_if_it_stayed_on_the_pairing_screen_moto_hub_keep_74219a6">Если экран сопряжения не сменился, MOTO-HUB продолжает перебирать видеоформаты, пока один не сработает. Если другие райдеры с той же приборной панелью уже подтвердили этот вариант, приложение уточнит ещё раз, прежде чем продолжить.</string>
+    <string name="legacy_if_your_other_moto_hub_app_is_running_a_session__263cbf82">Если на этом телефоне сеанс запущен в другом приложении MOTO-HUB, остановите его вместо этого.</string>
+    <string name="legacy_import_qr_from_an_image_65acae9a">Импортировать QR из изображения</string>
+    <string name="legacy_moto_hub_will_connect_on_its_own_when_the_dashbo_9f3fe52b">MOTO-HUB подключится сам, как только появится приборная панель.</string>
+    <string name="legacy_on_this_phone_that_is_almost_always_1_s_force_st_26b6b463">На этом телефоне это почти всегда %1$s. Принудительно остановите его на странице «Сведения о приложении» и попробуйте снова — Android не позволяет одному приложению разрывать соединение другого.</string>
+    <string name="legacy_shown_while_moto_hub_watches_for_the_motorcycle__5410550d">Показывается, пока MOTO-HUB ожидает появления Wi-Fi мотоцикла.</string>
+    <string name="legacy_the_three_local_ports_moto_hub_needs_for_the_das_ac32b51a">Три локальных порта, нужных MOTO-HUB для приборной панели (%1$s), сейчас заняты, поэтому подключение не удастся.</string>
+    <string name="legacy_try_anyway_909523a8">Всё равно попробовать</string>
+    <string name="legacy_waiting_for_s_c5c92cf8">Ожидание %s</string>
+    <string name="legacy_waiting_for_the_motorcycle_24d361aa">Ожидание мотоцикла</string>
+    <!-- Source: trips/TripAnalysisScreen.kt, home/HubHomeScreen.kt, companion, ai/AiPreset, and the service notifications - literals that reached a lookup indirectly, or were never wrapped -->
+    <string name="legacy_1_s_in_moto_hub_advanced_is_coming_soon_use_moto_6bcb37c0">%1$s в MOTO-HUB Advanced появится позже (пока используйте MOTO-HUB Core).</string>
+    <string name="legacy_import_qr_6b03505c">Импортировать QR</string>
+    <string name="legacy_scan_new_qr_ed7e6784">Сканировать новый QR</string>
+    <!-- Source: feature/home - the secondary actions under the pairing and projection cards -->
+    <string name="legacy_how_to_start_android_auto_e44c5dd3">Как запустить Android Auto</string>
+    <string name="legacy_open_wi_fi_settings_299670db">Открыть настройки Wi-Fi</string>
+    <string name="legacy_couldn_t_open_moto_hub_adv_solo_67eb730a">Не удалось открыть MOTO-HUB ADV-SOLO.</string>
+    <string name="legacy_moto_hub_adv_solo_1bac54f4">MOTO-HUB ADV-SOLO</string>
+    <string name="legacy_free_app_that_replaces_this_one_dashboard_naviga_f14ef8b3">Бесплатное приложение, заменяющее это: приборная панель, навигация, путешествия и многое другое.</string>
+    <string name="legacy_installed_on_this_phone_136503e7">УСТАНОВЛЕНО НА ЭТОМ ТЕЛЕФОНЕ</string>
+    <string name="legacy_free_app_d2eb824d">БЕСПЛАТНОЕ ПРИЛОЖЕНИЕ</string>
+    <string name="legacy_everything_moto_hub_does_and_a_full_riding_compu_5afce456">Всё, что умеет MOTO-HUB, плюс полноценный бортовой компьютер.</string>
+    <string name="legacy_moto_hub_adv_solo_is_a_free_app_that_replaces_th_9d1bc46c">MOTO-HUB ADV-SOLO — бесплатное приложение, заменяющее это и превращающее ваш TFT в полноценный бортовой компьютер: собственная приборная панель, навигация, записанные путешествия. Без подписки, без учётной записи и без дополнительного оборудования — используется уже имеющийся у вас T-Box.</string>
+    <string name="legacy_what_it_adds_cdd0b86b">ЧТО ДОБАВЛЯЕТ</string>
+    <string name="legacy_moving_to_adv_solo_21f5a90c">ПЕРЕХОД НА ADV-SOLO</string>
+    <string name="legacy_adv_solo_connects_to_the_motorcycle_on_its_own_p_ad9d6a7e">ADV-SOLO подключается к мотоциклу самостоятельно: сопряжение, подключение Wi-Fi, кнопки руля и Android Auto — всё работает внутри него. Это приложение ему не нужно.</string>
+    <string name="legacy_install_it_and_connect_your_motorcycle_there_the_526ab2e">Установите его и подключите мотоцикл там, затем удалите MOTO-HUB — ADV-SOLO предложит сделать это сам. Мотоциклы, сопряжённые здесь, не переносятся автоматически: сопрягите их заново в ADV-SOLO.</string>
+    <string name="legacy_links_4515799">ССЫЛКИ</string>
+    <string name="legacy_more_ways_to_start_dfa7360e">ДРУГИЕ СПОСОБЫ ЗАПУСКА</string>
+    <string name="legacy_one_step_is_waiting_for_you_ad249079">Остался один шаг</string>
+    <string name="legacy_starting_android_auto_330884c0">ЗАПУСК ANDROID AUTO</string>
+    <string name="legacy_dashboard_navigation_and_trips_the_free_app_that_141e7bbe">Приборная панель, навигация и путешествия — бесплатное приложение, заменяющее это</string>
+    <string name="legacy_less_8775b50b">Свернуть ▲</string>
+    <string name="legacy_details_1d7b33e">Подробнее ▼</string>
+</resources>
