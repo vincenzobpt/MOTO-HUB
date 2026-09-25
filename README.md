@@ -15,7 +15,7 @@
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue)](LICENSE)
 [![Android 12+](https://img.shields.io/badge/Android-12%2B-3DDC84?logo=android&logoColor=white)](#requirements)
 [![6 languages](https://img.shields.io/badge/languages-6-orange)](#what-moto-hub-does)
-[![Discord](https://img.shields.io/badge/Discord-join%20the%20community-5865F2?logo=discord&logoColor=white)](https://discord.gg/jYv7Z2chtP)
+[![Discord](https://img.shields.io/badge/Discord-join%20the%20community-5865F2?logo=discord&logoColor=white)](https://discord.gg/FzhXZtPhC8)
 
 <img src="media/hero-bike.jpg" alt="A motorcycle TFT dashboard running MOTO-HUB on the road" width="820">
 
@@ -39,7 +39,7 @@ and control it all from the **handlebar buttons** you already have.
 
 **Every rider here is on Discord** — support when a dashboard misbehaves, help getting your bike working, early builds, and the place where the next features get decided.
 
-[![Join the MOTO-HUB Discord](https://img.shields.io/badge/JOIN%20THE%20MOTO--HUB%20DISCORD-support%20·%20community%20·%20new%20builds-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/jYv7Z2chtP)
+[![Join the MOTO-HUB Discord](https://img.shields.io/badge/JOIN%20THE%20MOTO--HUB%20DISCORD-support%20·%20community%20·%20new%20builds-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/FzhXZtPhC8)
 
 </div>
 
@@ -245,7 +245,7 @@ MOTO-HUB is **not a CFMOTO-only app**. It speaks to the EasyConn / Carbit dashbo
 
 <sub>✅ riders confirmed it working &middot; 🟡 works in part, or not on every path &middot; ⚪ nobody has reported back yet</sub>
 
-**Your motorcycle is not on the list?** That does not mean it will not work — it means nobody has told us yet. Try it, then [tell us on Discord](https://discord.gg/jYv7Z2chtP): the app can export a diagnostic log that explains exactly what happened, and that is how every row above got filled in.
+**Your motorcycle is not on the list?** That does not mean it will not work — it means nobody has told us yet. Try it, then [tell us on Discord](https://discord.gg/FzhXZtPhC8): the app can export a diagnostic log that explains exactly what happened, and that is how every row above got filled in.
 
 Nothing in the app filters on brand: the network name always comes from the rider, through the QR code or manual pairing. A dashboard MOTO-HUB has never seen is not rejected — an unknown QR dialect can be accepted after a warning, an unknown dashboard falls back to a generic profile, and the diagnostics are built so a rider on an unfamiliar motorcycle can send a log that explains what happened. Each motorcycle model and T-Box firmware still needs its own validation before it can be called *supported* — including CFMOTO ones.
 
@@ -267,7 +267,7 @@ MOTO-HUB is built ride by ride, with testers on real motorcycles across many bra
 
 <div align="center">
 
-[![Discord](https://img.shields.io/badge/JOIN%20US%20ON%20DISCORD-support%20·%20community%20·%20development-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/jYv7Z2chtP)
+[![Discord](https://img.shields.io/badge/JOIN%20US%20ON%20DISCORD-support%20·%20community%20·%20development-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/FzhXZtPhC8)
 
 </div>
 
