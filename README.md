@@ -16,6 +16,7 @@
 [![Android 12+](https://img.shields.io/badge/Android-12%2B-3DDC84?logo=android&logoColor=white)](#requirements)
 [![6 languages](https://img.shields.io/badge/languages-6-orange)](#what-moto-hub-does)
 [![Discord](https://img.shields.io/badge/Discord-join%20the%20community-5865F2?logo=discord&logoColor=white)](https://discord.gg/FzhXZtPhC8)
+[![Website](https://img.shields.io/badge/website-motohub.techub.eu-111111)](https://motohub.techub.eu)
 
 <img src="media/hero-bike.jpg" alt="A motorcycle TFT dashboard running MOTO-HUB on the road" width="820">
 
@@ -32,6 +33,8 @@ and control it all from the **handlebar buttons** you already have.
 [![Get MOTO-HUB ADV-SOLO](https://img.shields.io/badge/Get%20MOTO--HUB%20ADV--SOLO-free%20·%20Android%2014%2B-e10600?style=for-the-badge&logo=android&logoColor=white)](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases/releases/latest)
 
 <sub>On the release page, expand **Assets** and download the file ending in `.apk`.</sub>
+
+🌐 **[motohub.techub.eu](https://motohub.techub.eu)**: getting started, release notes and the community dashboard gallery.
 
 <br>
 
@@ -52,145 +55,47 @@ and control it all from the **handlebar buttons** you already have.
 2. **Pair** by scanning the QR code your dashboard shows (or import a photo of it, or enter the network manually). Your bike is saved to the garage.
 3. **Ride** — start Android Auto or mirror your phone on the TFT. For the Ride Dashboard, navigation, trips and everything below, get [MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases/releases/latest).
 
-## Two apps, one ride
+## CORE or ADV-SOLO?
 
-> [!NOTE]
-> **ADVANCED is retired.** Its features now live in [MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases), a standalone app. This section describes how CORE and ADVANCED worked together.
+MOTO-HUB comes as two free apps. Neither needs the other: install the one that fits you.
 
-MOTO-HUB is deliberately split in two:
+- **MOTO-HUB CORE** (this repository) is the **open-source app for the basics**. It owns the connection to the motorcycle: pairing, the T-Box transport, Android Auto, screen mirroring and handlebar buttons. AGPL-3.0, Android 12+.
+- **[MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases)** is **one standalone app with everything**: all of the above, plus the Ride Dashboard, motorcycle navigation, trips, OBD engine data and much more. Free forever, closed source, Android 14+. It replaces MOTO-HUB ADVANCED, which is retired.
 
-- **MOTO-HUB** (this repository) is the **free, open-source core**. It owns the connection to the motorcycle — pairing, the T-Box transport, Android Auto, screen mirroring, handlebar buttons. Simple, focused, AGPL-3.0. It is the only app you *need*.
-- **[MOTO-HUB ADVANCED](https://github.com/vincenzobpt/MOTO-HUB-PRO-releases)** is the **free companion app** that turns the same TFT into a full riding computer: a native GPS dashboard, motorcycle navigation, trip recording and replay, AI place discovery, group intercom and more. It installs alongside MOTO-HUB and talks to it over a documented IPC boundary.
-
-**ADVANCED requires MOTO-HUB; MOTO-HUB does not require ADVANCED. Both are free — install both to get everything.** The two apps are released together and must be the **same version**.
-
-| | MOTO-HUB (this repository) | [MOTO-HUB ADVANCED](https://github.com/vincenzobpt/MOTO-HUB-PRO-releases) |
+| | MOTO-HUB CORE | [MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases) |
 | --- | :---: | :---: |
-| T-Box pairing, garage, connection | ✅ | uses MOTO-HUB |
-| Android Auto on the TFT | ✅ | delegated to MOTO-HUB |
+| T-Box pairing, garage, connection | ✅ | ✅ |
+| Android Auto on the TFT | ✅ | ✅ as a module |
 | Screen mirroring (full screen or one app) | ✅ | ✅ |
 | Handlebar button control | ✅ | ✅ |
-| USB external display (AOA) | ✅ | — |
-| Diagnostics, logs, in-app updates | ✅ | ✅ |
-| **Ride Dashboard** — native GPS scene on the TFT | — | ✅ |
-| **Navigation** — search, motorcycle routing, rich route preview | — | ✅ |
-| **Route intelligence** — weather along the route, fuel prices, speed cameras | — | ✅ |
-| **Trips** — full-telemetry recording, replay, analysis, GPX | — | ✅ |
-| **Riding Coach** — post-ride AI evaluation | — | ✅ |
-| **AI place discovery** | — | ✅ |
-| **Group intercom** — rider-to-rider voice | — | ✅ |
-| **Audio notes** pinned to your trips | — | ✅ |
-| **OBD-II diagnostics suite** — hidden somewhere in the app 🤫 | — | 🥚 |
+| USB external display (AOA) | ✅ | ✅ |
+| **Ride Dashboard**, on the TFT or full screen on the phone | — | ✅ |
+| **Navigation**: motorcycle routing, curvy roads, loop rides | — | ✅ |
+| **Route intelligence**: weather along the route, fuel prices, speed cameras | — | ✅ |
+| **Trips**: full-telemetry recording, 3D replay, Riding Coach | — | ✅ |
+| **Engine data** from an ELM327 OBD adapter | — | ✅ |
+| **AI place discovery**, **group intercom**, **audio notes** | — | ✅ |
+| Useful on a motorcycle with no compatible TFT | — | ✅ |
+| Source code | open, AGPL-3.0 | closed |
 | Minimum Android version | 12+ | 14+ |
 
+**Running CORE together with ADVANCED?** Install ADV-SOLO: it brings over your motorcycles, rides, audio notes, places, keys and settings from ADVANCED, then asks you to remove ADVANCED and CORE.
+
+## Want more? MOTO-HUB ADV-SOLO
+
+A native **Ride Dashboard** drawn on the TFT, or full screen on the phone when the bike has no compatible screen: live map, a 3D rider's-eye view, speed and trip, OBD engine gauges, and designs from the community. Around it, **navigation built for motorcycles**, **trips** recorded with full telemetry and replayed in 3D, a **Riding Coach**, **engine analysis** from a cheap OBD adapter, **AI place discovery** and **group intercom**. All free, forever.
+
 <div align="center">
-  <img src="media/phone-core-home.png" alt="MOTO-HUB Core home screen" width="230">
-  &nbsp;&nbsp;
-  <img src="media/phone-adv-home.png" alt="MOTO-HUB ADVANCED home screen with Nav, Trips and AI tabs" width="230">
+  <img src="media/phone-dash-visor.webp" alt="The Visor dashboard full screen on a phone: a 3D rider's-eye view of a mountain road with speed, trip and altitude" width="410">
+  <img src="media/phone-dash-split.webp" alt="The Split dashboard with location, map and GPS speed, full screen on a phone" width="410">
   <br>
-  <sub>The same design language, two missions: <b>CORE</b> connects your bike — <b>ADVANCED</b> makes it fly.</sub>
-</div>
+  <sub>The Ride Dashboard full screen on a phone: the Visor 3D view and the Split layout. On a compatible TFT, the same scene goes on the bike's dashboard.</sub>
 
-## MOTO-HUB ADVANCED — everything your TFT was waiting for
+<br><br>
 
-> [!NOTE]
-> ADVANCED is retired. Every feature below, and more, is in [MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases).
+[![Get MOTO-HUB ADV-SOLO](https://img.shields.io/badge/Get%20MOTO--HUB%20ADV--SOLO-free%20forever%20·%20Android%2014%2B-e10600?style=for-the-badge&logo=android&logoColor=white)](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases/releases/latest)
 
-*All of this is implemented, working, and free. It builds on the rider's own GPS — the motorcycle needs no extra hardware.*
-
-### 🏍️ Ride Dashboard
-
-A native, configurable riding scene rendered straight on the TFT: GPS speed, live map, trip stats, weather, phone status — every panel is a widget you choose, and panels can rotate through a carousel on the interval you set. The main panel is yours too: put the **live map** there, run **Android Auto embedded** inside it, or switch it to a full **OBD gauge cluster** with live engine data and gear estimation (ELM327 Bluetooth adapter required). Turn-by-turn guidance from Waze or Google Maps shows up in the Navigation widget.
-
-<div align="center">
-  <img src="media/tft-ride-dashboard.png" alt="Ride Dashboard on the TFT with GPS speed, live map and trip stats" width="410">
-  <img src="media/tft-dashboard-aa.png" alt="Android Auto embedded inside the Ride Dashboard map panel" width="410">
-  <br>
-  <img src="media/tft-obd-dashboard.png" alt="Ride Dashboard with the OBD gauge cluster in the main panel" width="410">
-  <img src="media/phone-widgets.png" alt="Widget customization screen" width="230">
-  <br>
-  <sub>The Ride Dashboard's main panel: live map, embedded Android Auto, or the OBD gauge cluster — your choice. Right: pick the widgets for every panel.</sub>
-</div>
-
-### 🗺️ Navigation, built for motorcycles
-
-Search a destination, get **motorcycle routing** — including *curvy roads* when the fastest line is not the point — preview the full route, add waypoints, and send it to the TFT. The route preview is a briefing, not just a line on a map:
-
-- **Where the curves are** — a strip showing which stretches actually bend, the best stretch called out, and what the twisty line costs you against the fast one.
-- **The shape of the ride** — total ascent, number of turns, and a pinch-to-zoom elevation profile.
-- **Weather along the route** — rain cells with the time you'll meet them, crosswind, ice risk.
-- **Fuel prices on the route** — live official price data in 🇮🇹 🇪🇸 🇫🇷 🇵🇹, merged with the stations on your path.
-- **Speed cameras** — an approaching-camera alert on the dashboard (off by default, and automatically disabled in countries where the law forbids it).
-- **Street-level preview** — tap the route line to open Mapillary street imagery of that exact spot.
-
-<div align="center">
-  <img src="media/phone-nav-preview-1.png" alt="Route preview showing where the curves are and the Fast or Piega route choice" width="230">
-  &nbsp;
-  <img src="media/phone-nav-preview-2.png" alt="Route briefing with ascent, turns, elevation profile and petrol prices on the route" width="230">
-  &nbsp;
-  <img src="media/phone-nav-preview-3.png" alt="Weather along the route with temperature and crosswind at each stage" width="230">
-  <br>
-  <sub>Where the curves are and what they cost you in time &middot; ascent, turns, elevation and petrol on the way &middot; the weather you will actually meet.</sub>
-</div>
-
-### 📈 Trips — record, relive, improve
-
-Every ride can be recorded with **full sensor telemetry**, not just a GPS trace. Browse your history by period, then relive it:
-
-- **Replay** the ride on the map, in a **3D chase-cam POV**, or export a **Google Earth KMZ** flyover.
-- **Post-ride analysis** — speed, altitude, lean angle and G-forces on a dedicated dashboard.
-- **Riding Coach** — an AI evaluation of your riding style after each trip.
-- **Audio notes** — record voice notes mid-ride, pinned to the exact point of the trip.
-- **GPX export**, trip merging, and a period-based archive with multi-select.
-
-<div align="center">
-  <img src="media/phone-trips-archive.png" alt="Trips archive grouped by period" width="230">
-  &nbsp;
-  <img src="media/phone-trip-replay.png" alt="Trip replay in 3D POV view" width="230">
-  &nbsp;
-  <img src="media/phone-trip-analysis.png" alt="Post-ride telemetry analysis with lean angle" width="230">
-</div>
-
-### 🤖 AI place discovery
-
-Ask for "a scenic pass with a café at the top" and let the AI tab rank real OpenStreetMap places for you — the map data is the source of truth, the model just picks well. Bring your own OpenAI-compatible API key; it is stored encrypted on the phone.
-
-<div align="center">
-  <img src="media/phone-ai.png" alt="AI assisted place discovery" width="230">
-</div>
-
-### 🎙️ Group intercom & voice
-
-Riding with a friend? **Group intercom** carries voice between two phones over the rider's own hotspot — no accounts, no servers, no subscription.
-
-<div align="center">
-  <img src="media/phone-intercom.png" alt="Group intercom" width="230">
-  &nbsp;
-  <img src="media/phone-audio-notes.png" alt="Audio notes pinned to a trip" width="230">
-</div>
-
-### 🥚 …and one secret left to find
-
-ADVANCED hides one more toy: a complete **OBD-II diagnostics suite**, tucked behind a door that appears on no menu. How to open it stays a secret — but riders who find it get:
-
-- **Live engine data** — revs, speed, throttle, engine load and temperatures, streamed from a standard ELM327 Bluetooth adapter.
-- **Fuel and air** — fuel trims, oxygen sensors, manifold and timing.
-- **Trouble codes** — read the stored codes, explained by a built-in catalogue, with the distance and warm-ups since they were last cleared.
-- **Full scan** — interrogate every PID your motorcycle supports and share the report as a file.
-
-<div align="center">
-  <img src="media/phone-obd-live-data-1.png" alt="Live data: engine speed, throttle, load and temperatures with one-minute traces" width="230">
-  &nbsp;
-  <img src="media/phone-obd-live-data-2.png" alt="Fuel and air: fuel trims, oxygen sensors, manifold pressure and timing" width="230">
-  &nbsp;
-  <img src="media/phone-obd-live-data-3.png" alt="Full scan: every PID the vehicle claims to support, answered and logged" width="230">
-  <br>
-  <sub>Live data &middot; fuel and air &middot; full scan. No, we won't tell you where the door is. Happy hunting. 🔎</sub>
-</div>
-
-<div align="center">
-
-[![Get MOTO-HUB ADV-SOLO](https://img.shields.io/badge/Get%20all%20of%20this%20—%20MOTO--HUB%20ADV--SOLO-free-e10600?style=for-the-badge&logo=android&logoColor=white)](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases/releases/latest)
+<sub>Everything it does, with screenshots, is on the <a href="https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases">ADV-SOLO page</a> and at <a href="https://motohub.techub.eu">motohub.techub.eu</a>.</sub>
 
 </div>
 
@@ -271,6 +176,8 @@ MOTO-HUB is built ride by ride, with testers on real motorcycles across many bra
 
 </div>
 
+News, release notes, the getting started guide and the community dashboard gallery are on **[motohub.techub.eu](https://motohub.techub.eu)**.
+
 ---
 
 ## The fine print
@@ -335,7 +242,7 @@ The garage stores multiple motorcycle profiles. Each profile can contain the T-B
 
 `External` appears only when a USB (AOA) accessory head unit is attached. It captures the phone screen and writes H.264 access units straight to the USB accessory endpoint, completely independently of the T-Box, EasyConn and ridedaemon path.
 
-The Ride Dashboard, Navigation and Trips are not part of this app — they live in [MOTO-HUB ADVANCED](https://github.com/vincenzobpt/MOTO-HUB-PRO-releases), which connects through this app's IPC boundary.
+The Ride Dashboard, Navigation and Trips are not part of this app — they live in [MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases), a separate standalone app.
 
 ### Handlebar Buttons
 
