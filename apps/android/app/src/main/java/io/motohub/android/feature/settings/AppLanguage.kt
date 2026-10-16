@@ -29,7 +29,8 @@ enum class AppLanguage(
     DUTCH("nl-NL", R.string.language_dutch),
     CZECH("cs-CZ", R.string.language_czech),
     TURKISH("tr-TR", R.string.language_turkish),
-    RUSSIAN("ru-RU", R.string.language_russian)
+    RUSSIAN("ru-RU", R.string.language_russian),
+    CHINESE("zh-CN", R.string.language_chinese)
 }
 
 object AppLanguageManager {

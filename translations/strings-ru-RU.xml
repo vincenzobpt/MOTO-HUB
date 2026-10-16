@@ -17,6 +17,7 @@
     <string name="language_czech">Čeština</string>
     <string name="language_turkish">Türkçe</string>
     <string name="language_russian">Русский</string>
+    <string name="language_chinese">Китайский</string>
     <string name="language_title">Язык</string>
     <string name="language_description">Выберите язык, который использует MOTO-HUB</string>
     <string name="language_detail_description">По умолчанию MOTO-HUB использует язык телефона. Выберите язык ниже, чтобы задать его отдельно для этого приложения.</string>

@@ -1,0 +1,2012 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Locale: zh-CN. Simplified Chinese. -->
+    <!-- Application identity -->
+    <string name="app_name">MOTO-HUB</string>
+
+    <!-- Settings > General > Language. Names are kept in their native form. -->
+    <string name="language_system_default">系统默认</string>
+    <string name="language_english">English</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_korean">한국어 (대한민국)</string>
+    <string name="language_french">Français</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_dutch">Nederlands</string>
+    <string name="language_czech">Čeština</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_chinese">简体中文</string>
+    <string name="language_title">语言</string>
+    <string name="language_description">选择 MOTO-HUB 使用的语言</string>
+    <string name="language_detail_description">MOTO-HUB 默认跟随手机语言。在下方选择语言可只对本应用改用它。</string>
+
+    <!-- Settings main page -->
+    <string name="legacy_download_anyway_c17b27fb">仍要下载</string>
+    <string name="legacy_download_over_1_s_23fdd550">下载超过 %1$s？</string>
+    <string name="legacy_moto_hub_1_s_is_2_s_and_right_now_the_only_conne_8ebbc51c">MOTO-HUB %1$s 为 %2$s，而目前唯一能连上互联网的连接是 %3$s，需要由你的运营商付费。在摩托车上这很正常 - 仪表盘的 Wi-Fi 完全没有互联网。</string>
+    <string name="legacy_waiting_for_wi_fi_costs_nothing_the_update_stays_3f38fec8">等待 Wi-Fi 不费电：更新仍会留在这个列表里。</string>
+    <string name="settings_configuration">配置</string>
+    <string name="settings_title">设置</string>
+    <string name="settings_general">常规</string>
+    <string name="settings_general_description">语言、无缝恢复和应用行为</string>
+
+    <!-- Settings > General -->
+    <string name="settings_general_title">常规</string>
+    <string name="settings_check_updates_on_launch">启动时检查更新</string>
+    <string name="settings_check_updates_on_launch_description">自动检查 GitHub 版本发布，最多每 24 小时一次</string>
+    <string name="settings_enable_seamless_resume">启用无缝恢复</string>
+    <string name="settings_seamless_resume_enabled_description">T-Box 长时间中断后，即使屏幕已关，Android Auto 也能恢复</string>
+    <string name="settings_seamless_resume_disabled_description">允许 Android Auto 在摩托车回来后于后台恢复；首次启用时需要权限</string>
+
+    <!-- Settings option labels. These are also used by the route and projection pickers. -->
+    <string name="video_quality_smoother">更流畅</string>
+    <string name="video_quality_smoother_description">更低码率，发热和网络负担更小。</string>
+    <string name="video_quality_balanced">均衡</string>
+    <string name="video_quality_balanced_description">当前 MOTO-HUB 的画质，也是推荐的默认值。</string>
+    <string name="video_quality_sharper">更清晰</string>
+    <string name="video_quality_sharper_description">更高码率，让地图和文字更锐利。</string>
+    <string name="video_power_auto">自动</string>
+    <string name="video_power_auto_description">根据手机温度和 Wi-Fi 质量调整码率和帧率。</string>
+    <string name="video_power_smooth">流畅</string>
+    <string name="video_power_smooth_description">在所选视频画质下 30 FPS。</string>
+    <string name="video_power_balanced">均衡</string>
+    <string name="video_power_balanced_description">在所选视频画质下稳定 24 FPS。</string>
+    <string name="video_power_saver">省电</string>
+    <string name="video_power_saver_description">20 FPS，减少发热和电量消耗。</string>
+    <string name="android_auto_resolution_auto">自动</string>
+    <string name="android_auto_resolution_auto_description">保持 MOTO-HUB 根据学到的 T-Box 尺寸自动切换方向。</string>
+    <string name="android_auto_resolution_landscape_sd">横屏 800 x 480</string>
+    <string name="android_auto_resolution_landscape_sd_description">标准横屏 Android Auto 画面。</string>
+    <string name="android_auto_resolution_landscape_hd">横屏 1280 x 720</string>
+    <string name="android_auto_resolution_landscape_hd_description">更清晰的高清横屏画面，手机负载更高。</string>
+    <string name="android_auto_resolution_landscape_fhd">横屏 1920 x 1080</string>
+    <string name="android_auto_resolution_landscape_fhd_description">全高清横屏画面。尚未在任何已知仪表盘上验证。</string>
+    <string name="android_auto_resolution_landscape_qhd">横屏 2560 x 1440</string>
+    <string name="android_auto_resolution_landscape_qhd_description">四倍高清横屏画面。手机负载很重，尚未在任何已知仪表盘上验证。</string>
+    <string name="android_auto_resolution_landscape_uhd">横屏 3840 x 2160</string>
+    <string name="android_auto_resolution_landscape_uhd_description">4K 横屏画面。手机同时编码和解码 4K，会发热并掉帧。</string>
+    <string name="android_auto_resolution_portrait_sd">竖屏 720 x 1280</string>
+    <string name="android_auto_resolution_portrait_sd_description">标准竖屏 Android Auto 画面。</string>
+    <string name="android_auto_resolution_portrait_hd">竖屏 1080 x 1920</string>
+    <string name="android_auto_resolution_portrait_hd_description">更清晰的高清竖屏画面，手机负载更高。</string>
+    <string name="android_auto_resolution_portrait_qhd">竖屏 1440 x 2560</string>
+    <string name="android_auto_resolution_portrait_qhd_description">四倍高清竖屏画面。手机负载很重，尚未在任何已知仪表盘上验证。</string>
+    <string name="android_auto_resolution_portrait_uhd">竖屏 2160 x 3840</string>
+    <string name="android_auto_resolution_portrait_uhd_description">4K 竖屏画面。手机同时编码和解码 4K，会发热并掉帧。</string>
+    <string name="android_auto_density_auto">自动</string>
+    <string name="android_auto_density_auto_description">使用所选分辨率自带的密度。</string>
+    <string name="android_auto_density_120">120 dpi</string>
+    <string name="android_auto_density_120_description">最小的界面，屏幕上的地图最多。在小尺寸 TFT 上很难看清。</string>
+    <string name="android_auto_density_160">160 dpi</string>
+    <string name="android_auto_density_160_description">小界面。横屏画面默认使用的密度。</string>
+    <string name="android_auto_density_213">213 dpi</string>
+    <string name="android_auto_density_213_description">介于小和标准之间。160 太挤、240 太粗时用它。</string>
+    <string name="android_auto_density_240">240 dpi</string>
+    <string name="android_auto_density_240_description">标准界面。竖屏画面默认使用的密度。</string>
+    <string name="android_auto_density_320">320 dpi</string>
+    <string name="android_auto_density_320_description">大界面，更容易看清，戴手套也更容易按中。屏幕上的地图更少。</string>
+    <string name="android_auto_density_480">480 dpi</string>
+    <string name="android_auto_density_480_description">最大的界面。只在高分辨率下才合适。</string>
+    <string name="android_auto_insets_auto">自动</string>
+    <string name="android_auto_insets_auto_description">使用完整的 Android Auto 画面；T-Box 投屏区域不添加 AA 边距。</string>
+    <string name="android_auto_insets_manual">手动</string>
+    <string name="android_auto_insets_manual_description">向 Android Auto 通告为这台摩托车设置的 TFT 安全边距。</string>
+    <string name="distance_units_kilometers">公里</string>
+    <string name="distance_units_kilometers_description">距离和速度使用 km 和 km/h。</string>
+    <string name="distance_units_miles">英里</string>
+    <string name="distance_units_miles_description">距离和速度使用 mi 和 mph。</string>
+    <string name="route_preference_fastest">最快</string>
+    <string name="route_preference_fastest_description">最快的路线，可走高速公路。</string>
+    <string name="route_preference_scenic">沿途风景</string>
+    <string name="route_preference_scenic_description">优先走乡间小路，避开高速公路。</string>
+
+    <!-- Core/Pro bridge notification -->
+    <string name="core_bridge_channel_name">MOTO-HUB Core 桥接</string>
+    <string name="core_bridge_channel_description">在 MOTO-HUB Pro 使用期间保持 T-Box 连接不断开</string>
+    <string name="core_bridge_notification_title">MOTO-HUB Core 正在运行</string>
+    <string name="core_bridge_notification_text">正在为 MOTO-HUB Pro 提供服务。</string>
+
+    <!-- Projection notifications -->
+    <string name="projection_channel_name">MOTO-HUB 投屏</string>
+    <string name="projection_channel_description">摩托车显示屏的投屏状态</string>
+    <string name="projection_notification_title">MOTO-HUB 正在运行</string>
+    <string name="projection_notification_text">屏幕投屏已开启。</string>
+    <string name="projection_notification_dimmed_text">投屏已开启，手机屏幕已变暗。</string>
+    <string name="stop_projection">停止</string>
+    <string name="dim_phone_display">调暗屏幕</string>
+    <string name="restore_phone_display">恢复显示</string>
+
+    <!-- Android Auto notifications -->
+    <string name="android_auto_channel_name">MOTO-HUB Android Auto</string>
+    <string name="android_auto_notification_title">MOTO-HUB Android Auto 会话</string>
+    <string name="android_auto_notification_text">会话进行中。打开 MOTO-HUB 查看实时投屏状态。</string>
+    <string name="stop_android_auto">停止 Android Auto</string>
+
+    <!-- Ride Dashboard notifications -->
+    <string name="ride_dashboard_channel_name">MOTO-HUB 骑行仪表盘</string>
+    <string name="ride_dashboard_channel_description">实时骑行数据的投屏状态</string>
+    <string name="ride_dashboard_notification_title">MOTO-HUB 骑行仪表盘</string>
+    <string name="ride_dashboard_notification_text">GPS 遥测和仪表盘投屏已开启。</string>
+    <string name="stop_ride_dashboard">停止仪表盘</string>
+    <!-- Source: MainActivity.kt -->
+    <string name="legacy_moto_hub_diagnostics_ba6420b1">MOTO-HUB 诊断</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_about_the_project_2feef1f7">关于本项目</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_check_for_updates_66a2b53b">检查更新</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_close_3e2edd8">关闭</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_experimental_software_e22071df">实验性软件</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_no_network_called_1_s_has_been_seen_but_this_pho_3174d343">未发现名为“%1$s”的网络，但这台手机知道“%2$s”，两者仅空格不同。再次保存即可保留你输入的名称。</string>
+    <string name="legacy_open_github_repository_80f9bf71">打开 GitHub 仓库</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_platform_9e635873">平台</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_source_support_aa797bf0">来源与支持</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_use_1_s_ef5e7994">使用 %1$s</string>
+    <string name="legacy_version_3fc0a8b8">版本</string>
+    <!-- Source: feature/androidauto/AndroidAutoPreviewScreen.kt -->
+    <string name="legacy_fullscreen_7d6157db">全屏</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_address_or_coordinates_9e7a90a">地址或坐标</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_back_1f7907">返回</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_controls_e20faad6">控制</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_cycle_panels_c623ab89">循环切换面板</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_everything_on_this_page_controls_the_projection__88534bf1">本页的所有设置都作用于摩托车当前显示的投屏画面。</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_exit_fullscreen_b7c93dd">退出全屏</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_fullscreen_map_bafc2397">全屏地图</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_handlebar_controls_cf2abe6b">车把控制</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_home_2268ff">主页</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_open_glove_friendly_fullscreen_controller_2d746356">打开戴手套也易操作的全屏控制器</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_reset_default_mapping_bd7464fe">重置默认映射</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_scroll_ebe1cfb8">滚动 +</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_scroll_ebe1f19f">滚动 −</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_the_value_is_restored_when_handlebar_capture_is__ea95c499">关闭车把截图后该数值会恢复。</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_timing_9551dc6a">正时</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_use_the_motorcycle_buttons_without_looking_down__1b06094c">无需低头即可使用摩托车按键。当前投屏优先接收这些指令。</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_voice_4eff112">语音</string>
+    <!-- Source: feature/controls/MediaButtonBridge.kt -->
+    <string name="legacy_motorcycle_buttons_control_targetname_c5bca78f">摩托车按键控制 $targetName</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_application_logs_ca54c69f">应用日志</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_clear_3e2c62d">清除</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_copy_log_e59a8039">复制日志</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_no_diagnostic_events_have_been_recorded_290567d5">尚未记录任何诊断事件。</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_persistent_events_from_wi_fi_t_box_mirroring_enc_679d01c0">来自 Wi-Fi、T-Box、画面镜像、编码器和 Android Auto 的持续事件。</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_share_4c25fbf">分享</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_troubleshooting_f6bb8e3a">故障排查</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_check_t_box_and_cellular_routes_without_starting_7ae11348">无需启动 VPN 或更改默认网络，即可检查 T-Box 和蜂窝网络路由。</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_network_diagnostics_a4fc929a">网络诊断</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_no_network_snapshot_available_5baf5bb0">没有可用的网络快照。</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_result_8fe0bc1d">结果</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_system_lab_433267fc">系统实验室</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_start_a_projection_to_populate_the_log_23fff8de">启动投屏以填充日志。</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_add_a_motorcycle_by_scanning_its_t_box_qr_code_a77ba91f">扫描其 T-Box 的 QR 码即可添加摩托车。</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_add_motorcycle_397b0e90">添加摩托车</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_edit_20e22a">编辑</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_motorcycles_2c9478e2">摩托车</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_no_qr_connect_manually_8ad804ea">没有二维码？手动连接</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_options_18bf1e7e">选项</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_saved_motorcycles_181a24a9">已保存的摩托车</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_scan_a_qr_code_5a21ea0a">扫描 QR 码</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_use_this_motorcycle_1204179a">使用这辆摩托车</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_your_garage_c0aeffb4">你的车库</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_your_garage_is_empty_f25b99e3">你的车库是空的</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_connection_eeae6ade">连接</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_cancel_77df1a9a">取消</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_changes_are_saved_immediately_3ab73352">更改会立即保存。</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_choose_how_the_complete_android_auto_image_is_fi_cb149112">选择完整的 Android Auto 画面如何适配 TFT。</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_display_name_6697cf49">显示名称</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_exclude_pixels_occupied_by_the_motorcycle_ui_the_c5210089">"排除摩托车界面占据的像素。这些数值保存在此 "</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_for_example_300_1aa3b7a">例如：300</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_for_example_mt700_adventure_4c1ae7c7">例如：MT700 Adventure</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_fuel_2195d6">油量</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_full_tank_range_on_a_fill_up_powers_the_fuel_ran_68a667ae">每次加满油时的满箱续航里程。为导航中的续航预警提供数据。</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_identity_fbc2d4de">身份标识</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_motorcycle_profile_bd90ddfa">摩托车配置</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_make_it_yours_9dfd813d">定制为你的配置</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_override_the_automatic_profile_detection_for_thi_dcc5245b">"覆盖这辆摩托车的自动配置检测。仅在 "</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_91afe4a4">移除</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_motorcycle_c0498b52">移除摩托车？</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_photo_7fa92bb6">移除照片</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_this_motorcycle_f21e94d7">移除此摩托车</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_reset_margins_ff05a94">重置安全边距</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_t_box_identifier_modelid_2c1c9ebd">T-Box 标识：$modelId</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_tank_range_km_f16147b8">油箱续航 (km)</string>
+    <!-- Garage tank-range field label when the rider selects miles. -->
+    <string name="legacy_tank_range_mi_f1614ebe">油箱续航 (mi)</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_the_wi_fi_password_is_stored_securely_on_this_ph_b6fb6382">Wi-Fi 密码已安全保存在这台手机上。</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_the_name_is_only_used_inside_moto_hub_10a5f3a4">该名称仅在 MOTO-HUB 内使用。</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_the_saved_connection_profile_and_its_photo_will__c6d581e2">已保存的连接配置及其照片将从 MOTO-HUB 中移除。</string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_could_not_derive_a_peer_ip_this_network_may_not__3fa3f2d0">无法获取对端 IP — 该网络可能尚无可用路由。</string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_if_easyconn_discovery_keeps_failing_briefly_reco_ced96e0d">"如果 EasyConn 发现始终失败，请短暂重新连接这台 T-Box 并进行探测 "</string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_scan_common_easyconn_ports_835f5172">扫描常见的 EasyConn 端口</string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_t_box_capability_inspector_937ec87d">T-Box 能力查看器</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_another_easyconn_app_can_keep_the_t_box_link_occ_fd2f2f53">即使离开前台，另一个 EasyConn 应用也可能一直占用 T-Box 链接。</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_connection_failed_3b5c2fbf">连接失败</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_choose_what_the_ride_dashboard_shows_for_navigat_793eeb07">选择骑行仪表盘在导航时显示哪些内容。</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_connect_your_motorcycle_2e5794e6">连接你的摩托车。</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_connecting_48965ad8">连接中</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_dashboard_map_5dae1b0">仪表盘地图</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_disconnect_966f34bc">断开连接</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_first_time_setup_d929eaa7">首次设置</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_session_actions_bc6aa933">会话操作</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_scan_the_t_box_qr_code_to_save_the_network_crede_67df5b62">扫描 T-Box QR 码即可自动保存网络凭据。</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_setting_up_network_and_t_box_7769a762">正在设置网络和 T-Box</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_what_to_show_122be0b9">显示什么？</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_back_fe3a848e">‹ 返回</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_arrived_ff08704d">已到达</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_calculating_your_route_86fbe56d">正在为你规划路线…</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_done_2097a2">完成</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_exact_destination_pin_used_for_routing_tap_the_m_10786cc">用于规划路线的精确目的地落点。点击地图可更改。</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_guidance_to_your_destination_will_end_27d69f">前往目的地的导航将结束。</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_info_225cae">信息</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_keep_going_6d8f25bf">继续</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_live_navigation_70ce19c8">实时导航</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_map_location_9df6ea19">地图位置</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_navigation_needs_attention_7f3ab90f">导航需要注意</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_no_9c1">否</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_name_24eeab">名称</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_navigation_will_start_either_way_open_the_ride_d_b34bca11">无论选哪种方式，导航都会开始。要在摩托车 TFT 上打开骑行仪表盘吗？</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_no_favorites_yet_save_one_from_a_route_preview_o_b8e45fac">还没有收藏。可从路线预览或到达页面中收藏。</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_no_matches_e3c700ba">无匹配结果。</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_not_every_address_number_is_mapped_in_openstreet_cf7708fe">"OpenStreetMap 还不是每个门牌号都有数据，所以标记点 "</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_off_route_recalculating_1f5a422b">已偏离路线 – 正在重新计算…</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_open_ride_dashboard_202629d">打开骑行仪表盘？</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_optional_label_267da254">可选标签</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_route_type_519caed1">路线类型</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_reroute_a49323d6">重新规划路线</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_27359d">保存</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_a_destination_as_a_favorite_from_a_route_pr_5669fe67">在路线预览中把目的地保存为收藏。</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_favorite_85e74bf">保存收藏</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_this_route_d63094aa">保存这条路线</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_search_address_or_paste_coordinates_daf446f5">搜索地址或粘贴坐标</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_start_navigation_2d34b0b2">开始导航</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_stop_277c22">停止</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_stop_navigation_8a243dad">停止导航？</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_tap_to_dismiss_d17702a2">轻点关闭</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_work_293b31">工作</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_yes_156c7">是</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_you_have_arrived_e0a68436">你已到达</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_e_g_sunday_loop_1dd6a810">例如：周日环线</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_label_27143b17">‹ $label</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_clear_all_5a4e690e">全部清除</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_dest_2072c2">终点</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_fit_113f1">适应</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_full_screen_22a47efd">全屏</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_select_all_ba2cd45d">全选</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_openstreetmap_contributors_692ada40">© OpenStreetMap 贡献者</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_auto_detects_direct_networks_choose_wi_fi_direct_a24126ac">自动会检测 DIRECT- 开头的网络。如果仪表盘是 P2P 群组所有者，请选择 Wi-Fi 直连。</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_connect_without_a_qr_code_bd61ac9f">不用 QR 码连接</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_manual_setup_176cc583">手动设置</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_some_motorcycles_don_t_show_a_pairing_qr_code_on_c3361949">"部分摩托车不会在仪表上显示配对二维码。如果你已经知道 "</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_t_box_wi_fi_transport_2b8fdfb9">T-Box Wi-Fi 传输</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_wi_fi_network_name_ssid_4e8cc3a7">Wi-Fi 网络名称（SSID）</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_wi_fi_password_aa1722dd">Wi-Fi 密码</string>
+    <!-- Source: feature/pairing/TBoxQrScannerScreen.kt -->
+    <string name="legacy_t_box_scan_eb4ea12b">T-Box 扫码</string>
+    <!-- Source: feature/ridedashboard/RideDashboardPreviewScreen.kt -->
+    <string name="legacy_uses_this_phone_s_gps_no_t_box_needed_same_rende_58537da7">"使用本手机的 GPS，无需 T-Box。渲染方式和抬头显示/缩放 "</string>
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_elevation_last_hour_10deed1a">海拔 / 上一小时</string>
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_now_12eb6">当前</string>
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_waiting_for_gnss_elevation_f069100e">等待 GNSS 海拔</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_battery_7593afdc">$battery%</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_g_force_fca415c5">G力</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_motion_sensors_b224e96f">运动传感器</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_phone_system_b2b20c1d">手机 // 系统</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_turn_rate_9cfa82a3">转向速率</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_ahead_3b5bda1">前方</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_compass_sun_45d9eeda">指南针 // 太阳</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_left_239807">左</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_right_4a5c9fc">右</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_sun_horizon_6a3f3196">太阳 / 地平线</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_sun_behind_2679a1ae">太阳在后方</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_waiting_for_position_heading_75ece8e0">等待定位与航向</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_dashboard_customization_b85f9307">仪表盘自定义</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_grant_41dd0fc">授予</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_live_layout_cdba0cde">实时布局</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_map_1293c">地图</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_map_stays_in_the_centre_f108a4fb">地图保持居中</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_needs_notification_access_44d40c16">需要通知权限</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_reset_defaults_6000a23">重置默认值</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_swap_2785b3">交换</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_tap_to_assign_d1b41d7">轻点指定</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_widget_library_cb7316bf">小组件库</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_current_location_5f369a9c">当前位置</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_eta_10d72">预计到达</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_nav_route_20ffc4db">导航 / 路线</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_off_route_recalculating_7a9dcf5c">偏离路线 — 重算中</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_remaining_d9f0bdd6">剩余</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_rise_2662c9">上升</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_set_14042">设置</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_sun_1422c">太阳</string>
+    <!-- Source: feature/ridedashboard/widget/NowPlayingWidget.kt -->
+    <string name="legacy_no_media_session_5cbc8365">-- 无媒体会话 --</string>
+    <!-- Source: feature/ridedashboard/widget/NowPlayingWidget.kt -->
+    <string name="legacy_no_artwork_2acf3875">无封面图</string>
+    <!-- Source: feature/ridedashboard/widget/NowPlayingWidget.kt -->
+    <string name="legacy_now_playing_media_session_45191bd6">正在播放 // 媒体会话</string>
+    <!-- Source: feature/ridedashboard/widget/SatelliteWidget.kt -->
+    <string name="legacy_signal_coverage_fef46060">信号覆盖</string>
+    <!-- Source: feature/ridedashboard/widget/SpeedGaugeWidget.kt -->
+    <string name="legacy_ground_speed_gps_c8f77ac7">地速 / GPS</string>
+    <!-- Source: feature/ridedashboard/widget/SpeedGaugeWidget.kt -->
+    <string name="legacy_km_h_233edb">km/h</string>
+    <!-- Speed-unit label when the rider selects miles in Settings. -->
+    <string name="legacy_mph_12b05">MPH</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_average_km_h_d2517b1e">平均 km/h</string>
+    <!-- Trip-metrics average-speed label when the rider selects miles. -->
+    <string name="legacy_average_mph_6c8da62">平均 mph</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_recent_8fd93a5b">最近</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_speed_profile_2c1ba290">速度曲线</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_trip_performance_8c26f32b">行程 // 性能</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_waiting_for_speed_data_91032a2d">等待速度数据</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_check_cellular_data_b94ccb68">检查蜂窝数据</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_live_23a8ec">实时</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_loading_3edc6d1c">加载中</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_open_meteo_gps_2cc3134f">OPEN-METEO • GPS</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_rain_probability_9ad3fd28">降雨 $probability%</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_retrying_every_15s_e5e3f7a4">每 15 秒重试</string>
+    <!-- Source: feature/safety/SafetyDisclaimerDialog.kt -->
+    <string name="legacy_i_understand_and_continue_7ea73adb">我已了解并继续</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_android_auto_content_insets_7046c7dd">Android Auto 内容边距</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_choose_image_detail_and_how_moto_hub_balances_sm_577123e1">选择画面精细度，以及 MOTO-HUB 如何平衡流畅度、发热、耗电和 Wi-Fi 负载。</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_default_route_type_b528b630">默认路线类型</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_motorcycle_features_1ef519ec">摩托车功能</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_power_mode_357a57fe">电源模式</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_resolution_bd8b64ac">分辨率</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_turn_by_turn_routing_uses_your_own_stadia_maps_a_76117a71">"逐向导航使用你自己的 Stadia Maps API 密钥，绝不会用 "</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_units_4d25f4f">单位</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_delete_79cb71cb">删除</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_delete_this_trip_b2d7ee2d">删除此行程？</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_delete_trip_1d14595a">删除行程</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_discard_c6d7a07e">丢弃</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_export_gpx_83319643">导出 GPX</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_finish_save_39e52944">完成并保存</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_gps_logging_works_with_the_phone_locked_37383170">手机锁屏时也能记录 GPS</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_not_saved_d22da6ba">未保存</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_name_this_ride_9a657605">为该行程命名</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_opening_the_saved_trip_now_c583b843">正在打开已保存的行程。</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_recorded_rides_823a26eb">已录制的行程</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_recording_unavailable_9bbb7461">无法录制</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_ride_archive_c06bf17a">骑行档案</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_record_a_ride_ce0c4be6">录制一次骑行</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_recording_was_too_short_to_keep_6761ae14">录制时长过短，未予保留</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_rename_trip_584eaba7">重命名行程</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_ride_recordings_need_at_least_100_m_15_s_of_move_260f0993">骑行录制至少需要 100 m、15 s 的行驶时间和两个 GPS 点。</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_saved_4b07667">已保存</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_start_new_recording_36e83013">开始新的录制</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_start_recording_836b8b93">开始录制</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_track_details_6b05b82d">轨迹详情</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_the_gps_trace_and_all_recorded_statistics_will_b_6d59f1b7">GPS 轨迹和所有已记录的统计数据将被永久删除。</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trip_name_5c3de586">行程名称</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trip_saved_to_recorded_rides_31c5533c">行程已保存到已记录行程</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trips_4d520ce">行程</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_try_again_25aeb09b">重试</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_view_2832a5">查看</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trips_ca1b8627">‹ 行程</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_allow_apk_installation_a3116df5">允许安装 APK</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_checking_github_releases_7e509ccb">正在检查 GitHub 版本…</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_moto_hub_updates_c98ab24f">MOTO-HUB 更新</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_no_apk_asset_attached_to_this_release_7a89904d">此版本没有附带 APK 安装包。</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_no_newer_version_is_available_b79316a1">没有更新版本。</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_pre_release_6bd19a9d">预发布版</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_retry_4b33288">重试</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_skip_this_version_c2d1da37">跳过此版本</string>
+    <!-- Source: session/ProjectionForegroundService.kt -->
+    <string name="legacy_projection_is_running_8c249b1a">投屏正在运行</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_fill_and_crop_8b8b5d16">填充并裁剪</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_preserve_aspect_ratio_b340e377">保持宽高比</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_show_the_complete_image_with_black_side_bars_whe_90d880eb">必要时显示完整画面，两侧加黑边。</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_stretch_display_45b17e87">拉伸画面</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_use_the_whole_tft_and_keep_all_content_visible_w_6c1c6337">使用整个 TFT，稍微拉伸以显示全部内容。</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_use_the_whole_tft_without_stretching_crop_the_ed_8f0ac706">使用整个 TFT，不做拉伸；宽高比不同时裁剪边缘。</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_adjust_the_phone_media_level_while_handlebar_cap_a55dd55a">车把录制进行时，可调节手机媒体音量。</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_advanced_handlebar_mapping_d94a5a3b">高级车把映射</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_choose_the_day_night_style_used_by_android_auto_c4b5df26">选择 Android Auto 使用的日间/夜间风格。</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_customize_double_taps_holds_and_android_auto_com_59078421">自定义双击、长按和 Android Auto 命令。</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_destinations_available_to_one_press_handlebar_na_19306aee">可通过一键车把导航直达的目的地。</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_double_tap_a52552f4">双击</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_map_appearance_b4c189c8">地图外观</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_media_volume_142f4af6">媒体音量</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_saved_places_f8158025">已保存的地点</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_select_hold_6cc41543">长按选择</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_detected_networks_fa8527c3">检测到的网络</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_session_events_1a7f9e03">会话事件</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_android_auto_display_56c75982">Android Auto 显示</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_choose_widgets_for_each_side_panel_c04b42c9">为每个侧面板选择小组件</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_customize_dashboard_3d094ab7">自定义仪表盘</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_endpoint_geometry_protocol_and_feature_flags_7f197859">端点、几何、协议与功能开关</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_exclude_pixels_occupied_by_the_motorcycle_ui_c69e3740">排除摩托车界面占据的像素</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_how_the_complete_android_auto_image_fits_the_tft_11c8bbf2">完整 Android Auto 画面如何适配 TFT</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_override_automatic_profile_detection_b102be5">覆盖自动配置检测</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_t_box_capability_inspector_e5159c9d">T-Box 能力查看器</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_t_box_profile_override_f6f6b251">T-Box 配置覆盖</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_tft_safe_margins_d1e86e30">TFT 安全边距</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_motorcycle_15a347f8">‹ 摩托车</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_customize_d780ac23">自定义</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_dim_phone_display_4f190e58">调暗手机屏幕</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_draw_recorded_points_on_the_dashboard_map_d0764c05">在仪表盘地图上标出记录的点位。</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_keep_the_tft_active_while_reducing_phone_distrac_f9df0d5a">在减少手机干扰的同时让 TFT 保持活动。</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_open_the_on_screen_android_auto_controls_55f559a3">打开屏幕上的 Android Auto 控件。</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_preview_50417ba8">预览</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_preview_touch_c103ae4d">预览与触控</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_show_gps_track_2ed7fcf2">显示 GPS 轨迹</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_view_android_auto_and_interact_from_your_phone_1e4d3a53">查看 Android Auto，并在手机上操作。</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_review_your_route_before_starting_guidance_48917adb">开始导航前先查看路线。</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_take_me_home_bb1e43ee">带我回家</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_about_moto_hub_6966e1f8">关于 MOTO-HUB</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_android_auto_cb210d00">Android Auto</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_announce_upcoming_maneuvers_while_navigating_7c1d9f50">导航时播报接下来的路口动作</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_connect_on_launch_9e7cd0e0">启动时自动连接</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_connect_recovery_trip_recording_1bf7551f">自动连接、恢复、行程记录</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_record_rides_3d1b712a">自动记录骑行</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_recover_stalled_android_auto_and_ride_dashb_5da6ea2d">自动恢复卡住的 Android Auto 和骑行仪表盘投屏</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_bluetooth_capture_and_mapping_3e23fd19">蓝牙采集与映射</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_connect_and_discover_t_box_when_app_opens_fe05f1ea">打开应用时连接并搜索 T-Box</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_connection_automation_93f3bb33">连接与自动化</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_diagnostics_3748418c">诊断</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_disable_touchscreen_4f636f13">禁用触摸屏</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_draw_detected_curved_segments_in_a_distinct_colo_906c94c">在 TFT 地图上用不同颜色标出检测到的弯道段</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_enable_logging_e57825e2">启用日志</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_encoder_detail_and_power_mode_for_all_streams_9c18fdcf">所有视频流的编码细节与功耗模式</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_fuel_range_warning_e301d2ef">续航里程预警</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_full_client_info_every_candidate_profile_s_score_fb2a321f">"完整 CLIENT_INFO、每个候选配置的分数、未知命令 "</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_golden_hour_hint_26c00b9f">黄金时刻提示</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_highlight_curvy_roads_6d7866a">突出显示弯道路段</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_master_switch_for_the_diagnostic_log_off_means_n_1d7e2b81">"诊断日志的总开关。关闭表示不记录任何内容 "</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_navigation_e5d7e634">导航</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_network_tests_and_application_logs_6064f99">网络测试与应用日志</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_preview_ride_dashboard_cf294e4">预览骑行仪表盘</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_recovery_watchdog_eb0fb218">恢复看门狗</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_resolution_and_display_mode_70f7a2be">分辨率与显示模式</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_review_copy_share_or_clear_events_fa00934b">查看、复制、分享或清除事件</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_routes_through_fossgis_s_free_public_valhalla_se_5f3fb227">"使用 FOSSGIS 免费的公共 Valhalla 服务器规划路线，而不是 "</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_see_the_tft_render_on_this_phone_using_its_own_g_d21ea9ba">在这台手机上查看 TFT 画面，使用手机自身的 GPS - 无需 T-Box</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_show_forecast_conditions_at_your_destination_in__d467471f">在路线预览中显示目的地天气预报</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_show_minutes_to_the_nearest_sunrise_sunset_golde_840f15d">显示距离最近日出或日落黄金时刻的分钟数</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_start_gps_logging_with_projection_sessions_1c3d9c89">在投屏会话期间记录 GPS 日志</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_t_box_discovery_wi_fi_binding_cellular_routes_32d84d5f">T-Box 发现、Wi-Fi 绑定、蜂窝网络路由</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_try_without_a_key_demo_server_74e379d4">不填密钥试用（演示服务器）</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_use_focus_and_handlebar_controls_even_when_the_t_d1be0479">即使 T-Box 报告为触摸屏，也可以使用焦点和车把控制</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_verbose_t_box_logging_ee12f7b3">T-Box 详细日志</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_video_quality_3ed2f63a">视频质量</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_voice_guidance_a2d4eea6">语音引导</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_warn_when_a_route_would_exceed_your_motorcycle_s_c31a0f09">当路线超出摩托车油箱续航时发出警告（在车库中设置）</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_weather_at_arrival_44ffc4d8">到达时天气</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_your_own_routing_api_key_for_turn_by_turn_94d8b202">逐向导航用自己的路径规划 API 密钥</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_settings_7469104a">‹ 设置</string>
+    <!-- Source: feature/trips/TripRecordingService.kt -->
+    <string name="legacy_gps_ride_recording_and_trip_statistics_28992d34">GPS 骑行记录与行程数据</string>
+    <!-- Source: session/PhoneDisplayDimmer.kt -->
+    <string name="legacy_moto_hub_display_dimmer_57b6244b">MOTO-HUB 屏幕调暗</string>
+    <!-- Dynamic UI templates. Keep positional placeholders unchanged. -->
+    <string name="legacy_filter_1_d_497daa14">滤镜 %1$d</string>
+    <string name="legacy_recording_1_s_b01f3573">录制中 · %1$s</string>
+    <string name="legacy_1_d_optimized_gps_points_de88df06">已优化 %1$d 个 GPS 点</string>
+    <string name="legacy_place_1_d_name_6bdc57c6">位置 %1$d 名称</string>
+    <string name="legacy_save_place_1_d_39c7a048">保存地点 %1$d</string>
+    <string name="legacy_t_box_identifier_1_s_531e2638">T-Box 标识：%1$s</string>
+    <string name="legacy_1_s_fe2c9a02">‹ %1$s</string>
+    <string name="legacy_motorcycle_buttons_control_1_s_6e2f90ac">摩托车按键控制 %1$s</string>
+    <string name="legacy_rain_1_d_84b55e18">降雨 %1$d%%</string>
+    <string name="legacy_1_d_c_41e7b8ff">%1$d°C</string>
+    <string name="legacy_1_d_km_h_6ce8c40f">%1$d KM/H</string>
+    <!-- Weather forecast wind speed when the rider selects miles. -->
+    <string name="legacy_1_d_mph_669c2f51">%1$d MPH</string>
+    <string name="legacy_moto_hub_258caaa5">MOTO-HUB</string>
+    <string name="legacy_recording_this_ride_1aceedab">正在记录本次骑行</string>
+    <string name="legacy_moto_hub_controls_f72ba5d1">MOTO-HUB 控制</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_available_e7e32615">可用 %1$d</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_remaining_e0c291">剩余 %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_2_s_a1c6054a">%1$s · %2$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1000_mt_x_cfdl26_a07555df">1000 MT-X (CFDL26)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_200_ms_snappier_singles_bddf5c9a">200 ms - 单击更灵敏</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_300_ms_balanced_17f78a68">300 ms - 均衡</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_450_ms_forgiving_doubles_3234effd">450 ms - 双击更宽容</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_500_ms_quicker_hold_a1cbda27">500 ms - 长按更快</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_600_ms_balanced_9f5246b">600 ms - 均衡</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_800_ms_deliberate_hold_32e73399">800 ms - 长按更沉稳</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_800mt_cfdl26_9a9a6453">800MT (CFDL26)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_800nk_advanced_cfdl26_8796cfe5">800NK Advanced (CFDL26)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_active_profile_dcb9be6f">当前配置</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_4d461ce0">Android Auto</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_atms_1ed139">ATM</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_avg_feb2">平均</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_avg_speed_7231cd39">平均速度</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_access_point_2a7fd7f4">接入点</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_airports_db81a128">机场</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_album_cover_current_track_and_progress_5704cf2c">专辑封面、当前曲目和播放进度</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_altitude_7d3daec2">高度</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_map_9e2be3c">Android Auto 地图</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_arc_speedometer_bearing_and_gnss_lock_status_a1dab290">弧形速度表、方位和 GNSS 锁定状态</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_assistant_ccab92be">助手</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_attractions_ab6135cc">景点</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_auto_1f51cf">自动</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_auto_day_night_808f223b">自动（日/夜）</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_backward_left_7f90d6f7">快退 - 左</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_backward_double_tap_left_bf920c29">快退双击 - 左</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bakery_7628ee00">烘焙店</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_banks_3cfd197">气缸排</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bars_pubs_8301b610">酒吧与酒馆</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_battery_phone_fc45d1a1">电量与手机</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_battery_charging_connectivity_temperature_and_mo_59cfa2d5">电量、充电、连接、温度和运动传感器</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bicycle_rental_cee64385">自行车租赁</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_absolute_volume_change_3096ab72">蓝牙绝对音量变化</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_next_track_command_7a7046ee">蓝牙下一曲指令</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_play_pause_command_a9252e58">蓝牙播放/暂停指令</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_previous_track_command_d68a66f2">蓝牙上一曲指令</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl16_450sr_style_non_touch_b3fdf770">CFDL16 / 450SR 式非触控</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl16_legacy_b0fd3b8a">CFDL16 / Legacy</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl26_motoplay_landscape_touch_a52d575c">CFDL26 MotoPlay 横屏触控</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl26_motoplay_portrait_handlebar_primary_c724cad9">CFDL26 MotoPlay 竖屏车把优先</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfmoto_800nk_97f23a55">CFMOTO 800NK</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cl_c450_5c8b3190">CL-C450</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_crcp_sdk_0_9_23_x_non_touch_5621c1f8">CRCP / sdk 0.9.23.x 非触控</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_campsites_75e7180b">营地</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_car_service_917649">汽车服务</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_charging_5973c691">正在充电</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_choose_a_widget_for_1_s_26345a66">为 %1$s 选择小组件</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_compass_9bdfd4f2">指南针</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_current_conditions_wind_humidity_via_open_meteo_4e58c8f3">当前实况、风力、湿度由 Open-Meteo 提供</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_down_1de05778">十字键下</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_left_1de3d2dd">十字键左</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_right_9eecea06">十字键右</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_up_a8ebfef1">十字键上</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d29c">十字键 ▲</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d2a0">十字键 ▶</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d2a6">十字键 ▼</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d2aa">十字键 ◀</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_dist_2005a6">距离</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_distance_3fd77bf5">距离</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_day_light_2f4e1b57">日间（浅色）</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_detect_from_the_motorcycle_recommended_9fd07c6f">从摩托车检测（推荐）</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_development_simulator_profile_45f9bdc8">开发模拟器配置</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_do_nothing_a83eb158">不执行任何操作</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_double_press_c52a55d2">下方向双击</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_press_6ec23765">下方向按压</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_double_f6f5f8f8">下 · 双击</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_single_1037016f">下 · 单击</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_drinking_water_6ae0dde1">喝水</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_elapsed_c777dd5c">已用时</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_elevation_857ea708">海拔 +</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_editing_1_s_a5399c23">正在编辑 %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_elevation_profile_climb_rate_and_gps_accuracy_d7b5d893">海拔剖面、爬升率与 GPS 精度</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_favorites_3baf7a37">收藏</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_favorite_427c2dbc">收藏</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_fire_stations_e5a3dc49">消防站</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_food_21807e">餐饮</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_forward_right_ed1ba1ce">向前 - 右</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_forward_double_tap_right_50824858">向前双击 - 右</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_gnss_satellite_visibility_and_fix_status_55616e56">GNSS 卫星可见性与定位状态</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_gps_search_f2175dfe">GPS 搜索</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_gps_1_d_m_85cd2614">GPS ±%1$d m</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_guiding_to_destination_1328e050">导航至目的地</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_heading_sun_altitude_and_rider_relative_sun_posi_8620d321">航向、太阳高度角和相对骑手的太阳位置</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_hospitals_466ae959">医院</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_hotels_stays_e91bd2ff">酒店与住宿</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_in_use_1_s_9a0bc66d">使用中 • %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_key_configured_d2c8ebf">已配置密钥</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_large_glove_friendly_actions_for_the_active_dash_ae3e3599">为当前仪表盘提供大号、便于戴手套操作的动作。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_larger_absolute_volume_change_c11a1729">更大的绝对音量变化</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_left_panel_9dcb38cb">左侧面板</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_left_double_f4a67f33">左 · 双击</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_left_single_de787aa">左 · 单击</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_log_copied_to_clipboard_a7cbe711">日志已复制到剪贴板</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_max_12944">最大</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_max_speed_6338424b">最高速度</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_mode_2431a3">模式</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_moto_hub_simulator_72ee829">MOTO-HUB 模拟器</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_moving_87e69c4e">移动中</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_manage_88ef8985">管理</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_manage_guidance_search_a_new_destination_or_resu_7899102a">管理引导、搜索新目的地，或继续你的路线。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_manual_recording_73634e37">手动录制</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_mirroring_8b513fa3">投屏中</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_mirrors_android_auto_s_own_map_5091f0fa">投屏 Android Auto 自带的地图</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_motoplay_landscape_cfdl16_47ddf145">MotoPlay 横屏（CFDL16）</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_motorcycle_service_4f005f46">摩托车保养</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigation_8beff614">导航</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_no_key_set_25cc0b82">未设置密钥</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_native_turn_by_turn_navigation_rendered_on_the_t_96caa565">在 TFT 上呈现的原生逐向导航</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_nav_place_1_9c6fda12">导航 · 地点 1</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_nav_place_2_9c6fda13">导航 · 地点 2</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_nav_place_3_9c6fda14">导航 · 地点 3</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigate_place_1_8cdacefb">导航至 → 地点 1</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigate_place_2_8cdacefc">导航至 → 地点 2</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigate_place_3_8cdacefd">导航至 → 地点 3</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_near_square_panel_544x512_7dfae4b9">近方形面板，544x512</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_near_square_touch_panel_720x712_644c47fc">近方形触控面板，720x712</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_next_turn_eta_sun_position_daylight_remaining_48ea2589">下一路口、预计到达时间、太阳位置、剩余日照</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_night_dark_e807e573">夜间（深色）</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_none_252358">无</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_now_playing_774920a4">正在播放</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ok_select_85c307d1">确定 / 选择</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_off_1354f">关闭</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_openstreetmap_12cdd70f">OpenStreetMap</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_phone_489454e">手机</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_pad_fullscreen_screen_stays_on_tap_exit_to_leave_fed4fb3e">铺满全屏 — 屏幕保持点亮。点按“退出”离开。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_parking_33f14b98">停车</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_pharmacies_3d1e90b1">药店</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_picnic_8e7a005e">野餐</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_police_8ed2913e">警察</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_post_offices_828381d7">邮局</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_quick_controls_b6d227a9">快捷控制</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_recent_destinations_4acda7ca">最近目的地</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_recorded_route_823d22b9">已记录路线</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ride_dashboard_7a0ca94c">骑行仪表盘</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rides_4a5be5b">行程</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_route_options_30bc2f87">路线选项</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_route_preview_683e8cb1">路线预览</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_requires_a_real_bluetooth_key_up_e9aa900c">需要真实的蓝牙按键触发</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rest_areas_9d275e5a">休息区</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ride_dashboard_ae928d6c">骑行仪表盘</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_right_panel_f3a982e0">右侧面板</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_right_double_8bb580fe">右 · 双击</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_right_single_a4f68975">右 · 单击</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rotary_back_875f5656">旋钮后退</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rotary_forward_5bd716f6">旋钮前进</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_saved_routes_18cdcb23">已保存的路线</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_search_results_3469955e">搜索结果</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_selected_for_1_s_49f82b77">已选 %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_satellites_110a3ab8">卫星</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_save_route_5f739206">保存路线</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_search_a_destination_pick_a_favorite_or_start_fr_a4048c1b">搜索目的地、选择收藏，或从已保存的路线开始。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_ok_6ca8fff1">选择 / 确定</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_double_tap_enter_star_8a562c06">双击选择 - 回车 / 星标</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_hold_enter_star_217fe7bb">长按选择 - 回车 / 星标</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_tap_enter_star_b26a1adf">单击选择 - 回车 / 星标</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_double_44fd35de">选择 · 双击</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_hold_ce87ce0c">选择 · 长按</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_tap_2ff408b6">选择 · 单击</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_send_navigation_and_selection_commands_to_androi_887e42f0">向 Android Auto 发送导航和选择命令。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_speed_gauge_85be8ba0">速度表</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_start_android_auto_to_enable_the_controller_2a5eb409">启动 Android Auto 以启用遥控器。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_start_the_dashboard_to_enable_these_actions_1fe53fdf">启动仪表盘以启用这些操作。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_supermarkets_5e8b87fc">超市</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_connected_35a5911b">T-Box 已连接</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_time_274acd">时间</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_total_4c4e324">总计</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_toilets_1eefa3e6">洗手间</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_touch_controller_53c8733d">触摸控制器</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_trip_metrics_7c88c7c8">行程数据</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_trip_distance_duration_average_speed_and_speed_p_97ed123f">行程里程、时长、平均速度与速度曲线</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_two_next_track_presses_inside_the_window_7db072f9">在窗口内按两次下一曲</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_two_presses_inside_the_double_tap_window_cc11c279">在双击窗口内按两次</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_create_log_file_9dac9184">无法创建日志文件</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_save_the_motorcycle_photo_d9e617d">无法保存摩托车照片</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_double_press_5e63a079">上双击</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_press_df788a9e">上单击</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_double_6854af1f">上 · 双击</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_single_8195b796">上 · 单击</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_viewpoints_390623e8">视点</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_weather_ac24cfd4">天气</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_where_are_you_going_f697966b">你要去哪里？</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_wi_fi_direct_p2p_5247f7ce">Wi-Fi Direct（P2P）</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_your_route_is_live_e56afe3e">你的路线已启用</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_modelid_66660742_wi_fi_direct_non_touch_f23f0c0b">modelId 66660742，Wi-Fi Direct，非触摸</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_absolute_volume_change_53b165a0">绝对音量变化</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_play_pause_command_31202f86">播放/暂停指令</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_previous_track_command_f9a52120">上一曲指令</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_next_track_command_26b481c">下一曲指令</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_both_1f3381">两者</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_live_564f882c">Android Auto 实时画面</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_standby_9525974d">Android Auto 待机</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_phone_preview_live_290cbf6">手机预览实时</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_7d22d040">正在启动</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_live_on_tft_d375f015">TFT 实时画面</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_preparing_69cf13e4">准备中</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_recording_route_df2cfb1a">正在记录路线</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_is_ready_to_connect_6b95609b">%1$s 已准备好连接。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_allow_moto_hub_notifications_to_keep_streaming_v_4700fc1e">允许 MOTO-HUB 通知，让投屏保持可见、可控。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_allow_nearby_devices_and_location_to_detect_the__a4c1fa2c">允许附近的设备和位置权限，以检测 T-Box 的 Wi-Fi 网络。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_is_requesting_a_connection_to_1_s_ffe67969">Android 正在请求连接到 %1$s。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_camera_permission_is_required_to_read_the_t_box__4e87d105">需要相机权限才能读取 T-Box 二维码。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_connection_cancelled_you_can_try_again_at_any_ti_19906357">连接已取消。你可以随时重试。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_disconnected_372b4933">已断开。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_motorcycle_8dd33db1">摩托车</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_network_connected_searching_for_the_easyconn_ser_851763f6">网络已连接。正在搜索 EasyConn 服务。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_no_known_phone_location_yet_move_outdoors_and_re_47df6139">尚不知道手机位置；请到室外重试。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_pair_a_motorcycle_in_garage_before_starting_navi_76f923b3">开始导航前，先在“车库”中配对摩托车。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_permission_granted_starting_the_capture_session_4805d845">权限已授予。正在启动采集会话。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_profile_saved_connect_to_the_t_box_network_and_s_a9069261">配置已保存。连接到 T-Box 网络并开始搜索。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_qr_code_scanned_but_the_profile_was_not_saved_1__e3b6164f">已扫描 QR 码，但配置未保存：%1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ride_dashboard_streaming_is_active_on_the_motorc_3729a921">骑行仪表盘正在摩托车 TFT 上串流播放。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_set_up_the_motorcycle_network_to_get_started_32bb831">设置摩托车网络即可开始使用。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_sharing_cancelled_by_the_user_72c1171e">用户已取消分享。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_something_went_wrong_try_again_b634c6cc">出了点问题，请重试。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_the_ride_dashboard_pipeline_f27c3ca7">正在启动骑行仪表盘通道。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_the_native_ride_dashboard_d28cae88">正在启动原生骑行仪表盘。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_the_projection_pipeline_bcc6994a">正在启动投屏通道。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_stop_the_current_mirroring_or_android_auto_sessi_5390e262">从这里打开骑行仪表盘前，先停止当前的镜像或 Android Auto 会话。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_streaming_active_to_the_motorcycle_tft_b881d9a3">正在向摩托车 TFT 传输。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_qr_code_scanned_and_saved_1_s_is_ready_to__d28dd75d">T-Box QR 码已扫描并保存。%1$s 已准备好连接。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_connection_lost_reconnect_to_the_motorcycl_cb4aa98e">T-Box 连接已断开。请重新连接到摩托车网络。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_found_you_can_now_choose_an_app_or_screen__163f7c13">已找到 T-Box。现在可以选择要投屏的应用或屏幕。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_not_found_1_s_656efb68">未找到 T-Box：%1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_that_search_is_too_long_try_a_shorter_search_e54badba">该搜索词过长。请换更短的搜索词。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_curved_segments_detected_af1abc2b">检测到 %1$d 个弯道路段</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_entries_newest_first_7c18f089">%1$d 条记录 / 最新在前</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_km_remaining_after_this_route_1b9e2ebf">走完这条路线后还剩 %1$d km</string>
+    <!-- Fuel-range warning when the rider selects miles. -->
+    <string name="legacy_1_d_mi_remaining_after_this_route_aaf9da45">走完这条路线后还剩 %1$d mi</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_2_s_3_s_4fcb415a">%1$s %2$s: %3$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_2_d_c_4859b80e">%1$s · %2$d°C</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_connect_a_motorcycle_before_customizing_its_dash_cc281859">请先连接摩托车，再自定义其仪表盘。</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_curvy_roads_ahead_15524f7">前方弯路</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_golden_hour_in_1_d_min_5c769914">%1$d 分钟后进入黄金时刻</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_golden_hour_now_ab52d7b1">已进入黄金时刻</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_installed_version_1_s_2_d_29cd3201">已安装版本：%1$s（%2$d）</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_location_and_notifications_are_required_while_re_4f6ceb2b">记录行程时需要定位和通知</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_opening_in_1_d_s_42389c34">%1$d 秒后打开…</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_peer_1_s_2_s_521b5084">对端 %1$s -&gt; %2$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_port_1_d_b6522e8b">端口 %1$d</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_open_github_8bdb9881">无法打开 GitHub</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_open_wi_fi_settings_537aaf03">无法打开 Wi-Fi 设置</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_open_the_companion_app_settings_c0a83e03">无法打开配套应用设置</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_no_open_ports_found_8533cd9d">未发现开放端口</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_open_1_s_e55a596b">打开：%1$s</string>
+    <!-- Android Auto pre-flight: an OEM companion app is installed, but may not be active. %1$s is
+         its name as shown on the phone (CFMOTO, Zontes Smart, Carbit Ride, ...). -->
+    <string name="legacy_1_s_detected_66208287">已检测到 %1$s</string>
+    <string name="legacy_moto_hub_starts_google_android_auto_not_1_s_3a77813f">MOTO-HUB 启动的是 Google Android Auto，而不是 %1$s。</string>
+    <string name="legacy_1_s_can_still_take_over_the_dashboard_connection_5bc85002">%1$s 在后台时仍可能占用仪表盘连接。为保证投屏稳定，请先在 Android 设置中强制停止它再继续。</string>
+    <string name="legacy_continue_with_android_auto_f6c7ef01">继续使用 Android Auto</string>
+    <string name="legacy_open_1_s_settings_470b74f2">打开 %1$s 设置</string>
+    <string name="legacy_do_not_show_this_warning_again_d3abf59b">不再显示此警告</string>
+    <!-- Source: tbox/ProfileOverride.kt -->
+    <string name="legacy_generic_dashboard_53d1376b">通用仪表盘</string>
+    <!-- Source: tbox/ProfileOverride.kt -->
+    <string name="legacy_neutral_defaults_for_a_dashboard_that_is_not_rec_8d299cf0">无法识别的仪表盘使用中性默认值</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_unfamiliar_pairing_code_714f8ce7">陌生的配对码</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_this_code_carries_wi_fi_details_for_1_s_but_it_w_422a5994">该二维码包含 %1$s 的 Wi-Fi 信息，但它不是由 MOTO-HUB 所知的仪表盘那样的 Carbit 地址签发。</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_several_manufacturers_ship_the_same_dashboard_so_49305d38">有多家厂商以自己的品牌搭载同一套仪表盘软件，所以这很可能就是你的摩托车。只有在你从自己的仪表盘上扫码时才继续。</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_use_these_details_52f852ac">使用这些信息</string>
+
+    <!-- ===========================================================         Catalogue sweep, 2026-08-13: strings this worktree draws but had
+         no identifier for. Values come from the pro-poc catalogues, where
+         the same source strings are already translated.
+         ================================================================== -->
+
+    <!-- Source: MainActivity.kt -->
+    <string name="legacy_unable_to_open_discord_50e2e02e">无法打开 Discord</string>
+
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_d_taps_away_from_the_prototype_779bf960">距离原型还差 %d 次点击</string>
+    <string name="legacy_community_source_fe28bfcc">社区与源码</string>
+    <string name="legacy_discord_c6d7d50c">Discord</string>
+    <string name="legacy_github_7f258fe3">GitHub</string>
+    <string name="legacy_map_rendering_by_maplibre_native_bsd_2_clause_ve_1f7cda7f">「地图渲染由 MapLibre Native（BSD-2-Clause）提供。矢量瓦片来自 OpenFreeMap，采用 OpenMapTiles 架构；栅格瓦片来自 OpenStreetMap 基金会。地址搜索由 Photon 提供。路径规划由 Valhalla 提供，托管于 Stadia Maps 或 FOSSGIS 演示服务器。地点数据来自 Overpass。天气来自 Open-Meteo。油价由西班牙 Ministerio para la Transición Ecológica、葡萄牙 DGEG、法国 Ministère de l\'Économie 和意大利 MIMIT 作为开放数据发布。DGEG 的数据不得用于商业用途。」</string>
+    <string name="legacy_maps_data_b256210d">地图与数据</string>
+    <string name="legacy_maps_addresses_and_routes_are_built_on_data_by_o_f0b02b91">地图、地址和路线基于 © OpenStreetMap 贡献者提供的数据构建，采用 ODbL 许可。</string>
+    <string name="legacy_prototype_unlocked_856a4841">原型功能已解锁</string>
+
+    <!-- Source: feature/androidauto/AndroidAutoHelpScreen.kt -->
+    <string name="legacy_a_notification_confirms_the_server_is_running_le_eacf82e">通知会确认服务器正在运行。请让它保持运行：它会一直开启，直到你停止它或重启手机。</string>
+    <string name="legacy_android_auto_17_4_removed_the_way_an_app_can_ask_890c8f24">Android Auto 17.4 去掉了应用请求它投屏的方式。MOTO-HUB 仍会尝试，在旧版本上有效——但如果无效，可以改为从它自己的开发者菜单启动 Android Auto。你无需安装任何东西。</string>
+    <string name="legacy_android_auto_does_not_start_2266b70e">Android Auto 无法启动</string>
+    <string name="legacy_every_time_android_auto_will_not_start_18ff3ab9">每次 Android Auto 都无法启动</string>
+    <string name="legacy_go_back_to_moto_hub_and_start_android_auto_it_co_ff8cc50d">返回 MOTO-HUB 并启动 Android Auto。它会在几秒内自行连接 —— 不用再按任何按钮。</string>
+    <string name="legacy_in_android_auto_s_developer_settings_open_the_me_1ea3a8cf">「在 Android Auto 的开发者设置中，打开右上角的 ⋮ 菜单并选择『启动车机服务器』。它在这个菜单里，不在它下方的设置列表中。」</string>
+    <string name="legacy_in_developer_settings_turn_on_add_new_cars_to_an_19f79566">在开发者设置中，打开「将新车添加到 Android Auto」（旧版本中称为「未知来源」）。</string>
+    <string name="legacy_jumps_straight_to_the_app_where_the_menu_above_l_7c8b2093">直接跳转到上面那个菜单所在的应用</string>
+    <string name="legacy_normally_moto_hub_waits_and_asks_android_auto_to_6c183bab">通常 MOTO-HUB 等待并请求 Android Auto 连接到它。17.4 版为所有这类应用关上了这扇门，不只是这一个。车机服务器把方向反了过来——由 Android Auto 等待，MOTO-HUB 去连接它——这是 Google 为自己的测试工具留下的一扇门。</string>
+    <string name="legacy_one_time_setup_ca24c531">一次性设置</string>
+    <string name="legacy_open_android_auto_settings_48a5120d">打开 Android Auto 设置</string>
+    <string name="legacy_open_the_android_auto_app_scroll_to_the_bottom_a_69ae9e53">打开 Android Auto 应用，滚动到底部并点按“版本”十次。开发者设置就会出现。</string>
+    <string name="legacy_why_14fa8">原因</string>
+
+    <!-- Source: feature/controls/BluetoothStatus.kt -->
+    <string name="legacy_allow_bluetooth_access_so_the_app_can_see_whethe_8754f4c2">允许访问蓝牙，让应用知道摩托车是否已连接。</string>
+    <string name="legacy_bluetooth_is_off_turn_it_on_then_pair_the_motorc_5375bc65">蓝牙已关闭 — 请先打开蓝牙，然后与摩托车配对。</string>
+    <string name="legacy_connected_now_1_s_if_that_is_the_motorcycle_the__cd016af1">当前已连接：%1$s。如果那就是这辆摩托车，车把按键就可以操作手机。</string>
+    <string name="legacy_no_audio_device_is_connected_right_now_with_the__7d4f4d3e">当前没有连接音频设备。启动摩托车后，它的仪表盘应该会出现在这里——如果一直没有，请从蓝牙设置中配对。</string>
+    <string name="legacy_this_phone_has_no_bluetooth_b42f7e85">该手机没有蓝牙。</string>
+
+    <!-- Source: feature/controls/HandlebarMappingScreen.kt -->
+    <string name="legacy_a_button_the_app_has_not_been_taught_yet_53060697">应用尚未学会的按键</string>
+    <string name="legacy_a_single_press_acts_immediately_instead_of_waiti_ebd37a80">单击会立即执行，不再等待双击判定窗口。双击仍然有效——只是会先执行单击。</string>
+    <string name="legacy_allow_bluetooth_bbde9a57">允许蓝牙</string>
+    <string name="legacy_bluetooth_settings_ed5eb975">蓝牙设置</string>
+    <string name="legacy_checking_bluetooth_ce222d3e">正在检查蓝牙…</string>
+    <string name="legacy_choose_what_this_press_does_4e74fce9">选择这次按下的作用。</string>
+    <string name="legacy_done_1_d_presses_learned_dd4b86bd">完成 - 已学习 %1$d 次按键。</string>
+    <string name="legacy_double_press_window_a8b0763c">双击时间窗口</string>
+    <string name="legacy_every_card_now_describes_your_handlebar_buttons__f70bd7b3">现在每张卡片都对应你的车把。标记为不存在的按键已移除。</string>
+    <string name="legacy_finish_7d6e78b3">完成</string>
+    <string name="legacy_handlebar_7b449ccb">车把</string>
+    <string name="legacy_hold_gestures_a5df4e6b">长按手势</string>
+    <string name="legacy_hold_time_bba08d6e">按住时长</string>
+    <string name="legacy_how_long_the_app_waits_before_deciding_a_press_w_fbe08ef2">应用在判定一次按键是双击还是长按之前的等待时长。</string>
+    <string name="legacy_motorcycle_bluetooth_88c59adf">摩托车蓝牙</string>
+    <string name="legacy_not_detected_yet_d1e8f877">尚未检测到</string>
+    <string name="legacy_not_on_my_bike_49509421">不在我的车上</string>
+    <string name="legacy_nothing_happens_some_dashboards_keep_a_button_fo_c80119d0">没有反应？有些仪表盘会自己占用一个按键，完全不向手机发送任何信号 - 在 CFMOTO CFDL16 上，短按一下摇杆按键就是这样。将其标记为不存在，它就不再占用位置。</string>
+    <string name="legacy_on_the_motorcycle_do_this_5d34555e">在摩托车上，请这样做</string>
+    <string name="legacy_one_card_per_button_with_what_a_press_a_double_p_e88303f5">每个按键一张卡片，分别说明单击、双击和长按各自的作用。教学车把，让应用知道你的车把上实际有哪些按键。</string>
+    <string name="legacy_press_a_handlebar_button_fd958503">按下车把按键</string>
+    <string name="legacy_reset_actions_to_defaults_95ecb43">将动作重置为默认值</string>
+    <string name="legacy_skip_27599f">跳过</string>
+    <string name="legacy_snappy_singles_330a9d7e">灵敏单击</string>
+    <string name="legacy_step_1_d_of_2_d_72bf41f6">第 %1$d 步，共 %2$d 步</string>
+    <string name="legacy_stop_here_d51e892e">在此停靠</string>
+    <string name="legacy_teach_my_handlebar_51393162">教学我的车把</string>
+    <string name="legacy_timing_937fe44a">正时</string>
+    <string name="legacy_turn_off_if_your_handlebar_needs_a_long_physical_c92718d1">如果车把每次点击都需要长按，就关闭此项，否则这些按压会被当作长按吞掉。</string>
+    <string name="legacy_controls_fd1b9add">‹ 控制</string>
+    <string name="legacy_handlebar_c1b6ada4">‹ 车把</string>
+
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_add_your_first_motorcycle_to_get_rolling_b8e9f267">添加第一辆摩托车，即可出发。</string>
+    <string name="legacy_no_motorcycle_no_problem_4346def1">没有摩托车？没关系</string>
+
+    <!-- Source: feature/home/CoreAvailability.kt -->
+    <string name="legacy_advanced_needs_moto_hub_core_installed_and_paire_722fef7d">Advanced 需要安装 MOTO-HUB (Core) 并与你的 T-Box 配对，才能连接、投屏或运行 Android Auto。</string>
+    <string name="legacy_couldn_t_open_the_browser_3e0fae25">无法打开浏览器。</string>
+    <string name="legacy_download_moto_hub_core_976f62e2">下载 MOTO-HUB Core</string>
+    <string name="legacy_moto_hub_core_not_found_b76c3f4f">未找到 MOTO-HUB CORE</string>
+
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_android_auto_17_4_removed_the_way_apps_ask_it_to_b5455068">“Android Auto 17.4 去掉了应用请求它投屏的方式。仍然可以从 Android Auto 自己的开发者菜单启动它。”</string>
+    <string name="legacy_one_possible_cause_1_s_is_installed_and_can_keep_47cef163">可能的原因之一：%1$s 已安装，即使在后台也会占用仪表盘连接。如果连接一直失败，请从它的应用信息页面强制停止，然后重试。</string>
+    <string name="legacy_open_1_s_app_info_33a7c01c">打开 %1$s 应用信息</string>
+    <string name="legacy_retry_connection_54743f76">重新连接</string>
+    <string name="legacy_some_dashboards_never_broadcast_a_network_of_the_787ecd2c">有些仪表盘从不广播自己的网络：它们会连接你手机创建的热点，使用仪表盘上显示的 SSID 和密码。如果你的仪表盘显示\"打开 Android 热点\"，就改用那个。</string>
+    <string name="legacy_1_s_is_installed_and_may_be_holding_the_dashboar_2c02bb10">%1$s 已安装，可能正在占用仪表盘。请在其应用信息页强制停止，然后重试。</string>
+    <string name="legacy_try_my_phone_hosts_the_hotspot_d4f6db66">试用：我的手机提供热点</string>
+
+    <!-- Source: feature/home/HubViewModel.kt -->
+    <string name="legacy_network_connected_pairing_over_bluetooth_and_wai_5b4c6259">网络已连接。正在通过蓝牙配对，等待仪表盘。</string>
+
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_altitude_ft_89feab0c">高度 FT</string>
+    <string name="legacy_altitude_m_caa51e4f">高度 M</string>
+    <string name="legacy_distance_ft_552284d9">距离 FT</string>
+    <string name="legacy_distance_km_5522856d">距离 KM</string>
+    <string name="legacy_distance_m_a7e856e2">距离 M</string>
+    <string name="legacy_distance_mi_552285a7">距离 MI</string>
+    <string name="legacy_max_km_h_45403037">最高 km/h</string>
+    <string name="legacy_max_mph_5d129e29">最高 mph</string>
+
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_connect_and_recovery_57ed0872">自动连接与恢复</string>
+    <string name="legacy_auto_recover_stalled_android_auto_streams_bd3e2d8e">自动恢复卡住的 Android Auto 投屏</string>
+    <string name="legacy_button_mapping_815600">按键映射</string>
+    <string name="legacy_buttons_control_android_auto_3dc44642">按键控制 Android Auto</string>
+    <string name="legacy_drive_android_auto_with_the_motorcycle_s_buttons_ec16509d">「用车把按键操控 Android Auto」</string>
+    <string name="legacy_handlebar_buttons_47b4fd2c">车把按键</string>
+    <string name="legacy_managed_by_the_companion_app_its_controls_screen_9ad80a75">由配套应用管理：它的控制界面会在每次会话开始时重新应用自身的车把配置，覆盖这里设置的配置。请在那边配置车把。</string>
+    <string name="legacy_music_volume_9fa56d95">音乐音量</string>
+    <string name="legacy_off_means_the_mode_picker_stays_exactly_as_befor_c93efb5c">关闭表示模式选择器保持原样。</string>
+    <string name="legacy_on_9ff">开启</string>
+    <string name="legacy_put_a_screen_on_the_tft_as_soon_as_the_motorcycl_60bf969c">摩托车一连上就在 TFT 上显示画面</string>
+    <string name="legacy_requires_the_phone_paired_to_the_motorcycle_s_bl_dda6960a">需要手机已与摩托车蓝牙配对。会话运行期间音乐照常播放，但其按键会被截获。</string>
+    <string name="legacy_set_the_dash_clock_over_bluetooth_experimental_3431b284">通过蓝牙设置仪表盘时钟（实验性）</string>
+    <string name="legacy_set_the_dash_clock_over_wi_fi_292a2ca5">通过 Wi-Fi 设置仪表盘时钟</string>
+    <string name="legacy_on_by_default_and_what_sets_the_time_on_most_das_6234cd82">默认开启，大多数仪表盘靠它校时。只有当你的仪表盘向 MOTO-HUB 询问时间、忽略回答却仍显示 01.01.1970 时才关闭它：在这些仪表上写入时钟不会有任何作用，还可能覆盖你在仪表盘上手动设置的时间。关闭后车辆仍会正常连接，只是再也不会被告知当前时间。</string>
+    <string name="legacy_your_dashboard_has_been_seen_asking_for_the_time_c02f4d97">可以看到你的仪表盘向手机询问时间、得到回答，然后依旧按自己的上电时间继续计时。这个开关无论打开还是关闭都不会改变它：那个时钟由仪表盘自己保持，不是由手机保持。</string>
+    <string name="legacy_settings_595d2043">设置</string>
+    <string name="legacy_some_dashboards_ask_for_the_time_over_bluetooth__b44ce43b">有些仪表盘通过蓝牙而不是 Wi-Fi 询问时间，没有蓝牙就一直停在 00:00。需要先在 Android 的蓝牙设置中把这台手机与摩托车配对。默认关闭；MOTO-HUB 只会回应使用仪表盘自身协议的设备。</string>
+    <string name="legacy_some_dashboards_forget_settings_like_the_clock_w_76d95842">有些仪表盘在 Wi-Fi Direct 链路完全断开后会丢失时钟这类设置。它会让手机保持关联到摩托车的网络，直到你离开应用或关闭 Wi-Fi。默认关闭；只有在断开后仪表盘不再显示时间时才打开。</string>
+    <string name="legacy_start_automatically_2cb44c45">自动启动</string>
+    <string name="legacy_start_on_connect_94487a47">连接时启动</string>
+    <string name="legacy_stay_linked_to_the_bike_s_wi_fi_after_disconnect_81b0e941">断开连接后保持连接摩托车的 Wi-Fi</string>
+    <string name="legacy_the_motorcycle_s_buttons_reach_the_phone_over_bl_356cbf0d">“摩托车上的按键通过蓝牙以媒体键的形式传到手机。会话推流时，MOTO-HUB 可以截获这些按键，用它们操控 Android Auto 导航，而不是操控音乐播放器。”</string>
+    <string name="legacy_what_each_press_double_press_and_hold_does_97201ad9">单击、双击和长按各自的作用</string>
+    <string name="legacy_what_to_do_when_android_auto_refuses_to_project_fa692d1b">Android Auto 拒绝投屏时该怎么做</string>
+    <string name="legacy_what_to_start_5b78fc39">启动什么</string>
+    <string name="legacy_while_capture_is_on_the_volume_buttons_navigate__9e410bf">录制开启时，音量键用于导航而不是调节音量 —— 收听音量在这里设置。</string>
+    <string name="legacy_with_this_on_moto_hub_skips_the_what_should_i_sh_498b0614">开启后，MOTO-HUB 会跳过『该显示什么？』页面，摩托车连接建立后立即把所选页面投屏到 TFT。每次启动应用只执行一次 —— 停止某个页面后即可重新控制。</string>
+
+    <!-- Source: ui/components/SystemKillNotice.kt -->
+    <string name="legacy_dismiss_c6dc4a6a">关闭</string>
+    <string name="legacy_stopped_by_your_phone_37b2b157">由你的手机停止</string>
+    <string name="legacy_your_last_session_ended_at_1_s_because_the_phone_8386f49c">你上一次会话在 %1$s 结束，是因为手机关闭了 %2$s，而不是应用出了故障。</string>
+
+    <!-- ==================================================================
+         Catalogue sweep, 2026-08-13 (second pass): source strings that sit
+         inside an if/when/arrayOf within the lookup call.
+         ================================================================== -->
+
+    <!-- Source: feature/ai/AiSettingsScreen.kt -->
+    <string name="legacy_api_key_fb0d9b39">API 密钥</string>
+    <string name="legacy_replace_api_key_d64eadad">替换 API 密钥</string>
+
+    <!-- Source: feature/androidauto/AndroidAutoPreviewScreen.kt -->
+    <string name="legacy_hide_controls_2dc943b4">隐藏控件</string>
+
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_1_d_rpm_2_d_km_h_3_d_c_coolant_60ed46da">%1$d rpm · %2$d km/h · 水温 %3$d °C</string>
+    <string name="legacy_obd_adapter_connected_29e365e9">OBD 适配器已连接</string>
+    <string name="legacy_saved_4bf7e67">已保存</string>
+    <string name="legacy_the_dashboard_shows_why_on_the_motorcycle_442e8daa">仪表盘会在摩托车上显示原因。</string>
+    <string name="legacy_waiting_for_the_obd_adapter_b3b01207">等待 OBD 适配器</string>
+
+    <!-- Source: feature/controls/HandlebarMappingScreen.kt -->
+    <string name="legacy_listening_2ece009b">正在聆听</string>
+    <string name="legacy_received_d3a64e01">已接收</string>
+    <string name="legacy_teach_again_4fb10bd5">重新教学</string>
+
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_bluetooth_is_turned_off_so_the_obd_adapter_canno_5a8640c">蓝牙已关闭，因此无法连接 OBD 适配器。</string>
+    <string name="legacy_customizable_vector_map_rendered_on_the_tft_bfa6e220">在 TFT 上渲染的可自定义矢量地图</string>
+    <string name="legacy_gps_following_8ad5867b">GPS 跟随</string>
+    <string name="legacy_moto_hub_needs_bluetooth_access_to_reach_the_obd_af681be3">MOTO-HUB 需要蓝牙权限才能连接 OBD 适配器。</string>
+    <string name="legacy_no_map_live_engine_data_from_a_paired_elm327_ada_8ecf531c">无地图：已配对 ELM327 适配器的实时发动机数据</string>
+    <string name="legacy_no_paired_obd_adapter_found_pair_the_elm327_dong_90029f7c">未找到已配对的 OBD 适配器。请先配对 ELM327 适配器。</string>
+    <string name="legacy_restore_gps_76fc23d8">恢复 GPS</string>
+
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_mute_24c639">静音</string>
+    <string name="legacy_voice_on_8e4723ad">语音开启</string>
+
+    <!-- Source: feature/obd/ObdFuelAirScreen.kt -->
+    <string name="legacy_the_ecu_is_adding_fuel_steadily_worth_a_look_if__da08dd7">ECU 在持续补油。如果数值一直上升，值得检查一下。</string>
+    <string name="legacy_the_ecu_is_taking_fuel_away_steadily_worth_a_loo_b2e06214">ECU 在持续减油。如果数值一直下降，值得检查一下。</string>
+
+    <!-- Source: feature/obd/ObdFullScanScreen.kt -->
+    <string name="legacy_last_scan_1c6351c7">上次扫描</string>
+    <string name="legacy_run_full_scan_62e71f9">运行完整扫描</string>
+    <string name="legacy_scanning_f99dc8b1">扫描中</string>
+    <string name="legacy_scanning_b757d75">扫描中…</string>
+
+    <!-- Source: feature/obd/ObdHubScreen.kt -->
+    <string name="legacy_bluetooth_is_turned_off_92ceda3f">蓝牙已关闭。</string>
+    <string name="legacy_connected_and_reading_1e53c68c">已连接，正在读取</string>
+    <string name="legacy_connecting_ca35204e">连接中…</string>
+    <string name="legacy_moto_hub_needs_bluetooth_access_to_reach_the_ada_8763b3f4">MOTO-HUB 需要蓝牙权限才能连接适配器。</string>
+    <string name="legacy_no_paired_obd_adapter_found_72c35314">未找到已配对的 OBD 适配器。</string>
+    <string name="legacy_not_connected_273cf5d2">未连接。</string>
+
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_1h_af24">-1H</string>
+    <string name="legacy_climbing_6536490d">爬坡中</string>
+    <string name="legacy_descending_da6096f8">下坡</string>
+    <string name="legacy_gnss_live_7bc47fe5">GNSS 实时</string>
+    <string name="legacy_level_44fa364">级别</string>
+    <string name="legacy_no_fix_8982dd16">无定位</string>
+    <string name="legacy_vertical_speed_427682fd">垂直速度</string>
+
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_battery_level_508e0b71">电量</string>
+    <string name="legacy_charging_843f5271">充电中</string>
+    <string name="legacy_external_power_41cdb450">外接电源</string>
+    <string name="legacy_hot_1182d">热门</string>
+    <string name="legacy_low_power_483394f9">低电量</string>
+    <string name="legacy_no_sensor_69b15af9">无传感器</string>
+    <string name="legacy_normal_8999b0e7">普通</string>
+    <string name="legacy_warm_288a85">温暖</string>
+
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_east_205bfd">东</string>
+    <string name="legacy_glare_risk_8e426920">眩光风险</string>
+    <string name="legacy_gnss_stale_fd32d3a0">GNSS 数据过期</string>
+    <string name="legacy_ne_9b7">NE</string>
+    <string name="legacy_no_gnss_a6d94c86">无 GNSS</string>
+    <string name="legacy_north_47050e5">北</string>
+    <string name="legacy_nw_9c9">NW</string>
+    <string name="legacy_se_a52">东南</string>
+    <string name="legacy_south_4b6d1ad">南</string>
+    <string name="legacy_sun_tracking_5fd65e2b">太阳追踪</string>
+    <string name="legacy_sw_a64">软件</string>
+    <string name="legacy_west_2899af">西</string>
+
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_off_for_1_s_a8aabb23">%1$s 内关闭</string>
+    <string name="legacy_one_widget_pinned_on_1_s_9ab92ad6">已在 %1$s 上固定一个小组件</string>
+    <string name="legacy_rotating_on_1_s_c5e75b74">正在旋转 %1$s</string>
+    <string name="legacy_this_panel_cycles_through_the_1_d_ticked_widgets_3a2b2d0e">此面板在已勾选的 %1$d 个组件之间轮播。</string>
+    <string name="legacy_this_panel_shows_that_one_widget_and_never_rotat_f3acc606">此面板只显示那一个组件，不会轮播。再勾选一个即可开始轮播。</string>
+    <string name="legacy_tick_widgets_below_to_build_this_panel_s_carouse_ab0f3111">勾选下面的组件来搭建此面板的轮播。每个面板都有自己的轮播。</string>
+
+    <!-- Source: feature/ridedashboard/widget/SatelliteWidget.kt -->
+    <string name="legacy_2d_fix_weak_geometry_e5b0cd1f">2D 定位 • 几何较弱</string>
+    <string name="legacy_3d_fix_navigation_ready_bff99e13">3D 定位 • 导航就绪</string>
+    <string name="legacy_scan_26be7d">扫描</string>
+    <string name="legacy_searching_for_satellites_f009ee35">搜索卫星</string>
+
+    <!-- Source: feature/ridedashboard/widget/SpeedGaugeWidget.kt -->
+    <string name="legacy_gnss_ok_35ac4b15">GNSS 正常</string>
+    <string name="legacy_n_4e">N</string>
+    <string name="legacy_w_57">W</string>
+
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_session_live_5f7f2456">会话进行中</string>
+
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_capture_84285f26">采集</string>
+    <string name="legacy_capturing_561c2223">正在采集…</string>
+    <string name="legacy_recalibrate_ceebf5d4">重新校准</string>
+
+    <!-- Source: feature/trips/TripLibraryUi.kt -->
+    <string name="legacy_enhanced_9c6c8376">增强</string>
+    <string name="legacy_gps_only_e6f03982">仅 GPS</string>
+         description; rendered outside the app's own Compose runtime, so it is a plain string
+         resource rather than a motoHubText() call). -->
+    <string name="handlebar_hid_capture_description">在车把输入协议设置中选择 HID 模式后，MOTO-HUB 可以读取蓝牙 HID 车把遥控器上的十字键按键。</string>
+
+    <!-- ==================================================================
+         Handlebar HID mode, phone-only Android Auto and the teach
+         prerequisite dialog (PR #8, rebased 2026-08-18).
+         ================================================================== -->
+    <string name="legacy_android_auto_isn_t_running_9f167e30">Android Auto 未在运行</string>
+    <string name="legacy_teaching_the_handlebar_needs_a_live_android_auto_697217d0">教学车把需要正在运行的 Android Auto 会话来采集按键。请连接到摩托车，或在本手机上不使用 T-Box 启动。</string>
+    <string name="legacy_connect_to_1_s_579387aa">连接到 %1$s</string>
+    <string name="legacy_start_on_this_phone_no_t_box_f1bcc79f">在本手机上启动（无 T-Box）</string>
+    <string name="legacy_bluetooth_is_off_turn_it_on_then_pair_the_remote_356459fc">蓝牙已关闭 — 请先打开蓝牙，然后把遥控器按键盘方式配对。</string>
+    <string name="legacy_allow_bluetooth_access_so_the_app_can_read_the_r_bf160fa2">“允许访问蓝牙，让应用读取遥控器的按键。”</string>
+    <string name="legacy_bluetooth_is_on_a_hid_remote_doesn_t_show_up_her_77795af8">「蓝牙已开启。HID 遥控器不会在这里显示为已连接设备 — 如果按键仍无响应，请在系统蓝牙设置中确认它已配对，并确认已开启无障碍功能。」</string>
+    <string name="legacy_or_right_now_without_the_t_box_21ba0502">现在就用，无需 T-Box</string>
+    <string name="legacy_android_auto_straight_to_your_phone_f0cc540c">Android Auto —— 直达你的手机</string>
+    <string name="legacy_input_protocol_8ff4fe4e">输入协议</string>
+    <string name="legacy_most_dashboards_send_buttons_as_avrcp_media_keys_6e1dd82c">大多数仪表以 AVRCP 媒体键的形式发送按键 —— 请保持 AVRCP。只有当遥控器以蓝牙键盘的方式配对、且它的按键始终无法被记录时，才选择 HID。</string>
+    <string name="legacy_hid_mode_also_needs_moto_hub_s_accessibility_ser_c0cdf4cc">HID 模式还需要开启 MOTO-HUB 的无障碍服务，否则按键不会被识别。</string>
+    <string name="legacy_open_accessibility_settings_a01c954b">打开无障碍设置</string>
+    <string name="legacy_turn_on_moto_hub_so_handlebar_presses_reach_the__b41c5310">请保持 MOTO-HUB 运行，这样在任意界面都能把车把按键传给应用</string>
+    <string name="legacy_was_moto_hub_s_switch_greyed_out_android_blocks__b5233420">MOTO-HUB 的开关是灰色的？Android 会屏蔽非应用商店安装的应用，而 MOTO-HUB 是从 GitHub 下载的。请打开「应用信息」，点击右上角的 ⋮，选择「允许受限设置」，然后返回并打开该开关。</string>
+    <string name="legacy_open_app_info_7c77c863">打开应用信息</string>
+    <string name="legacy_where_allow_restricted_settings_lives_8f29fea1">「允许受限设置」在哪里</string>
+    <string name="legacy_avrcp_media_keys_f50e20c7">AVRCP（媒体按键）</string>
+    <string name="legacy_hid_d_pad_a247f04a">HID（方向键）</string>
+    <string name="legacy_default_the_dashboard_sends_bluetooth_media_key__ccbdfbf7">默认。仪表盘会发送蓝牙媒体键命令，用于播放/暂停、切歌和音量调节。</string>
+    <string name="legacy_for_remotes_that_pair_as_a_bluetooth_keyboard_an_25055a66">「适用于以蓝牙键盘方式配对并发送方向键操作的遥控器。需要开启下面的 MOTO-HUB 无障碍服务。」</string>
+
+    <!-- External display service (USB AOA) - notification channel and ongoing notification -->
+    <string name="legacy_moto_hub_external_display_streaming_1be823ca">MOTO-HUB 外接屏幕推流</string>
+    <string name="legacy_streaming_to_external_display_via_usb_ab5c31c6">通过 USB 传输到外接显示</string>
+    <string name="legacy_stop_external_display_c050e9ab">停止外接显示</string>
+    <string name="legacy_aap_accessory_probe_running_bcf6ccd1">AAP 配件探测运行中</string>
+
+    <!-- About screen -->
+    <string name="legacy_your_phone_your_motorcycle_display_c5956fcb">“你的手机。
+你的摩托车显示屏。”</string>
+    <string name="legacy_follow_development_join_our_community_report_iss_b8b8fffa">关注开发进展、加入我们的社区、反馈问题并下载发布版本。</string>
+    <string name="legacy_moto_hub_is_an_independent_project_it_is_not_aff_9e4c2633">MOTO-HUB 是独立项目，与 Carbit、CFMOTO、其他使用 EasyConn 仪表盘的厂商、Google 或 Android Auto 均无隶属、认可或赞助关系。所有产品名称和标识均归各自所有者所有。</string>
+    <string name="legacy_moto_hub_is_an_experimental_proof_of_concept_not_34b4b321">MOTO-HUB 是实验性的概念验证，并非量产级产品。</string>
+    <string name="legacy_development_and_testing_happen_on_a_cfmoto_700mt_ac58afbf">开发和测试在 CFMOTO 700MT-ADV 仪表盘上完成，搭配 OnePlus 13 / Galaxy Z Fold4 手机。其他摩托车、品牌、T-Box 固件版本和手机在此均未测试：可能表现不同、反复重试，或完全连不上。如果仪表盘显示了配对 QR 码，值得一试。</string>
+    <string name="legacy_do_not_rely_on_it_as_your_only_source_of_critica_39775433">不要把它当作关键导航的唯一依据。请在停车状态下配置导航，使用本软件的风险自负。</string>
+
+    <!-- Garage - hero tiles -->
+    <string name="legacy_scan_motorcycle_qr_code_cc47d360">扫描摩托车 QR 码</string>
+    <string name="legacy_point_your_camera_at_the_t_box_sticker_1fc1811">把摄像头对准 T-Box 贴纸</string>
+    <string name="legacy_no_qr_manual_setup_e8495cc4">没有二维码？手动设置</string>
+    <string name="legacy_type_the_network_in_yourself_b35606b3">手动输入网络名称</string>
+    <string name="legacy_scan_its_t_box_qr_code_ca4d32e3">扫描其 T-Box QR 码</string>
+    <string name="legacy_no_qr_manual_1dd2a7a7">没有二维码？手动输入</string>
+    <string name="legacy_type_the_network_in_b00b50ec">输入网络名称</string>
+    <string name="legacy_used_by_phone_only_display_modes_without_a_t_box_13ed383e">供没有 T-Box 的纯手机显示模式使用</string>
+    <string name="legacy_talk_to_a_second_phone_over_your_own_hotspot_2aec1606">通过你自己的热点与第二部手机对讲</string>
+    <string name="legacy_default_settings_a0578342">默认设置</string>
+    <string name="legacy_group_intercom_c81733c6">群组对讲</string>
+
+    <!-- Motorcycle details - photo and Android Auto format buttons (short labels) -->
+    <string name="legacy_add_photo_203b2dd3">添加照片</string>
+    <string name="legacy_change_photo_ad0735e2">更换照片</string>
+    <string name="legacy_motorcycle_photo_4fd6c703">摩托车照片</string>
+    <string name="legacy_fit_10ff1">适应</string>
+    <string name="legacy_stretch_baa072e5">拉伸</string>
+    <string name="legacy_crop_1fb290">裁剪</string>
+
+    <!-- T-Box capability inspector - section titles and row labels -->
+    <string name="legacy_a_read_only_view_of_data_observed_directly_from__eb0959e6">直接从这个 T-Box 采集的数据的只读视图。</string>
+    <string name="legacy_wi_fi_network_68c4e1ac">Wi-Fi 网络</string>
+    <string name="legacy_easyconn_endpoint_f9ecbf07">EasyConn 端点</string>
+    <string name="legacy_nsd_package_bfb67045">NSD 包</string>
+    <string name="legacy_last_discovered_a02851f2">最近发现</string>
+    <string name="legacy_diagnostics_54322d8c">诊断</string>
+    <string name="legacy_if_easyconn_discovery_keeps_failing_briefly_reco_b8d938f8">如果 EasyConn 发现始终失败，请短暂重新连接这台 T-Box，直接探测它的常用端口（10915-10935），看看究竟哪个端口会有响应。</string>
+    <string name="legacy_display_8e70a4a2">显示</string>
+    <string name="legacy_tft_capture_area_ad3b6865">TFT 截图区域</string>
+    <string name="legacy_orientation_d9c9db0">方向</string>
+    <string name="legacy_reported_dpi_4b722c90">上报的 dpi</string>
+    <string name="legacy_dpi_mode_9e4a5ea6">DPI 模式</string>
+    <string name="legacy_screen_type_5d60ca4e">屏幕类型</string>
+    <string name="legacy_reported_identity_b41296b">上报的身份信息</string>
+    <string name="legacy_head_unit_name_1d44c987">车机名称</string>
+    <string name="legacy_vehicle_brand_1ca30d73">车辆品牌</string>
+    <string name="legacy_vehicle_model_1d3cbd15">车辆型号</string>
+    <string name="legacy_these_values_are_shown_exactly_as_reported_by_th_16427b8c">这些数值完全按 T-Box 上报的内容显示。MOTO-HUB 不会根据二维码或网络名称推断摩托车型号。</string>
+    <string name="legacy_software_protocol_2108716b">软件与协议</string>
+    <string name="legacy_pxc_version_5fba84f3">PXC 版本</string>
+    <string name="legacy_sdk_version_aacf3ed2">SDK 版本</string>
+    <string name="legacy_software_version_8135c77f">软件版本</string>
+    <string name="legacy_version_code_301c55">版本号</string>
+    <string name="legacy_reported_package_ec9e7619">上报的包名</string>
+    <string name="legacy_product_type_42ccc3eb">产品类型</string>
+    <string name="legacy_transport_type_33b665f1">传输类型</string>
+    <string name="legacy_function_mask_a68c5a14">功能掩码</string>
+    <string name="legacy_wi_fi_socket_timeout_c3c69476">Wi-Fi 套接字超时</string>
+    <string name="legacy_feature_flags_3e60189d">功能开关</string>
+    <string name="legacy_screen_mirroring_3102b12f">屏幕投屏</string>
+    <string name="legacy_screen_touch_4eb406ab">屏幕触控</string>
+    <string name="legacy_overlay_touch_d474eb4f">叠加层触控</string>
+    <string name="legacy_mirror_reconnect_e70c0c56">投屏重新连接</string>
+    <string name="legacy_landscape_adaptive_4f69625b">横屏自适应</string>
+    <string name="legacy_socket_authentication_94d326a5">套接字认证</string>
+    <string name="legacy_microphone_c888754a">麦克风</string>
+    <string name="legacy_hid_input_9c332ccd">HID 输入</string>
+    <string name="legacy_third_party_apps_a5fc13b2">第三方应用</string>
+    <string name="legacy_phone_signal_e87f95ba">手机信号</string>
+    <string name="legacy_time_synchronization_62f3fb2d">时间同步</string>
+    <string name="legacy_bluetooth_calls_f80c25c3">蓝牙通话</string>
+    <string name="legacy_sensitive_client_info_fields_are_intentionally_e_4b966321">敏感的 CLIENT_INFO 字段有意不存储、不显示。</string>
+    <string name="legacy_capability_report_captured_65a39462">能力报告已捕获</string>
+    <string name="legacy_t_box_discovered_cd525276">已发现 T-Box</string>
+    <string name="legacy_no_observations_yet_d99ce56e">尚无观测数据</string>
+    <string name="legacy_client_info_was_captured_during_an_easyconn_hand_f72a40e8">在 EasyConn 握手过程中捕获了 CLIENT_INFO。</string>
+    <string name="legacy_start_mirroring_or_android_auto_once_to_capture__cd900a4a">启动一次镜像或 Android Auto 以获取 CLIENT_INFO。</string>
+    <string name="legacy_connect_this_motorcycle_then_start_mirroring_or__176c21dd">连接这辆摩托车，然后启动一次 Android Auto。</string>
+    <string name="legacy_wait_288975">等待</string>
+    <string name="legacy_observed_1_s_43b8d8b3">实测 %1$s</string>
+    <string name="legacy_not_reported_7aaeba0">未上报</string>
+    <string name="legacy_supported_a4e9e48e">受支持</string>
+    <string name="legacy_not_supported_14e0b361">不支持</string>
+    <string name="legacy_not_reported_108c5fa0">未上报</string>
+
+    <!-- QR pairing - photo fallback dialog and live scanner -->
+    <string name="legacy_analyzing_qr_photo_aa205a9c">正在分析 QR 照片…</string>
+    <string name="legacy_removing_display_patterns_and_trying_qr_recognit_b1c3a1e8">正在移除图案锁并尝试 QR 识别</string>
+    <string name="legacy_attempt_1_d_of_2_d_e7c367b5">第 %1$d 次，共 %2$d 次</string>
+    <string name="legacy_flash_on_64bdb02f">闪光灯开</string>
+    <string name="legacy_flash_40cffd0">闪光灯</string>
+    <string name="legacy_zoom_1_s_d659e688">缩放 %1$s</string>
+    <string name="legacy_max_12d44">最大</string>
+    <string name="legacy_tap_the_qr_code_to_focus_use_zoom_if_it_is_small_2607a78c">轻点 QR 码对焦 • 码太小请放大</string>
+
+    <!-- Safety disclaimer shown on first launch -->
+    <string name="legacy_safety_warning_243ef82e">安全警告</string>
+    <string name="legacy_riding_requires_your_full_attention_never_intera_96038a24">骑行需要你全神贯注。摩托车行驶过程中，切勿操作 MOTO-HUB、Android Auto、导航、投屏、行程录制或任何屏幕控件。</string>
+    <string name="legacy_configure_and_verify_everything_only_while_parke_57e1b31b">仅在停车时配置并检查所有项目。仅在完全安全、可控的情况下使用本应用。若情况并非完全安全，请不要使用。</string>
+    <string name="legacy_moto_hub_is_not_a_safety_device_and_cannot_preve_a3d43f2f">MOTO-HUB 不是安全设备，无法防止分心、碰撞、伤害或损坏。你需自行负责安全骑行并遵守所有适用法规。</string>
+    <string name="legacy_i_understand_do_not_show_this_warning_again_e4526192">我已了解——不再显示此警告</string>
+
+    <!-- GitHub update dialog -->
+    <string name="legacy_downloading_fe585f4">正在下载…</string>
+    <string name="legacy_download_and_install_508990da">下载并安装</string>
+
+    <!-- Home and shared UI -->
+    <string name="legacy_no_motorcycle_b58a6930">无摩托车</string>
+    <string name="legacy_stop_streaming_3eba75e4">停止传输</string>
+    <string name="legacy_touch_the_preview_to_control_android_auto_91609ae0">触摸预览画面即可操控 Android Auto</string>
+
+    <!-- Handlebar mapping - action short labels, family headers and calibration hints -->
+    <string name="legacy_up_abb">上</string>
+    <string name="legacy_down_2098c2">下</string>
+    <string name="legacy_left_241427">左</string>
+    <string name="legacy_right_4b4d1fc">右</string>
+    <string name="legacy_ok_9dc">确定</string>
+    <string name="legacy_place_1_45c34f38">位置 1</string>
+    <string name="legacy_place_2_45c34f39">位置 2</string>
+    <string name="legacy_place_3_45c34f3a">位置 3</string>
+    <string name="legacy_move_the_cursor_78e625b4">移动光标</string>
+    <string name="legacy_system_92af662f">系统</string>
+    <string name="legacy_navigate_to_f20c4b8a">导航至</string>
+    <string name="legacy_this_button_has_no_hold_skipping_automatically_44873c53">该按键不支持长按 —— 将自动跳过。</string>
+    <string name="legacy_that_was_a_single_press_press_twice_quickly_for__e774e0f2">刚才只按了一下，快速连按两次即为双击。</string>
+    <string name="legacy_that_was_a_quick_tap_press_and_hold_a_moment_lon_5b9c9d4d">刚才只是轻点，请再长按一会儿。</string>
+    <string name="legacy_open_hotspot_settings_7d1f3d4a">打开热点设置</string>
+    <!-- The "MOTO-HUB is still looking" notification shown while a connection attempt runs,
+         and the hosted-network wording that tells the rider not to close the app. %1$s is
+         the motorcycle network name. -->
+    <string name="legacy_moto_hub_connection_progress_c260af34">MOTO-HUB 连接进度</string>
+    <string name="legacy_looking_for_1_s_9983a22f">正在查找 %1$s</string>
+    <string name="legacy_connecting_to_1_s_2f10e3b8">正在连接到 %1$s</string>
+    <string name="legacy_keep_moto_hub_open_closing_it_stops_the_search_54ec507">保持 MOTO-HUB 打开，关闭会中断搜索。</string>
+    <string name="legacy_hotspot_is_up_searching_it_for_the_dashboard_thi_caab4cd3">热点已开启。正在为仪表盘搜索它——这最多可能需要 90 秒，请保持 MOTO-HUB 打开。</string>
+    <!-- Asked once per video format tried, after a session that looked healthy from the phone:
+         only the rider can see whether the dashboard actually displayed it. %1$s is the
+         motorcycle name. -->
+    <string name="legacy_did_it_show_up_on_the_dashboard_f341c05">仪表盘上显示出来了吗？</string>
+    <string name="legacy_last_time_you_connected_to_1_s_everything_looked_46fc9a09">「上次你连接到 %1$s 时，这台手机上一切正常。MOTO-HUB 无法看到仪表盘的屏幕，所以这件事只能问你。」</string>
+    <string name="legacy_if_it_stayed_on_the_pairing_screen_moto_hub_will_40398b69">如果一直停留在配对界面，MOTO-HUB 会在下次骑行时尝试另一种视频格式，并一直尝试到有一个可用为止。</string>
+    <string name="legacy_yes_i_saw_it_625527f4">是，我看到了</string>
+    <string name="legacy_no_nothing_appeared_f92c88fc">没有，什么都没出现</string>
+    <!-- Shown when the video-format search cannot progress because every session so far ran the
+         Ride Dashboard, which sends its own format. -->
+    <string name="legacy_the_video_format_search_is_waiting_ac28c9a">视频格式搜索正在等待</string>
+    <string name="legacy_moto_hub_is_still_looking_for_a_video_format_you_44b4c53c">MOTO-HUB 仍在寻找你的仪表盘能显示的视频格式，但只有在 Android Auto 运行时才能测试 - 骑行仪表盘始终发送自己的格式。</string>
+    <string name="legacy_connect_once_with_android_auto_and_the_search_mo_71871380">用 Android Auto 连接一次，搜索就会自行推进。</string>
+    <string name="legacy_got_it_7f79855f">知道了</string>
+
+    <!-- ===========================================================
+         Catalogue sweep, 2026-08-24: strings this worktree draws but had no
+         identifier for. The photo-picker values come from the pro-poc
+         catalogues, where the same source strings are already translated;
+         the About paragraph is this worktree's own, rewritten when CORE
+         dropped to Android 12.
+         ================================================================== -->
+
+    <!-- Source: MainActivity.kt -->
+    <string name="legacy_camera_permission_is_required_to_take_a_photo_951c5abe">需要相机权限才能拍照</string>
+
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_browse_files_e6b23981">浏览文件</string>
+    <string name="legacy_choose_from_gallery_1d40e025">从相册中选择</string>
+    <string name="legacy_downloads_cloud_drives_and_any_other_folder_eb4e2c46">下载文件夹、云盘及其他任意文件夹。</string>
+    <string name="legacy_open_the_camera_and_shoot_it_now_75ae0eed">打开相机，现在就拍。</string>
+    <string name="legacy_pick_one_of_your_photos_913c1c70">从你的照片中选一张。</string>
+    <string name="legacy_take_a_photo_cefc733a">拍照</string>
+
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_moto_hub_connects_an_android_12_phone_to_a_motor_b791c32e">MOTO-HUB 把 Android 12 及以上的手机连接到通过 EasyConn 配对的摩托车仪表 —— EasyConn 是多家厂商随车提供的 Carbit 软件，CFMOTO 就是其中之一。它支持画面与应用镜像、Android Auto 投屏、已保存的摩托车配置以及本机诊断。</string>
+
+    <!-- Source: feature/controls — a controller button stands in for a handlebar press -->
+    <string name="legacy_handlebar_presses_32db65bc">车把按压</string>
+    <string name="legacy_backward_hold_left_72d8761e">快退长按 - 左</string>
+    <string name="legacy_forward_hold_right_3f058b83">向前长按 - 右</string>
+
+    <!-- Source: feature/diagnostics/BleExplorerScreen.kt — the Bluetooth LE workbench -->
+    <string name="legacy_bluetooth_le_explorer_2ab1f074">蓝牙 LE 浏览器</string>
+    <string name="legacy_find_any_bluetooth_le_device_open_it_and_see_wha_ff9d191c">找到任意蓝牙 LE 设备并打开，看看它究竟由什么构成：服务、特征值，以及它发出的每一个字节。专为那些什么都不声明的遥控器设计 - 订阅后按下它们的按键，协议就会自己写进日志。</string>
+    <string name="legacy_devices_1_d_c9f468d8">设备 (%1$d)</string>
+    <string name="legacy_filter_by_name_address_or_service_5c4953c4">按名称、地址或服务筛选</string>
+    <string name="legacy_not_connectable_a36d7984">- 无法连接</string>
+    <string name="legacy_services_99327804">"服务： "</string>
+    <string name="legacy_manufacturer_5ba47ab7">"制造商： "</string>
+    <string name="legacy_service_data_703f501b">"服务数据： "</string>
+    <string name="legacy_connected_839202e9">已连接</string>
+    <string name="legacy_rediscover_cece7f3c">重新发现</string>
+    <string name="legacy_mtu_517_7d540d89">MTU 517</string>
+    <string name="legacy_read_rssi_318ccc81">读取 RSSI</string>
+    <string name="legacy_read_26cdb6">读取</string>
+    <string name="legacy_write_4ff67bf">写入</string>
+    <string name="legacy_write_to_1_s_716e199f">写入 %1$s</string>
+    <string name="legacy_bytes_in_hex_01_ff_0a_01ff0a_and_0x01_0xff_all_w_69a0e8b2">十六进制字节 — 「01 FF 0A」「01ff0a」和「0x01,0xFF」都可以使用。此操作会直接写入设备：在某些硬件上，错误的数值会改动难以恢复的设置。</string>
+    <string name="legacy_hex_11afb">十六进制</string>
+    <string name="legacy_not_valid_hex_yet_f28e24dc">尚不是有效的十六进制值。</string>
+    <string name="legacy_1_d_byte_s_f2d64482">%1$d 字节</string>
+    <string name="legacy_no_response_bdcb77a0">无响应</string>
+    <string name="legacy_traffic_eb2daddd">路况</string>
+    <string name="legacy_nothing_yet_dc65bed9">暂时没有。</string>
+    <string name="legacy_every_line_here_is_also_in_the_application_log_s_f3e682dd">这里的每一行也会进入应用日志，因此可以在诊断报告中一并提交整个会话。</string>
+    <string name="legacy_dash_clock_lab_a1a0638d">仪表时钟实验室</string>
+    <string name="legacy_experiments_for_dashes_that_reset_the_clock_zont_a4c75a39">针对会重置时钟的仪表的实验（Zontes、Voge）</string>
+    <string name="legacy_scan_connect_and_read_any_ble_device_byte_by_byt_c47fb770">扫描、连接并逐字节读取任意 BLE 设备</string>
+
+    <!-- Source: strings the extractor used to miss inside if/else expressions -->
+    <string name="legacy_stop_scanning_93cac2ef">停止扫描</string>
+    <string name="legacy_scan_for_devices_883edf83">扫描设备</string>
+    <string name="legacy_showing_named_devices_only_18320ef1">仅显示已命名设备</string>
+    <string name="legacy_showing_every_device_ab347b96">显示所有设备</string>
+    <string name="legacy_nothing_yet_a_remote_that_sleeps_only_advertises_231ea04a">暂时没有。休眠的遥控器只在按下按键后的几秒内广播 - 按一下并让遥控器保持在附近。</string>
+    <string name="legacy_start_a_scan_to_see_what_is_around_bd69ed5b">启动扫描以查看周围环境。</string>
+    <string name="legacy_unsubscribe_862dd2b1">取消订阅</string>
+    <string name="legacy_subscribe_9621fd2a">订阅</string>
+
+    <!-- Source: feature/controls — actions that drive the Ride Dashboard itself -->
+    <string name="legacy_dashboard_next_panel_8f5432b1">仪表盘：下一个面板</string>
+    <string name="legacy_dashboard_fullscreen_map_1bd08691">仪表盘：全屏地图</string>
+    <string name="legacy_dashboard_zoom_the_map_on_me_4f78353">仪表盘：将地图缩放到我的位置</string>
+    <string name="legacy_dashboard_change_the_left_widget_2ac18bf8">仪表盘：更换左侧小组件</string>
+    <string name="legacy_dashboard_change_the_right_widget_e40e68ad">仪表盘：更换右侧小组件</string>
+    <string name="legacy_panel_33b634ef">面板 +</string>
+    <string name="legacy_map_full_b08caf3">地图已满</string>
+    <string name="legacy_zoom_me_5ca904e5">以我为中心缩放</string>
+    <string name="legacy_widget_l_b0744190">小组件 L</string>
+    <string name="legacy_widget_r_b0744196">小组件 R</string>
+
+    <!-- Source: feature/controls — actions that drive the rider's music -->
+    <string name="legacy_music_464f605">音乐</string>
+    <string name="legacy_music_play_pause_f246dd44">音乐：播放 / 暂停</string>
+    <string name="legacy_music_next_track_516d3c09">音乐：下一曲</string>
+    <string name="legacy_music_previous_track_dab94b8d">音乐：上一曲</string>
+    <string name="legacy_music_volume_up_f45c31d6">音乐：音量加</string>
+    <string name="legacy_music_volume_down_4e0f651d">音乐：音量减</string>
+    <string name="legacy_play_25ff54">播放</string>
+    <string name="legacy_next_24ff13">下一步</string>
+    <string name="legacy_previous_b7ee1f17">上一个</string>
+    <string name="legacy_vol_4eff3fe">音量 +</string>
+    <string name="legacy_vol_4f015e5">音量 −</string>
+
+    <!-- Source: feature/controls — the three input sources, and which one is live -->
+    <string name="legacy_motorcycle_handlebar_dc90fcfc">摩托车车把</string>
+    <string name="legacy_android_auto_17_4_removed_the_way_an_app_can_ask_217ec1b2">Android Auto 17.4 去掉了应用请求它投屏的方式。MOTO-HUB 仍会尝试，在旧版本上有效——但如果无效，下面的四个步骤改为从它自己的开发者菜单启动 Android Auto。这是其他办法都不管用时依然有效的部分，而且你无需安装任何东西。</string>
+    <string name="legacy_start_android_auto_yourself_3b0dffe1">自行启动 Android Auto</string>
+    <string name="legacy_open_the_android_auto_app_s_settings_scroll_to_t_4ef36207">“打开 Android Auto 应用的设置，滚动到底部并点按‘版本’十次。这样就会解锁它的开发者选项——你只需要做一次。”</string>
+    <string name="legacy_stay_on_that_same_android_auto_settings_screen_o_2c08cebc">停留在同一个 Android Auto 设置页面，打开右上角的三点菜单，选择\"启动车机服务\"。它在这个菜单里，不在开发者设置里面。做到这一步就行了。</string>
+    <string name="legacy_while_you_are_in_there_629f07a5">进入本页期间</string>
+    <string name="legacy_open_developer_settings_from_that_same_screen_an_4629699">在同一界面中打开开发者设置，并开启“Add new cars to Android Auto”（旧版本中叫“Unknown sources”）。在 Android Auto 17.2 及更早版本上，通常只开这个开关就够了。从 17.3 开始就不行了——第 2 步才行——所以如果 Android Auto 仍然无法启动，不要停在这里。</string>
+
+    <!-- Source: androidauto/AndroidAutoSelfModeHelp — the step the home screen and the
+         Android Auto preview draw when projection needs the rider to do something -->
+    <string name="legacy_start_head_unit_server_da7b299f">启动\"车机服务\"</string>
+    <string name="legacy_the_three_dot_menu_at_the_top_right_of_android_a_d6625ac7">Android Auto 自带设置右上角的三点菜单</string>
+    <string name="legacy_unlock_android_auto_s_developer_options_first_op_2865efda">先解锁 Android Auto 的开发者选项：打开它的设置，滚动到底部，点按「版本」十次。</string>
+    <string name="legacy_enable_add_new_cars_to_android_auto_75bf90fa">开启「将新车添加到 Android Auto」</string>
+    <string name="legacy_android_auto_then_developer_settings_f55db1c8">Android Auto，然后是开发者设置</string>
+
+    <!-- Source: feature/androidauto/AndroidAutoPreviewScreen — the preview's own status line -->
+    <string name="legacy_android_auto_is_not_running_start_a_session_from_e803c9ee">Android Auto 未在运行。请从首页开始会话。</string>
+    <string name="legacy_preparing_android_auto_db146bea">正在准备 Android Auto…</string>
+    <string name="legacy_waiting_for_android_auto_to_start_projecting_b7646bd0">等待 Android Auto 开始投屏…</string>
+    <string name="legacy_live_preview_touch_enabled_73752c4b">实时预览 · 已启用触控</string>
+
+    <!-- Source: failure text the home screen's error banner draws. Declared as constants and compared by
+         identity on the way there, so the catalogue is the only place they can be translated -->
+    <string name="legacy_google_android_auto_never_connected_to_moto_hub__bd46b5a3">「Google Android Auto 从未连接到 MOTO-HUB。较新的 Android Auto 版本移除了应用请求投屏的方式，所以请从 Android Auto 本身启动它。打开 Android Auto 应用的设置，滚动到底部，点按「版本」十次解锁开发者选项。然后在同一设置页面打开右上角的三点菜单，选择「启动车机服务」- 这个菜单在 Android Auto 的常规设置页面上，不在开发者设置里面。让 MOTO-HUB 保持运行：它会在几秒内自行连接，下次可以继续开着服务。」</string>
+    <string name="legacy_google_android_auto_took_moto_hub_s_request_and__ae0978d0">Google Android Auto 接受了 MOTO-HUB 的请求，然后就没了下文。面对它未被允许信任的车机，它就是这样处理的。打开 Android Auto 应用的设置，滚动到底部，连续点按十次“版本”以解锁开发者选项，打开开发者设置并开启“Add new cars to Android Auto”（旧版本称为“Unknown sources”），然后再从 MOTO-HUB 启动 Android Auto。如果仍然没反应，回到 Android Auto 设置界面，使用右上角的三点菜单：“Start head unit server”。</string>
+    <string name="legacy_google_android_auto_took_moto_hub_s_request_and__3e12afc0">「Google Android Auto 收到了 MOTO-HUB 的请求又把它晾在一边，本版本对此无能为力：Android Auto 17.3 及更高版本移除了应用请求投屏的方式。请改为从 Android Auto 启动。打开 Android Auto 应用的设置，滚动到底部，点按「版本」十次解锁开发者选项，然后在同一设置页面右上角打开三点菜单，选择「启动车机服务」。让 MOTO-HUB 保持运行：它会在几秒内自行连接。既然已经进了这里，开发者设置中的「向 Android Auto 添加新车」也应处于开启状态。」</string>
+    <string name="legacy_another_easyconn_session_is_already_using_the_lo_fa50b26f">“另一个 EasyConn 会话正在使用本地连接端口（10920-10922）。请停止正在运行的 MOTO-HUB 会话，或强制停止摩托车自带的配套应用（CFMOTO、Zontes Smart、Carbit Ride 以及其他品牌的同类应用），然后重试连接。”</string>
+    <string name="legacy_phone_wi_fi_is_off_turn_it_on_then_tap_connect_a_5fd21cc0">手机 Wi-Fi 已关闭。打开它，然后再次点按“连接”。</string>
+    <string name="legacy_phone_hotspot_is_off_turn_it_on_then_tap_connect_683a58f1">手机热点已关闭。打开它，然后再次点按“连接”。</string>
+    <string name="legacy_action_needed_a446e8df">需要操作</string>
+    <string name="legacy_do_this_in_android_auto_9a49aaee">在 Android Auto 中执行</string>
+    <string name="legacy_show_me_how_73baf02b">演示给我看</string>
+    <string name="legacy_for_dashes_that_reset_their_clock_at_every_ignit_64c2ff15">适用于每次点火循环都会重置时钟的仪表（尤其是 Zontes 和 Voge）。仪表通电后，实验室会通过蓝牙连接并监听，然后用五种不同格式推送时间，并记录每一个字节。请骑行、循环点火，然后分享应用日志：日志会说明仪表接受了哪种格式。</string>
+    <string name="legacy_run_clock_experiments_8ad4688f">运行时钟实验</string>
+    <string name="legacy_live_log_831d05f0">实时日志</string>
+    <string name="legacy_nothing_yet_power_the_dash_on_then_run_the_exper_b1ec5c8f">暂无内容。请打开仪表电源，然后运行实验。</string>
+    <string name="legacy_moto_hub_closed_unexpectedly_30f439d7">MOTO-HUB 意外关闭</string>
+    <string name="legacy_the_last_time_you_used_moto_hub_it_stopped_becau_8448d27c">你上次使用 MOTO-HUB 时因错误而闪退。只有发送诊断报告，开发者才能查明原因。</string>
+    <string name="legacy_the_report_contains_your_motorcycle_s_dashboard__f4208b9f">报告包含你的摩托车仪表盘型号、手机型号、Android 和 Android Auto 的版本、已安装的 MOTO-HUB 版本，以及含错误的应用程序日志。绝不包含密码、位置和硬件地址。</string>
+    <string name="legacy_send_reports_automatically_from_now_on_7cdd2209">今后自动发送报告</string>
+    <string name="legacy_send_report_55908cac">发送报告</string>
+    <string name="legacy_how_your_data_is_handled_ff77c87f">你的数据如何处理</string>
+    <string name="legacy_not_now_e202d7e9">暂时不要</string>
+    <string name="legacy_help_improve_moto_hub_9bf5292c">帮助改进 MOTO-HUB</string>
+    <string name="legacy_moto_hub_can_send_a_diagnostics_report_to_the_de_36cc6ba6">MOTO-HUB 可以向开发者发送诊断报告：你的摩托车仪表盘型号、手机型号、已安装的 Android、Android Auto 和 MOTO-HUB 版本，以及应用日志。绝不包含密码、位置和硬件地址。</string>
+    <string name="legacy_reports_go_out_at_most_once_a_day_after_an_updat_6fc12b8d">报告每天最多发送一次，也会在更新后或崩溃后发送，且仅在有互联网连接时发送。你的 Support ID 显示在设置 ▸ 诊断中，可随时开启或关闭。</string>
+    <string name="legacy_send_reports_5c810947">发送报告</string>
+    <string name="legacy_diagnostics_privacy_notice_1f708f84">诊断隐私声明</string>
+    <string name="legacy_support_id_5239972c">支持 ID</string>
+    <string name="legacy_moto_hub_support_id_7149b87">MOTO-HUB 支持 ID</string>
+    <string name="legacy_tap_to_copy_quote_it_when_asking_for_help_it_ide_edc7231">轻点即可复制。求助时请附上它，它能标识这台手机和这台摩托车。</string>
+    <string name="legacy_support_id_copied_63da1e38">支持 ID 已复制</string>
+    <string name="legacy_what_gets_sent_f4a13bbf">发送的内容</string>
+    <string name="legacy_read_what_a_report_contains_then_choose_whether__e679dae">先看看报告包含哪些内容，再决定是否发送</string>
+    <string name="legacy_who_holds_your_reports_how_long_they_are_kept_an_ea54a6b7">谁保管你的报告、保存多久，以及如何申请删除</string>
+    <string name="legacy_send_diagnostics_now_9368c9ea">立即发送诊断信息</string>
+    <string name="legacy_this_build_has_no_collector_configured_e224996">此版本未配置数据采集器</string>
+    <string name="legacy_logging_is_off_the_log_would_end_at_1_s_c9d7198e">日志记录已关闭；日志将截止于 %1$s</string>
+    <string name="legacy_logging_is_off_there_is_no_log_to_send_eca8d32d">日志记录已关闭；没有可发送的日志</string>
+    <string name="legacy_send_diagnostics_automatically_880f35b7">自动发送诊断信息</string>
+    <string name="legacy_sends_the_report_above_to_the_developer_at_most__8689def0">上面的报告每天最多向开发者发送一次，或在更新后、崩溃后发送 —— 且仅在有网络时发送。内容为仪表盘和手机型号、应用版本和应用日志；绝不含密码、位置或硬件地址。</string>
+    <string name="legacy_logging_is_off_d9325d5a">日志记录已关闭</string>
+    <string name="legacy_nothing_has_been_recorded_since_1_s_what_was_log_1be484ac">自 %1$s 以来没有记录任何内容。在此之前记录的内容会保留 - 关闭日志只是停止新增记录，绝不会删除旧记录。</string>
+    <string name="legacy_nothing_has_been_recorded_and_there_is_no_earlie_dd873fa0">没有记录任何内容，也没有更早的日志。</string>
+    <string name="legacy_a_report_sent_now_carries_that_log_so_it_says_no_cb65d9dc">现在发送的报告只会带上该日志，因此无法说明应用今天做了什么。要报告问题，请重新开启「启用日志」，让问题再次出现，然后再发送。</string>
+    <string name="legacy_that_worked_keep_it_b0100883">成功了，要保留吗？</string>
+    <string name="legacy_your_dashboard_is_now_accepting_the_picture_on_t_a2e41389">你的仪表盘现在接受 %1$s 配置的画面。要继续用于这台摩托车吗？</string>
+    <string name="legacy_you_have_just_found_out_something_moto_hub_could_5d173f67">你刚刚发现了一件 MOTO-HUB 自己没法确定的事：这块仪表盘实际接受哪个配置。发送日志会一起带上这条信息，下一位用你这台摩托车的车手就能一次配对正确。</string>
+    <string name="legacy_send_my_log_now_80f590fe">立即发送我的日志</string>
+    <string name="legacy_send_logs_automatically_from_now_on_1efdfbe9">今后自动发送日志</string>
+    <string name="legacy_keep_it_318f8786">保留</string>
+    <string name="legacy_undo_284d04">撤销</string>
+    <string name="legacy_try_another_profile_2632e907">尝试其他配置</string>
+    <string name="legacy_the_connection_to_your_motorcycle_is_fine_the_da_6a78bba4">你与摩托车的连接没问题，只是仪表盘不接受当前发送的画面格式。换一个配置即可改变该格式。选一个会立即重新连接；如果仪表盘开始正常显示，MOTO-HUB 会询问是否保留。</string>
+    <string name="legacy_your_dashboard_is_not_showing_this_9765fbe3">你的仪表盘没有显示这个</string>
+    <string name="legacy_connected_but_the_picture_is_being_refused_tap_t_b17b1097">已连接，但画面被拒绝。点按以尝试其他配置。</string>
+    <string name="legacy_connected_not_displaying_53b322ca">已连接，未显示</string>
+    <string name="legacy_your_dashboard_refused_1_d_of_the_picture_it_was_beaebc06">你的仪表盘拒绝了所收到画面的 %1$d%%（%2$d 帧，共 %3$d 帧）。</string>
+    <string name="legacy_this_is_what_your_dashboard_reports_itself_to_be_8dfdffdd">这是你的仪表盘自报的信息。</string>
+    <string name="legacy_speaks_the_same_protocol_your_motorcycle_is_alre_7a13c9ca">使用你的摩托车已经在用的同一套协议。</string>
+    <string name="legacy_plain_settings_no_assumptions_a_good_thing_to_fa_3d3a2213">朴素的设置，不做任何假设——作为退路很不错。</string>
+    <string name="legacy_an_experiment_for_one_dashboard_s_open_question__1eafa773">“针对某个仪表盘开放问题的实验。可能不会有任何效果。”</string>
+    <string name="legacy_navigation_active_on_tft_b6221bcf">TFT 上导航已开启</string>
+    <string name="legacy_tft_is_receiving_your_screen_56fd381">TFT 正在接收你的屏幕画面</string>
+    <string name="legacy_android_auto_is_waiting_for_one_step_from_you_31eacac3">Android Auto 正在等你完成一步操作</string>
+    <string name="legacy_session_is_being_prepared_742c490a">正在准备会话</string>
+    <string name="legacy_button_presses_are_off_2952e766">按键已关闭</string>
+    <string name="legacy_moto_hub_advanced_owns_this_setting_and_writes_i_b8e328f7">MOTO-HUB ADVANCED 拥有此设置，并会用自己的设置覆盖它，所以请在那边开启而不是在这里。</string>
+    <string name="legacy_turn_presses_back_on_9d506146">转向按键再按一次恢复开启</string>
+    <string name="legacy_these_drive_the_ride_dashboard_so_they_do_nothin_d4d30d86">这些配置驱动骑行仪表盘，因此只有在它运行时才起作用 —— 仅运行 Android Auto 会话是不够的。</string>
+    <string name="legacy_show_button_presses_on_the_dashboard_4ed2cd5e">在仪表盘上显示按键操作</string>
+
+    <!-- Source: feature/controls — the handlebar page after the Bluetooth controller was removed -->
+    <string name="legacy_your_motorcycle_s_own_handlebar_drives_moto_hub__f19519f3">用你自己的车把来驱动 MOTO-HUB。教学一次，然后为每个按键指定你想要的功能。</string>
+    <string name="legacy_presses_still_arrive_and_still_show_up_on_this_p_62dfa27d">按键仍然会到达并显示在本页面上 —— 但不会执行任何操作。</string>
+    <string name="legacy_every_handlebar_press_432fb397">"每一次车把按键 "</string>
+    <!-- Home: MOTO-HUB ADVANCED promo card and dialog -->
+    <string name="legacy_couldn_t_open_moto_hub_advanced_89c059e1">无法打开 MOTO-HUB ADVANCED。</string>
+    <string name="legacy_moto_hub_advanced_1cc3b73d">MOTO-HUB ADVANCED</string>
+    <string name="legacy_dashboard_navigation_and_trips_installed_on_this_7ffa5bb9">仪表盘、导航和行程 —— 已安装在本手机上。</string>
+    <string name="legacy_free_companion_app_dashboard_navigation_trips_an_256e51cd">免费的配套应用：仪表盘、导航、行程等。</string>
+    <string name="legacy_open_259a6a">打开</string>
+    <string name="legacy_see_what_it_adds_c8867b38">看看它带来了什么</string>
+    <string name="legacy_a_second_free_app_that_installs_next_to_moto_hub_96f5853f">另一个免费应用，与 MOTO-HUB 并排安装，把同一个仪表变成完整的骑行电脑。无需额外硬件。</string>
+    <string name="legacy_ride_dashboard_gps_speed_live_map_and_trip_stats_e664cbab">骑行仪表盘 —— 在 TFT 上显示 GPS 速度、实时地图和行程统计</string>
+    <string name="legacy_navigation_search_motorcycle_routing_and_route_p_269dbf5a">导航 —— 搜索、摩托车路线规划和路线预览</string>
+    <string name="legacy_on_the_route_weather_fuel_prices_and_speed_camer_1ec23092">沿途 —— 天气、油价和测速摄像头</string>
+    <string name="legacy_trips_recording_replay_analysis_and_gpx_export_ec08e237">行程 —— 记录、回放、分析和 GPX 导出</string>
+    <string name="legacy_ai_place_discovery_and_a_post_ride_riding_coach_34d4ea13">AI 地点发现和骑行结束后的「骑行教练」</string>
+    <string name="legacy_group_intercom_rider_to_rider_voice_70e92f1a">车队对讲 —— 车手之间的语音</string>
+    <string name="legacy_moto_hub_stays_in_charge_of_the_motorcycle_pairi_6ccf9308">MOTO-HUB 将继续掌管摩托车：配对、连接和 Android Auto 都在这里运行。请为两个应用安装同一版本。</string>
+    <string name="legacy_download_advanced_66a9c89a">下载 ADVANCED</string>
+    <string name="legacy_resolution_177354cc">分辨率</string>
+    <string name="legacy_the_video_source_android_auto_sends_to_the_dashb_a90d80a4">Android Auto 发送到仪表盘的视频源</string>
+    <string name="legacy_interface_size_7aea8aa8">界面尺寸</string>
+    <string name="legacy_how_large_android_auto_draws_itself_on_that_sour_2161eca0">Android Auto 在该信号源上的显示大小</string>
+    <string name="legacy_landscape_fb5e029b">横屏</string>
+    <string name="legacy_portrait_5a1dab9b">竖屏</string>
+    <string name="legacy_experimental_f1ae3108">实验性</string>
+    <!-- Source: catalogue catch-up 2026-09-06 - handlebar profiles, companion display, Home Assistant Torque, trip phone health, and the reworded wire verdict -->
+    <string name="legacy_1_s_is_holding_the_dashboard_connection_f85acc07">%1$s 正占用仪表盘连接</string>
+    <string name="legacy_another_app_is_holding_the_dashboard_connection_2f8f3870">另一个应用占用了仪表盘连接</string>
+    <string name="legacy_force_stop_your_motorcycle_s_own_companion_app_f_47bc5899">「在你摩托车原装车机应用的「应用信息」页面强制停止它，然后重试 - Android 不允许一个应用解除另一个应用的连接。」</string>
+    <string name="legacy_if_it_stayed_on_the_pairing_screen_moto_hub_keep_74219a6">如果一直停留在配对界面，MOTO-HUB 会不断尝试各种视频格式，直到有一个可用。当使用同一仪表盘的其他骑手已经确认过这个格式时，它会再问你一次才继续。</string>
+    <string name="legacy_if_your_other_moto_hub_app_is_running_a_session__263cbf82">如果你手机上另一个 MOTO-HUB 应用正在运行会话，请改为停止那一个。</string>
+    <string name="legacy_import_qr_from_an_image_65acae9a">从图片导入 QR</string>
+    <string name="legacy_moto_hub_will_connect_on_its_own_when_the_dashbo_9f3fe52b">仪表盘启动后，MOTO-HUB 会自行连接。</string>
+    <string name="legacy_on_this_phone_that_is_almost_always_1_s_force_st_26b6b463">“在这台手机上，这几乎总是 %1$s。请从它的应用信息页面强制停止，然后重试 - Android 不允许一个应用释放另一个应用的连接。”</string>
+    <string name="legacy_shown_while_moto_hub_watches_for_the_motorcycle__5410550d">“MOTO-HUB 等待摩托车的 Wi-Fi 时显示。”</string>
+    <string name="legacy_the_three_local_ports_moto_hub_needs_for_the_das_ac32b51a">MOTO-HUB 为该仪表盘所需的三个本地端口（%1$s）当前被占用，因此连接会失败。</string>
+    <string name="legacy_try_anyway_909523a8">仍然尝试</string>
+    <string name="legacy_waiting_for_s_c5c92cf8">等待 %s</string>
+    <string name="legacy_waiting_for_the_motorcycle_24d361aa">等待摩托车</string>
+    <!-- Source: trips/TripAnalysisScreen.kt, home/HubHomeScreen.kt, companion, ai/AiPreset, and the service notifications - literals that reached a lookup indirectly, or were never wrapped -->
+    <string name="legacy_1_s_in_moto_hub_advanced_is_coming_soon_use_moto_6bcb37c0">%1$s 即将在 MOTO-HUB Advanced 中推出（请暂时使用 MOTO-HUB Core）。</string>
+    <string name="legacy_import_qr_6b03505c">导入 QR</string>
+    <string name="legacy_scan_new_qr_ed7e6784">扫描新 QR 码</string>
+    <!-- Source: feature/home - the secondary actions under the pairing and projection cards -->
+    <string name="legacy_how_to_start_android_auto_e44c5dd3">如何启动 Android Auto</string>
+    <string name="legacy_open_wi_fi_settings_299670db">打开 Wi-Fi 设置</string>
+    <string name="legacy_couldn_t_open_moto_hub_adv_solo_67eb730a">无法打开 MOTO-HUB ADV-SOLO。</string>
+    <string name="legacy_moto_hub_adv_solo_1bac54f4">MOTO-HUB ADV-SOLO</string>
+    <string name="legacy_free_app_that_replaces_this_one_dashboard_naviga_f14ef8b3">替代本应用的免费应用：仪表盘、导航、行程等。</string>
+    <string name="legacy_installed_on_this_phone_136503e7">已安装在本手机上</string>
+    <string name="legacy_free_app_d2eb824d">免费应用</string>
+    <string name="legacy_everything_moto_hub_does_and_a_full_riding_compu_5afce456">MOTO-HUB 的全部功能，外加一台完整的骑行电脑。</string>
+    <string name="legacy_moto_hub_adv_solo_is_a_free_app_that_replaces_th_9d1bc46c">MOTO-HUB ADV-SOLO 是一个免费的替代应用，能把你的 TFT 变成完整的骑行电脑：自带的仪表盘、导航和行程记录。无需订阅、无需账号，也无需额外硬件 —— 直接使用你已有的 T-Box。</string>
+    <string name="legacy_what_it_adds_cdd0b86b">它增加了什么</string>
+    <string name="legacy_moving_to_adv_solo_21f5a90c">迁移到 ADV-SOLO</string>
+    <string name="legacy_adv_solo_connects_to_the_motorcycle_on_its_own_p_ad9d6a7e">ADV-SOLO 会自行连接摩托车：配对、Wi-Fi 连接、车把按键和 Android Auto 都在其中运行。它不再需要本应用。</string>
+    <string name="legacy_install_it_and_connect_your_motorcycle_there_the_526ab2e">安装它并在那里连接你的摩托车，然后卸载 MOTO-HUB —— ADV-SOLO 会引导你完成。在此配对的摩托车不会迁移过去：请在 ADV-SOLO 中重新配对。</string>
+    <string name="legacy_links_4515799">链接</string>
+    <string name="legacy_more_ways_to_start_dfa7360e">更多启动方式</string>
+    <string name="legacy_one_step_is_waiting_for_you_ad249079">还有一步在等着你</string>
+    <string name="legacy_starting_android_auto_330884c0">启动 ANDROID AUTO</string>
+    <string name="legacy_dashboard_navigation_and_trips_the_free_app_that_141e7bbe">仪表盘、导航和行程 —— 替代本应用的免费应用</string>
+    <string name="legacy_less_8775b50b">收起 ▲</string>
+    <string name="legacy_details_1d7b33e">详情 ▼</string>
+</resources>

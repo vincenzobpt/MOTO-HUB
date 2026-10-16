@@ -119,7 +119,7 @@ The open-source core is a complete product on its own:
 - **Bulletproof sessions** — auto-connect on launch, a recovery watchdog that rebuilds a stalled stream, and seamless resume across longer dropouts.
 - **Diagnostics that respect you** — network tests, a full local log you can share as a file, and a master switch that turns all logging off.
 - **In-app updates** — the app checks GitHub releases and shows the notes before installing.
-- **6 languages** — English, Italian, Spanish, French, Portuguese, Korean.
+- **12 languages** — English, Italian, Spanish, French, Portuguese, Korean, German, Dutch, Czech, Turkish, Russian, Chinese.
 
 <a id="requirements"></a>**Requirements:** Android 12 or newer and a motorcycle with a compatible dashboard (see below). [MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases), which replaces ADVANCED, requires Android 14+.
 
@@ -228,7 +228,7 @@ The same instructions are in the app under `Settings ▸ Android Auto does not s
 - Optionally recover or seamlessly resume a stalled or dropped TFT stream when the T-Box returns.
 - Show persistent diagnostics, run network tests, and share application logs as an exported file for troubleshooting.
 - Check GitHub releases and pre-releases from inside the app, showing release notes before installing a newer APK.
-- Run in English, Italian, Spanish, French, Portuguese or Korean, or follow the phone language.
+- Run in English, Italian, Spanish, French, Portuguese, Korean, German, Dutch, Czech, Turkish, Russian or Chinese, or follow the phone language.
 
 ### Motorcycle Garage
 
