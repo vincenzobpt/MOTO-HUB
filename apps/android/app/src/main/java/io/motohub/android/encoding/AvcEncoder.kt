@@ -290,6 +290,9 @@ class AvcEncoder(
             // prepends them itself, so losing KEY_PREPEND_HEADER_TO_SYNC_FRAMES costs nothing
             // on the wire; losing the repeat-frame floor only shows on a stalled source.
             if (attempt.bare) return@apply
+            // Ask the codec not to pipeline frames; vendors that honour it drop a frame or two
+            // of encoder delay, the others ignore the key.
+            setInteger(MediaFormat.KEY_LATENCY, 0)
             if (useCbr) {
                 setInteger(
                     MediaFormat.KEY_BITRATE_MODE,

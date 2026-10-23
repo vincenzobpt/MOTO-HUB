@@ -1046,6 +1046,10 @@ class RideDaemonTransport(
             )
             val socket = attemptLink.createSocket()
             try {
+                // Go adopts this descriptor through net.FileConn, which unlike its own dialer
+                // leaves Nagle on; the command channel is short request/reply messages, and
+                // Nagle plus delayed ACK can hold each one back up to ~40 ms.
+                socket.tcpNoDelay = true
                 socket.connect(InetSocketAddress(host.ipAddress, host.port), EC_CONNECT_TIMEOUT_MS)
                 ProjectionEventLog.record("TBOX", "EasyConn TCP command socket connected.")
                 socket.use { connected ->
