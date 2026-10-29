@@ -1668,6 +1668,9 @@ class RideDaemonTransport(
         val magic = buffer.getInt(8)
         if ((cmd xor totalLen) != magic || cmd != CMD_MDNS_RESPOND_ACK) return false
         val payloadLen = (totalLen - WAKE_PROBE_HEADER_SIZE).coerceAtLeast(0)
+        // A real ACK is a few bytes of JSON. The length is the peer's word, and the hotspot sweep
+        // probes every host on the subnet, so it is capped before anything is allocated.
+        if (payloadLen > 65_536) return false
         val payload = ByteArray(payloadLen)
         if (payloadLen > 0 && !readFullyOrFalse(input, payload)) return false
         return payload.toString(Charsets.UTF_8).contains("true")
