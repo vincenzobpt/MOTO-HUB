@@ -1,0 +1,2011 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Locale: th-TH. Translated from the en-US catalogue, which stays the source of truth. -->
+    <!-- Application identity -->
+    <string name="app_name">MOTO-HUB</string>
+
+    <!-- Settings > General > Language. Names are kept in their native form. -->
+    <string name="language_system_default">ค่าเริ่มต้นของระบบ</string>
+    <string name="language_english">English</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_korean">한국어 (대한민국)</string>
+    <string name="language_french">Français</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_dutch">Nederlands</string>
+    <string name="language_czech">Čeština</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_thai">ไทย</string>
+    <string name="language_title">ภาษา</string>
+    <string name="language_description">เลือกภาษาที่ MOTO-HUB ใช้</string>
+    <string name="language_detail_description">MOTO-HUB ใช้ภาษาของโทรศัพท์เป็นค่าเริ่มต้น เลือกภาษาด้านล่างเพื่อใช้เฉพาะกับแอปนี้</string>
+
+    <!-- Settings main page -->
+    <string name="legacy_download_anyway_c17b27fb">ดาวน์โหลดต่อไป</string>
+    <string name="legacy_download_over_1_s_23fdd550">ดาวน์โหลดผ่าน %1$s หรือไม่</string>
+    <string name="legacy_moto_hub_1_s_is_2_s_and_right_now_the_only_conne_8ebbc51c">MOTO-HUB %1$s เป็นเวอร์ชัน %2$s และขณะนี้การเชื่อมต่อเดียวที่เข้าถึงอินเทอร์เน็ตได้คือ %3$s ซึ่งผู้ให้บริการของคุณคิดค่าใช้จ่าย บนมอเตอร์ไซค์ถือเป็นเรื่องปกติ เพราะ Wi-Fi ของแดชบอร์ดไม่มีอินเทอร์เน็ตเลย</string>
+    <string name="legacy_waiting_for_wi_fi_costs_nothing_the_update_stays_3f38fec8">การรอ Wi-Fi ไม่มีค่าใช้จ่าย: การอัปเดตจะยังอยู่ในรายการนี้</string>
+    <string name="settings_configuration">การกำหนดค่า</string>
+    <string name="settings_title">การตั้งค่า</string>
+    <string name="settings_general">ทั่วไป</string>
+    <string name="settings_general_description">ภาษา การกลับมาใช้งานต่ออย่างราบรื่น และพฤติกรรมของแอป</string>
+
+    <!-- Settings > General -->
+    <string name="settings_general_title">ทั่วไป</string>
+    <string name="settings_check_updates_on_launch">ตรวจสอบการอัปเดตเมื่อเปิดแอป</string>
+    <string name="settings_check_updates_on_launch_description">ตรวจสอบรุ่นใหม่จาก GitHub โดยอัตโนมัติ ไม่เกินครั้งเดียวต่อ 24 ชั่วโมง</string>
+    <string name="settings_enable_seamless_resume">เปิดใช้การกลับมาใช้งานต่ออย่างราบรื่น</string>
+    <string name="settings_seamless_resume_enabled_description">Android Auto กลับมาใช้งานต่อได้หลัง T-Box ถูกขัดจังหวะนาน แม้หน้าจอจะปิดอยู่</string>
+    <string name="settings_seamless_resume_disabled_description">อนุญาตให้ Android Auto กลับมาใช้งานต่อในพื้นหลังเมื่อรถกลับมา ต้องขอสิทธิ์เมื่อเปิดใช้ครั้งแรก</string>
+
+    <!-- Settings option labels. These are also used by the route and projection pickers. -->
+    <string name="video_quality_smoother">ลื่นไหลขึ้น</string>
+    <string name="video_quality_smoother_description">บิตเรตต่ำลง ความร้อนและภาระเครือข่ายน้อยลง</string>
+    <string name="video_quality_balanced">สมดุล</string>
+    <string name="video_quality_balanced_description">คุณภาพปัจจุบันของ MOTO-HUB และเป็นค่าเริ่มต้นที่แนะนำ</string>
+    <string name="video_quality_sharper">คมชัดขึ้น</string>
+    <string name="video_quality_sharper_description">บิตเรตสูงขึ้นเพื่อแผนที่และข้อความที่คมชัดกว่า</string>
+    <string name="video_power_auto">อัตโนมัติ</string>
+    <string name="video_power_auto_description">ปรับบิตเรตและอัตราเฟรมตามอุณหภูมิโทรศัพท์และคุณภาพ Wi-Fi</string>
+    <string name="video_power_smooth">ลื่นไหล</string>
+    <string name="video_power_smooth_description">30 FPS ตามคุณภาพวิดีโอที่เลือก</string>
+    <string name="video_power_balanced">สมดุล</string>
+    <string name="video_power_balanced_description">24 FPS อย่างเสถียรตามคุณภาพวิดีโอที่เลือก</string>
+    <string name="video_power_saver">ประหยัด</string>
+    <string name="video_power_saver_description">20 FPS เพื่อลดความร้อนและการใช้แบตเตอรี่</string>
+    <string name="android_auto_resolution_auto">อัตโนมัติ</string>
+    <string name="android_auto_resolution_auto_description">คงการวางแนวอัตโนมัติของ MOTO-HUB ตามสัดส่วน T-Box ที่เรียนรู้ไว้</string>
+    <string name="android_auto_resolution_landscape_sd">แนวนอน 800 x 480</string>
+    <string name="android_auto_resolution_landscape_sd_description">แหล่งภาพแนวนอนมาตรฐานของ Android Auto</string>
+    <string name="android_auto_resolution_landscape_hd">แนวนอน 1280 x 720</string>
+    <string name="android_auto_resolution_landscape_hd_description">แหล่งภาพแนวนอน HD ที่คมชัดกว่า แลกกับภาระบนโทรศัพท์ที่สูงขึ้น</string>
+    <string name="android_auto_resolution_landscape_fhd">แนวนอน 1920 x 1080</string>
+    <string name="android_auto_resolution_landscape_fhd_description">แหล่งภาพแนวนอน Full HD ยังไม่ผ่านการตรวจสอบบนแดชบอร์ดที่รู้จัก</string>
+    <string name="android_auto_resolution_landscape_qhd">แนวนอน 2560 x 1440</string>
+    <string name="android_auto_resolution_landscape_qhd_description">แหล่งภาพแนวนอน Quad HD หนักต่อโทรศัพท์และยังไม่ผ่านการตรวจสอบบนแดชบอร์ดที่รู้จัก</string>
+    <string name="android_auto_resolution_landscape_uhd">แนวนอน 3840 x 2160</string>
+    <string name="android_auto_resolution_landscape_uhd_description">แหล่งภาพแนวนอน 4K โทรศัพท์ต้องเข้ารหัสและถอดรหัส 4K พร้อมกัน คาดว่าจะร้อนและมีภาพกระตุก</string>
+    <string name="android_auto_resolution_portrait_sd">แนวตั้ง 720 x 1280</string>
+    <string name="android_auto_resolution_portrait_sd_description">แหล่งภาพแนวตั้งมาตรฐานของ Android Auto</string>
+    <string name="android_auto_resolution_portrait_hd">แนวตั้ง 1080 x 1920</string>
+    <string name="android_auto_resolution_portrait_hd_description">แหล่งภาพแนวตั้ง HD ที่คมชัดกว่า แลกกับภาระบนโทรศัพท์ที่สูงขึ้น</string>
+    <string name="android_auto_resolution_portrait_qhd">แนวตั้ง 1440 x 2560</string>
+    <string name="android_auto_resolution_portrait_qhd_description">แหล่งภาพแนวตั้ง Quad HD หนักต่อโทรศัพท์และยังไม่ผ่านการตรวจสอบบนแดชบอร์ดที่รู้จัก</string>
+    <string name="android_auto_resolution_portrait_uhd">แนวตั้ง 2160 x 3840</string>
+    <string name="android_auto_resolution_portrait_uhd_description">แหล่งภาพแนวตั้ง 4K โทรศัพท์ต้องเข้ารหัสและถอดรหัส 4K พร้อมกัน คาดว่าจะร้อนและมีภาพกระตุก</string>
+    <string name="android_auto_density_auto">อัตโนมัติ</string>
+    <string name="android_auto_density_auto_description">ใช้ความหนาแน่นที่มาพร้อมกับความละเอียดที่เลือก</string>
+    <string name="android_auto_density_120">120 dpi</string>
+    <string name="android_auto_density_120_description">อินเทอร์เฟซเล็กที่สุด เห็นแผนที่ได้มากที่สุด อ่านยากบน TFT ขนาดเล็ก</string>
+    <string name="android_auto_density_160">160 dpi</string>
+    <string name="android_auto_density_160_description">อินเทอร์เฟซขนาดเล็ก เป็นความหนาแน่นที่แหล่งภาพแนวนอนใช้เป็นค่าเริ่มต้น</string>
+    <string name="android_auto_density_213">213 dpi</string>
+    <string name="android_auto_density_213_description">อยู่ระหว่างขนาดเล็กกับมาตรฐาน เหมาะเมื่อ 160 แน่นเกินไปและ 240 หยาบเกินไป</string>
+    <string name="android_auto_density_240">240 dpi</string>
+    <string name="android_auto_density_240_description">อินเทอร์เฟซมาตรฐาน เป็นความหนาแน่นที่แหล่งภาพแนวตั้งใช้เป็นค่าเริ่มต้น</string>
+    <string name="android_auto_density_320">320 dpi</string>
+    <string name="android_auto_density_320_description">อินเทอร์เฟซขนาดใหญ่ อ่านง่ายและกดโดนง่ายแม้สวมถุงมือ เห็นแผนที่บนหน้าจอน้อยลง</string>
+    <string name="android_auto_density_480">480 dpi</string>
+    <string name="android_auto_density_480_description">อินเทอร์เฟซใหญ่ที่สุด เหมาะสมเฉพาะกับแหล่งภาพความละเอียดสูงเท่านั้น</string>
+    <string name="android_auto_insets_auto">อัตโนมัติ</string>
+    <string name="android_auto_insets_auto_description">ใช้แหล่งภาพ Android Auto แบบเต็ม พื้นที่ฉายของ T-Box ไม่เพิ่มระยะขอบ AA</string>
+    <string name="android_auto_insets_manual">กำหนดเอง</string>
+    <string name="android_auto_insets_manual_description">แจ้งระยะขอบปลอดภัย TFT ของมอเตอร์ไซค์แต่ละคันให้กับ Android Auto</string>
+    <string name="distance_units_kilometers">กิโลเมตร</string>
+    <string name="distance_units_kilometers_description">ระยะทางและความเร็วหน่วย km และ km/h</string>
+    <string name="distance_units_miles">ไมล์</string>
+    <string name="distance_units_miles_description">ระยะทางและความเร็วหน่วย mi และ mph</string>
+    <string name="route_preference_fastest">เร็วที่สุด</string>
+    <string name="route_preference_fastest_description">เส้นทางเร็วที่สุด อนุญาตให้ใช้ทางหลวงพิเศษ</string>
+    <string name="route_preference_scenic">ชมวิว</string>
+    <string name="route_preference_scenic_description">เลือกถนนสายรองและหลีกเลี่ยงทางหลวงพิเศษ</string>
+
+    <!-- Core/Pro bridge notification -->
+    <string name="core_bridge_channel_name">บริดจ์ Core ของ MOTO-HUB</string>
+    <string name="core_bridge_channel_description">รักษาการเชื่อมต่อ T-Box ให้คงอยู่ขณะที่ MOTO-HUB Pro ใช้งาน</string>
+    <string name="core_bridge_notification_title">MOTO-HUB Core กำลังทำงาน</string>
+    <string name="core_bridge_notification_text">กำลังให้บริการ MOTO-HUB Pro</string>
+
+    <!-- Projection notifications -->
+    <string name="projection_channel_name">การฉายภาพของ MOTO-HUB</string>
+    <string name="projection_channel_description">สถานะการสตรีมไปยังหน้าจอมอเตอร์ไซค์</string>
+    <string name="projection_notification_title">MOTO-HUB กำลังทำงาน</string>
+    <string name="projection_notification_text">การฉายหน้าจอกำลังทำงาน</string>
+    <string name="projection_notification_dimmed_text">การฉายภาพทำงานอยู่ หน้าจอโทรศัพท์หรี่แสงแล้ว</string>
+    <string name="stop_projection">หยุด</string>
+    <string name="dim_phone_display">หรี่หน้าจอ</string>
+    <string name="restore_phone_display">คืนค่าหน้าจอ</string>
+
+    <!-- Android Auto notifications -->
+    <string name="android_auto_channel_name">MOTO-HUB Android Auto</string>
+    <string name="android_auto_notification_title">เซสชัน Android Auto ของ MOTO-HUB</string>
+    <string name="android_auto_notification_text">เซสชันทำงานอยู่ เปิด MOTO-HUB เพื่อดูสถานะการฉายภาพแบบเรียลไทม์</string>
+    <string name="stop_android_auto">หยุด Android Auto</string>
+
+    <!-- Ride Dashboard notifications -->
+    <string name="ride_dashboard_channel_name">MOTO-HUB แดชบอร์ดการขี่</string>
+    <string name="ride_dashboard_channel_description">สถานะการสตรีมข้อมูลการขี่แบบเรียลไทม์</string>
+    <string name="ride_dashboard_notification_title">MOTO-HUB แดชบอร์ดการขี่</string>
+    <string name="ride_dashboard_notification_text">การสตรีมข้อมูล GPS และแดชบอร์ดกำลังทำงาน</string>
+    <string name="stop_ride_dashboard">หยุดแดชบอร์ด</string>
+    <!-- Source: MainActivity.kt -->
+    <string name="legacy_moto_hub_diagnostics_ba6420b1">การวินิจฉัย MOTO-HUB</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_about_the_project_2feef1f7">เกี่ยวกับโปรเจกต์</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_check_for_updates_66a2b53b">ตรวจสอบการอัปเดต</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_close_3e2edd8">ปิด</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_experimental_software_e22071df">ซอฟต์แวร์ทดลอง</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_no_network_called_1_s_has_been_seen_but_this_pho_3174d343">ยังไม่เคยพบเครือข่ายชื่อ “%1$s” แต่โทรศัพท์เครื่องนี้รู้จัก “%2$s” ซึ่งต่างกันแค่การเว้นวรรค บันทึกอีกครั้งเพื่อคงค่าที่พิมพ์ไว้</string>
+    <string name="legacy_open_github_repository_80f9bf71">เปิดที่เก็บ GitHub</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_platform_9e635873">แพลตฟอร์ม</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_source_support_aa797bf0">แหล่งโค้ดและการสนับสนุน</string>
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_use_1_s_ef5e7994">ใช้ %1$s</string>
+    <string name="legacy_version_3fc0a8b8">เวอร์ชัน</string>
+    <!-- Source: feature/androidauto/AndroidAutoPreviewScreen.kt -->
+    <string name="legacy_fullscreen_7d6157db">เต็มหน้าจอ</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_address_or_coordinates_9e7a90a">ที่อยู่หรือพิกัด</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_back_1f7907">ย้อนกลับ</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_controls_e20faad6">การควบคุม</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_cycle_panels_c623ab89">สลับแผง</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_everything_on_this_page_controls_the_projection__88534bf1">ทุกอย่างบนหน้านี้ควบคุมการฉายภาพที่กำลังแสดงอยู่บนมอเตอร์ไซค์</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_exit_fullscreen_b7c93dd">ออกจากโหมดเต็มหน้าจอ</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_fullscreen_map_bafc2397">แผนที่เต็มหน้าจอ</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_handlebar_controls_cf2abe6b">ปุ่มควบคุมบนแฮนด์</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_home_2268ff">หน้าแรก</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_open_glove_friendly_fullscreen_controller_2d746356">เปิดหน้าจอควบคุมแบบเต็มหน้าจอที่ใช้งานได้แม้สวมถุงมือ</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_reset_default_mapping_bd7464fe">รีเซ็ตการจับคู่กลับเป็นค่าเริ่มต้น</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_scroll_ebe1cfb8">เลื่อน +</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_scroll_ebe1f19f">เลื่อน −</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_the_value_is_restored_when_handlebar_capture_is__ea95c499">ค่าจะกลับคืนเมื่อปิดการดักจับปุ่มแฮนด์</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_timing_9551dc6a">จังหวะเวลา</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_use_the_motorcycle_buttons_without_looking_down__1b06094c">ใช้ปุ่มบนมอเตอร์ไซค์ได้โดยไม่ต้องก้มมอง การฉายภาพที่ทำงานอยู่จะได้รับคำสั่งก่อน</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_voice_4eff112">เสียงพูด</string>
+    <!-- Source: feature/controls/MediaButtonBridge.kt -->
+    <string name="legacy_motorcycle_buttons_control_targetname_c5bca78f">ปุ่มบนมอเตอร์ไซค์ควบคุม $targetName</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_application_logs_ca54c69f">บันทึกของแอปพลิเคชัน</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_clear_3e2c62d">ล้าง</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_copy_log_e59a8039">คัดลอกบันทึก</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_no_diagnostic_events_have_been_recorded_290567d5">ยังไม่มีเหตุการณ์การวินิจฉัยที่บันทึกไว้</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_persistent_events_from_wi_fi_t_box_mirroring_enc_679d01c0">เหตุการณ์ถาวรจาก Wi-Fi, T-Box, การมิเรอร์ภาพ, ตัวเข้ารหัส และ Android Auto</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_share_4c25fbf">แชร์</string>
+    <!-- Source: feature/diagnostics/ApplicationLogScreen.kt -->
+    <string name="legacy_troubleshooting_f6bb8e3a">การแก้ไขปัญหา</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_check_t_box_and_cellular_routes_without_starting_7ae11348">ตรวจสอบเส้นทางไปยัง T-Box และเครือข่ายมือถือ โดยไม่เริ่มใช้ VPN หรือเปลี่ยนเครือข่ายเริ่มต้น</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_network_diagnostics_a4fc929a">การวินิจฉัยเครือข่าย</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_no_network_snapshot_available_5baf5bb0">ยังไม่มีภาพรวมเครือข่าย</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_result_8fe0bc1d">ผลลัพธ์</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_system_lab_433267fc">ห้องทดลองระบบ</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_start_a_projection_to_populate_the_log_23fff8de">เริ่มการฉายภาพเพื่อให้บันทึกมีข้อมูล</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_add_a_motorcycle_by_scanning_its_t_box_qr_code_a77ba91f">เพิ่มมอเตอร์ไซค์โดยสแกนรหัส QR ของ T-Box</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_add_motorcycle_397b0e90">เพิ่มมอเตอร์ไซค์</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_edit_20e22a">แก้ไข</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_motorcycles_2c9478e2">มอเตอร์ไซค์</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_no_qr_connect_manually_8ad804ea">ไม่มี QR? เชื่อมต่อด้วยตนเอง</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_options_18bf1e7e">ตัวเลือก</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_saved_motorcycles_181a24a9">มอเตอร์ไซค์ที่บันทึกไว้</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_scan_a_qr_code_5a21ea0a">สแกนรหัส QR</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_use_this_motorcycle_1204179a">ใช้มอเตอร์ไซค์นี้</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_your_garage_c0aeffb4">โรงรถของคุณ</string>
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_your_garage_is_empty_f25b99e3">โรงรถของคุณยังว่างอยู่</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_connection_eeae6ade">การเชื่อมต่อ</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_cancel_77df1a9a">ยกเลิก</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_changes_are_saved_immediately_3ab73352">การเปลี่ยนแปลงจะถูกบันทึกทันที</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_choose_how_the_complete_android_auto_image_is_fi_cb149112">เลือกวิธีจัดวางภาพ Android Auto ทั้งหมดให้พอดีกับ TFT</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_display_name_6697cf49">ชื่อที่แสดง</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_exclude_pixels_occupied_by_the_motorcycle_ui_the_c5210089">ยกเว้นพิกเซลที่ UI ของมอเตอร์ไซค์ใช้อยู่ ค่าเหล่านี้จะถูกเก็บไว้สำหรับ </string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_for_example_300_1aa3b7a">ตัวอย่าง: 300</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_for_example_mt700_adventure_4c1ae7c7">ตัวอย่าง: MT700 Adventure</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_fuel_2195d6">เชื้อเพลิง</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_full_tank_range_on_a_fill_up_powers_the_fuel_ran_68a667ae">ระยะทางที่วิ่งได้ต่อการเติมถังเต็ม ใช้สำหรับการเตือนระยะทางเชื้อเพลิงในการนำทาง</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_identity_fbc2d4de">ข้อมูลประจำตัว</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_motorcycle_profile_bd90ddfa">โปรไฟล์มอเตอร์ไซค์</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_make_it_yours_9dfd813d">ปรับให้เป็นของคุณ</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_override_the_automatic_profile_detection_for_thi_dcc5245b">แทนที่การตรวจจับโปรไฟล์อัตโนมัติของมอเตอร์ไซค์คันนี้ ให้ใช้เฉพาะเมื่อ </string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_91afe4a4">นำออก</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_motorcycle_c0498b52">นำมอเตอร์ไซค์ออกหรือไม่</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_photo_7fa92bb6">นำรูปออก</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_remove_this_motorcycle_f21e94d7">นำมอเตอร์ไซค์นี้ออก</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_reset_margins_ff05a94">รีเซ็ตระยะขอบ</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_t_box_identifier_modelid_2c1c9ebd">ตัวระบุ T-Box: $modelId</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_tank_range_km_f16147b8">ระยะทางต่อถัง (km)</string>
+    <!-- Garage tank-range field label when the rider selects miles. -->
+    <string name="legacy_tank_range_mi_f1614ebe">ระยะทางต่อถัง (mi)</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_the_wi_fi_password_is_stored_securely_on_this_ph_b6fb6382">รหัสผ่าน Wi-Fi จะถูกจัดเก็บอย่างปลอดภัยบนโทรศัพท์เครื่องนี้</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_the_name_is_only_used_inside_moto_hub_10a5f3a4">ชื่อนี้ใช้เฉพาะภายใน MOTO-HUB เท่านั้น</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_the_saved_connection_profile_and_its_photo_will__c6d581e2">โปรไฟล์การเชื่อมต่อที่บันทึกไว้และรูปภาพของมันจะถูกนำออกจาก MOTO-HUB</string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_could_not_derive_a_peer_ip_this_network_may_not__3fa3f2d0">ระบุ IP ของอีกฝั่งไม่ได้ เครือข่ายนี้อาจยังไม่มีเส้นทางที่ใช้งานได้</string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_if_easyconn_discovery_keeps_failing_briefly_reco_ced96e0d">หากการค้นหา EasyConn ยังล้มเหลวอยู่ ให้เชื่อมต่อกับ T-Box นี้ใหม่ชั่วขณะแล้วลองสำรวจ </string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_scan_common_easyconn_ports_835f5172">สแกนพอร์ต EasyConn ทั่วไป</string>
+    <!-- Source: feature/garage/TBoxCapabilityScreen.kt -->
+    <string name="legacy_t_box_capability_inspector_937ec87d">ตัวตรวจสอบความสามารถของ T-BOX</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_another_easyconn_app_can_keep_the_t_box_link_occ_fd2f2f53">แอป EasyConn อื่นอาจยึดการเชื่อมต่อ T-Box ไว้ต่อเนื่องแม้จะออกจากหน้าจอหลักไปแล้ว</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_connection_failed_3b5c2fbf">การเชื่อมต่อล้มเหลว</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_choose_what_the_ride_dashboard_shows_for_navigat_793eeb07">เลือกสิ่งที่แดชบอร์ดการขี่จะแสดงในการนำทาง</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_connect_your_motorcycle_2e5794e6">เชื่อมต่อมอเตอร์ไซค์ของคุณ</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_connecting_48965ad8">กำลังเชื่อมต่อ</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_dashboard_map_5dae1b0">แผนที่บนแดชบอร์ด</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_disconnect_966f34bc">ยกเลิกการเชื่อมต่อ</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_first_time_setup_d929eaa7">การตั้งค่าครั้งแรก</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_session_actions_bc6aa933">การจัดการเซสชัน</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_scan_the_t_box_qr_code_to_save_the_network_crede_67df5b62">สแกนรหัส QR ของ T-Box เพื่อบันทึกข้อมูลรับรองเครือข่ายโดยอัตโนมัติ</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_setting_up_network_and_t_box_7769a762">กำลังตั้งค่าเครือข่ายและ T-Box</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_what_to_show_122be0b9">แสดงอะไร?</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_back_fe3a848e">‹ ย้อนกลับ</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_arrived_ff08704d">ถึงจุดหมายแล้ว</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_calculating_your_route_86fbe56d">กำลังคำนวณเส้นทางของคุณ…</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_done_2097a2">เสร็จสิ้น</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_exact_destination_pin_used_for_routing_tap_the_m_10786cc">หมุดจุดหมายตำแหน่งตรงที่ใช้คำนวณเส้นทาง แตะแผนที่เพื่อเปลี่ยน</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_guidance_to_your_destination_will_end_27d69f">การนำทางไปยังจุดหมายปลายทางของคุณจะสิ้นสุด</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_info_225cae">ข้อมูล</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_keep_going_6d8f25bf">ไปต่อ</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_live_navigation_70ce19c8">การนำทางสด</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_map_location_9df6ea19">ตำแหน่งบนแผนที่</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_navigation_needs_attention_7f3ab90f">การนำทางต้องการความสนใจ</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_no_9c1">ไม่</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_name_24eeab">ชื่อ</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_navigation_will_start_either_way_open_the_ride_d_b34bca11">การนำทางจะเริ่มขึ้นไม่ว่าอย่างไร เปิด Ride Dashboard บนจอ TFT ของมอเตอร์ไซค์หรือไม่?</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_no_favorites_yet_save_one_from_a_route_preview_o_b8e45fac">ยังไม่มีรายการโปรด บันทึกได้จากหน้าตัวอย่างเส้นทางหรือหน้าถึงจุดหมาย</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_no_matches_e3c700ba">ไม่พบรายการที่ตรงกัน</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_not_every_address_number_is_mapped_in_openstreet_cf7708fe">ยังไม่มีการวาดเลขที่อยู่ทุกหลังลงใน OpenStreetMap จึงทำให้พิน </string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_off_route_recalculating_1f5a422b">หลุดเส้นทาง – กำลังคำนวณใหม่…</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_open_ride_dashboard_202629d">เปิด Ride Dashboard?</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_optional_label_267da254">ป้ายกำกับ (ไม่บังคับ)</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_route_type_519caed1">ชนิดเส้นทาง</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_reroute_a49323d6">คำนวณเส้นทางใหม่</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_27359d">บันทึก</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_a_destination_as_a_favorite_from_a_route_pr_5669fe67">บันทึกจุดหมายปลายทางเป็นรายการโปรดจากหน้าตัวอย่างเส้นทาง</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_favorite_85e74bf">บันทึกรายการโปรด</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_save_this_route_d63094aa">บันทึกเส้นทางนี้</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_search_address_or_paste_coordinates_daf446f5">ค้นหาที่อยู่หรือวางพิกัด</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_start_navigation_2d34b0b2">เริ่มการนำทาง</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_stop_277c22">หยุด</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_stop_navigation_8a243dad">หยุดการนำทาง?</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_tap_to_dismiss_d17702a2">แตะเพื่อปิด</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_work_293b31">ที่ทำงาน</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_yes_156c7">ใช่</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_you_have_arrived_e0a68436">คุณมาถึงแล้ว</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_e_g_sunday_loop_1dd6a810">เช่น วนรอบวันอาทิตย์</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_label_27143b17">‹ $label</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_clear_all_5a4e690e">ล้างทั้งหมด</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_dest_2072c2">จุดหมาย</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_fit_113f1">ปรับพอดี</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_full_screen_22a47efd">เต็มหน้าจอ</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_select_all_ba2cd45d">เลือกทั้งหมด</string>
+    <!-- Source: feature/navigation/RouteMap.kt -->
+    <string name="legacy_openstreetmap_contributors_692ada40">© OpenStreetMap contributors</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_auto_detects_direct_networks_choose_wi_fi_direct_a24126ac">ตรวจจับเครือข่ายที่ขึ้นต้นด้วย DIRECT- โดยอัตโนมัติ เลือก Wi-Fi Direct หากแดชบอร์ดเป็น P2P Group Owner</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_connect_without_a_qr_code_bd61ac9f">เชื่อมต่อโดยไม่ใช้รหัส QR</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_manual_setup_176cc583">ตั้งค่าด้วยตนเอง</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_some_motorcycles_don_t_show_a_pairing_qr_code_on_c3361949">มอเตอร์ไซค์บางรุ่นไม่แสดงรหัส QR สำหรับจับคู่บนแดชบอร์ด หากคุณทราบอยู่แล้ว </string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_t_box_wi_fi_transport_2b8fdfb9">การเชื่อมต่อ Wi-Fi ของ T-Box</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_wi_fi_network_name_ssid_4e8cc3a7">ชื่อเครือข่าย Wi-Fi (SSID)</string>
+    <!-- Source: feature/pairing/ManualPairingScreen.kt -->
+    <string name="legacy_wi_fi_password_aa1722dd">รหัสผ่าน Wi-Fi</string>
+    <!-- Source: feature/pairing/TBoxQrScannerScreen.kt -->
+    <string name="legacy_t_box_scan_eb4ea12b">สแกน T-Box</string>
+    <!-- Source: feature/ridedashboard/RideDashboardPreviewScreen.kt -->
+    <string name="legacy_uses_this_phone_s_gps_no_t_box_needed_same_rende_58537da7">ใช้ GPS ของโทรศัพท์เครื่องนี้ - ไม่ต้องมี T-Box ใช้ตัวเรนเดอร์และ heading-up/ซูม แบบเดียวกัน </string>
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_elevation_last_hour_10deed1a">ระดับความสูง / ชั่วโมงล่าสุด</string>
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_now_12eb6">ตอนนี้</string>
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_waiting_for_gnss_elevation_f069100e">กำลังรอระดับความสูงจาก GNSS</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_battery_7593afdc">$battery%</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_g_force_fca415c5">แรง G</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_motion_sensors_b224e96f">เซ็นเซอร์ตรวจจับการเคลื่อนไหว</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_phone_system_b2b20c1d">โทรศัพท์ // ระบบ</string>
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_turn_rate_9cfa82a3">อัตราการเลี้ยว</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_ahead_3b5bda1">ด้านหน้า</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_compass_sun_45d9eeda">เข็มทิศ // ดวงอาทิตย์</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_left_239807">ซ้าย</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_right_4a5c9fc">ขวา</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_sun_horizon_6a3f3196">ดวงอาทิตย์ / ขอบฟ้า</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_sun_behind_2679a1ae">ดวงอาทิตย์อยู่ด้านหลัง</string>
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_waiting_for_position_heading_75ece8e0">กำลังรอตำแหน่ง + ทิศทาง</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_dashboard_customization_b85f9307">การปรับแต่งแดชบอร์ด</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_grant_41dd0fc">ให้สิทธิ์</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_live_layout_cdba0cde">เลย์เอาต์แบบสด</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_map_1293c">แผนที่</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_map_stays_in_the_centre_f108a4fb">แผนที่คงอยู่ตรงกลางเสมอ</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_needs_notification_access_44d40c16">ต้องการสิทธิ์การแจ้งเตือน</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_reset_defaults_6000a23">รีเซ็ตค่าเริ่มต้น</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_swap_2785b3">สลับ</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_tap_to_assign_d1b41d7">แตะเพื่อกำหนด</string>
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_widget_library_cb7316bf">คลังวิดเจ็ต</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_current_location_5f369a9c">ตำแหน่งปัจจุบัน</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_eta_10d72">ETA</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_nav_route_20ffc4db">นำทาง / เส้นทาง</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_off_route_recalculating_7a9dcf5c">หลุดเส้นทาง — กำลังคำนวณใหม่</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_remaining_d9f0bdd6">ที่เหลือ</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_rise_2662c9">ขึ้น</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_set_14042">ตก</string>
+    <!-- Source: feature/ridedashboard/widget/NavigationWidget.kt -->
+    <string name="legacy_sun_1422c">ดวงอาทิตย์</string>
+    <!-- Source: feature/ridedashboard/widget/NowPlayingWidget.kt -->
+    <string name="legacy_no_media_session_5cbc8365">-- ไม่มีเซสชันสื่อ --</string>
+    <!-- Source: feature/ridedashboard/widget/NowPlayingWidget.kt -->
+    <string name="legacy_no_artwork_2acf3875">ไม่มีภาพปก</string>
+    <!-- Source: feature/ridedashboard/widget/NowPlayingWidget.kt -->
+    <string name="legacy_now_playing_media_session_45191bd6">กำลังเล่น // เซสชันสื่อ</string>
+    <!-- Source: feature/ridedashboard/widget/SatelliteWidget.kt -->
+    <string name="legacy_signal_coverage_fef46060">ความครอบคลุมสัญญาณ</string>
+    <!-- Source: feature/ridedashboard/widget/SpeedGaugeWidget.kt -->
+    <string name="legacy_ground_speed_gps_c8f77ac7">ความเร็วพื้น / GPS</string>
+    <!-- Source: feature/ridedashboard/widget/SpeedGaugeWidget.kt -->
+    <string name="legacy_km_h_233edb">KM/H</string>
+    <!-- Speed-unit label when the rider selects miles in Settings. -->
+    <string name="legacy_mph_12b05">MPH</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_average_km_h_d2517b1e">ความเร็วเฉลี่ย KM/H</string>
+    <!-- Trip-metrics average-speed label when the rider selects miles. -->
+    <string name="legacy_average_mph_6c8da62">ความเร็วเฉลี่ย MPH</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_recent_8fd93a5b">ล่าสุด</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_speed_profile_2c1ba290">โปรไฟล์ความเร็ว</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_trip_performance_8c26f32b">ทริป // ประสิทธิภาพ</string>
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_waiting_for_speed_data_91032a2d">กำลังรอข้อมูลความเร็ว</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_check_cellular_data_b94ccb68">ตรวจสอบเน็ตมือถือ</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_live_23a8ec">สด</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_loading_3edc6d1c">กำลังโหลด</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_open_meteo_gps_2cc3134f">OPEN-METEO • GPS</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_rain_probability_9ad3fd28">ฝน $probability%</string>
+    <!-- Source: feature/ridedashboard/widget/WeatherWidget.kt -->
+    <string name="legacy_retrying_every_15s_e5e3f7a4">ลองใหม่ทุก 15 วินาที</string>
+    <!-- Source: feature/safety/SafetyDisclaimerDialog.kt -->
+    <string name="legacy_i_understand_and_continue_7ea73adb">ฉันเข้าใจและดำเนินการต่อ</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_android_auto_content_insets_7046c7dd">ระยะขอบเนื้อหา Android Auto</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_choose_image_detail_and_how_moto_hub_balances_sm_577123e1">เลือกรายละเอียดของภาพและวิธีที่ MOTO-HUB ถ่วงดุลระหว่างความลื่นไหล ความร้อน แบตเตอรี่ และภาระ Wi-Fi</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_default_route_type_b528b630">ชนิดเส้นทางเริ่มต้น</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_motorcycle_features_1ef519ec">ฟีเจอร์มอเตอร์ไซค์</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_power_mode_357a57fe">โหมดพลังงาน</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_resolution_bd8b64ac">ความละเอียด</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_turn_by_turn_routing_uses_your_own_stadia_maps_a_76117a71">การนำทางแบบบอกเลี้ยวทีละทางใช้ Stadia Maps API key ของคุณเอง ไม่ใช่ </string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_units_4d25f4f">หน่วย</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_delete_79cb71cb">ลบ</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_delete_this_trip_b2d7ee2d">ลบทริปนี้?</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_delete_trip_1d14595a">ลบทริป</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_discard_c6d7a07e">ทิ้ง</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_export_gpx_83319643">ส่งออก GPX</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_finish_save_39e52944">เสร็จสิ้นและบันทึก</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_gps_logging_works_with_the_phone_locked_37383170">การบันทึก GPS ทำงานได้แม้ล็อกโทรศัพท์อยู่</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_not_saved_d22da6ba">ยังไม่ได้บันทึก</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_name_this_ride_9a657605">ตั้งชื่อการขี่นี้</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_opening_the_saved_trip_now_c583b843">กำลังเปิดทริปที่บันทึกไว้</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_recorded_rides_823a26eb">การขี่ที่บันทึกไว้</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_recording_unavailable_9bbb7461">ไม่สามารถบันทึกได้</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_ride_archive_c06bf17a">คลังการขี่</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_record_a_ride_ce0c4be6">บันทึกการขี่</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_recording_was_too_short_to_keep_6761ae14">การบันทึกสั้นเกินไปจึงไม่ถูกเก็บไว้</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_rename_trip_584eaba7">เปลี่ยนชื่อทริป</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_ride_recordings_need_at_least_100_m_15_s_of_move_260f0993">การบันทึกการขี่ต้องมีการเคลื่อนที่อย่างน้อย 100 ม. หรือ 15 วินาที และมีจุด GPS อย่างน้อยสองจุด</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_saved_4b07667">บันทึกแล้ว</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_start_new_recording_36e83013">เริ่มบันทึกใหม่</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_start_recording_836b8b93">เริ่มบันทึก</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_track_details_6b05b82d">รายละเอียดเส้นทาง</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_the_gps_trace_and_all_recorded_statistics_will_b_6d59f1b7">เส้นทาง GPS และสถิติที่บันทึกไว้ทั้งหมดจะถูกลบอย่างถาวร</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trip_name_5c3de586">ชื่อทริป</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trip_saved_to_recorded_rides_31c5533c">บันทึกทริปลงใน \'การขี่ที่บันทึกไว้\' แล้ว</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trips_4d520ce">ทริป</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_try_again_25aeb09b">ลองอีกครั้ง</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_view_2832a5">ดู</string>
+    <!-- Source: feature/trips/TripsScreen.kt -->
+    <string name="legacy_trips_ca1b8627">‹ ทริป</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_allow_apk_installation_a3116df5">อนุญาตการติดตั้ง APK</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_checking_github_releases_7e509ccb">กำลังตรวจสอบรีลีส GitHub...</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_moto_hub_updates_c98ab24f">อัปเดต MOTO-HUB</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_no_apk_asset_attached_to_this_release_7a89904d">รีลีสนี้ไม่มีไฟล์ APK แนบมา</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_no_newer_version_is_available_b79316a1">ไม่มีเวอร์ชันที่ใหม่กว่านี้</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_pre_release_6bd19a9d">พรีรีลีส</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_retry_4b33288">ลองใหม่</string>
+    <!-- Source: feature/update/GithubUpdateDialog.kt -->
+    <string name="legacy_skip_this_version_c2d1da37">ข้ามเวอร์ชันนี้</string>
+    <!-- Source: session/ProjectionForegroundService.kt -->
+    <string name="legacy_projection_is_running_8c249b1a">กำลังฉายภาพอยู่</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_fill_and_crop_8b8b5d16">เติมเต็มและครอบตัด</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_preserve_aspect_ratio_b340e377">รักษาสัดส่วนภาพ</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_show_the_complete_image_with_black_side_bars_whe_90d880eb">แสดงภาพแบบเต็มโดยเพิ่มแถบดำด้านข้างเมื่อจำเป็น</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_stretch_display_45b17e87">ยืดภาพเต็มจอ</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_use_the_whole_tft_and_keep_all_content_visible_w_6c1c6337">ใช้จอ TFT ทั้งหมดและแสดงเนื้อหาได้ครบด้วยการยืดภาพเล็กน้อย</string>
+    <!-- Source: androidauto/AndroidAutoDisplayProfile.kt -->
+    <string name="legacy_use_the_whole_tft_without_stretching_crop_the_ed_8f0ac706">ใช้จอ TFT ทั้งหมดโดยไม่ยืดภาพ ครอบตัดขอบเมื่อสัดส่วนภาพต่างกัน</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_adjust_the_phone_media_level_while_handlebar_cap_a55dd55a">ปรับระดับเสียงสื่อของโทรศัพท์ขณะเปิดการจับปุ่มแฮนด์อยู่</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_advanced_handlebar_mapping_d94a5a3b">การจับคู่ปุ่มแฮนด์ขั้นสูง</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_choose_the_day_night_style_used_by_android_auto_c4b5df26">เลือกสไตล์กลางวัน/กลางคืนที่ Android Auto ใช้</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_customize_double_taps_holds_and_android_auto_com_59078421">ปรับแต่งการแตะสองครั้ง การกดค้าง และคำสั่ง Android Auto</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_destinations_available_to_one_press_handlebar_na_19306aee">จุดหมายปลายทางที่ใช้กับการนำทางด้วยการกดปุ่มแฮนด์ครั้งเดียว</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_double_tap_a52552f4">แตะสองครั้ง</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_map_appearance_b4c189c8">รูปลักษณ์ของแผนที่</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_media_volume_142f4af6">ระดับเสียงสื่อ</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_saved_places_f8158025">สถานที่ที่บันทึกไว้</string>
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_select_hold_6cc41543">กดค้างเพื่อเลือก</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_detected_networks_fa8527c3">เครือข่ายที่ตรวจพบ</string>
+    <!-- Source: feature/diagnostics/NetworkDiagnosticsScreen.kt -->
+    <string name="legacy_session_events_1a7f9e03">เหตุการณ์ของเซสชัน</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_android_auto_display_56c75982">จอแสดงผล Android Auto</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_choose_widgets_for_each_side_panel_c04b42c9">เลือกวิดเจ็ตสำหรับแผงด้านข้างแต่ละฝั่ง</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_customize_dashboard_3d094ab7">ปรับแต่งแดชบอร์ด</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_endpoint_geometry_protocol_and_feature_flags_7f197859">ปลายทางเชื่อมต่อ เรขาคณิต โปรโตคอล และฟีเจอร์แฟล็ก</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_exclude_pixels_occupied_by_the_motorcycle_ui_c69e3740">ตัดพื้นที่พิกเซลที่ UI ของมอเตอร์ไซค์ใช้ออก</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_how_the_complete_android_auto_image_fits_the_tft_11c8bbf2">วิธีที่ภาพ Android Auto แบบเต็มพอดีกับจอ TFT</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_override_automatic_profile_detection_b102be5">บังคับใช้เองแทนการตรวจจับโปรไฟล์อัตโนมัติ</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_t_box_capability_inspector_e5159c9d">เครื่องมือตรวจสอบความสามารถของ T-Box</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_t_box_profile_override_f6f6b251">การบังคับใช้โปรไฟล์ T-Box</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_tft_safe_margins_d1e86e30">ระยะขอบปลอดภัยของจอ TFT</string>
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_motorcycle_15a347f8">‹ มอเตอร์ไซค์</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_customize_d780ac23">ปรับแต่ง</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_dim_phone_display_4f190e58">หรี่หน้าจอโทรศัพท์</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_draw_recorded_points_on_the_dashboard_map_d0764c05">วาดจุดที่บันทึกไว้ลงบนแผนที่แดชบอร์ด</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_keep_the_tft_active_while_reducing_phone_distrac_f9df0d5a">เปิดจอ TFT ค้างไว้พร้อมลดสิ่งรบกวนจากโทรศัพท์</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_open_the_on_screen_android_auto_controls_55f559a3">เปิดตัวควบคุม Android Auto บนหน้าจอ</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_preview_50417ba8">ดูตัวอย่าง</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_preview_touch_c103ae4d">ดูตัวอย่างและแตะ</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_show_gps_track_2ed7fcf2">แสดงเส้นทาง GPS</string>
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_view_android_auto_and_interact_from_your_phone_1e4d3a53">ดู Android Auto และโต้ตอบจากโทรศัพท์</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_review_your_route_before_starting_guidance_48917adb">ตรวจสอบเส้นทางก่อนเริ่มการนำทาง</string>
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_take_me_home_bb1e43ee">กลับบ้าน</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_about_moto_hub_6966e1f8">เกี่ยวกับ MOTO-HUB</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_android_auto_cb210d00">Android Auto</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_announce_upcoming_maneuvers_while_navigating_7c1d9f50">ประกาศการเลี้ยวถัดไประหว่างการนำทาง</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_connect_on_launch_9e7cd0e0">เชื่อมต่ออัตโนมัติเมื่อเปิดแอป</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_connect_recovery_trip_recording_1bf7551f">การเชื่อมต่ออัตโนมัติ การกู้คืน และการบันทึกทริป</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_record_rides_3d1b712a">บันทึกการขี่โดยอัตโนมัติ</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_recover_stalled_android_auto_and_ride_dashb_5da6ea2d">กู้คืนสตรีม Android Auto และ Ride Dashboard ที่ค้างโดยอัตโนมัติ</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_bluetooth_capture_and_mapping_3e23fd19">การจับสัญญาณและการจับคู่ปุ่มผ่าน Bluetooth</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_connect_and_discover_t_box_when_app_opens_fe05f1ea">เชื่อมต่อและค้นหา T-Box เมื่อเปิดแอป</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_connection_automation_93f3bb33">การเชื่อมต่อและระบบอัตโนมัติ</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_diagnostics_3748418c">การวินิจฉัย</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_disable_touchscreen_4f636f13">ปิดการใช้งานหน้าจอสัมผัส</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_draw_detected_curved_segments_in_a_distinct_colo_906c94c">วาดช่วงทางโค้งที่ตรวจพบด้วยสีที่แตกต่างบนแผนที่ TFT</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_enable_logging_e57825e2">เปิดใช้การบันทึกล็อก</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_encoder_detail_and_power_mode_for_all_streams_9c18fdcf">รายละเอียดของตัวเข้ารหัสและโหมดพลังงานสำหรับสตรีมทั้งหมด</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_fuel_range_warning_e301d2ef">การเตือนระยะทางน้ำมันเชื้อเพลิง</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_full_client_info_every_candidate_profile_s_score_fb2a321f">CLIENT_INFO แบบเต็ม คะแนนของโปรไฟล์ที่เสนอทุกตัว และคำสั่งที่ไม่รู้จัก </string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_golden_hour_hint_26c00b9f">คำแนะนำช่วงแสงทอง</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_highlight_curvy_roads_6d7866a">เน้นถนนที่มีทางโค้ง</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_master_switch_for_the_diagnostic_log_off_means_n_1d7e2b81">สวิตช์หลักสำหรับล็อกการวินิจฉัย ปิดอยู่หมายความว่าจะไม่มีการบันทึกอะไรเลย </string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_navigation_e5d7e634">การนำทาง</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_network_tests_and_application_logs_6064f99">การทดสอบเครือข่ายและล็อกของแอปพลิเคชัน</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_preview_ride_dashboard_cf294e4">ดูตัวอย่าง Ride Dashboard</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_recovery_watchdog_eb0fb218">วอตช์ด็อกการกู้คืน</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_resolution_and_display_mode_70f7a2be">ความละเอียดและโหมดการแสดงผล</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_review_copy_share_or_clear_events_fa00934b">ดู คัดลอก แชร์ หรือล้างเหตุการณ์</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_routes_through_fossgis_s_free_public_valhalla_se_5f3fb227">เส้นทางผ่านเซิร์ฟเวอร์ Valhalla สาธารณะฟรีของ FOSSGIS แทนที่จะเป็น </string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_see_the_tft_render_on_this_phone_using_its_own_g_d21ea9ba">ดูภาพที่เรนเดอร์บน TFT บนโทรศัพท์เครื่องนี้ โดยใช้ GPS ของตัวเอง - ไม่ต้องมี T-Box</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_show_forecast_conditions_at_your_destination_in__d467471f">แสดงสภาพอากาศพยากรณ์ที่จุดหมายปลายทางในตัวอย่างเส้นทาง</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_show_minutes_to_the_nearest_sunrise_sunset_golde_840f15d">แสดงนาทีถึงช่วงแสงทองพระอาทิตย์ขึ้น/ตกที่ใกล้ที่สุด</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_start_gps_logging_with_projection_sessions_1c3d9c89">เริ่มการบันทึก GPS พร้อมเซสชันการฉายภาพ</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_t_box_discovery_wi_fi_binding_cellular_routes_32d84d5f">การค้นหา T-Box การเชื่อมกับ Wi-Fi และเส้นทางผ่านเครือข่ายมือถือ</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_try_without_a_key_demo_server_74e379d4">ลองใช้โดยไม่ต้องมีคีย์ (เซิร์ฟเวอร์สาธิต)</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_use_focus_and_handlebar_controls_even_when_the_t_d1be0479">ใช้การโฟกัสและปุ่มแฮนด์ต่อไป แม้ T-Box จะรายงานว่าเป็นจอสัมผัส</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_verbose_t_box_logging_ee12f7b3">บันทึกล็อก T-Box แบบละเอียด</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_video_quality_3ed2f63a">คุณภาพวิดีโอ</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_voice_guidance_a2d4eea6">การนำทางด้วยเสียง</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_warn_when_a_route_would_exceed_your_motorcycle_s_c31a0f09">เตือนเมื่อเส้นทางยาวเกินระยะทางต่อถังของมอเตอร์ไซค์คุณ (ตั้งค่าไว้ใน Garage)</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_weather_at_arrival_44ffc4d8">สภาพอากาศเมื่อถึงจุดหมาย</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_your_own_routing_api_key_for_turn_by_turn_94d8b202">คีย์ API เส้นทางของคุณเองสำหรับการนำทางทีละเลี้ยว</string>
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_settings_7469104a">‹ การตั้งค่า</string>
+    <!-- Source: feature/trips/TripRecordingService.kt -->
+    <string name="legacy_gps_ride_recording_and_trip_statistics_28992d34">การบันทึกการขี่ GPS และสถิติการเดินทาง</string>
+    <!-- Source: session/PhoneDisplayDimmer.kt -->
+    <string name="legacy_moto_hub_display_dimmer_57b6244b">ตัวหรี่หน้าจอ MOTO-HUB</string>
+    <!-- Dynamic UI templates. Keep positional placeholders unchanged. -->
+    <string name="legacy_filter_1_d_497daa14">ตัวกรอง %1$d</string>
+    <string name="legacy_recording_1_s_b01f3573">กำลังบันทึก · %1$s</string>
+    <string name="legacy_1_d_optimized_gps_points_de88df06">จุด GPS ที่ปรับแล้ว %1$d จุด</string>
+    <string name="legacy_place_1_d_name_6bdc57c6">ชื่อสถานที่ %1$d</string>
+    <string name="legacy_save_place_1_d_39c7a048">บันทึกสถานที่ %1$d</string>
+    <string name="legacy_t_box_identifier_1_s_531e2638">ตัวระบุ T-Box: %1$s</string>
+    <string name="legacy_1_s_fe2c9a02">‹ %1$s</string>
+    <string name="legacy_motorcycle_buttons_control_1_s_6e2f90ac">ปุ่มบนมอเตอร์ไซค์ควบคุม %1$s</string>
+    <string name="legacy_rain_1_d_84b55e18">ฝน %1$d%%</string>
+    <string name="legacy_1_d_c_41e7b8ff">%1$d°C</string>
+    <string name="legacy_1_d_km_h_6ce8c40f">%1$d KM/H</string>
+    <!-- Weather forecast wind speed when the rider selects miles. -->
+    <string name="legacy_1_d_mph_669c2f51">%1$d MPH</string>
+    <string name="legacy_moto_hub_258caaa5">MOTO-HUB</string>
+    <string name="legacy_recording_this_ride_1aceedab">กำลังบันทึกการขี่นี้</string>
+    <string name="legacy_moto_hub_controls_f72ba5d1">การควบคุม MOTO-HUB</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_available_e7e32615">มีให้ใช้ %1$d</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_remaining_e0c291">เหลืออีก %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_2_s_a1c6054a">%1$s · %2$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1000_mt_x_cfdl26_a07555df">1000 MT-X (CFDL26)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_200_ms_snappier_singles_bddf5c9a">200 ms - กดเดี่ยวตอบสนองไว</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_300_ms_balanced_17f78a68">300 ms - สมดุล</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_450_ms_forgiving_doubles_3234effd">450 ms - แตะสองครั้งยืดหยุ่น</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_500_ms_quicker_hold_a1cbda27">500 ms - กดค้างเร็วขึ้น</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_600_ms_balanced_9f5246b">600 ms - สมดุล</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_800_ms_deliberate_hold_32e73399">800 ms - กดค้างชัดเจน</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_800mt_cfdl26_9a9a6453">800MT (CFDL26)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_800nk_advanced_cfdl26_8796cfe5">800NK Advanced (CFDL26)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_active_profile_dcb9be6f">โปรไฟล์ที่ใช้อยู่</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_4d461ce0">ANDROID AUTO</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_atms_1ed139">ตู้เอทีเอ็ม</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_avg_feb2">เฉลี่ย</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_avg_speed_7231cd39">ความเร็วเฉลี่ย</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_access_point_2a7fd7f4">จุดเชื่อมต่อ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_airports_db81a128">สนามบิน</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_album_cover_current_track_and_progress_5704cf2c">ปกอัลบั้ม เพลงที่เล่นอยู่ และความคืบหน้า</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_altitude_7d3daec2">ระดับความสูง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_map_9e2be3c">แผนที่ Android Auto</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_arc_speedometer_bearing_and_gnss_lock_status_a1dab290">สปีดโอมิเตอร์แบบโค้ง ทิศทาง และสถานะการล็อก GNSS</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_assistant_ccab92be">ผู้ช่วย</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_attractions_ab6135cc">สถานที่ท่องเที่ยว</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_auto_1f51cf">อัตโนมัติ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_auto_day_night_808f223b">อัตโนมัติ (กลางวัน/กลางคืน)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_backward_left_7f90d6f7">ย้อนกลับ - ซ้าย</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_backward_double_tap_left_bf920c29">ย้อนกลับแตะสองครั้ง - ซ้าย</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bakery_7628ee00">ร้านเบเกอรี่</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_banks_3cfd197">ธนาคาร</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bars_pubs_8301b610">บาร์และผับ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_battery_phone_fc45d1a1">แบตเตอรี่และโทรศัพท์</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_battery_charging_connectivity_temperature_and_mo_59cfa2d5">แบตเตอรี่ การชาร์จ การเชื่อมต่อ อุณหภูมิ และเซ็นเซอร์การเคลื่อนไหว</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bicycle_rental_cee64385">เช่าจักรยาน</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_absolute_volume_change_3096ab72">เปลี่ยนระดับเสียงแบบ absolute ผ่าน Bluetooth</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_next_track_command_7a7046ee">คำสั่งเพลงถัดไปผ่าน Bluetooth</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_play_pause_command_a9252e58">คำสั่งเล่น/หยุดชั่วคราวผ่าน Bluetooth</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_bluetooth_previous_track_command_d68a66f2">คำสั่งเพลงก่อนหน้าผ่าน Bluetooth</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl16_450sr_style_non_touch_b3fdf770">CFDL16 / สไตล์ 450SR แบบไม่สัมผัส</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl16_legacy_b0fd3b8a">CFDL16 / Legacy</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl26_motoplay_landscape_touch_a52d575c">CFDL26 MotoPlay แนวนอนแบบสัมผัส</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfdl26_motoplay_portrait_handlebar_primary_c724cad9">CFDL26 MotoPlay แนวตั้ง ควบคุมด้วยปุ่มแฮนด์เป็นหลัก</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cfmoto_800nk_97f23a55">CFMOTO 800NK</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_cl_c450_5c8b3190">CL-C450</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_crcp_sdk_0_9_23_x_non_touch_5621c1f8">CRCP / sdk 0.9.23.x แบบไม่สัมผัส</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_campsites_75e7180b">สถานที่กางเต็นท์</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_car_service_917649">ศูนย์บริการรถยนต์</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_charging_5973c691">กำลังชาร์จ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_choose_a_widget_for_1_s_26345a66">เลือกวิดเจ็ตสำหรับ %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_compass_9bdfd4f2">เข็มทิศ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_current_conditions_wind_humidity_via_open_meteo_4e58c8f3">สภาพอากาศปัจจุบัน ลม และความชื้น ผ่าน Open-Meteo</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_down_1de05778">D-pad ลง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_left_1de3d2dd">D-pad ซ้าย</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_right_9eecea06">D-pad ขวา</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_up_a8ebfef1">D-pad ขึ้น</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d29c">D-pad ▲</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d2a0">D-pad ▶</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d2a6">D-pad ▼</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_d_pad_6049d2aa">D-pad ◀</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_dist_2005a6">ระยะทาง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_distance_3fd77bf5">ระยะทาง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_day_light_2f4e1b57">กลางวัน (สว่าง)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_detect_from_the_motorcycle_recommended_9fd07c6f">ตรวจจับจากมอเตอร์ไซค์ (แนะนำ)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_development_simulator_profile_45f9bdc8">โปรไฟล์ซิมูเลเตอร์สำหรับการพัฒนา</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_do_nothing_a83eb158">ไม่ทำอะไร</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_double_press_c52a55d2">กดลงสองครั้ง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_press_6ec23765">กดลง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_double_f6f5f8f8">ลง · สองครั้ง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_down_single_1037016f">ลง · ครั้งเดียว</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_drinking_water_6ae0dde1">จุดน้ำดื่ม</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_elapsed_c777dd5c">เวลาที่ผ่านไป</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_elevation_857ea708">ระดับความสูง +</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_editing_1_s_a5399c23">กำลังแก้ไข %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_elevation_profile_climb_rate_and_gps_accuracy_d7b5d893">โปรไฟล์ความสูง อัตราการไต่ และความแม่นยำของ GPS</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_favorites_3baf7a37">รายการโปรด</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_favorite_427c2dbc">รายการโปรด</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_fire_stations_e5a3dc49">สถานีดับเพลิง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_food_21807e">อาหาร</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_forward_right_ed1ba1ce">เดินหน้า - ขวา</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_forward_double_tap_right_50824858">เดินหน้าแตะสองครั้ง - ขวา</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_gnss_satellite_visibility_and_fix_status_55616e56">การมองเห็นดาวเทียม GNSS และสถานะการจับพิกัด</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_gps_search_f2175dfe">ค้นหา GPS</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_gps_1_d_m_85cd2614">GPS ±%1$d m</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_guiding_to_destination_1328e050">กำลังนำทางไปยังจุดหมายปลายทาง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_heading_sun_altitude_and_rider_relative_sun_posi_8620d321">ทิศทาง ความสูงดวงอาทิตย์ และตำแหน่งดวงอาทิตย์เทียบกับผู้ขับขี่</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_hospitals_466ae959">โรงพยาบาล</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_hotels_stays_e91bd2ff">โรงแรมและที่พัก</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_in_use_1_s_9a0bc66d">กำลังใช้งาน • %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_key_configured_d2c8ebf">ตั้งค่าคีย์แล้ว</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_large_glove_friendly_actions_for_the_active_dash_ae3e3599">การทำงานขนาดใหญ่ ใช้งานได้แม้สวมถุงมือ สำหรับแดชบอร์ดที่เปิดใช้อยู่</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_larger_absolute_volume_change_c11a1729">เปลี่ยนระดับเสียง absolute ทีละมาก</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_left_panel_9dcb38cb">แผงด้านซ้าย</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_left_double_f4a67f33">ซ้าย · สองครั้ง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_left_single_de787aa">ซ้าย · ครั้งเดียว</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_log_copied_to_clipboard_a7cbe711">คัดลอกล็อกไปยังคลิปบอร์ดแล้ว</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_max_12944">สูงสุด</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_max_speed_6338424b">ความเร็วสูงสุด</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_mode_2431a3">โหมด</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_moto_hub_simulator_72ee829">MOTO-HUB Simulator</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_moving_87e69c4e">กำลังเคลื่อนที่</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_manage_88ef8985">จัดการ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_manage_guidance_search_a_new_destination_or_resu_7899102a">จัดการการนำทาง ค้นหาจุดหมายใหม่ หรือกลับมาขี่ตามเส้นทางเดิม</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_manual_recording_73634e37">บันทึกด้วยตนเอง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_mirroring_8b513fa3">การมิเรอร์</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_mirrors_android_auto_s_own_map_5091f0fa">มิเรอร์แผนที่ของ Android Auto เอง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_motoplay_landscape_cfdl16_47ddf145">MotoPlay แนวนอน (CFDL16)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_motorcycle_service_4f005f46">ศูนย์บริการมอเตอร์ไซค์</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigation_8beff614">การนำทาง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_no_key_set_25cc0b82">ยังไม่ได้ตั้งค่าคีย์</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_native_turn_by_turn_navigation_rendered_on_the_t_96caa565">การนำทางทีละเลี้ยวในตัว วาดแสดงบน TFT</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_nav_place_1_9c6fda12">นำทาง · สถานที่ 1</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_nav_place_2_9c6fda13">นำทาง · สถานที่ 2</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_nav_place_3_9c6fda14">นำทาง · สถานที่ 3</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigate_place_1_8cdacefb">นำทาง → สถานที่ 1</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigate_place_2_8cdacefc">นำทาง → สถานที่ 2</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_navigate_place_3_8cdacefd">นำทาง → สถานที่ 3</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_near_square_panel_544x512_7dfae4b9">แผงเกือบจัตุรัส, 544x512</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_near_square_touch_panel_720x712_644c47fc">แผงสัมผัสเกือบจัตุรัส, 720x712</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_next_turn_eta_sun_position_daylight_remaining_48ea2589">เลี้ยวถัดไป เวลาถึง (ETA) ตำแหน่งดวงอาทิตย์ และแสงกลางวันที่เหลือ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_night_dark_e807e573">กลางคืน (มืด)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_none_252358">ไม่มี</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_now_playing_774920a4">กำลังเล่น</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ok_select_85c307d1">ตกลง / เลือก</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_off_1354f">ปิด</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_openstreetmap_12cdd70f">OpenStreetMap</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_phone_489454e">โทรศัพท์</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_pad_fullscreen_screen_stays_on_tap_exit_to_leave_fed4fb3e">Pad เต็มหน้าจอ — หน้าจอค้างเปิดอยู่ แตะ Exit เพื่อออก</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_parking_33f14b98">ที่จอดรถ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_pharmacies_3d1e90b1">ร้านขายยา</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_picnic_8e7a005e">จุดปิกนิก</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_police_8ed2913e">สถานีตำรวจ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_post_offices_828381d7">ไปรษณีย์</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_quick_controls_b6d227a9">การควบคุมด่วน</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_recent_destinations_4acda7ca">จุดหมายล่าสุด</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_recorded_route_823d22b9">เส้นทางที่บันทึกไว้</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ride_dashboard_7a0ca94c">RIDE DASHBOARD</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rides_4a5be5b">การขี่</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_route_options_30bc2f87">ตัวเลือกเส้นทาง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_route_preview_683e8cb1">ตัวอย่างเส้นทาง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_requires_a_real_bluetooth_key_up_e9aa900c">ต้องมีการปล่อยปุ่ม Bluetooth จริง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rest_areas_9d275e5a">จุดพักบนเส้นทาง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ride_dashboard_ae928d6c">Ride Dashboard</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_right_panel_f3a982e0">แผงด้านขวา</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_right_double_8bb580fe">ขวา · สองครั้ง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_right_single_a4f68975">ขวา · ครั้งเดียว</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rotary_back_875f5656">หมุนย้อนกลับ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_rotary_forward_5bd716f6">หมุนเดินหน้า</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_saved_routes_18cdcb23">เส้นทางที่เก็บไว้</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_search_results_3469955e">ผลการค้นหา</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_selected_for_1_s_49f82b77">เลือกไว้สำหรับ %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_satellites_110a3ab8">ดาวเทียม</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_save_route_5f739206">บันทึกเส้นทาง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_search_a_destination_pick_a_favorite_or_start_fr_a4048c1b">ค้นหาจุดหมายปลายทาง เลือกรายการโปรด หรือเริ่มจากเส้นทางที่เก็บไว้</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_ok_6ca8fff1">เลือก / ตกลง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_double_tap_enter_star_8a562c06">เลือกแตะสองครั้ง - Enter / Star</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_hold_enter_star_217fe7bb">เลือกกดค้าง - Enter / Star</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_tap_enter_star_b26a1adf">เลือกแตะ - Enter / Star</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_double_44fd35de">เลือก · สองครั้ง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_hold_ce87ce0c">เลือก · กดค้าง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_select_tap_2ff408b6">เลือก · แตะ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_send_navigation_and_selection_commands_to_androi_887e42f0">ส่งคำสั่งการนำทางและการเลือกไปยัง Android Auto</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_speed_gauge_85be8ba0">หน้าปัดความเร็ว</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_start_android_auto_to_enable_the_controller_2a5eb409">เริ่ม Android Auto เพื่อเปิดใช้ตัวควบคุม</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_start_the_dashboard_to_enable_these_actions_1fe53fdf">เริ่มแดชบอร์ดเพื่อเปิดใช้การทำงานเหล่านี้</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_supermarkets_5e8b87fc">ซูเปอร์มาร์เก็ต</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_connected_35a5911b">เชื่อมต่อ T-Box แล้ว</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_time_274acd">เวลา</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_total_4c4e324">รวม</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_toilets_1eefa3e6">ห้องน้ำ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_touch_controller_53c8733d">ตัวควบคุมสัมผัส</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_trip_metrics_7c88c7c8">ตัวชี้วัดการเดินทาง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_trip_distance_duration_average_speed_and_speed_p_97ed123f">ระยะทาง ระยะเวลา ความเร็วเฉลี่ย และโปรไฟล์ความเร็วของการเดินทาง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_two_next_track_presses_inside_the_window_7db072f9">กดปุ่มเพลงถัดไปสองครั้งภายในช่วงเวลาที่กำหนด</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_two_presses_inside_the_double_tap_window_cc11c279">กดสองครั้งภายในช่วงเวลาแตะสองครั้ง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_create_log_file_9dac9184">สร้างไฟล์ล็อกไม่ได้</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_save_the_motorcycle_photo_d9e617d">บันทึกรูปมอเตอร์ไซค์ไม่ได้</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_double_press_5e63a079">กดขึ้นสองครั้ง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_press_df788a9e">กดปุ่มขึ้น</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_double_6854af1f">ขึ้น · กดสองครั้ง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_up_single_8195b796">ขึ้น · กดครั้งเดียว</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_viewpoints_390623e8">จุดชมวิว</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_weather_ac24cfd4">สภาพอากาศ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_where_are_you_going_f697966b">จะไปที่ไหนดี?</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_wi_fi_direct_p2p_5247f7ce">Wi-Fi Direct (P2P)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_your_route_is_live_e56afe3e">เส้นทางของคุณกำลังแสดงอยู่</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_modelid_66660742_wi_fi_direct_non_touch_f23f0c0b">modelId 66660742, Wi-Fi Direct, ไม่รองรับสัมผัส</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_absolute_volume_change_53b165a0">การเปลี่ยนระดับเสียงแบบสัมบูรณ์</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_play_pause_command_31202f86">คำสั่งเล่น/พัก</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_previous_track_command_f9a52120">คำสั่งไปเพลงก่อนหน้า</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_next_track_command_26b481c">คำสั่งไปเพลงถัดไป</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_both_1f3381">ทั้งสอง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_live_564f882c">ANDROID AUTO ทำงานอยู่</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_auto_standby_9525974d">ANDROID AUTO สแตนด์บาย</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_phone_preview_live_290cbf6">พรีวิวโทรศัพท์ ทำงานอยู่</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_7d22d040">กำลังเริ่ม</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_live_on_tft_d375f015">กำลังแสดงบน TFT</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_preparing_69cf13e4">กำลังเตรียมการ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_recording_route_df2cfb1a">กำลังบันทึกเส้นทาง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_is_ready_to_connect_6b95609b">%1$s พร้อมเชื่อมต่อแล้ว</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_allow_moto_hub_notifications_to_keep_streaming_v_4700fc1e">อนุญาตการแจ้งเตือนของ MOTO-HUB เพื่อให้การสตรีมยังแสดงอยู่และควบคุมได้</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_allow_nearby_devices_and_location_to_detect_the__a4c1fa2c">อนุญาตสิทธิ์อุปกรณ์ใกล้เคียงและตำแหน่งที่ตั้งเพื่อค้นหาเครือข่าย Wi-Fi ของ T-Box</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_android_is_requesting_a_connection_to_1_s_ffe67969">Android กำลังขอเชื่อมต่อไปยัง %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_camera_permission_is_required_to_read_the_t_box__4e87d105">จำเป็นต้องให้สิทธิ์กล้องเพื่ออ่าน QR code ของ T-Box</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_connection_cancelled_you_can_try_again_at_any_ti_19906357">ยกเลิกการเชื่อมต่อแล้ว ลองอีกครั้งได้ทุกเมื่อ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_disconnected_372b4933">ตัดการเชื่อมต่อแล้ว</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_motorcycle_8dd33db1">มอเตอร์ไซค์</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_network_connected_searching_for_the_easyconn_ser_851763f6">เชื่อมต่อเครือข่ายแล้ว กำลังค้นหาบริการ EasyConn</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_no_known_phone_location_yet_move_outdoors_and_re_47df6139">ยังไม่ทราบตำแหน่งของโทรศัพท์ ให้ออกไปที่โล่งแล้วลองอีกครั้ง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_pair_a_motorcycle_in_garage_before_starting_navi_76f923b3">จับคู่มอเตอร์ไซค์ใน Garage ก่อนเริ่มการนำทาง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_permission_granted_starting_the_capture_session_4805d845">ได้รับสิทธิ์แล้ว กำลังเริ่มเซสชันการจับหน้าจอ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_profile_saved_connect_to_the_t_box_network_and_s_a9069261">บันทึกโปรไฟล์แล้ว เชื่อมต่อกับเครือข่าย T-Box แล้วเริ่มค้นหา</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_qr_code_scanned_but_the_profile_was_not_saved_1__e3b6164f">สแกน QR code แล้ว แต่บันทึกโปรไฟล์ไม่สำเร็จ: %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_ride_dashboard_streaming_is_active_on_the_motorc_3729a921">การสตรีม Ride Dashboard ทำงานอยู่บนจอ TFT ของมอเตอร์ไซค์</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_set_up_the_motorcycle_network_to_get_started_32bb831">ตั้งค่าเครือข่ายมอเตอร์ไซค์เพื่อเริ่มใช้งาน</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_sharing_cancelled_by_the_user_72c1171e">ผู้ใช้ยกเลิกการแชร์แล้ว</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_something_went_wrong_try_again_b634c6cc">เกิดข้อผิดพลาด ลองอีกครั้ง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_the_ride_dashboard_pipeline_f27c3ca7">กำลังเริ่มไปป์ไลน์ Ride Dashboard</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_the_native_ride_dashboard_d28cae88">กำลังเริ่ม Ride Dashboard แบบ native</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_starting_the_projection_pipeline_bcc6994a">กำลังเริ่มไปป์ไลน์การฉายภาพ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_stop_the_current_mirroring_or_android_auto_sessi_5390e262">หยุดเซสชันมิเรอร์หน้าจอหรือ Android Auto ปัจจุบันก่อนเปิด Ride Dashboard จากที่นี่</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_streaming_active_to_the_motorcycle_tft_b881d9a3">การสตรีมไปยังจอ TFT ของมอเตอร์ไซค์ทำงานอยู่</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_qr_code_scanned_and_saved_1_s_is_ready_to__d28dd75d">สแกนและบันทึก QR code ของ T-Box แล้ว %1$s พร้อมเชื่อมต่อ</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_connection_lost_reconnect_to_the_motorcycl_cb4aa98e">หลุดจาก T-Box แล้ว โปรดเชื่อมต่อเครือข่ายมอเตอร์ไซค์อีกครั้ง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_found_you_can_now_choose_an_app_or_screen__163f7c13">พบ T-Box แล้ว ตอนนี้เลือกแอปหรือหน้าจอที่จะแชร์ได้แล้ว</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_t_box_not_found_1_s_656efb68">ไม่พบ T-Box: %1$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_that_search_is_too_long_try_a_shorter_search_e54badba">คำค้นหานี้ยาวเกินไป ลองใช้คำค้นหาที่สั้นกว่า</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_curved_segments_detected_af1abc2b">ตรวจพบช่วงถนนโค้ง %1$d ช่วง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_entries_newest_first_7c18f089">%1$d รายการ  /  ใหม่สุดก่อน</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_d_km_remaining_after_this_route_1b9e2ebf">เหลืออีก %1$d กม. หลังจบเส้นทางนี้</string>
+    <!-- Fuel-range warning when the rider selects miles. -->
+    <string name="legacy_1_d_mi_remaining_after_this_route_aaf9da45">เหลืออีก %1$d ไมล์ หลังจบเส้นทางนี้</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_2_s_3_s_4fcb415a">%1$s  %2$s: %3$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_1_s_2_d_c_4859b80e">%1$s · %2$d°C</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_connect_a_motorcycle_before_customizing_its_dash_cc281859">เชื่อมต่อมอเตอร์ไซค์ก่อนปรับแต่งแดชบอร์ดของมัน</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_curvy_roads_ahead_15524f7">ถนนโค้งข้างหน้า</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_golden_hour_in_1_d_min_5c769914">โกลเด้นอาวเวอร์ในอีก %1$d นาที</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_golden_hour_now_ab52d7b1">ตอนนี้คือโกลเด้นอาวเวอร์</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_installed_version_1_s_2_d_29cd3201">เวอร์ชันที่ติดตั้ง: %1$s (%2$d)</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_location_and_notifications_are_required_while_re_4f6ceb2b">จำเป็นต้องเปิดสิทธิ์ตำแหน่งที่ตั้งและการแจ้งเตือนขณะบันทึกการเดินทาง</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_opening_in_1_d_s_42389c34">จะเปิดในอีก %1$d วินาที…</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_peer_1_s_2_s_521b5084">Peer %1$s -&gt; %2$s</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_port_1_d_b6522e8b">พอร์ต %1$d</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_open_github_8bdb9881">เปิด GitHub ไม่ได้</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_open_wi_fi_settings_537aaf03">เปิดการตั้งค่า Wi-Fi ไม่ได้</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_unable_to_open_the_companion_app_settings_c0a83e03">เปิดการตั้งค่าแอปคู่หูไม่ได้</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_no_open_ports_found_8533cd9d">ไม่พบพอร์ตที่เปิดอยู่</string>
+    <!-- Source: localized UI literal / enum label -->
+    <string name="legacy_open_1_s_e55a596b">เปิดอยู่: %1$s</string>
+    <!-- Android Auto pre-flight: an OEM companion app is installed, but may not be active. %1$s is
+         its name as shown on the phone (CFMOTO, Zontes Smart, Carbit Ride, ...). -->
+    <string name="legacy_1_s_detected_66208287">ตรวจพบ %1$s</string>
+    <string name="legacy_moto_hub_starts_google_android_auto_not_1_s_3a77813f">MOTO-HUB เริ่ม Google Android Auto ไม่ใช่ %1$s</string>
+    <string name="legacy_1_s_can_still_take_over_the_dashboard_connection_5bc85002">%1$s ยังแย่งการเชื่อมต่อแดชบอร์ดได้แม้อยู่เบื้องหลัง เพื่อให้การฉายภาพเสถียร ให้บังคับหยุดแอปนี้ในการตั้งค่า Android ก่อนดำเนินการต่อ</string>
+    <string name="legacy_continue_with_android_auto_f6c7ef01">ดำเนินการต่อด้วย Android Auto</string>
+    <string name="legacy_open_1_s_settings_470b74f2">เปิดการตั้งค่า %1$s</string>
+    <string name="legacy_do_not_show_this_warning_again_d3abf59b">ไม่ต้องแสดงคำเตือนนี้อีก</string>
+    <!-- Source: tbox/ProfileOverride.kt -->
+    <string name="legacy_generic_dashboard_53d1376b">แดชบอร์ดทั่วไป</string>
+    <!-- Source: tbox/ProfileOverride.kt -->
+    <string name="legacy_neutral_defaults_for_a_dashboard_that_is_not_rec_8d299cf0">ค่าเริ่มต้นแบบเป็นกลางสำหรับแดชบอร์ดที่ไม่รู้จัก</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_unfamiliar_pairing_code_714f8ce7">รหัสจับคู่ที่ไม่คุ้นเคย</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_this_code_carries_wi_fi_details_for_1_s_but_it_w_422a5994">โค้ดนี้มีข้อมูล Wi-Fi ของ %1$s แต่ไม่ได้ออกมาจากที่อยู่ของ Carbit เหมือนแดชบอร์ดที่ MOTO-HUB รู้จัก</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_several_manufacturers_ship_the_same_dashboard_so_49305d38">ผู้ผลิตหลายรายใช้ซอฟต์แวร์แดชบอร์ดชุดเดียวกันภายใต้แบรนด์ของตัวเอง จึงเป็นไปได้สูงว่านี่คือมอเตอร์ไซค์ของคุณ ดำเนินการต่อเมื่อสแกนมาจากแดชบอร์ดของคุณเองเท่านั้น</string>
+    <!-- Source: feature/pairing/UnverifiedQrDialog.kt -->
+    <string name="legacy_use_these_details_52f852ac">ใช้ข้อมูลชุดนี้</string>
+
+    <!-- ===========================================================         Catalogue sweep, 2026-08-13: strings this worktree draws but had
+         no identifier for. Values come from the pro-poc catalogues, where
+         the same source strings are already translated.
+         ================================================================== -->
+
+    <!-- Source: MainActivity.kt -->
+    <string name="legacy_unable_to_open_discord_50e2e02e">เปิด Discord ไม่ได้</string>
+
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_d_taps_away_from_the_prototype_779bf960">แตะอีก %d ครั้งก็จะถึงโปรโตไทป์</string>
+    <string name="legacy_community_source_fe28bfcc">ชุมชน &amp; ซอร์สโค้ด</string>
+    <string name="legacy_discord_c6d7d50c">Discord</string>
+    <string name="legacy_github_7f258fe3">GitHub</string>
+    <string name="legacy_map_rendering_by_maplibre_native_bsd_2_clause_ve_1f7cda7f">การเรนเดอร์แผนที่โดย MapLibre Native (BSD-2-Clause) แผนที่เวกเตอร์โดย OpenFreeMap ตามสเปก OpenMapTiles ส่วนแผนที่แรสเตอร์โดยมูลนิธิ OpenStreetMap ค้นหาที่อยู่โดย Photon การคำนวณเส้นทางโดย Valhalla โฮสต์โดย Stadia Maps หรือเซิร์ฟเวอร์สาธิตของ FOSSGIS ข้อมูลสถานที่โดย Overpass ข้อมูลอากาศโดย Open-Meteo ราคาน้ำมันเผยแพร่เป็นข้อมูลเปิดโดย Ministerio para la Transición Ecológica ของสเปน DGEG ของโปรตุเกส Ministère de l\'Économie ของฝรั่งเศส และ MIMIT ของอิตาลี ข้อมูลของ DGEG ห้ามนำไปใช้เชิงพาณิชย์</string>
+    <string name="legacy_maps_data_b256210d">แผนที่ &amp; ข้อมูล</string>
+    <string name="legacy_maps_addresses_and_routes_are_built_on_data_by_o_f0b02b91">แผนที่ ที่อยู่ และเส้นทางสร้างจากข้อมูลโดย © OpenStreetMap contributors ภายใต้สัญญาอนุญาต ODbL</string>
+    <string name="legacy_prototype_unlocked_856a4841">ปลดล็อกโปรโตไทป์แล้ว</string>
+
+    <!-- Source: feature/androidauto/AndroidAutoHelpScreen.kt -->
+    <string name="legacy_a_notification_confirms_the_server_is_running_le_eacf82e">การแจ้งเตือนจะยืนยันว่าเซิร์ฟเวอร์กำลังทำงานอยู่ ปล่อยให้ทำงานต่อไป เซิร์ฟเวอร์จะอยู่จนกว่าคุณจะหยุดหรือรีสตาร์ทโทรศัพท์</string>
+    <string name="legacy_android_auto_17_4_removed_the_way_an_app_can_ask_890c8f24">Android Auto 17.4 ตัดวิธีที่แอปขอให้มันฉายภาพออกไป MOTO-HUB ยังพยายามตามปกติ และบนเวอร์ชันเก่าก็ใช้ได้ — แต่ถ้าไม่ได้ ก็เริ่ม Android Auto จากเมนูนักพัฒนาของตัวมันเองแทนได้ คุณไม่ต้องติดตั้งอะไรเพิ่ม</string>
+    <string name="legacy_android_auto_does_not_start_2266b70e">Android Auto เริ่มทำงานไม่ได้</string>
+    <string name="legacy_every_time_android_auto_will_not_start_18ff3ab9">ANDROID AUTO ไม่เริ่มทำงานเลยสักครั้ง</string>
+    <string name="legacy_go_back_to_moto_hub_and_start_android_auto_it_co_ff8cc50d">กลับไปที่ MOTO-HUB แล้วเริ่ม Android Auto มันจะเชื่อมต่อเองภายในไม่กี่วินาที — ไม่ต้องกดอย่างอื่นเพิ่ม</string>
+    <string name="legacy_in_android_auto_s_developer_settings_open_the_me_1ea3a8cf">ในการตั้งค่านักพัฒนาของ Android Auto เปิดเมนู ⋮ ที่มุมขวาบนแล้วเลือก \"Start head unit server\" รายการนี้อยู่ในเมนูนั้น ไม่ได้อยู่ในรายการการตั้งค่าด้านล่าง</string>
+    <string name="legacy_in_developer_settings_turn_on_add_new_cars_to_an_19f79566">ในการตั้งค่านักพัฒนา เปิด \"Add new cars to Android Auto\" (เวอร์ชันเก่าเรียกว่า \"Unknown sources\")</string>
+    <string name="legacy_jumps_straight_to_the_app_where_the_menu_above_l_7c8b2093">พาไปที่แอปที่มีเมนูตามด้านบนโดยตรง</string>
+    <string name="legacy_normally_moto_hub_waits_and_asks_android_auto_to_6c183bab">ปกติ MOTO-HUB จะรอแล้วขอให้ Android Auto เชื่อมต่อเข้ามา เวอร์ชัน 17.4 ปิดประตูทางนี้ทิ้งสำหรับแอปประเภทนี้ทุกตัว ไม่ใช่แค่ตัวนี้ head unit server สลับทิศทางกลับกัน — Android Auto เป็นฝ่ายรอ แล้ว MOTO-HUB เชื่อมต่อเข้าไป — เป็นประตูที่ Google เปิดไว้สำหรับเครื่องมือทดสอบของตัวเอง</string>
+    <string name="legacy_one_time_setup_ca24c531">ตั้งค่าครั้งเดียว</string>
+    <string name="legacy_open_android_auto_settings_48a5120d">เปิดการตั้งค่า Android Auto</string>
+    <string name="legacy_open_the_android_auto_app_scroll_to_the_bottom_a_69ae9e53">เปิดแอป Android Auto เลื่อนลงล่างสุดแล้วแตะ \"Version\" สิบครั้ง Developer settings จะปรากฏขึ้น</string>
+    <string name="legacy_why_14fa8">ทำไม</string>
+
+    <!-- Source: feature/controls/BluetoothStatus.kt -->
+    <string name="legacy_allow_bluetooth_access_so_the_app_can_see_whethe_8754f4c2">ให้สิทธิ์เข้าถึง Bluetooth เพื่อให้แอปเห็นว่ามอเตอร์ไซค์เชื่อมต่ออยู่หรือไม่</string>
+    <string name="legacy_bluetooth_is_off_turn_it_on_then_pair_the_motorc_5375bc65">Bluetooth ปิดอยู่ — เปิดก่อนแล้วจับคู่มอเตอร์ไซค์</string>
+    <string name="legacy_connected_now_1_s_if_that_is_the_motorcycle_the__cd016af1">ตอนนี้เชื่อมต่อกับ: %1$s อยู่ ถ้านั่นคือมอเตอร์ไซค์ ปุ่มบนแฮนด์ก็ส่งมาถึงโทรศัพท์ได้</string>
+    <string name="legacy_no_audio_device_is_connected_right_now_with_the__7d4f4d3e">ยังไม่มีอุปกรณ์เสียงเชื่อมต่ออยู่ตอนนี้ พอสตาร์ทมอเตอร์ไซค์ แดชบอร์ดของมันควรปรากฏที่นี่ — ถ้าไม่ปรากฏเลย ให้จับคู่จากการตั้งค่า Bluetooth</string>
+    <string name="legacy_this_phone_has_no_bluetooth_b42f7e85">โทรศัพท์เครื่องนี้ไม่มี Bluetooth</string>
+
+    <!-- Source: feature/controls/HandlebarMappingScreen.kt -->
+    <string name="legacy_a_button_the_app_has_not_been_taught_yet_53060697">ปุ่มที่แอปยังไม่เคยเรียนรู้</string>
+    <string name="legacy_a_single_press_acts_immediately_instead_of_waiti_ebd37a80">การกดครั้งเดียวจะทำงานทันทีแทนที่จะรอหน้าต่างของการกดสองครั้ง การกดสองครั้งยังใช้ได้อยู่ - แค่จะทำงานของการกดครั้งเดียวก่อน</string>
+    <string name="legacy_allow_bluetooth_bbde9a57">อนุญาต Bluetooth</string>
+    <string name="legacy_bluetooth_settings_ed5eb975">การตั้งค่า Bluetooth</string>
+    <string name="legacy_checking_bluetooth_ce222d3e">กำลังตรวจสอบ Bluetooth…</string>
+    <string name="legacy_choose_what_this_press_does_4e74fce9">เลือกว่าการกดนี้จะทำอะไร</string>
+    <string name="legacy_done_1_d_presses_learned_dd4b86bd">เสร็จแล้ว - เรียนรู้การกดแล้ว %1$d ครั้ง</string>
+    <string name="legacy_double_press_window_a8b0763c">กรอบเวลาการกดสองครั้ง</string>
+    <string name="legacy_every_card_now_describes_your_handlebar_buttons__f70bd7b3">ตอนนี้การ์ดทุกใบอธิบายแฮนด์ของคุณแล้ว ปุ่มที่คุณทำเครื่องหมายว่าไม่มีก็หายไปแล้ว</string>
+    <string name="legacy_finish_7d6e78b3">เสร็จสิ้น</string>
+    <string name="legacy_handlebar_7b449ccb">แฮนด์</string>
+    <string name="legacy_hold_gestures_a5df4e6b">ท่าทางการกดค้าง</string>
+    <string name="legacy_hold_time_bba08d6e">เวลากดค้าง</string>
+    <string name="legacy_how_long_the_app_waits_before_deciding_a_press_w_fbe08ef2">ระยะเวลาที่แอปรอก่อนตัดสินว่าการกดนั้นเป็นการกดสองครั้งหรือการกดค้าง</string>
+    <string name="legacy_motorcycle_bluetooth_88c59adf">Bluetooth ของมอเตอร์ไซค์</string>
+    <string name="legacy_not_detected_yet_d1e8f877">ยังตรวจไม่พบ</string>
+    <string name="legacy_not_on_my_bike_49509421">ไม่มีบนมอเตอร์ไซค์ของฉัน</string>
+    <string name="legacy_nothing_happens_some_dashboards_keep_a_button_fo_c80119d0">กดแล้วไม่มีอะไรเกิดขึ้น? แดชบอร์ดบางรุ่นสงวนปุ่มไว้ใช้เองและไม่ส่งอะไรมาที่โทรศัพท์เลย - บน CFMOTO CFDL16 การกดร็อกเกอร์สั้นๆ ก็ทำแบบนี้พอดี ทำเครื่องหมายว่าไม่มีปุ่มนี้แล้วมันจะไม่กินพื้นที่อีก</string>
+    <string name="legacy_on_the_motorcycle_do_this_5d34555e">บนมอเตอร์ไซค์ ให้ทำแบบนี้</string>
+    <string name="legacy_one_card_per_button_with_what_a_press_a_double_p_e88303f5">การ์ดหนึ่งใบต่อหนึ่งปุ่ม พร้อมบอกว่าการกด กดสองครั้ง และกดค้างแต่ละอย่างทำอะไร สอนแฮนด์เพื่อให้แอปรู้ว่าของคุณมีปุ่มไหนจริงๆ</string>
+    <string name="legacy_press_a_handlebar_button_fd958503">กดปุ่มบนแฮนด์</string>
+    <string name="legacy_reset_actions_to_defaults_95ecb43">รีเซ็ตการทำงานเป็นค่าเริ่มต้น</string>
+    <string name="legacy_skip_27599f">ข้าม</string>
+    <string name="legacy_snappy_singles_330a9d7e">กดเดียวตอบสนองไว</string>
+    <string name="legacy_step_1_d_of_2_d_72bf41f6">ขั้นตอนที่ %1$d จาก %2$d</string>
+    <string name="legacy_stop_here_d51e892e">หยุดแค่นี้</string>
+    <string name="legacy_teach_my_handlebar_51393162">สอนแฮนด์ของฉัน</string>
+    <string name="legacy_timing_937fe44a">จังหวะเวลา</string>
+    <string name="legacy_turn_off_if_your_handlebar_needs_a_long_physical_c92718d1">ปิดถ้าแฮนด์ของคุณต้องกดยาวจริงๆ ทุกครั้งถึงจะคลิกได้ - ไม่งั้นการกดพวกนั้นจะถูกกินไปเป็นการกดค้าง</string>
+    <string name="legacy_controls_fd1b9add">‹ การควบคุม</string>
+    <string name="legacy_handlebar_c1b6ada4">‹ แฮนด์</string>
+
+    <!-- Source: feature/garage/GarageScreen.kt -->
+    <string name="legacy_add_your_first_motorcycle_to_get_rolling_b8e9f267">เพิ่มมอเตอร์ไซค์คันแรกของคุณเพื่อเริ่มต้น</string>
+    <string name="legacy_no_motorcycle_no_problem_4346def1">ไม่มีมอเตอร์ไซค์? ไม่เป็นไร</string>
+
+    <!-- Source: feature/home/CoreAvailability.kt -->
+    <string name="legacy_advanced_needs_moto_hub_core_installed_and_paire_722fef7d">Advanced ต้องมี MOTO-HUB (Core) ติดตั้งอยู่และจับคู่กับ T-Box ของคุณก่อนจึงจะเชื่อมต่อ มิเรอร์ หรือรัน Android Auto ได้</string>
+    <string name="legacy_couldn_t_open_the_browser_3e0fae25">เปิดเบราว์เซอร์ไม่ได้</string>
+    <string name="legacy_download_moto_hub_core_976f62e2">ดาวน์โหลด MOTO-HUB Core</string>
+    <string name="legacy_moto_hub_core_not_found_b76c3f4f">ไม่พบ MOTO-HUB CORE</string>
+
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_android_auto_17_4_removed_the_way_apps_ask_it_to_b5455068">Android Auto 17.4 ตัดวิธีที่แอปขอให้มันฉายภาพออกไป แต่ยังเริ่มจากเมนูนักพัฒนาของ Android Auto เองได้อยู่</string>
+    <string name="legacy_one_possible_cause_1_s_is_installed_and_can_keep_47cef163">สาเหตุที่เป็นไปได้อย่างหนึ่ง: %1$s ติดตั้งอยู่และอาจยึดลิงก์แดชบอร์ดไว้แม้ทำงานอยู่เบื้องหลัง ถ้าการเชื่อมต่อล้มเหลวซ้ำ ให้บังคับหยุดแอปจากหน้า App info แล้วลองใหม่</string>
+    <string name="legacy_open_1_s_app_info_33a7c01c">เปิด App info ของ %1$s</string>
+    <string name="legacy_retry_connection_54743f76">ลองเชื่อมต่ออีกครั้ง</string>
+    <string name="legacy_some_dashboards_never_broadcast_a_network_of_the_787ecd2c">แดชบอร์ดบางรุ่นไม่เคยกระจายเครือข่ายของตัวเองเลย แต่จะเข้าร่วมฮอตสปอตที่โทรศัพท์ของคุณสร้างขึ้น โดยใช้ Ssid และ Password ที่แสดงบนแดชบอร์ด ถ้าของคุณบอกให้ \"open Android hotspot\" ให้ลองวิธีนี้แทน</string>
+    <string name="legacy_1_s_is_installed_and_may_be_holding_the_dashboar_2c02bb10">%1$s ติดตั้งอยู่และอาจยึดแดชบอร์ดไว้ ให้บังคับหยุดจากหน้า App info แล้วลองใหม่</string>
+    <string name="legacy_try_my_phone_hosts_the_hotspot_d4f6db66">ลอง: ให้โทรศัพท์ของฉันกระจายฮอตสปอต</string>
+
+    <!-- Source: feature/home/HubViewModel.kt -->
+    <string name="legacy_network_connected_pairing_over_bluetooth_and_wai_5b4c6259">เชื่อมต่อเครือข่ายแล้ว กำลังจับคู่ผ่าน Bluetooth และรอแดชบอร์ด</string>
+
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_altitude_ft_89feab0c">ความสูง FT</string>
+    <string name="legacy_altitude_m_caa51e4f">ความสูง M</string>
+    <string name="legacy_distance_ft_552284d9">ระยะทาง FT</string>
+    <string name="legacy_distance_km_5522856d">ระยะทาง KM</string>
+    <string name="legacy_distance_m_a7e856e2">ระยะทาง M</string>
+    <string name="legacy_distance_mi_552285a7">ระยะทาง MI</string>
+    <string name="legacy_max_km_h_45403037">สูงสุด KM/H</string>
+    <string name="legacy_max_mph_5d129e29">สูงสุด MPH</string>
+
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_auto_connect_and_recovery_57ed0872">เชื่อมต่ออัตโนมัติและการกู้คืน</string>
+    <string name="legacy_auto_recover_stalled_android_auto_streams_bd3e2d8e">กู้คืนสตรีม Android Auto ที่ค้างอัตโนมัติ</string>
+    <string name="legacy_button_mapping_815600">การแมปปุ่ม</string>
+    <string name="legacy_buttons_control_android_auto_3dc44642">ปุ่มควบคุม Android Auto</string>
+    <string name="legacy_drive_android_auto_with_the_motorcycle_s_buttons_ec16509d">ควบคุม Android Auto ด้วยปุ่มของมอเตอร์ไซค์</string>
+    <string name="legacy_handlebar_buttons_47b4fd2c">ปุ่มบนแฮนด์</string>
+    <string name="legacy_managed_by_the_companion_app_its_controls_screen_9ad80a75">จัดการโดยแอปคู่หู: หน้า Controls ของแอปจะใช้ค่าตั้งแฮนด์ของตัวเองซ้ำทุกครั้งที่เซสชันเริ่ม ทำให้ค่าที่ตั้งไว้ที่นี่ถูกเขียนทับ ตั้งค่าแฮนด์ที่แอปนั้นแทน</string>
+    <string name="legacy_music_volume_9fa56d95">ระดับเสียงเพลง</string>
+    <string name="legacy_off_means_the_mode_picker_stays_exactly_as_befor_c93efb5c">ถ้าปิด ตัวเลือกโหมดจะยังอยู่เหมือนเดิมทุกอย่าง</string>
+    <string name="legacy_on_9ff">เปิด</string>
+    <string name="legacy_put_a_screen_on_the_tft_as_soon_as_the_motorcycl_60bf969c">ใส่หน้าจอลงบน TFT ทันทีที่มอเตอร์ไซค์เชื่อมต่อ</string>
+    <string name="legacy_requires_the_phone_paired_to_the_motorcycle_s_bl_dda6960a">ต้องจับคู่โทรศัพท์กับ Bluetooth ของมอเตอร์ไซค์ก่อน เพลงยังเล่นต่อได้ตามปกติ แต่ปุ่มของมันจะถูกจับไว้ระหว่างที่เซสชันทำงาน</string>
+    <string name="legacy_set_the_dash_clock_over_bluetooth_experimental_3431b284">ตั้งนาฬิกาบนแดชบอร์ดผ่าน Bluetooth (ทดลอง)</string>
+    <string name="legacy_set_the_dash_clock_over_wi_fi_292a2ca5">ตั้งนาฬิกาบนแดชบอร์ดผ่าน Wi-Fi</string>
+    <string name="legacy_on_by_default_and_what_sets_the_time_on_most_das_6234cd82">เปิดเป็นค่าเริ่มต้น และเป็นวิธีตั้งเวลาบนแดชบอร์ดส่วนใหญ่ ปิดเฉพาะเมื่อแดชบอร์ดของคุณถามเวลาจาก MOTO-HUB แต่ไม่สนคำตอบ แล้วยังแสดง 01.01.1970 เหมือนเดิม: บนรุ่นแบบนั้นการเขียนนาฬิกาไม่มีผลอะไรเลย และอาจเขียนทับเวลาที่คุณตั้งเองไว้บนแดชบอร์ด ปิดอันนี้ไว้รถก็เชื่อมต่อได้ตามปกติ เพียงแต่จะไม่มีการบอกเวลาให้มันเท่านั้น</string>
+    <string name="legacy_your_dashboard_has_been_seen_asking_for_the_time_c02f4d97">แดชบอร์ดของคุณเคยถามเวลา ได้รับคำตอบ แต่ก็ยังนับเวลาต่อจากเวลาเปิดเครื่องของมันเองเหมือนเดิม สวิตช์นี้ไม่ว่าเปิดหรือปิดก็ไม่มีผลกับมัน เพราะนาฬิกานั้นเก็บโดยแดชบอร์ด ไม่ใช่โทรศัพท์</string>
+    <string name="legacy_settings_595d2043">การตั้งค่า</string>
+    <string name="legacy_some_dashboards_ask_for_the_time_over_bluetooth__b44ce43b">แดชบอร์ดบางรุ่นถามเวลาผ่าน Bluetooth แทน Wi-Fi และจะค้างที่ 00:00 ถ้าไม่มีการตอบ ต้องจับคู่รถกับโทรศัพท์เครื่องนี้ไว้ในการตั้งค่า Bluetooth ของ Android ก่อน ปิดเป็นค่าเริ่มต้น MOTO-HUB ตอบเฉพาะอุปกรณ์ที่ถามด้วยโปรโตคอลของแดชบอร์ดเองเท่านั้น</string>
+    <string name="legacy_some_dashboards_forget_settings_like_the_clock_w_76d95842">แดชบอร์ดบางรุ่นลืมการตั้งค่าอย่างนาฬิกาเมื่อลิงก์ Wi-Fi Direct หลุดสนิท ฟีเจอร์นี้จะคงโทรศัพท์ไว้กับเครือข่ายของรถจนกว่าคุณจะออกจากแอปหรือปิด Wi-Fi ปิดเป็นค่าเริ่มต้น เปิดเมื่อแดชบอร์ดของคุณเสียเวลาหลังตัดการเชื่อมต่อเท่านั้น</string>
+    <string name="legacy_start_automatically_2cb44c45">เริ่มอัตโนมัติ</string>
+    <string name="legacy_start_on_connect_94487a47">เริ่มเมื่อเชื่อมต่อ</string>
+    <string name="legacy_stay_linked_to_the_bike_s_wi_fi_after_disconnect_81b0e941">คงการเชื่อมกับ Wi-Fi ของรถหลังตัดการเชื่อมต่อ</string>
+    <string name="legacy_the_motorcycle_s_buttons_reach_the_phone_over_bl_356cbf0d">ปุ่มของมอเตอร์ไซค์ส่งสัญญาณถึงโทรศัพท์ผ่าน Bluetooth ในรูปแบบ media keys ระหว่างที่เซสชันกำลังสตรีม MOTO-HUB จับปุ่มเหล่านี้ไปควบคุมการนำทางของ Android Auto แทนเครื่องเล่นเพลงได้</string>
+    <string name="legacy_what_each_press_double_press_and_hold_does_97201ad9">การกด กดสองครั้ง และกดค้างแต่ละอย่างทำอะไร</string>
+    <string name="legacy_what_to_do_when_android_auto_refuses_to_project_fa692d1b">ต้องทำอย่างไรเมื่อ Android Auto ไม่ยอมฉายภาพ</string>
+    <string name="legacy_what_to_start_5b78fc39">จะเริ่มอะไร</string>
+    <string name="legacy_while_capture_is_on_the_volume_buttons_navigate__9e410bf">ระหว่างที่เปิดการจับปุ่มอยู่ ปุ่มปรับระดับเสียงจะใช้นำทางแทนการปรับเสียง — ตั้งระดับเสียงที่ฟังไว้ที่นี่</string>
+    <string name="legacy_with_this_on_moto_hub_skips_the_what_should_i_sh_498b0614">เมื่อเปิดอันนี้ MOTO-HUB จะข้ามหน้า \"จะแสดงอะไรดี?\" แล้วใส่หน้าจอที่เลือกไว้ลงบน TFT ทันทีที่ลิงก์กับมอเตอร์ไซค์ขึ้น ทำงานครั้งเดียวต่อการเปิดแอปหนึ่งครั้ง - หยุดหน้าจอแล้วคุณก็กลับมาควบคุมเองได้</string>
+
+    <!-- Source: ui/components/SystemKillNotice.kt -->
+    <string name="legacy_dismiss_c6dc4a6a">ปิด</string>
+    <string name="legacy_stopped_by_your_phone_37b2b157">ถูกหยุดโดยโทรศัพท์ของคุณ</string>
+    <string name="legacy_your_last_session_ended_at_1_s_because_the_phone_8386f49c">เซสชันล่าสุดของคุณจบลงเมื่อ %1$s เพราะโทรศัพท์ปิด %2$s ทิ้ง ไม่ใช่เพราะแอปมีข้อผิดพลาด</string>
+
+    <!-- ==================================================================
+         Catalogue sweep, 2026-08-13 (second pass): source strings that sit
+         inside an if/when/arrayOf within the lookup call.
+         ================================================================== -->
+
+    <!-- Source: feature/ai/AiSettingsScreen.kt -->
+    <string name="legacy_api_key_fb0d9b39">คีย์ API</string>
+    <string name="legacy_replace_api_key_d64eadad">เปลี่ยนคีย์ API</string>
+
+    <!-- Source: feature/androidauto/AndroidAutoPreviewScreen.kt -->
+    <string name="legacy_hide_controls_2dc943b4">ซ่อนปุ่มควบคุม</string>
+
+    <!-- Source: feature/controls/ControlsScreen.kt -->
+    <string name="legacy_1_d_rpm_2_d_km_h_3_d_c_coolant_60ed46da">%1$d rpm · %2$d km/h · น้ำหล่อเย็น %3$d °C</string>
+    <string name="legacy_obd_adapter_connected_29e365e9">เชื่อมต่ออะแดปเตอร์ OBD แล้ว</string>
+    <string name="legacy_saved_4bf7e67">บันทึกแล้ว</string>
+    <string name="legacy_the_dashboard_shows_why_on_the_motorcycle_442e8daa">แดชบอร์ดบนมอเตอร์ไซค์จะแสดงเหตุผลให้</string>
+    <string name="legacy_waiting_for_the_obd_adapter_b3b01207">กำลังรออะแดปเตอร์ OBD</string>
+
+    <!-- Source: feature/controls/HandlebarMappingScreen.kt -->
+    <string name="legacy_listening_2ece009b">กำลังฟัง</string>
+    <string name="legacy_received_d3a64e01">ได้รับแล้ว</string>
+    <string name="legacy_teach_again_4fb10bd5">สอนอีกครั้ง</string>
+
+    <!-- Source: feature/home/HubHomeScreen.kt -->
+    <string name="legacy_bluetooth_is_turned_off_so_the_obd_adapter_canno_5a8640c">Bluetooth ถูกปิดอยู่ จึงเข้าถึงอะแดปเตอร์ OBD ไม่ได้</string>
+    <string name="legacy_customizable_vector_map_rendered_on_the_tft_bfa6e220">แผนที่เวกเตอร์ปรับแต่งได้ เรนเดอร์บน TFT</string>
+    <string name="legacy_gps_following_8ad5867b">ตามตำแหน่ง GPS</string>
+    <string name="legacy_moto_hub_needs_bluetooth_access_to_reach_the_obd_af681be3">MOTO-HUB ต้องการสิทธิ์เข้าถึง Bluetooth เพื่อเชื่อมกับอะแดปเตอร์ OBD</string>
+    <string name="legacy_no_map_live_engine_data_from_a_paired_elm327_ada_8ecf531c">ไม่มีแผนที่: ข้อมูลเครื่องยนต์แบบเรียลไทม์จากอะแดปเตอร์ ELM327 ที่จับคู่ไว้</string>
+    <string name="legacy_no_paired_obd_adapter_found_pair_the_elm327_dong_90029f7c">ไม่พบอะแดปเตอร์ OBD ที่จับคู่ไว้ จับคู่ดองเกิล ELM327 ก่อน</string>
+    <string name="legacy_restore_gps_76fc23d8">คืนโหมด GPS</string>
+
+    <!-- Source: feature/navigation/NavigationScreen.kt -->
+    <string name="legacy_mute_24c639">ปิดเสียง</string>
+    <string name="legacy_voice_on_8e4723ad">เปิดเสียงพูด</string>
+
+    <!-- Source: feature/obd/ObdFuelAirScreen.kt -->
+    <string name="legacy_the_ecu_is_adding_fuel_steadily_worth_a_look_if__da08dd7">ECU กำลังเพิ่มปริมาณน้ำมันอย่างต่อเนื่อง ควรตรวจสอบหากค่ายังไต่ขึ้นต่อไป</string>
+    <string name="legacy_the_ecu_is_taking_fuel_away_steadily_worth_a_loo_b2e06214">ECU กำลังลดปริมาณน้ำมันอย่างต่อเนื่อง ควรตรวจสอบหากค่ายังลดลงต่อไป</string>
+
+    <!-- Source: feature/obd/ObdFullScanScreen.kt -->
+    <string name="legacy_last_scan_1c6351c7">การสแกนล่าสุด</string>
+    <string name="legacy_run_full_scan_62e71f9">สแกนแบบเต็ม</string>
+    <string name="legacy_scanning_f99dc8b1">กำลังสแกน</string>
+    <string name="legacy_scanning_b757d75">กำลังสแกน…</string>
+
+    <!-- Source: feature/obd/ObdHubScreen.kt -->
+    <string name="legacy_bluetooth_is_turned_off_92ceda3f">บลูทูธปิดอยู่</string>
+    <string name="legacy_connected_and_reading_1e53c68c">เชื่อมต่อแล้ว กำลังอ่านข้อมูล</string>
+    <string name="legacy_connecting_ca35204e">กำลังเชื่อมต่อ…</string>
+    <string name="legacy_moto_hub_needs_bluetooth_access_to_reach_the_ada_8763b3f4">MOTO-HUB ต้องเข้าถึงบลูทูธเพื่อเชื่อมกับอะแดปเตอร์</string>
+    <string name="legacy_no_paired_obd_adapter_found_72c35314">ไม่พบอะแดปเตอร์ OBD ที่จับคู่ไว้</string>
+    <string name="legacy_not_connected_273cf5d2">ยังไม่ได้เชื่อมต่อ</string>
+
+    <!-- Source: feature/ridedashboard/widget/AltitudeWidget.kt -->
+    <string name="legacy_1h_af24">-1H</string>
+    <string name="legacy_climbing_6536490d">กำลังไต่ขึ้น</string>
+    <string name="legacy_descending_da6096f8">กำลังไต่ลง</string>
+    <string name="legacy_gnss_live_7bc47fe5">GNSS เรียลไทม์</string>
+    <string name="legacy_level_44fa364">ระดับ</string>
+    <string name="legacy_no_fix_8982dd16">ไม่มีพิกัด</string>
+    <string name="legacy_vertical_speed_427682fd">ความเร็วแนวตั้ง</string>
+
+    <!-- Source: feature/ridedashboard/widget/BatteryWidget.kt -->
+    <string name="legacy_battery_level_508e0b71">ระดับแบตเตอรี่</string>
+    <string name="legacy_charging_843f5271">กำลังชาร์จ</string>
+    <string name="legacy_external_power_41cdb450">ไฟเลี้ยงภายนอก</string>
+    <string name="legacy_hot_1182d">ร้อน</string>
+    <string name="legacy_low_power_483394f9">พลังงานต่ำ</string>
+    <string name="legacy_no_sensor_69b15af9">ไม่มีเซ็นเซอร์</string>
+    <string name="legacy_normal_8999b0e7">ปกติ</string>
+    <string name="legacy_warm_288a85">อุ่น</string>
+
+    <!-- Source: feature/ridedashboard/widget/CompassWidget.kt -->
+    <string name="legacy_east_205bfd">ตะวันออก</string>
+    <string name="legacy_glare_risk_8e426920">เสี่ยงแสงจ้า</string>
+    <string name="legacy_gnss_stale_fd32d3a0">ข้อมูล GNSS เก่า</string>
+    <string name="legacy_ne_9b7">NE</string>
+    <string name="legacy_no_gnss_a6d94c86">ไม่มี GNSS</string>
+    <string name="legacy_north_47050e5">เหนือ</string>
+    <string name="legacy_nw_9c9">NW</string>
+    <string name="legacy_se_a52">SE</string>
+    <string name="legacy_south_4b6d1ad">ใต้</string>
+    <string name="legacy_sun_tracking_5fd65e2b">ติดตามตำแหน่งดวงอาทิตย์</string>
+    <string name="legacy_sw_a64">SW</string>
+    <string name="legacy_west_2899af">ตะวันตก</string>
+
+    <!-- Source: feature/ridedashboard/widget/DashboardWidgetPickerScreen.kt -->
+    <string name="legacy_off_for_1_s_a8aabb23">ปิดเป็นเวลา %1$s</string>
+    <string name="legacy_one_widget_pinned_on_1_s_9ab92ad6">ปักหมุดวิดเจ็ตเดียวไว้ที่ %1$s</string>
+    <string name="legacy_rotating_on_1_s_c5e75b74">หมุนเวียนอยู่ที่ %1$s</string>
+    <string name="legacy_this_panel_cycles_through_the_1_d_ticked_widgets_3a2b2d0e">แผงนี้จะหมุนเวียนผ่านวิดเจ็ตที่ติ๊กเลือกไว้ %1$d รายการ</string>
+    <string name="legacy_this_panel_shows_that_one_widget_and_never_rotat_f3acc606">แผงนี้แสดงวิดเจ็ตเดียวนั้นและไม่หมุนเวียน ติ๊กเลือกเพิ่มอีกหนึ่งรายการเพื่อเริ่มการหมุนเวียน</string>
+    <string name="legacy_tick_widgets_below_to_build_this_panel_s_carouse_ab0f3111">ติ๊กเลือกวิดเจ็ตด้านล่างเพื่อสร้างชุดหมุนเวียนของแผงนี้ แต่ละแผงมีของตัวเอง</string>
+
+    <!-- Source: feature/ridedashboard/widget/SatelliteWidget.kt -->
+    <string name="legacy_2d_fix_weak_geometry_e5b0cd1f">ได้พิกัด 2D  •  เรขาคณิตอ่อนแอ</string>
+    <string name="legacy_3d_fix_navigation_ready_bff99e13">ได้พิกัด 3D  •  พร้อมนำทาง</string>
+    <string name="legacy_scan_26be7d">สแกน</string>
+    <string name="legacy_searching_for_satellites_f009ee35">กำลังค้นหาดาวเทียม</string>
+
+    <!-- Source: feature/ridedashboard/widget/SpeedGaugeWidget.kt -->
+    <string name="legacy_gnss_ok_35ac4b15">GNSS ปกติ</string>
+    <string name="legacy_n_4e">N</string>
+    <string name="legacy_w_57">W</string>
+
+    <!-- Source: feature/ridedashboard/widget/TripMetricsWidget.kt -->
+    <string name="legacy_session_live_5f7f2456">กำลังบันทึกเซสชัน</string>
+
+    <!-- Source: feature/settings/SettingsScreen.kt -->
+    <string name="legacy_capture_84285f26">จับภาพ</string>
+    <string name="legacy_capturing_561c2223">กำลังจับภาพ…</string>
+    <string name="legacy_recalibrate_ceebf5d4">ปรับเทียบใหม่</string>
+
+    <!-- Source: feature/trips/TripLibraryUi.kt -->
+    <string name="legacy_enhanced_9c6c8376">ปรับปรุงแล้ว</string>
+    <string name="legacy_gps_only_e6f03982">GPS เท่านั้น</string>
+         description; rendered outside the app's own Compose runtime, so it is a plain string
+         resource rather than a motoHubText() call). -->
+    <string name="handlebar_hid_capture_description">ให้ MOTO-HUB อ่านการกด D-pad จากรีโมตบังโคลนแบบ Bluetooth HID ขณะที่เลือกโหมด HID ไว้ในการตั้งค่าปุ่มบังโคลน</string>
+
+    <!-- ==================================================================
+         Handlebar HID mode, phone-only Android Auto and the teach
+         prerequisite dialog (PR #8, rebased 2026-08-18).
+         ================================================================== -->
+    <string name="legacy_android_auto_isn_t_running_9f167e30">Android Auto ไม่ได้ทำงานอยู่</string>
+    <string name="legacy_teaching_the_handlebar_needs_a_live_android_auto_697217d0">การสอนปุ่มบังโคลนต้องมีเซสชัน Android Auto ที่กำลังทำงานอยู่เพื่อจับการกดปุ่ม เชื่อมต่อกับมอเตอร์ไซค์ หรือเริ่ม Android Auto บนโทรศัพท์เครื่องนี้โดยไม่ใช้ T-Box</string>
+    <string name="legacy_connect_to_1_s_579387aa">เชื่อมต่อกับ %1$s</string>
+    <string name="legacy_start_on_this_phone_no_t_box_f1bcc79f">เริ่มบนโทรศัพท์เครื่องนี้ (ไม่มี T-Box)</string>
+    <string name="legacy_bluetooth_is_off_turn_it_on_then_pair_the_remote_356459fc">บลูทูธปิดอยู่ — เปิดก่อน แล้วจับคู่รีโมตเป็นคีย์บอร์ด</string>
+    <string name="legacy_allow_bluetooth_access_so_the_app_can_read_the_r_bf160fa2">อนุญาตการเข้าถึงบลูทูธ เพื่อให้แอปอ่านการกดปุ่มจากรีโมตได้</string>
+    <string name="legacy_bluetooth_is_on_a_hid_remote_doesn_t_show_up_her_77795af8">บลูทูธเปิดอยู่ รีโมตแบบ HID จะไม่แสดงที่นี่เป็นอุปกรณ์ที่เชื่อมต่ออยู่ — หากยังไม่รู้จักการกดปุ่ม ให้ตรวจว่าจับคู่ไว้ในการตั้งค่าบลูทูธของระบบแล้ว และเปิดการเข้าถึงพิเศษ (Accessibility) อยู่</string>
+    <string name="legacy_or_right_now_without_the_t_box_21ba0502">หรือเริ่มเลยตอนนี้ โดยไม่ใช้ T-BOX</string>
+    <string name="legacy_android_auto_straight_to_your_phone_f0cc540c">Android Auto — ตรงถึงโทรศัพท์ของคุณ</string>
+    <string name="legacy_input_protocol_8ff4fe4e">โปรโตคอลอินพุต</string>
+    <string name="legacy_most_dashboards_send_buttons_as_avrcp_media_keys_6e1dd82c">แดชบอร์ดส่วนใหญ่ส่งปุ่มเป็นคีย์ควบคุมสื่อ AVRCP — ปล่อยไว้ที่ AVRCP เลือก HID เฉพาะเมื่อรีโมตจับคู่เป็นคีย์บอร์ด Bluetooth และการกดปุ่มไม่ถูกตรวจจับที่ด้านล่างเลย</string>
+    <string name="legacy_hid_mode_also_needs_moto_hub_s_accessibility_ser_c0cdf4cc">โหมด HID ยังต้องเปิดบริการการเข้าถึงพิเศษ (Accessibility Service) ของ MOTO-HUB ด้วย ไม่เช่นนั้นการกดปุ่มจะไม่ถูกมองเห็น</string>
+    <string name="legacy_open_accessibility_settings_a01c954b">เปิดการตั้งค่าการเข้าถึงพิเศษ (Accessibility)</string>
+    <string name="legacy_turn_on_moto_hub_so_handlebar_presses_reach_the__b41c5310">เปิด MOTO-HUB เพื่อให้การกดปุ่มบังโคลนเข้าถึงแอปได้จากทุกหน้าจอ</string>
+    <string name="legacy_was_moto_hub_s_switch_greyed_out_android_blocks__b5233420">สวิตช์ของ MOTO-HUB กลายเป็นสีเทาหรือไม่ Android บล็อกไว้สำหรับแอปที่ไม่ได้ติดตั้งจากร้านแอป และ MOTO-HUB ดาวน์โหลดจาก GitHub เปิดข้อมูลแอป (App info) แตะ ⋮ ที่มุมขวาบน เลือก \"อนุญาตการตั้งค่าที่ถูกจำกัด\" แล้วกลับมาเปิดสวิตช์</string>
+    <string name="legacy_open_app_info_7c77c863">เปิดข้อมูลแอป</string>
+    <string name="legacy_where_allow_restricted_settings_lives_8f29fea1">\"อนุญาตการตั้งค่าที่ถูกจำกัด\" อยู่ตรงไหน</string>
+    <string name="legacy_avrcp_media_keys_f50e20c7">AVRCP (ปุ่มควบคุมสื่อ)</string>
+    <string name="legacy_hid_d_pad_a247f04a">HID (D-pad)</string>
+    <string name="legacy_default_the_dashboard_sends_bluetooth_media_key__ccbdfbf7">ค่าเริ่มต้น แดชบอร์ดส่งคำสั่งคีย์ควบคุมสื่อ Bluetooth สำหรับเล่น/หยุดชั่วคราว เปลี่ยนแทร็ก และระดับเสียง</string>
+    <string name="legacy_for_remotes_that_pair_as_a_bluetooth_keyboard_an_25055a66">สำหรับรีโมตที่จับคู่เป็นคีย์บอร์ด Bluetooth และส่งการกด D-pad ต้องเปิดบริการการเข้าถึงพิเศษ (Accessibility Service) ของ MOTO-HUB ด้านล่างด้วย</string>
+
+    <!-- External display service (USB AOA) - notification channel and ongoing notification -->
+    <string name="legacy_moto_hub_external_display_streaming_1be823ca">การสตรีมไปยังจอภายนอกของ MOTO-HUB</string>
+    <string name="legacy_streaming_to_external_display_via_usb_ab5c31c6">กำลังสตรีมไปยังจอภายนอกผ่าน USB</string>
+    <string name="legacy_stop_external_display_c050e9ab">หยุดจอภายนอก</string>
+    <string name="legacy_aap_accessory_probe_running_bcf6ccd1">กำลังตรวจสอบอุปกรณ์เสริม AAP</string>
+
+    <!-- About screen -->
+    <string name="legacy_your_phone_your_motorcycle_display_c5956fcb">โทรศัพท์ของคุณ\nจอแสดงผลมอเตอร์ไซค์ของคุณ</string>
+    <string name="legacy_follow_development_join_our_community_report_iss_b8b8fffa">ติดตามการพัฒนา เข้าร่วมชุมชนของเรา รายงานปัญหา และดาวน์โหลดรุ่นต่าง ๆ</string>
+    <string name="legacy_moto_hub_is_an_independent_project_it_is_not_aff_9e4c2633">MOTO-HUB เป็นโครงการอิสระ ไม่มีส่วนเกี่ยวข้อง ไม่ได้รับการรับรอง หรือได้รับทุนสนับสนุนจาก Carbit, CFMOTO, ผู้ผลิตรายอื่นที่แดชบอร์ดใช้ EasyConn, Google หรือ Android Auto แต่อย่างใด ชื่อผลิตภัณฑ์และเครื่องหมายการค้าทั้งหมดเป็นของเจ้าของแต่ละราย</string>
+    <string name="legacy_moto_hub_is_an_experimental_proof_of_concept_not_34b4b321">MOTO-HUB เป็นต้นแบบเชิงทดลอง ไม่ใช่ผลิตภัณฑ์ระดับใช้งานจริง</string>
+    <string name="legacy_development_and_testing_happen_on_a_cfmoto_700mt_ac58afbf">การพัฒนาและการทดสอบทำบนแดชบอร์ด CFMOTO 700MT-ADV ร่วมกับโทรศัพท์ OnePlus 13 / Galaxy Z Fold4 มอเตอร์ไซค์ แบรนด์ เวอร์ชันเฟิร์มแวร์ T-Box และโทรศัพท์อื่น ๆ ยังไม่ได้ทดสอบที่นี่: คาดว่าจะพบพฤติกรรมที่ต่างออกไป การลองใหม่ หรือไม่เชื่อมต่อเลย หากแดชบอร์ดแสดง QR code สำหรับจับคู่ ก็คุ้มที่จะลอง</string>
+    <string name="legacy_do_not_rely_on_it_as_your_only_source_of_critica_39775433">อย่าพึ่งพาแอปนี้เป็นแหล่งนำทางที่สำคัญเพียงแหล่งเดียว ตั้งค่าการนำทางเฉพาะขณะจอดรถ และใช้ซอฟต์แวร์นี้โดยยอมรับความเสี่ยงเอง</string>
+
+    <!-- Garage - hero tiles -->
+    <string name="legacy_scan_motorcycle_qr_code_cc47d360">สแกน QR code ของมอเตอร์ไซค์</string>
+    <string name="legacy_point_your_camera_at_the_t_box_sticker_1fc1811">ชี้กล้องไปที่สติกเกอร์ T-Box</string>
+    <string name="legacy_no_qr_manual_setup_e8495cc4">ไม่มี QR? ตั้งค่าเอง</string>
+    <string name="legacy_type_the_network_in_yourself_b35606b3">พิมพ์ชื่อเครือข่ายเอง</string>
+    <string name="legacy_scan_its_t_box_qr_code_ca4d32e3">สแกน QR code ของ T-Box</string>
+    <string name="legacy_no_qr_manual_1dd2a7a7">ไม่มี QR? ตั้งเอง</string>
+    <string name="legacy_type_the_network_in_b00b50ec">พิมพ์ชื่อเครือข่าย</string>
+    <string name="legacy_used_by_phone_only_display_modes_without_a_t_box_13ed383e">ใช้กับโหมดจอแบบใช้โทรศัพท์เท่านั้น โดยไม่มี T-Box</string>
+    <string name="legacy_talk_to_a_second_phone_over_your_own_hotspot_2aec1606">เชื่อมกับโทรศัพท์เครื่องที่สองผ่านฮอตสปอตของคุณเอง</string>
+    <string name="legacy_default_settings_a0578342">การตั้งค่าเริ่มต้น</string>
+    <string name="legacy_group_intercom_c81733c6">อินเตอร์คอมกลุ่ม</string>
+
+    <!-- Motorcycle details - photo and Android Auto format buttons (short labels) -->
+    <string name="legacy_add_photo_203b2dd3">เพิ่มรูปภาพ</string>
+    <string name="legacy_change_photo_ad0735e2">เปลี่ยนรูปภาพ</string>
+    <string name="legacy_motorcycle_photo_4fd6c703">รูปภาพมอเตอร์ไซค์</string>
+    <string name="legacy_fit_10ff1">พอดี</string>
+    <string name="legacy_stretch_baa072e5">ยืด</string>
+    <string name="legacy_crop_1fb290">ครอป</string>
+
+    <!-- T-Box capability inspector - section titles and row labels -->
+    <string name="legacy_a_read_only_view_of_data_observed_directly_from__eb0959e6">มุมมองแบบอ่านอย่างเดียวของข้อมูลที่สังเกตได้โดยตรงจาก T-Box เครื่องนี้</string>
+    <string name="legacy_wi_fi_network_68c4e1ac">เครือข่าย Wi-Fi</string>
+    <string name="legacy_easyconn_endpoint_f9ecbf07">จุดเชื่อมต่อ EasyConn</string>
+    <string name="legacy_nsd_package_bfb67045">แพ็กเกจ NSD</string>
+    <string name="legacy_last_discovered_a02851f2">ค้นพบล่าสุด</string>
+    <string name="legacy_diagnostics_54322d8c">การวินิจฉัย</string>
+    <string name="legacy_if_easyconn_discovery_keeps_failing_briefly_reco_b8d938f8">หากการค้นพบ EasyConn ล้มเหลวซ้ำ ๆ ให้เชื่อมต่อกับ T-Box เครื่องนี้สั้น ๆ แล้วลองตรวจพอร์ตที่รู้จักกันดี (10915-10935) โดยตรงเพื่อดูว่าพอร์ตใดตอบกลับจริง</string>
+    <string name="legacy_display_8e70a4a2">จอแสดงผล</string>
+    <string name="legacy_tft_capture_area_ad3b6865">พื้นที่จับภาพ TFT</string>
+    <string name="legacy_orientation_d9c9db0">การวางแนว</string>
+    <string name="legacy_reported_dpi_4b722c90">DPI ที่รายงาน</string>
+    <string name="legacy_dpi_mode_9e4a5ea6">โหมด DPI</string>
+    <string name="legacy_screen_type_5d60ca4e">ประเภทหน้าจอ</string>
+    <string name="legacy_reported_identity_b41296b">ตัวตนที่รายงาน</string>
+    <string name="legacy_head_unit_name_1d44c987">ชื่อหัวเครื่อง</string>
+    <string name="legacy_vehicle_brand_1ca30d73">แบรนด์ยานพาหนะ</string>
+    <string name="legacy_vehicle_model_1d3cbd15">รุ่นยานพาหนะ</string>
+    <string name="legacy_these_values_are_shown_exactly_as_reported_by_th_16427b8c">ค่าเหล่านี้แสดงตรงตามที่ T-Box รายงานมา MOTO-HUB ไม่อนุมานรุ่นมอเตอร์ไซค์จาก QR code หรือชื่อเครือข่าย</string>
+    <string name="legacy_software_protocol_2108716b">ซอฟต์แวร์และโปรโตคอล</string>
+    <string name="legacy_pxc_version_5fba84f3">เวอร์ชัน PXC</string>
+    <string name="legacy_sdk_version_aacf3ed2">เวอร์ชัน SDK</string>
+    <string name="legacy_software_version_8135c77f">เวอร์ชันซอฟต์แวร์</string>
+    <string name="legacy_version_code_301c55">รหัสเวอร์ชัน</string>
+    <string name="legacy_reported_package_ec9e7619">แพ็กเกจที่รายงาน</string>
+    <string name="legacy_product_type_42ccc3eb">ประเภทผลิตภัณฑ์</string>
+    <string name="legacy_transport_type_33b665f1">ประเภททรานสปอร์ต</string>
+    <string name="legacy_function_mask_a68c5a14">มาสก์ฟังก์ชัน</string>
+    <string name="legacy_wi_fi_socket_timeout_c3c69476">หมดเวลาซ็อกเก็ต Wi-Fi</string>
+    <string name="legacy_feature_flags_3e60189d">แฟล็กฟีเจอร์</string>
+    <string name="legacy_screen_mirroring_3102b12f">มิเรอร์หน้าจอ</string>
+    <string name="legacy_screen_touch_4eb406ab">สัมผัสหน้าจอ</string>
+    <string name="legacy_overlay_touch_d474eb4f">สัมผัสโอเวอร์เลย์</string>
+    <string name="legacy_mirror_reconnect_e70c0c56">เชื่อมต่อมิเรอร์ใหม่</string>
+    <string name="legacy_landscape_adaptive_4f69625b">ปรับตามแนวนอน</string>
+    <string name="legacy_socket_authentication_94d326a5">การยืนยันตัวตนซ็อกเก็ต</string>
+    <string name="legacy_microphone_c888754a">ไมโครโฟน</string>
+    <string name="legacy_hid_input_9c332ccd">อินพุต HID</string>
+    <string name="legacy_third_party_apps_a5fc13b2">แอปของบุคคลที่สาม</string>
+    <string name="legacy_phone_signal_e87f95ba">สัญญาณโทรศัพท์</string>
+    <string name="legacy_time_synchronization_62f3fb2d">การซิงก์เวลา</string>
+    <string name="legacy_bluetooth_calls_f80c25c3">การโทรผ่านบลูทูธ</string>
+    <string name="legacy_sensitive_client_info_fields_are_intentionally_e_4b966321">ฟิลด์ CLIENT_INFO ที่ละเอียดอ่อนถูกตัดออกจากการจัดเก็บและการแสดงผลโดยเจตนา</string>
+    <string name="legacy_capability_report_captured_65a39462">บันทึกรายงานความสามารถแล้ว</string>
+    <string name="legacy_t_box_discovered_cd525276">พบ T-Box</string>
+    <string name="legacy_no_observations_yet_d99ce56e">ยังไม่มีข้อมูลที่สังเกตได้</string>
+    <string name="legacy_client_info_was_captured_during_an_easyconn_hand_f72a40e8">CLIENT_INFO ถูกจับได้ระหว่างการจับมือ (handshake) ของ EasyConn</string>
+    <string name="legacy_start_mirroring_or_android_auto_once_to_capture__cd900a4a">เริ่มมิเรอร์หรือ Android Auto หนึ่งครั้งเพื่อจับ CLIENT_INFO</string>
+    <string name="legacy_connect_this_motorcycle_then_start_mirroring_or__176c21dd">เชื่อมต่อกับมอเตอร์ไซค์เครื่องนี้ก่อน แล้วเริ่มมิเรอร์หรือ Android Auto หนึ่งครั้ง</string>
+    <string name="legacy_wait_288975">รอ</string>
+    <string name="legacy_observed_1_s_43b8d8b3">สังเกตเมื่อ %1$s</string>
+    <string name="legacy_not_reported_7aaeba0">ไม่ได้รายงาน</string>
+    <string name="legacy_supported_a4e9e48e">รองรับ</string>
+    <string name="legacy_not_supported_14e0b361">ไม่รองรับ</string>
+    <string name="legacy_not_reported_108c5fa0">ไม่ได้รายงาน</string>
+
+    <!-- QR pairing - photo fallback dialog and live scanner -->
+    <string name="legacy_analyzing_qr_photo_aa205a9c">กำลังวิเคราะห์รูปภาพ QR…</string>
+    <string name="legacy_removing_display_patterns_and_trying_qr_recognit_b1c3a1e8">กำลังลบลวดลายบนจอและลองจดจำ QR</string>
+    <string name="legacy_attempt_1_d_of_2_d_e7c367b5">ความพยายามครั้งที่ %1$d จาก %2$d</string>
+    <string name="legacy_flash_on_64bdb02f">แฟลชเปิด</string>
+    <string name="legacy_flash_40cffd0">แฟลช</string>
+    <string name="legacy_zoom_1_s_d659e688">ซูม %1$s</string>
+    <string name="legacy_max_12d44">สูงสุด</string>
+    <string name="legacy_tap_the_qr_code_to_focus_use_zoom_if_it_is_small_2607a78c">แตะ QR code เพื่อโฟกัส • ใช้ซูมหาก QR เล็ก</string>
+
+    <!-- Safety disclaimer shown on first launch -->
+    <string name="legacy_safety_warning_243ef82e">คำเตือนด้านความปลอดภัย</string>
+    <string name="legacy_riding_requires_your_full_attention_never_intera_96038a24">การขับขี่ต้องการความสนใจเต็มที่จากคุณ อย่าแตะต้อง MOTO-HUB, Android Auto, การนำทาง, มิเรอร์, การบันทึกการเดินทาง หรือปุ่มควบคุมใด ๆ บนหน้าจอขณะมอเตอร์ไซค์กำลังเคลื่อนที่โดยเด็ดขาด</string>
+    <string name="legacy_configure_and_verify_everything_only_while_parke_57e1b31b">ตั้งค่าและตรวจสอบทุกอย่างเฉพาะขณะจอดรถเท่านั้น ใช้แอปพลิเคชันนี้เฉพาะในสถานการณ์ที่ปลอดภัยและควบคุมได้อย่างสมบูรณ์ หากเงื่อนไขไม่ปลอดภัยอย่างสมบูรณ์ อย่าใช้งาน</string>
+    <string name="legacy_moto_hub_is_not_a_safety_device_and_cannot_preve_a3d43f2f">MOTO-HUB ไม่ใช่อุปกรณ์ด้านความปลอดภัย และไม่สามารถป้องกันการเสียสมาธิ อุบัติเหตุ การบาดเจ็บ หรือความเสียหายได้ คุณเป็นผู้รับผิดชอบแต่เพียงผู้เดียวต่อการขับขี่อย่างปลอดภัยและการปฏิบัติตามกฎหมายที่เกี่ยวข้องทั้งหมด</string>
+    <string name="legacy_i_understand_do_not_show_this_warning_again_e4526192">ฉันเข้าใจแล้ว — ไม่ต้องแสดงคำเตือนนี้อีก</string>
+
+    <!-- GitHub update dialog -->
+    <string name="legacy_downloading_fe585f4">กำลังดาวน์โหลด...</string>
+    <string name="legacy_download_and_install_508990da">ดาวน์โหลดและติดตั้ง</string>
+
+    <!-- Home and shared UI -->
+    <string name="legacy_no_motorcycle_b58a6930">ไม่มีมอเตอร์ไซค์</string>
+    <string name="legacy_stop_streaming_3eba75e4">หยุดสตรีม</string>
+    <string name="legacy_touch_the_preview_to_control_android_auto_91609ae0">แตะภาพตัวอย่างเพื่อควบคุม Android Auto</string>
+
+    <!-- Handlebar mapping - action short labels, family headers and calibration hints -->
+    <string name="legacy_up_abb">ขึ้น</string>
+    <string name="legacy_down_2098c2">ลง</string>
+    <string name="legacy_left_241427">ซ้าย</string>
+    <string name="legacy_right_4b4d1fc">ขวา</string>
+    <string name="legacy_ok_9dc">ตกลง</string>
+    <string name="legacy_place_1_45c34f38">ช่องที่ 1</string>
+    <string name="legacy_place_2_45c34f39">ช่องที่ 2</string>
+    <string name="legacy_place_3_45c34f3a">ช่องที่ 3</string>
+    <string name="legacy_move_the_cursor_78e625b4">ย้ายเคอร์เซอร์</string>
+    <string name="legacy_system_92af662f">ระบบ</string>
+    <string name="legacy_navigate_to_f20c4b8a">นำทางไปยัง</string>
+    <string name="legacy_this_button_has_no_hold_skipping_automatically_44873c53">ปุ่มนี้ไม่มีการกดค้าง - ข้ามไปโดยอัตโนมัติ</string>
+    <string name="legacy_that_was_a_single_press_press_twice_quickly_for__e774e0f2">นั่นคือการกดครั้งเดียว - กดเร็ว ๆ สองครั้งเพื่อนับเป็นดับเบิล</string>
+    <string name="legacy_that_was_a_quick_tap_press_and_hold_a_moment_lon_5b9c9d4d">นั่นคือการแตะเร็ว - กดค้างไว้นานขึ้นอีกหน่อย</string>
+    <string name="legacy_open_hotspot_settings_7d1f3d4a">เปิดการตั้งค่าฮอตสปอต</string>
+    <!-- The "MOTO-HUB is still looking" notification shown while a connection attempt runs,
+         and the hosted-network wording that tells the rider not to close the app. %1$s is
+         the motorcycle network name. -->
+    <string name="legacy_moto_hub_connection_progress_c260af34">ความคืบหน้าการเชื่อมต่อของ MOTO-HUB</string>
+    <string name="legacy_looking_for_1_s_9983a22f">กำลังค้นหา %1$s</string>
+    <string name="legacy_connecting_to_1_s_2f10e3b8">กำลังเชื่อมต่อกับ %1$s</string>
+    <string name="legacy_keep_moto_hub_open_closing_it_stops_the_search_54ec507">เปิด MOTO-HUB ค้างไว้ - ปิดแล้วการค้นหาจะหยุด</string>
+    <string name="legacy_hotspot_is_up_searching_it_for_the_dashboard_thi_caab4cd3">ฮอตสปอตเปิดอยู่ กำลังค้นหาแดชบอร์ดในนั้น - อาจใช้เวลานานถึง 90 วินาที จึงควรเปิด MOTO-HUB ค้างไว้</string>
+    <!-- Asked once per video format tried, after a session that looked healthy from the phone:
+         only the rider can see whether the dashboard actually displayed it. %1$s is the
+         motorcycle name. -->
+    <string name="legacy_did_it_show_up_on_the_dashboard_f341c05">ภาพปรากฏบนแดชบอร์ดหรือไม่</string>
+    <string name="legacy_last_time_you_connected_to_1_s_everything_looked_46fc9a09">ครั้งล่าสุดที่คุณเชื่อมต่อกับ %1$s ทุกอย่างดูปกติดีจากโทรศัพท์เครื่องนี้ MOTO-HUB ไม่มีทางเห็นหน้าจอของแดชบอร์ด จึงมีเรื่องเดียวที่ต้องถามคุณ</string>
+    <string name="legacy_if_it_stayed_on_the_pairing_screen_moto_hub_will_40398b69">หากยังค้างอยู่ที่หน้าจอจับคู่ MOTO-HUB จะลองฟอร์แมตวิดีโออื่นในการขับขี่ครั้งถัดไป และจะพยายามต่อไปจนกว่าจะได้ฟอร์แมตที่ใช้ได้</string>
+    <string name="legacy_yes_i_saw_it_625527f4">ใช่ เห็นแล้ว</string>
+    <string name="legacy_no_nothing_appeared_f92c88fc">ไม่ ไม่มีอะไรปรากฏขึ้น</string>
+    <!-- Shown when the video-format search cannot progress because every session so far ran the
+         Ride Dashboard, which sends its own format. -->
+    <string name="legacy_the_video_format_search_is_waiting_ac28c9a">การค้นหาฟอร์แมตวิดีโอกำลังรออยู่</string>
+    <string name="legacy_moto_hub_is_still_looking_for_a_video_format_you_44b4c53c">MOTO-HUB ยังคงหาฟอร์แมตวิดีโอที่แดชบอร์ดของคุณแสดงได้อยู่ แต่ทดสอบได้ครั้งละหนึ่งเท่านั้นขณะ Android Auto ทำงาน - Ride Dashboard ส่งฟอร์แมตของตัวเองเสมอ</string>
+    <string name="legacy_connect_once_with_android_auto_and_the_search_mo_71871380">เชื่อมต่อด้วย Android Auto หนึ่งครั้ง แล้วการค้นหาจะเดินหน้าต่อไปเอง</string>
+    <string name="legacy_got_it_7f79855f">เข้าใจแล้ว</string>
+
+    <!-- ===========================================================
+         Catalogue sweep, 2026-08-24: strings this worktree draws but had no
+         identifier for. The photo-picker values come from the pro-poc
+         catalogues, where the same source strings are already translated;
+         the About paragraph is this worktree's own, rewritten when CORE
+         dropped to Android 12.
+         ================================================================== -->
+
+    <!-- Source: MainActivity.kt -->
+    <string name="legacy_camera_permission_is_required_to_take_a_photo_951c5abe">จำเป็นต้องมีสิทธิ์เข้าถึงกล้องเพื่อถ่ายรูป</string>
+
+    <!-- Source: feature/garage/MotorcycleDetailsScreen.kt -->
+    <string name="legacy_browse_files_e6b23981">เรียกดูไฟล์</string>
+    <string name="legacy_choose_from_gallery_1d40e025">เลือกจากแกลเลอรี</string>
+    <string name="legacy_downloads_cloud_drives_and_any_other_folder_eb4e2c46">ดาวน์โหลด คลาวด์ไดรฟ์ และโฟลเดอร์อื่น ๆ</string>
+    <string name="legacy_open_the_camera_and_shoot_it_now_75ae0eed">เปิดกล้องแล้วถ่ายภาพทันที</string>
+    <string name="legacy_pick_one_of_your_photos_913c1c70">เลือกจากรูปภาพของคุณ</string>
+    <string name="legacy_take_a_photo_cefc733a">ถ่ายรูป</string>
+
+    <!-- Source: feature/about/AboutScreen.kt -->
+    <string name="legacy_moto_hub_connects_an_android_12_phone_to_a_motor_b791c32e">MOTO-HUB เชื่อมต่อโทรศัพท์ Android 12+ เข้ากับแดชบอร์ดของมอเตอร์ไซค์ที่จับคู่ผ่าน EasyConn — ซอฟต์แวร์จาก Carbit ที่ผู้ผลิตหลายรายใส่มาให้ ซึ่งรวมถึง CFMOTO รองรับการมิเรอร์หน้าจอและแอป การฉายภาพ Android Auto โปรไฟล์มอเตอร์ไซค์ที่บันทึกไว้ และการวินิจฉัยบนอุปกรณ์</string>
+
+    <!-- Source: feature/controls — a controller button stands in for a handlebar press -->
+    <string name="legacy_handlebar_presses_32db65bc">การกดปุ่มแฮนด์</string>
+    <string name="legacy_backward_hold_left_72d8761e">กดค้างถอยหลัง - ซ้าย</string>
+    <string name="legacy_forward_hold_right_3f058b83">กดค้างเดินหน้า - ขวา</string>
+
+    <!-- Source: feature/diagnostics/BleExplorerScreen.kt — the Bluetooth LE workbench -->
+    <string name="legacy_bluetooth_le_explorer_2ab1f074">ตัวสำรวจ Bluetooth LE</string>
+    <string name="legacy_find_any_bluetooth_le_device_open_it_and_see_wha_ff9d191c">ค้นหาอุปกรณ์ Bluetooth LE ตัวไหนก็ได้ เปิดดู แล้วดูว่าข้างในมีอะไรจริง ๆ: เซอร์วิส คาแรกเทอริสติก และทุกไบต์ที่มันส่ง ทำมาเพื่อรีโมตที่ไม่ประกาศตัวตนอะไรเลย - กดปุ่มบนรีโมตขณะสมัครรับข้อมูลอยู่ แล้วโปรโตคอลจะเขียนตัวเองลงในล็อก</string>
+    <string name="legacy_devices_1_d_c9f468d8">อุปกรณ์ (%1$d)</string>
+    <string name="legacy_filter_by_name_address_or_service_5c4953c4">กรองตามชื่อ ที่อยู่ หรือเซอร์วิส</string>
+    <string name="legacy_not_connectable_a36d7984">  - เชื่อมต่อไม่ได้</string>
+    <string name="legacy_services_99327804">เซอร์วิส: </string>
+    <string name="legacy_manufacturer_5ba47ab7">ผู้ผลิต: </string>
+    <string name="legacy_service_data_703f501b">ข้อมูลเซอร์วิส: </string>
+    <string name="legacy_connected_839202e9">เชื่อมต่อแล้ว</string>
+    <string name="legacy_rediscover_cece7f3c">ค้นหาใหม่</string>
+    <string name="legacy_mtu_517_7d540d89">MTU 517</string>
+    <string name="legacy_read_rssi_318ccc81">อ่าน RSSI</string>
+    <string name="legacy_read_26cdb6">อ่าน</string>
+    <string name="legacy_write_4ff67bf">เขียน</string>
+    <string name="legacy_write_to_1_s_716e199f">เขียนไปที่ %1$s</string>
+    <string name="legacy_bytes_in_hex_01_ff_0a_01ff0a_and_0x01_0xff_all_w_69a0e8b2">ไบต์แบบเลขฐานสิบหก - \"01 FF 0A\", \"01ff0a\" และ \"0x01,0xFF\" ใช้ได้ทั้งหมด การเขียนนี้ส่งตรงไปที่อุปกรณ์: บนฮาร์ดแวร์บางรุ่น ค่าที่ผิดอาจเปลี่ยนการตั้งค่าที่เปลี่ยนกลับได้ยาก</string>
+    <string name="legacy_hex_11afb">เลขฐานสิบหก</string>
+    <string name="legacy_not_valid_hex_yet_f28e24dc">ยังไม่ใช่เลขฐานสิบหกที่ถูกต้อง</string>
+    <string name="legacy_1_d_byte_s_f2d64482">%1$d ไบต์</string>
+    <string name="legacy_no_response_bdcb77a0">ไม่มีการตอบกลับ</string>
+    <string name="legacy_traffic_eb2daddd">การรับส่งข้อมูล</string>
+    <string name="legacy_nothing_yet_dc65bed9">ยังไม่มีอะไรเลย</string>
+    <string name="legacy_every_line_here_is_also_in_the_application_log_s_f3e682dd">ทุกบรรทัดที่นี่ยังอยู่ในล็อกของแอปด้วย จึงส่งเซสชันไปกับรายงานวินิจฉัยได้</string>
+    <string name="legacy_dash_clock_lab_a1a0638d">ห้องทดลองนาฬิกาแดชบอร์ด</string>
+    <string name="legacy_experiments_for_dashes_that_reset_the_clock_zont_a4c75a39">การทดลองสำหรับแดชบอร์ดที่รีเซ็ตนาฬิกา (Zontes, Voge)</string>
+    <string name="legacy_scan_connect_and_read_any_ble_device_byte_by_byt_c47fb770">สแกน เชื่อมต่อ และอ่านอุปกรณ์ BLE ทีละไบต์</string>
+
+    <!-- Source: strings the extractor used to miss inside if/else expressions -->
+    <string name="legacy_stop_scanning_93cac2ef">หยุดสแกน</string>
+    <string name="legacy_scan_for_devices_883edf83">สแกนหาอุปกรณ์</string>
+    <string name="legacy_showing_named_devices_only_18320ef1">แสดงเฉพาะอุปกรณ์ที่มีชื่อ</string>
+    <string name="legacy_showing_every_device_ab347b96">แสดงทุกอุปกรณ์</string>
+    <string name="legacy_nothing_yet_a_remote_that_sleeps_only_advertises_231ea04a">ยังไม่มีอะไรเลย รีโมตที่อยู่ในโหมดสลีบจะประกาศตัวเพียงไม่กี่วินาทีหลังมีการกดปุ่ม - กดปุ่มสักปุ่มแล้ววางรีโมตไว้ใกล้ ๆ</string>
+    <string name="legacy_start_a_scan_to_see_what_is_around_bd69ed5b">เริ่มสแกนเพื่อดูว่ามีอะไรอยู่รอบ ๆ</string>
+    <string name="legacy_unsubscribe_862dd2b1">ยกเลิกการสมัครรับข้อมูล</string>
+    <string name="legacy_subscribe_9621fd2a">สมัครรับข้อมูล</string>
+
+    <!-- Source: feature/controls — actions that drive the Ride Dashboard itself -->
+    <string name="legacy_dashboard_next_panel_8f5432b1">แดชบอร์ด: แผงถัดไป</string>
+    <string name="legacy_dashboard_fullscreen_map_1bd08691">แดชบอร์ด: แผนที่เต็มจอ</string>
+    <string name="legacy_dashboard_zoom_the_map_on_me_4f78353">แดชบอร์ด: ซูมแผนที่ที่ตำแหน่งของฉัน</string>
+    <string name="legacy_dashboard_change_the_left_widget_2ac18bf8">แดชบอร์ด: เปลี่ยนวิดเจ็ตด้านซ้าย</string>
+    <string name="legacy_dashboard_change_the_right_widget_e40e68ad">แดชบอร์ด: เปลี่ยนวิดเจ็ตด้านขวา</string>
+    <string name="legacy_panel_33b634ef">แผง +</string>
+    <string name="legacy_map_full_b08caf3">แผนที่เต็มจอ</string>
+    <string name="legacy_zoom_me_5ca904e5">ซูมที่ฉัน</string>
+    <string name="legacy_widget_l_b0744190">วิดเจ็ต L</string>
+    <string name="legacy_widget_r_b0744196">วิดเจ็ต R</string>
+
+    <!-- Source: feature/controls — actions that drive the rider's music -->
+    <string name="legacy_music_464f605">เพลง</string>
+    <string name="legacy_music_play_pause_f246dd44">เพลง: เล่น / หยุดชั่วคราว</string>
+    <string name="legacy_music_next_track_516d3c09">เพลง: แทร็กถัดไป</string>
+    <string name="legacy_music_previous_track_dab94b8d">เพลง: แทร็กก่อนหน้า</string>
+    <string name="legacy_music_volume_up_f45c31d6">เพลง: เพิ่มเสียง</string>
+    <string name="legacy_music_volume_down_4e0f651d">เพลง: ลดเสียง</string>
+    <string name="legacy_play_25ff54">เล่น</string>
+    <string name="legacy_next_24ff13">ถัดไป</string>
+    <string name="legacy_previous_b7ee1f17">ก่อนหน้า</string>
+    <string name="legacy_vol_4eff3fe">เสียง +</string>
+    <string name="legacy_vol_4f015e5">เสียง −</string>
+
+    <!-- Source: feature/controls — the three input sources, and which one is live -->
+    <string name="legacy_motorcycle_handlebar_dc90fcfc">แฮนด์มอเตอร์ไซค์</string>
+    <string name="legacy_android_auto_17_4_removed_the_way_an_app_can_ask_217ec1b2">Android Auto 17.4 ตัดวิธีที่แอปขอให้มันฉายภาพออกไป MOTO-HUB ยังพยายามอยู่ และในเวอร์ชันเก่ากว่ามันก็ได้ผล — แต่ถ้าไม่ได้ผล สี่ขั้นตอนด้านล่างจะเริ่ม Android Auto จากเมนูนักพัฒนาของมันเองแทน นี่คือวิธีที่ได้ผลเมื่อวิธีอื่นไม่ได้ผล และคุณไม่ต้องติดตั้งอะไรเพิ่ม</string>
+    <string name="legacy_start_android_auto_yourself_3b0dffe1">เริ่ม Android Auto ด้วยตัวเอง</string>
+    <string name="legacy_open_the_android_auto_app_s_settings_scroll_to_t_4ef36207">เปิดการตั้งค่าของแอป Android Auto เลื่อนลงล่างสุดแล้วแตะ \"Version\" สิบครั้ง วิธีนี้จะปลดล็อกตัวเลือกนักพัฒนา — ทำครั้งเดียวก็พอ</string>
+    <string name="legacy_stay_on_that_same_android_auto_settings_screen_o_2c08cebc">อยู่บนหน้าตั้งค่า Android Auto หน้าเดิมต่อไป เปิดเมนูสามจุดที่มุมขวาบนแล้วเลือก \"Start head unit server\" อยู่ในเมนูนั้น ไม่ใช่ในการตั้งค่านักพัฒนา ขั้นตอนนี้แหละที่ทำให้มันทำงาน</string>
+    <string name="legacy_while_you_are_in_there_629f07a5">ขณะที่อยู่ตรงนั้น</string>
+    <string name="legacy_open_developer_settings_from_that_same_screen_an_4629699">เปิดการตั้งค่านักพัฒนาจากหน้าจอเดิมนั้น แล้วเปิด \"Add new cars to Android Auto\" (เวอร์ชันเก่าเรียกว่า \"Unknown sources\") บน Android Auto 17.2 หรือเก่ากว่า สวิตช์นี้อย่างเดียวมักพอแล้ว ตั้งแต่ 17.3 เป็นต้นไปไม่พอ — ต้องใช้ขั้นตอนที่ 2 — ดังนั้นอย่าหยุดแค่นี้ถ้า Android Auto ยังเริ่มไม่ได้</string>
+
+    <!-- Source: androidauto/AndroidAutoSelfModeHelp — the step the home screen and the
+         Android Auto preview draw when projection needs the rider to do something -->
+    <string name="legacy_start_head_unit_server_da7b299f">เริ่ม \"head unit server\"</string>
+    <string name="legacy_the_three_dot_menu_at_the_top_right_of_android_a_d6625ac7">เมนูสามจุดที่มุมขวาบนของการตั้งค่า Android Auto</string>
+    <string name="legacy_unlock_android_auto_s_developer_options_first_op_2865efda">ปลดล็อกตัวเลือกนักพัฒนาของ Android Auto ก่อน: เปิดการตั้งค่า เลื่อนลงล่างสุด แล้วแตะ \"Version\" สิบครั้ง</string>
+    <string name="legacy_enable_add_new_cars_to_android_auto_75bf90fa">เปิด \"Add new cars to Android Auto\"</string>
+    <string name="legacy_android_auto_then_developer_settings_f55db1c8">Android Auto แล้วจึงเปิดการตั้งค่านักพัฒนา</string>
+
+    <!-- Source: feature/androidauto/AndroidAutoPreviewScreen — the preview's own status line -->
+    <string name="legacy_android_auto_is_not_running_start_a_session_from_e803c9ee">Android Auto ยังไม่ทำงาน เริ่มเซสชันจากหน้าหลัก</string>
+    <string name="legacy_preparing_android_auto_db146bea">กำลังเตรียม Android Auto…</string>
+    <string name="legacy_waiting_for_android_auto_to_start_projecting_b7646bd0">กำลังรอให้ Android Auto เริ่มฉายภาพ…</string>
+    <string name="legacy_live_preview_touch_enabled_73752c4b">พรีวิวสด · เปิดใช้การสัมผัส</string>
+
+    <!-- Source: failure text the home screen's error banner draws. Declared as constants and compared by
+         identity on the way there, so the catalogue is the only place they can be translated -->
+    <string name="legacy_google_android_auto_never_connected_to_moto_hub__bd46b5a3">Google Android Auto ไม่เคยเชื่อมต่อกับ MOTO-HUB เลย Android Auto เวอร์ชันใหม่ตัดวิธีที่แอปขอให้มันฉายภาพออกไป จึงต้องเริ่มจาก Android Auto เอง เปิดการตั้งค่าของแอป Android Auto เลื่อนลงล่างสุดแล้วแตะ \"Version\" สิบครั้งเพื่อปลดล็อกตัวเลือกนักพัฒนา จากนั้นบนหน้าตั้งค่าหน้าเดิมนั้น เปิดเมนูสามจุดที่มุมขวาบนแล้วเลือก \"Start head unit server\" - เมนูนี้อยู่บนหน้าตั้งค่าปกติของ Android Auto ไม่ใช่ในการตั้งค่านักพัฒนา ปล่อยให้ MOTO-HUB ทำงานต่อไป: มันจะเชื่อมต่อเองภายในสองสามวินาที และคุณปล่อยให้เซิร์ฟเวอร์ทำงานต่อไว้สำหรับครั้งหน้าก็ได้</string>
+    <string name="legacy_google_android_auto_took_moto_hub_s_request_and__ae0978d0">Google Android Auto รับคำขอของ MOTO-HUB แล้วก็เมินมัน นั่นคือสิ่งที่มันทำกับ head unit ที่ยังไม่ได้รับการยืนยันให้ไว้ใจ เปิดการตั้งค่าของแอป Android Auto เลื่อนลงล่างสุดแล้วแตะ \"Version\" สิบครั้งเพื่อปลดล็อกตัวเลือกนักพัฒนา เปิดการตั้งค่านักพัฒนาแล้วเปิด \"Add new cars to Android Auto\" (บิลด์เก่าเรียกว่า \"Unknown sources\") จากนั้นเริ่ม Android Auto จาก MOTO-HUB อีกครั้ง ถ้ายังไม่มีอะไรเกิดขึ้น ให้กลับไปหน้าตั้งค่า Android Auto แล้วใช้เมนูสามจุดที่มุมขวาบน: \"Start head unit server\"</string>
+    <string name="legacy_google_android_auto_took_moto_hub_s_request_and__3e12afc0">Google Android Auto รับคำขอของ MOTO-HUB แล้วก็เมินมัน ซึ่งเป็นสิ่งเดียวที่เวอร์ชันนี้ทำกับคำขอแบบนั้น: Android Auto 17.3 ขึ้นไปตัดวิธีที่แอปขอให้มันฉายภาพออกไป เริ่มจาก Android Auto แทน เปิดการตั้งค่าของแอป Android Auto เลื่อนลงล่างสุดแล้วแตะ \"Version\" สิบครั้งเพื่อปลดล็อกตัวเลือกนักพัฒนา จากนั้นเปิดเมนูสามจุดที่มุมขวาบนของหน้าตั้งค่าหน้าเดิมนั้นแล้วเลือก \"Start head unit server\" ปล่อยให้ MOTO-HUB ทำงานต่อไป: มันจะเชื่อมต่อเองภายในสองสามวินาที ระหว่างนั้น \"Add new cars to Android Auto\" ในการตั้งค่านักพัฒนาก็ควรเปิดไว้ด้วย</string>
+    <string name="legacy_another_easyconn_session_is_already_using_the_lo_fa50b26f">มีเซสชัน EasyConn อื่นกำลังใช้พอร์ตเชื่อมต่อภายในเครื่อง (10920-10922) อยู่ ให้หยุดเซสชัน MOTO-HUB ที่ทำงานอยู่ทั้งหมด หรือบังคับหยุดแอปคู่หูของมอเตอร์ไซค์คุณเอง (CFMOTO, Zontes Smart, Carbit Ride และแอปเทียบเท่าที่แบรนด์อื่นใส่มาให้) แล้วลองเชื่อมต่ออีกครั้ง</string>
+    <string name="legacy_phone_wi_fi_is_off_turn_it_on_then_tap_connect_a_5fd21cc0">Wi-Fi ของโทรศัพท์ปิดอยู่ เปิดก่อน แล้วแตะเชื่อมต่ออีกครั้ง</string>
+    <string name="legacy_phone_hotspot_is_off_turn_it_on_then_tap_connect_683a58f1">ฮอตสปอตของโทรศัพท์ปิดอยู่ เปิดก่อน แล้วแตะเชื่อมต่ออีกครั้ง</string>
+    <string name="legacy_action_needed_a446e8df">ต้องดำเนินการ</string>
+    <string name="legacy_do_this_in_android_auto_9a49aaee">ทำสิ่งนี้ใน Android Auto</string>
+    <string name="legacy_show_me_how_73baf02b">ดูวิธีทำ</string>
+    <string name="legacy_for_dashes_that_reset_their_clock_at_every_ignit_64c2ff15">สำหรับแดชบอร์ดที่รีเซ็ตนาฬิกาทุกครั้งที่วนรอบการเปิดกุญแจ (โดยเฉพาะ Zontes และ Voge) ขณะที่แดชบอร์ดเปิดอยู่ ห้องทดลองจะเชื่อมต่อผ่าน Bluetooth คอยรับฟัง แล้วส่งเวลาออกไปเป็น 5 รูปแบบที่ต่างกัน พร้อมบันทึกทุกไบต์ ออกไปขี่ ปิดเปิดกุญแจหนึ่งรอบ แล้วแชร์ล็อกของแอป: มันจะบอกว่าแดชบอร์ดยอมรับรูปแบบไหน</string>
+    <string name="legacy_run_clock_experiments_8ad4688f">ทำการทดลองนาฬิกา</string>
+    <string name="legacy_live_log_831d05f0">ล็อกแบบสด</string>
+    <string name="legacy_nothing_yet_power_the_dash_on_then_run_the_exper_b1ec5c8f">ยังไม่มีอะไรเลย เปิดแดชบอร์ดก่อน แล้วค่อยทำการทดลอง</string>
+    <string name="legacy_moto_hub_closed_unexpectedly_30f439d7">MOTO-HUB ปิดลงโดยไม่คาดคิด</string>
+    <string name="legacy_the_last_time_you_used_moto_hub_it_stopped_becau_8448d27c">ครั้งล่าสุดที่คุณใช้ MOTO-HUB แอปหยุดทำงานเพราะเกิดข้อผิดพลาด การส่งรายงานวินิจฉัยคือสิ่งที่ทำให้นักพัฒนาหาสาเหตุได้</string>
+    <string name="legacy_the_report_contains_your_motorcycle_s_dashboard__f4208b9f">รายงานมีรุ่นแดชบอร์ดของมอเตอร์ไซค์คุณ รุ่นโทรศัพท์ของคุณ เวอร์ชัน Android และ Android Auto เวอร์ชัน MOTO-HUB ที่ติดตั้งไว้ และล็อกของแอปพร้อมข้อผิดพลาดนั้น รหัสผ่าน ตำแหน่ง และที่อยู่ฮาร์ดแวร์จะไม่ถูกรวมไว้เด็ดขาด</string>
+    <string name="legacy_send_reports_automatically_from_now_on_7cdd2209">ส่งรายงานโดยอัตโนมัติตั้งแต่นี้</string>
+    <string name="legacy_send_report_55908cac">ส่งรายงาน</string>
+    <string name="legacy_how_your_data_is_handled_ff77c87f">ข้อมูลของคุณถูกจัดการอย่างไร</string>
+    <string name="legacy_not_now_e202d7e9">ไม่ใช่ตอนนี้</string>
+    <string name="legacy_help_improve_moto_hub_9bf5292c">ช่วยปรับปรุง MOTO-HUB</string>
+    <string name="legacy_moto_hub_can_send_a_diagnostics_report_to_the_de_36cc6ba6">MOTO-HUB ส่งรายงานวินิจฉัยให้นักพัฒนาได้: รุ่นแดชบอร์ดของมอเตอร์ไซค์คุณ รุ่นโทรศัพท์ของคุณ เวอร์ชัน Android, Android Auto และ MOTO-HUB ที่ติดตั้งไว้ และล็อกของแอป รหัสผ่าน ตำแหน่ง และที่อยู่ฮาร์ดแวร์จะไม่ถูกรวมไว้เด็ดขาด</string>
+    <string name="legacy_reports_go_out_at_most_once_a_day_after_an_updat_6fc12b8d">รายงานส่งออกวันละไม่เกินครั้งเดียว หลังอัปเดต หลังแอปพัง และส่งผ่านการเชื่อมต่อที่มีอินเทอร์เน็ตเท่านั้น Support ID ของคุณแสดงอยู่ใน การตั้งค่า ▸ การวินิจฉัย ซึ่งเปิดหรือปิดตัวเลือกนี้ได้ตลอดเวลา</string>
+    <string name="legacy_send_reports_5c810947">ส่งรายงาน</string>
+    <string name="legacy_diagnostics_privacy_notice_1f708f84">ประกาศความเป็นส่วนตัวของการวินิจฉัย</string>
+    <string name="legacy_support_id_5239972c">Support ID</string>
+    <string name="legacy_moto_hub_support_id_7149b87">Support ID ของ MOTO-HUB</string>
+    <string name="legacy_tap_to_copy_quote_it_when_asking_for_help_it_ide_edc7231">แตะเพื่อคัดลอก อ้างอิงรหัสนี้เวลาขอความช่วยเหลือ มันระบุโทรศัพท์และมอเตอร์ไซค์เครื่องนี้</string>
+    <string name="legacy_support_id_copied_63da1e38">คัดลอก Support ID แล้ว</string>
+    <string name="legacy_what_gets_sent_f4a13bbf">สิ่งที่ถูกส่ง</string>
+    <string name="legacy_read_what_a_report_contains_then_choose_whether__e679dae">อ่านว่ารายงานมีอะไรบ้าง แล้วเลือกว่าจะส่งหรือไม่</string>
+    <string name="legacy_who_holds_your_reports_how_long_they_are_kept_an_ea54a6b7">ใครเป็นผู้เก็บรายงานของคุณ เก็บไว้นานเท่าไร และขอให้ลบได้อย่างไร</string>
+    <string name="legacy_send_diagnostics_now_9368c9ea">ส่งข้อมูลวินิจฉัยเดี๋ยวนี้</string>
+    <string name="legacy_this_build_has_no_collector_configured_e224996">บิลด์นี้ไม่ได้ตั้งค่าตัวรวบรวมรายงานไว้</string>
+    <string name="legacy_logging_is_off_the_log_would_end_at_1_s_c9d7198e">การบันทึกล็อกปิดอยู่ ล็อกจะจบลงที่ %1$s</string>
+    <string name="legacy_logging_is_off_there_is_no_log_to_send_eca8d32d">การบันทึกล็อกปิดอยู่ ไม่มีล็อกให้ส่ง</string>
+    <string name="legacy_send_diagnostics_automatically_880f35b7">ส่งข้อมูลวินิจฉัยโดยอัตโนมัติ</string>
+    <string name="legacy_sends_the_report_above_to_the_developer_at_most__8689def0">ส่งรายงานด้านบนถึงนักพัฒนาวันละไม่เกินครั้งเดียว หลังอัปเดต หลังแอปพัง - ผ่านการเชื่อมต่อที่มีอินเทอร์เน็ตเท่านั้น รวมรุ่นแดชบอร์ดและโทรศัพท์ เวอร์ชันแอป และล็อกของแอป ไม่มีรหัสผ่าน ตำแหน่ง หรือที่อยู่ฮาร์ดแวร์เด็ดขาด</string>
+    <string name="legacy_logging_is_off_d9325d5a">การบันทึกล็อกปิดอยู่</string>
+    <string name="legacy_nothing_has_been_recorded_since_1_s_what_was_log_1be484ac">ไม่มีอะไรถูกบันทึกตั้งแต่ %1$s สิ่งที่บันทึกไว้ก่อนหน้านั้นยังอยู่ - การปิดการบันทึกล็อกแค่หยุดรายการใหม่ ไม่เคยลบรายการเดิม</string>
+    <string name="legacy_nothing_has_been_recorded_and_there_is_no_earlie_dd873fa0">ยังไม่มีอะไรถูกบันทึก และไม่มีล็อกก่อนหน้านี้เหมือนกัน</string>
+    <string name="legacy_a_report_sent_now_carries_that_log_so_it_says_no_cb65d9dc">รายงานที่ส่งตอนนี้จะแนบล็อกนั้นไปด้วย จึงไม่บอกอะไรเลยว่าแอปกำลังทำอะไรอยู่วันนี้ ถ้าจะรายงานปัญหา ให้เปิดการบันทึกล็อกกลับขึ้นมาอีกครั้ง ทำให้เกิดขึ้นซ้ำ แล้วจึงส่งรายงาน</string>
+    <string name="legacy_that_worked_keep_it_b0100883">ได้ผลแล้ว - เก็บไว้ไหม</string>
+    <string name="legacy_your_dashboard_is_now_accepting_the_picture_on_t_a2e41389">แดชบอร์ดของคุณตอนนี้ยอมรับภาพในโปรไฟล์ %1$s แล้ว จะใช้โปรไฟล์นี้ต่อกับมอเตอร์ไซค์คันนี้ไหม</string>
+    <string name="legacy_you_have_just_found_out_something_moto_hub_could_5d173f67">คุณเพิ่งค้นพบสิ่งที่ MOTO-HUB สรุปเองไม่ได้: ว่าแดชบอร์ดคันนี้ยอมรับโปรไฟล์ใดจริง ๆ การส่งล็อกของคุณจะแบ่งปันข้อมูลนี้ เพื่อให้ไรเดอร์คนต่อไปที่ใช้มอเตอร์ไซค์แบบเดียวกันตั้งถูกตั้งแต่ครั้งแรก</string>
+    <string name="legacy_send_my_log_now_80f590fe">ส่งล็อกของฉันเดี๋ยวนี้</string>
+    <string name="legacy_send_logs_automatically_from_now_on_1efdfbe9">ส่งล็อกโดยอัตโนมัติตั้งแต่นี้</string>
+    <string name="legacy_keep_it_318f8786">เก็บไว้</string>
+    <string name="legacy_undo_284d04">เลิกทำ</string>
+    <string name="legacy_try_another_profile_2632e907">ลองโปรไฟล์อื่น</string>
+    <string name="legacy_the_connection_to_your_motorcycle_is_fine_the_da_6a78bba4">การเชื่อมต่อกับมอเตอร์ไซค์ปกติดี - แดชบอร์ดแค่ปฏิเสธภาพที่ส่งไปในรูปแบบปัจจุบัน โปรไฟล์อื่นจะเปลี่ยนรูปแบบนั้น เลือกสักโปรไฟล์แล้วจะเชื่อมต่อใหม่ทันที ถ้าแดชบอร์ดเริ่มแสดงภาพ MOTO-HUB จะถามว่าจะเก็บไว้หรือไม่</string>
+    <string name="legacy_your_dashboard_is_not_showing_this_9765fbe3">แดชบอร์ดของคุณไม่แสดงภาพนี้</string>
+    <string name="legacy_connected_but_the_picture_is_being_refused_tap_t_b17b1097">เชื่อมต่อแล้ว แต่ภาพถูกปฏิเสธอยู่ แตะเพื่อลองโปรไฟล์อื่น</string>
+    <string name="legacy_connected_not_displaying_53b322ca">เชื่อมต่อแล้ว แต่ไม่แสดงภาพ</string>
+    <string name="legacy_your_dashboard_refused_1_d_of_the_picture_it_was_beaebc06">แดชบอร์ดของคุณปฏิเสธภาพที่ส่งไป %1$d%% (%2$d เฟรมจาก %3$d เฟรม)</string>
+    <string name="legacy_this_is_what_your_dashboard_reports_itself_to_be_8dfdffdd">นี่คือข้อมูลที่แดชบอร์ดของคุณรายงานตัวเอง</string>
+    <string name="legacy_speaks_the_same_protocol_your_motorcycle_is_alre_7a13c9ca">ใช้โปรโตคอลเดียวกับที่มอเตอร์ไซค์ของคุณใช้อยู่แล้ว</string>
+    <string name="legacy_plain_settings_no_assumptions_a_good_thing_to_fa_3d3a2213">ตั้งค่าธรรมดา ไม่มีข้อสมมติ - เป็นทางสำรองที่ดี</string>
+    <string name="legacy_an_experiment_for_one_dashboard_s_open_question__1eafa773">การทดลองเพื่อตอบคำถามค้างคาของแดชบอร์ดรุ่นหนึ่ง อาจไม่มีผลอะไรเลย</string>
+    <string name="legacy_navigation_active_on_tft_b6221bcf">กำลังนำทางอยู่บน TFT</string>
+    <string name="legacy_tft_is_receiving_your_screen_56fd381">TFT กำลังรับภาพหน้าจอของคุณ</string>
+    <string name="legacy_android_auto_is_waiting_for_one_step_from_you_31eacac3">Android Auto กำลังรอขั้นตอนเดียวจากคุณ</string>
+    <string name="legacy_session_is_being_prepared_742c490a">กำลังเตรียมเซสชัน</string>
+    <string name="legacy_button_presses_are_off_2952e766">การกดปุ่มปิดอยู่</string>
+    <string name="legacy_moto_hub_advanced_owns_this_setting_and_writes_i_b8e328f7">MOTO-HUB ADVANCED เป็นเจ้าของการตั้งค่านี้และจะเขียนทับด้วยค่าของมันเอง จึงควรเปิดที่นั่นแทนที่จะเปิดที่นี่</string>
+    <string name="legacy_turn_presses_back_on_9d506146">เปิดการกดปุ่มกลับขึ้นมา</string>
+    <string name="legacy_these_drive_the_ride_dashboard_so_they_do_nothin_d4d30d86">ปุ่มเหล่านี้ใช้ควบคุม Ride Dashboard จึงไม่มีผลอะไรเว้นแต่มันกำลังทำงานอยู่ - เซสชัน Android Auto อย่างเดียวไม่พอ</string>
+    <string name="legacy_show_button_presses_on_the_dashboard_4ed2cd5e">แสดงการกดปุ่มบนแดชบอร์ด</string>
+
+    <!-- Source: feature/controls — the handlebar page after the Bluetooth controller was removed -->
+    <string name="legacy_your_motorcycle_s_own_handlebar_drives_moto_hub__f19519f3">แฮนด์ของมอเตอร์ไซค์คุณเองเป็นตัวสั่งงาน MOTO-HUB สอนมันครั้งเดียว แล้วกำหนดให้แต่ละปุ่มทำสิ่งที่คุณต้องการ</string>
+    <string name="legacy_presses_still_arrive_and_still_show_up_on_this_p_62dfa27d">การกดปุ่มยังเข้ามาและยังแสดงบนหน้านี้ - แต่ไม่มีการทำอะไรตามมัน</string>
+    <string name="legacy_every_handlebar_press_432fb397">การกดปุ่มแฮนด์ทุกครั้ง </string>
+    <!-- Home: MOTO-HUB ADVANCED promo card and dialog -->
+    <string name="legacy_couldn_t_open_moto_hub_advanced_89c059e1">เปิด MOTO-HUB ADVANCED ไม่ได้</string>
+    <string name="legacy_moto_hub_advanced_1cc3b73d">MOTO-HUB ADVANCED</string>
+    <string name="legacy_dashboard_navigation_and_trips_installed_on_this_7ffa5bb9">แดชบอร์ด การนำทาง และการเดินทาง - ติดตั้งบนโทรศัพท์เครื่องนี้แล้ว</string>
+    <string name="legacy_free_companion_app_dashboard_navigation_trips_an_256e51cd">แอปคู่หูฟรี: แดชบอร์ด การนำทาง การเดินทาง และอื่น ๆ</string>
+    <string name="legacy_open_259a6a">เปิด</string>
+    <string name="legacy_see_what_it_adds_c8867b38">ดูว่าเพิ่มอะไร</string>
+    <string name="legacy_a_second_free_app_that_installs_next_to_moto_hub_96f5853f">แอปฟรีตัวที่สองที่ติดตั้งคู่กับ MOTO-HUB และเปลี่ยนแดชบอร์ดเดิมให้เป็นคอมพิวเตอร์ขี่เต็มรูปแบบ ไม่ต้องใช้ฮาร์ดแวร์เพิ่ม</string>
+    <string name="legacy_ride_dashboard_gps_speed_live_map_and_trip_stats_e664cbab">Ride Dashboard - ความเร็ว GPS แผนที่สด และสถิติการเดินทางบน TFT</string>
+    <string name="legacy_navigation_search_motorcycle_routing_and_route_p_269dbf5a">การนำทาง - การค้นหา เส้นทางสำหรับมอเตอร์ไซค์ และพรีวิวเส้นทาง</string>
+    <string name="legacy_on_the_route_weather_fuel_prices_and_speed_camer_1ec23092">ระหว่างเส้นทาง - สภาพอากาศ ราคาน้ำมัน และกล้องจับความเร็ว</string>
+    <string name="legacy_trips_recording_replay_analysis_and_gpx_export_ec08e237">การเดินทาง - บันทึก เล่นซ้ำ วิเคราะห์ และส่งออก GPX</string>
+    <string name="legacy_ai_place_discovery_and_a_post_ride_riding_coach_34d4ea13">การค้นหาสถานที่ด้วย AI และโค้ชการขี่หลังจบการเดินทาง</string>
+    <string name="legacy_group_intercom_rider_to_rider_voice_70e92f1a">อินเตอร์คอมกลุ่ม - เสียงคุยระหว่างไรเดอร์</string>
+    <string name="legacy_moto_hub_stays_in_charge_of_the_motorcycle_pairi_6ccf9308">MOTO-HUB ยังคงดูแลมอเตอร์ไซค์อยู่: การจับคู่ การเชื่อมต่อ และ Android Auto ทำงานต่อที่นี่ ติดตั้งทั้งสองแอปให้เป็นเวอร์ชันเดียวกัน</string>
+    <string name="legacy_download_advanced_66a9c89a">ดาวน์โหลด ADVANCED</string>
+    <string name="legacy_resolution_177354cc">ความละเอียด</string>
+    <string name="legacy_the_video_source_android_auto_sends_to_the_dashb_a90d80a4">แหล่งวิดีโอที่ Android Auto ส่งให้แดชบอร์ด</string>
+    <string name="legacy_interface_size_7aea8aa8">ขนาดอินเทอร์เฟซ</string>
+    <string name="legacy_how_large_android_auto_draws_itself_on_that_sour_2161eca0">ขนาดที่ Android Auto วาดหน้าจอตัวเองบนแหล่งวิดีโอนั้น</string>
+    <string name="legacy_landscape_fb5e029b">แนวนอน</string>
+    <string name="legacy_portrait_5a1dab9b">แนวตั้ง</string>
+    <string name="legacy_experimental_f1ae3108">ทดลอง</string>
+    <!-- Source: catalogue catch-up 2026-09-06 - handlebar profiles, companion display, Home Assistant Torque, trip phone health, and the reworded wire verdict -->
+    <string name="legacy_1_s_is_holding_the_dashboard_connection_f85acc07">%1$s กำลังยึดการเชื่อมต่อแดชบอร์ดอยู่</string>
+    <string name="legacy_another_app_is_holding_the_dashboard_connection_2f8f3870">แอปอื่นกำลังยึดการเชื่อมต่อแดชบอร์ดอยู่</string>
+    <string name="legacy_force_stop_your_motorcycle_s_own_companion_app_f_47bc5899">บังคับหยุดแอปคู่หูของมอเตอร์ไซค์คุณเองจากหน้าข้อมูลแอป แล้วลองอีกครั้ง - Android ไม่อนุญาตให้แอปหนึ่งปล่อยการเชื่อมต่อของอีกแอปหนึ่ง</string>
+    <string name="legacy_if_it_stayed_on_the_pairing_screen_moto_hub_keep_74219a6">ถ้ายังค้างอยู่บนหน้าจับคู่ MOTO-HUB จะลองรูปแบบวิดีโอไปเรื่อย ๆ จนกว่าจะมีรูปแบบหนึ่งได้ผล ถ้าไรเดอร์คนอื่นที่ใช้แดชบอร์ดรุ่นเดียวกันยืนยันรูปแบบนี้ไว้แล้ว มันจะถามคุณอีกครั้งก่อนเดินหน้าต่อ</string>
+    <string name="legacy_if_your_other_moto_hub_app_is_running_a_session__263cbf82">ถ้าแอป MOTO-HUB อีกตัวของคุณกำลังรันเซสชันอยู่บนโทรศัพท์เครื่องนี้ ให้หยุดตัวนั้นแทน</string>
+    <string name="legacy_import_qr_from_an_image_65acae9a">นำเข้า QR จากรูปภาพ</string>
+    <string name="legacy_moto_hub_will_connect_on_its_own_when_the_dashbo_9f3fe52b">MOTO-HUB จะเชื่อมต่อเองเมื่อแดชบอร์ดเปิดขึ้นมา</string>
+    <string name="legacy_on_this_phone_that_is_almost_always_1_s_force_st_26b6b463">บนโทรศัพท์เครื่องนี้ ส่วนใหญ่ก็คือ %1$s บังคับหยุดมันจากหน้าข้อมูลแอป แล้วลองอีกครั้ง - Android ไม่อนุญาตให้แอปหนึ่งปล่อยการเชื่อมต่อของอีกแอปหนึ่ง</string>
+    <string name="legacy_shown_while_moto_hub_watches_for_the_motorcycle__5410550d">แสดงขณะที่ MOTO-HUB คอยหา Wi-Fi ของมอเตอร์ไซค์อยู่</string>
+    <string name="legacy_the_three_local_ports_moto_hub_needs_for_the_das_ac32b51a">พอร์ตภายในเครื่องสามตัวที่ MOTO-HUB ต้องใช้กับแดชบอร์ด (%1$s) ถูกใช้งานอยู่ตอนนี้ การเชื่อมต่อจึงจะล้มเหลว</string>
+    <string name="legacy_try_anyway_909523a8">ลองอยู่ดี</string>
+    <string name="legacy_waiting_for_s_c5c92cf8">กำลังรอ %s</string>
+    <string name="legacy_waiting_for_the_motorcycle_24d361aa">กำลังรอมอเตอร์ไซค์</string>
+    <!-- Source: trips/TripAnalysisScreen.kt, home/HubHomeScreen.kt, companion, ai/AiPreset, and the service notifications - literals that reached a lookup indirectly, or were never wrapped -->
+    <string name="legacy_1_s_in_moto_hub_advanced_is_coming_soon_use_moto_6bcb37c0">%1$s ใน MOTO-HUB Advanced กำลังจะมาเร็ว ๆ นี้ (ช่วงนี้ใช้ MOTO-HUB Core ก่อน)</string>
+    <string name="legacy_import_qr_6b03505c">นำเข้า QR</string>
+    <string name="legacy_scan_new_qr_ed7e6784">สแกน QR ใหม่</string>
+    <!-- Source: feature/home - the secondary actions under the pairing and projection cards -->
+    <string name="legacy_how_to_start_android_auto_e44c5dd3">วิธีเริ่ม Android Auto</string>
+    <string name="legacy_open_wi_fi_settings_299670db">เปิดการตั้งค่า Wi-Fi</string>
+    <string name="legacy_couldn_t_open_moto_hub_adv_solo_67eb730a">เปิด MOTO-HUB ADV-SOLO ไม่ได้</string>
+    <string name="legacy_moto_hub_adv_solo_1bac54f4">MOTO-HUB ADV-SOLO</string>
+    <string name="legacy_free_app_that_replaces_this_one_dashboard_naviga_f14ef8b3">แอปฟรีที่มาแทนแอปนี้: แดชบอร์ด การนำทาง การเดินทาง และอื่น ๆ</string>
+    <string name="legacy_installed_on_this_phone_136503e7">ติดตั้งบนโทรศัพท์เครื่องนี้แล้ว</string>
+    <string name="legacy_free_app_d2eb824d">แอปฟรี</string>
+    <string name="legacy_everything_moto_hub_does_and_a_full_riding_compu_5afce456">ทุกอย่างที่ MOTO-HUB ทำ และคอมพิวเตอร์ขี่เต็มรูปแบบ</string>
+    <string name="legacy_moto_hub_adv_solo_is_a_free_app_that_replaces_th_9d1bc46c">MOTO-HUB ADV-SOLO เป็นแอปฟรีที่มาแทนแอปนี้และเปลี่ยน TFT ของคุณให้เป็นคอมพิวเตอร์ขี่เต็มรูปแบบ: แดชบอร์ดของตัวเอง การนำทาง และการเดินทางที่บันทึกไว้ ไม่มีการสมัครสมาชิก ไม่ต้องมีบัญชี และไม่ต้องใช้ฮาร์ดแวร์เพิ่ม - ใช้ T-Box ที่คุณมีอยู่แล้ว</string>
+    <string name="legacy_what_it_adds_cdd0b86b">สิ่งที่เพิ่มเข้ามา</string>
+    <string name="legacy_moving_to_adv_solo_21f5a90c">การย้ายไป ADV-SOLO</string>
+    <string name="legacy_adv_solo_connects_to_the_motorcycle_on_its_own_p_ad9d6a7e">ADV-SOLO เชื่อมต่อกับมอเตอร์ไซค์ด้วยตัวเอง: การจับคู่ การเชื่อมต่อ Wi-Fi ปุ่มแฮนด์ และ Android Auto ทำงานอยู่ข้างในมันทั้งหมด ไม่ต้องใช้แอปนี้</string>
+    <string name="legacy_install_it_and_connect_your_motorcycle_there_the_526ab2e">ติดตั้งแล้วเชื่อมต่อมอเตอร์ไซค์ที่นั่น จากนั้นจึงถอนการติดตั้ง MOTO-HUB - ADV-SOLO จะเสนอช่วยทำให้ มอเตอร์ไซค์ที่จับคู่ไว้ที่นี่จะไม่ย้ายตามไป: ต้องจับคู่ใหม่ใน ADV-SOLO</string>
+    <string name="legacy_links_4515799">ลิงก์</string>
+    <string name="legacy_more_ways_to_start_dfa7360e">วิธีเริ่มต้นเพิ่มเติม</string>
+    <string name="legacy_one_step_is_waiting_for_you_ad249079">มีขั้นตอนหนึ่งรอคุณอยู่</string>
+    <string name="legacy_starting_android_auto_330884c0">กำลังเริ่ม Android Auto</string>
+    <string name="legacy_dashboard_navigation_and_trips_the_free_app_that_141e7bbe">แดชบอร์ด การนำทาง และการเดินทาง - แอปฟรีที่มาแทนแอปนี้</string>
+    <string name="legacy_less_8775b50b">ย่อ ▲</string>
+    <string name="legacy_details_1d7b33e">รายละเอียด ▼</string>
+</resources>
