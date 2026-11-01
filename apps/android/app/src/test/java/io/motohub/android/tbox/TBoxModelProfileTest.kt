@@ -332,6 +332,23 @@ class TBoxModelProfileTest {
     }
 
     @Test
+    fun `the Zontes 350E experiment is GENERIC's wire format plus the page probe`() {
+        // The rider asked for the working stream untouched and one probe on top; any other delta
+        // would put a second variable in the next log.
+        val g = TBoxModelProfile.GENERIC
+        val z = TBoxModelProfile.ZONTES_350E_TEST
+        assertEquals(TBoxModelProfile.ZONTES_350E_TEST, ProfileOverride.ZONTES_350E_TEST.resolve())
+        assertEquals(true, z.sendsPageSwitchProbe)
+        assertEquals(g.allowsPlainVideoFraming, z.allowsPlainVideoFraming)
+        assertEquals(g.requiresProactivePxcHeartbeat, z.requiresProactivePxcHeartbeat)
+        assertEquals(g.requiresSockAuth, z.requiresSockAuth)
+        assertEquals(g.advertisedSupportFunction, z.advertisedSupportFunction)
+        assertEquals(g.encoderKeyframeIntervalSeconds, z.encoderKeyframeIntervalSeconds)
+        assertEquals(g.encoderFrameRate, z.encoderFrameRate)
+        assertEquals(g.encoderBitRate, z.encoderBitRate)
+    }
+
+    @Test
     fun `the two Zontes experiments differ only in the video framing`() {
         // The point of test B is to move one variable at a time: the tester's 2026-08-11 log
         // showed the indexed framing of test A killing the session sooner than GENERIC's plain
@@ -362,6 +379,7 @@ class TBoxModelProfileTest {
         assertEquals(
             listOf(
                 TBoxModelProfile.ZONTES_368G_TEST_B,
+                TBoxModelProfile.ZONTES_350E_TEST,
                 TBoxModelProfile.VOGE_TEST,
                 TBoxModelProfile.QJ_SRK921_RR,
                 TBoxModelProfile.GENERIC

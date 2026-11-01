@@ -211,12 +211,16 @@ class RideDaemonTransportTest {
     }
 
     @Test
-    fun `no dashboard asks for the page experiment any more`() {
+    fun `only the Zontes 350E experiment asks for the page experiment`() {
         // It ran on the QJ dash on 2026-09-09 and failed twice over: not one of the three
         // commands was acknowledged, and the rider watching the panel saw nothing, the
         // control command included. Three writes a session that the firmware provably
-        // ignores are not worth muddying the next experiment's only instrument - the panel.
-        assertTrue(TBoxModelProfile.entries.none { it.sendsPageSwitchProbe })
+        // ignores are not worth muddying another experiment's only instrument - the panel -
+        // so the one rider who asked for it (issue #12) is the only one who gets it.
+        assertEquals(
+            listOf(TBoxModelProfile.ZONTES_350E_TEST),
+            TBoxModelProfile.entries.filter { it.sendsPageSwitchProbe }
+        )
     }
 
     @Test

@@ -110,8 +110,8 @@ enum class TBoxModelProfile(
      * It ran on the one dash it was written for and did not work: report 611F-5791-9EBA
      * (2026-09-09) shows all six writes reaching the socket across two sessions, not one
      * `cmd+1` ack coming back, and the rider seeing nothing on the panel - not even from the
-     * control command that was supposed to move the dash away from mirroring. So no profile
-     * sets it any more, and a test holds that.
+     * control command that was supposed to move the dash away from mirroring. So only the
+     * [TBoxModelProfile.ZONTES_350E_TEST] experiment sets it now, and a test holds that.
      *
      * The code stays because the measurement was worth making and the next Carbit firmware
      * that drains a stream without painting it may answer differently. Do not switch it back
@@ -405,6 +405,36 @@ enum class TBoxModelProfile(
         // the one Zontes known to work elsewhere is fed - zanderp's open-cfmoto encodes a 1s
         // GOP with no intra refresh at all, and its 125X is community-confirmed.
         encoderPlainGopWithoutIntraRefresh = true
+    ),
+    /**
+     * Compatibility experiment for the Zontes 350E (HUName `JCDZ21-Ee26`, `flavor 51`, channel
+     * `21321`, firmware 1.0.1, sdk 0.9.23.3, 1024x464 capture area): issue #12, 2026-09-17. Over
+     * both Wi-Fi Direct and the access point the whole chain runs - EasyConn READY, `CAPTURE_CONFIG`,
+     * `STREAM_START`, 3440 frames pulled, `frameTimeouts=0` - and the TFT never leaves its pairing
+     * QR page, for Android Auto and plain mirroring alike. The rider asked for exactly one change
+     * on top of that working stream: the page-switch probe, to learn whether the missing step is
+     * opening the mirror page.
+     *
+     * So this is [GENERIC]'s wire format verbatim - plain framing decided by the dash's ext byte,
+     * proactive PXC heartbeat, all-intra, no sock auth - plus [sendsPageSwitchProbe]. Nothing else
+     * moves, so the panel stays the only instrument. The probe already failed once, on the QJ
+     * SRK921 RR (a Carbit dash on the same `flavor 51` licence), so a silent result here is the
+     * expected one and rules the whole `0x2xxxx` page block out for the JCDZ family too.
+     * Manual selection only: [score] never claims it, and `modelId` is left empty because the
+     * rider's manual pairing saved none.
+     */
+    ZONTES_350E_TEST(
+        key = "zontes_350e_test",
+        displayName = "Zontes 350E (test)",
+        modelIds = emptySet(),
+        mapTilesRequireCellular = true,
+        supportsScreenTouch = false,
+        fallbackTBoxVideoArea = TBoxEvent.VideoArea(1024, 464),
+        requiresSockAuth = false,
+        advertisedSupportFunction = 0,
+        allowsPlainVideoFraming = true,
+        requiresProactivePxcHeartbeat = true,
+        sendsPageSwitchProbe = true
     ),
     /**
      * Compatibility experiment for the Voge dashes (flavor 51, channel 37504, 592x752 portrait
@@ -1111,6 +1141,7 @@ enum class TBoxModelProfile(
                 // whose Zontes dashes already stream fine would silently change wire format.
                 ZONTES_368G_TEST -> 0
                 ZONTES_368G_TEST_B -> 0
+                ZONTES_350E_TEST -> 0
                 // Same rule for the Voge stream experiment: a Voge that streams fine today
                 // must never be moved off all-intra by detection.
                 VOGE_TEST -> 0

@@ -55,6 +55,12 @@ enum class ProfileOverride(
         "Same experiment with plain framing instead: the dash's ext byte decides, plus a 1s GOP",
         experimental = true
     ),
+    ZONTES_350E_TEST(
+        "zontes_350e_test",
+        "Zontes 350E (test)",
+        "Experiment for a dash that takes every frame and stays on the QR page: asks it to open the mirror page",
+        experimental = true
+    ),
     VOGE_TEST(
         "voge_test",
         "Voge (test)",
@@ -115,6 +121,7 @@ enum class ProfileOverride(
         CL_C450 -> TBoxModelProfile.CL_C450
         ZONTES_368G_TEST -> TBoxModelProfile.ZONTES_368G_TEST
         ZONTES_368G_TEST_B -> TBoxModelProfile.ZONTES_368G_TEST_B
+        ZONTES_350E_TEST -> TBoxModelProfile.ZONTES_350E_TEST
         VOGE_TEST -> TBoxModelProfile.VOGE_TEST
         QJ_SRK921_RR -> TBoxModelProfile.QJ_SRK921_RR
         KOVE_800X -> TBoxModelProfile.KOVE_800X
