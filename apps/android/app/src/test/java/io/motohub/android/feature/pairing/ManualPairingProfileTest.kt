@@ -25,7 +25,9 @@ class ManualPairingProfileTest {
         mode: TBoxConnectionMode,
         modelId: String? = null
     ) = MotorcycleProfile(
-        ssid = "CQKY_c632fceef",
+        // Deliberately not a CQKY_ name: these tests are about the chip, and a KOVE network name
+        // now earns the ThinkerRide id by itself (see Kove625xProfileTest).
+        ssid = "DASH_c632fceef",
         password = "secret",
         modelId = modelId,
         connectionMode = mode

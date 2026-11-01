@@ -5,6 +5,7 @@ package io.motohub.android.tbox
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
@@ -157,6 +158,12 @@ class TBoxModelProfileTest {
                 capabilities = TBoxCapabilities(carModel = "CFMOTO 800NK")
             )
         )
+    }
+
+    /** CFMOTO-124178: a 1000 MT-X declared touch in CLIENT_INFO while this profile dropped every tap. */
+    @Test
+    fun `1000 MT-X portrait panel accepts touch`() {
+        assertTrue(TBoxModelProfile.CFDL26_PORTRAIT.supportsScreenTouch)
     }
 
     @Test

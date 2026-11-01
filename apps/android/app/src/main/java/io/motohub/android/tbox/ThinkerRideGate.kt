@@ -40,7 +40,12 @@ internal object ThinkerRideGate {
      */
     fun requiresBle(profile: MotorcycleProfile?): Boolean =
         profile?.connectionMode == TBoxConnectionMode.THINKERRIDE ||
-            profile?.connectionMode == TBoxConnectionMode.BLE_PROVISIONED
+            profile?.connectionMode == TBoxConnectionMode.BLE_PROVISIONED ||
+            (profile != null && TBoxModelProfile.resolve(
+                profile.modelId,
+                null,
+                ProfileOverride.byKey(profile.profileOverrideKey)
+            ).transportFamily == TBoxTransportFamily.THINKERRIDE)
 
     /**
      * Like [WifiDirectGate.hasNearbyDevicesPermission], [packageName] matters because the BLE

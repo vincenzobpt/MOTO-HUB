@@ -223,8 +223,9 @@ enum class TBoxModelProfile(
     /**
      * Network-name prefixes that identify this dashboard when nothing else does. Only for a
      * dash whose QR carries no modelId and whose SSID is the one stable thing about it (the
-     * KOVE 625X's `KY_ADV_…`); a prefix earns the profile's first [modelIds] entry through
-     * [modelIdForSsid]. Empty for every profile a code or CLIENT_INFO can name.
+     * KOVE 625X's `KY_ADV_…`, the ThinkerRide chip's `CQKY_…`); a prefix earns the profile's
+     * first [modelIds] entry through [modelIdForSsid]. Empty for every profile a code or
+     * CLIENT_INFO can name.
      */
     val ssidPrefixes: Set<String> = emptySet()
 ) {
@@ -291,13 +292,17 @@ enum class TBoxModelProfile(
         requiresSockAuth = true,
         advertisedSupportFunction = 128
     ),
-    /** CFDL26 MotoPlay Portrait (1000 MT‑X) — handlebar-primary, non-touch. */
+    /**
+     * CFDL26 MotoPlay Portrait (1000 MT‑X) — touch panel: a field 1000 MT-X (CFMOTO-124178,
+     * 2026-10-18) declared supportScreenTouch=true and touchMode=1 in CLIENT_INFO, and its rider
+     * could not tap Android Auto while this profile dropped every touch.
+     */
     CFDL26_PORTRAIT(
         key = "cfdl26_portrait",
         displayName = "CFDL26 / MotoPlay Portrait (1000 MT‑X)",
         modelIds = setOf("37426"),
         mapTilesRequireCellular = true,
-        supportsScreenTouch = false,
+        supportsScreenTouch = true,
         defaultAndroidAutoPreset = AndroidAutoVideoPreset.PORTRAIT_720X1280,
         requiresSockAuth = true,
         advertisedSupportFunction = 128
@@ -627,7 +632,8 @@ enum class TBoxModelProfile(
             ThinkerRideProtocol.DEFAULT_VIDEO_HEIGHT * 3,
         encoderPlainGopWithoutIntraRefresh = true,
         encoderUsesExactVideoArea = true,
-        transportFamily = TBoxTransportFamily.THINKERRIDE
+        transportFamily = TBoxTransportFamily.THINKERRIDE,
+        ssidPrefixes = setOf("CQKY_")
     ),
     /**
      * KOVE 450 Rally (2022 dash, SiQi firmware `SV=3.0.x`): the same ThinkerRide wire as

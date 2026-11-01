@@ -24,17 +24,22 @@ class Kove625xProfileTest {
 
     @Test
     fun otherNetworkNamesEarnNothing() {
-        assertNull(TBoxModelProfile.modelIdForSsid("CQKY_763116fcb"))
         assertNull(TBoxModelProfile.modelIdForSsid("ML065622"))
         assertNull(TBoxModelProfile.modelIdForSsid("KY_ADV"))
         assertNull(TBoxModelProfile.modelIdForSsid(""))
         assertNull(TBoxModelProfile.modelIdForSsid(null))
     }
 
+    /** Case 74149ea9: a KOVE paired by hand resolved to GENERIC and never reached its BLE chip. */
     @Test
-    fun noOtherProfileClaimsANetworkNamePrefix() {
+    fun theThinkerRideChipNameEarnsTheThinkerRideModelId() {
+        assertEquals(ThinkerRideProtocol.PROVISIONING_MODEL_ID, TBoxModelProfile.modelIdForSsid("CQKY_763116fcb"))
+    }
+
+    @Test
+    fun onlyTheKoveFamiliesClaimANetworkNamePrefix() {
         val claimants = TBoxModelProfile.entries.filter { it.ssidPrefixes.isNotEmpty() }
-        assertEquals(listOf(TBoxModelProfile.KOVE_625X), claimants)
+        assertEquals(setOf(TBoxModelProfile.KOVE_625X, TBoxModelProfile.KOVE_800X), claimants.toSet())
     }
 
     @Test
