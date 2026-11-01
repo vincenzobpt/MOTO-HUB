@@ -46,6 +46,9 @@ object ProcessExitReport {
 
     private const val KEY_ACKNOWLEDGED_KILL_AT = "acknowledged-kill-at"
 
+    /** Set once the traces of deaths reported before traces were read have been sent too. */
+    private const val KEY_TRACE_BACKFILL_DONE = "trace-backfill-done"
+
     /**
      * The most recent death that the phone inflicted on this app rather than the app inflicting
      * on itself, when the rider has not been told about it yet.
@@ -112,6 +115,16 @@ object ProcessExitReport {
                 )
             }
 
+        // Once, on the first launch that reads traces: the deaths already reported without one
+        // are still in Android's history, and their tombstones are the evidence WB-22 is
+        // missing. Reported again with the trace only, never the reason line a second time.
+        if (!preferences.getBoolean(KEY_TRACE_BACKFILL_DONE, false)) {
+            exits.filter { it.timestamp <= lastReportedAt }.sortedBy { it.timestamp }.forEach { exit ->
+                reportTrace(exit, earlier = TIMESTAMP_FORMAT.format(Date(exit.timestamp)))
+            }
+            preferences.edit().putBoolean(KEY_TRACE_BACKFILL_DONE, true).apply()
+        }
+
         val fresh = exits.filter { it.timestamp > lastReportedAt }.sortedBy { it.timestamp }
         if (fresh.isEmpty()) return
         fresh.forEach(::report)
@@ -149,6 +162,50 @@ object ProcessExitReport {
             ProjectionEventLog.warning("APP", detail)
         } else {
             ProjectionEventLog.debug("APP", detail)
+        }
+        reportTrace(exit)
+    }
+
+    /**
+     * Where a native crash or an ANR actually happened, from the trace Android kept with the
+     * record. Without it every native crash reached the collector as a reason and a signal number
+     * and nothing that could be fixed (WB-22). Its own line, so the collector groups riders by
+     * the library and function that failed rather than by the timestamp in the line above.
+     *
+     * @param earlier the time of a death an earlier launch already reported without its trace,
+     *   named so the line is not read as a new crash; null for the death just reported.
+     */
+    private fun reportTrace(exit: ApplicationExitInfo, earlier: String? = null) {
+        if (exit.reason != ApplicationExitInfo.REASON_CRASH_NATIVE &&
+            exit.reason != ApplicationExitInfo.REASON_ANR
+        ) {
+            return
+        }
+        val bytes = ExitTrace.read(runCatching { exit.traceInputStream }.getOrNull())
+        if (bytes == null) {
+            if (earlier == null) ProjectionEventLog.debug("APP", "Android kept no trace with that record.")
+            return
+        }
+        val prefix = earlier?.let { "Earlier crash at $it, reported before without its trace: " }.orEmpty()
+        if (exit.reason == ApplicationExitInfo.REASON_CRASH_NATIVE) {
+            val crash = ExitTrace.parseTombstone(bytes)
+            if (crash == null) {
+                ProjectionEventLog.warning(
+                    "NATIVE_CRASH",
+                    "${prefix}The tombstone Android kept (${bytes.size} bytes) could not be read."
+                )
+                return
+            }
+            ProjectionEventLog.warning(
+                "NATIVE_CRASH",
+                (listOf(prefix + crash.headline) + crash.lines()).joinToString("\n")
+            )
+        } else {
+            val main = ExitTrace.anrMainThread(bytes) ?: return
+            ProjectionEventLog.warning(
+                "ANR",
+                (listOf("${prefix}Main thread at the ANR:") + main).joinToString("\n")
+            )
         }
     }
 
