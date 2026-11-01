@@ -103,10 +103,13 @@ class AaMicrophone(
         if (activeWorker != null && activeWorker !== Thread.currentThread()) {
             activeWorker.join(500)
         }
-        recorder?.release()
-        recorder = null
-        routeCandidates = emptyList()
-        routeIndex = -1
+        // Still under the lock: a worker the join gave up on may be mid-reroute, reading these.
+        synchronized(lock) {
+            recorder?.release()
+            recorder = null
+            routeCandidates = emptyList()
+            routeIndex = -1
+        }
         releaseBluetoothRoute()
         log("[MIC] stopped: $reason")
     }
@@ -294,14 +297,19 @@ class AaMicrophone(
     @SuppressLint("NewApi")
     private fun rerouteAwayFrom(current: AudioRecord): AudioRecord? {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return null
-        val (dead, _) = routeCandidates.getOrNull(routeIndex) ?: return null
         if (isSilencedByAndroid(current)) return null
-        silentRoutes += dead.address
         val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         val next = synchronized(lock) {
             if (!recording) return null
+            val (dead, _) = routeCandidates.getOrNull(routeIndex) ?: return null
             val onBluetooth = selectNextRoute(audioManager)
-            val replacement = runCatching { newRecorder() }.getOrNull() ?: return null
+            val replacement = runCatching { newRecorder() }.getOrNull()
+            if (replacement == null) {
+                // Not marked silent: the verdict only stands once something better took over.
+                log("[MIC] ${dead.name} carries only digital silence, but no recorder could be opened on the next route")
+                return null
+            }
+            silentRoutes += dead.address
             replacement.startRecording()
             recorder = replacement
             log(

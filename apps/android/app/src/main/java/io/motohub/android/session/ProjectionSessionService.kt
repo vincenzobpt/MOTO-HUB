@@ -212,13 +212,25 @@ class ProjectionSessionService : Service() {
         // onTBoxFailureEvent.
         handshakeInFlight.set(true)
         val configurationResult = try {
+            val firstAttemptStartedAt = SystemClock.elapsedRealtime()
             var result = handle.transport.negotiateVideoConfiguration(
                 host = handle.host,
                 savedArea = savedArea,
                 fallbackArea = fallbackArea,
                 videoAreaTimeoutMillis = VIDEO_AREA_TIMEOUT_MS
             )
-            if (result.isFailure) {
+            // A torn-down session fails at once; a dash that sat through the whole video-area
+            // timeout was reachable and simply did not answer, and a second round would only
+            // double the rider's wait before the same failure.
+            val firstAttemptTimedOut =
+                SystemClock.elapsedRealtime() - firstAttemptStartedAt >= VIDEO_AREA_TIMEOUT_MS
+            if (result.isFailure && firstAttemptTimedOut) {
+                ProjectionEventLog.warning(
+                    "T-BOX",
+                    "Video negotiation timed out after ${VIDEO_AREA_TIMEOUT_MS / 1000}s; " +
+                        "not retrying: ${result.exceptionOrNull()?.message}"
+                )
+            } else if (result.isFailure) {
                 // Whichever mode ran before this one called transport.stop() on end, which for the
                 // real GPL transport fully tears down the underlying session, so a bare retry of
                 // negotiateVideoConfiguration fails identically every time. Re-run discover() from
@@ -242,8 +254,9 @@ class ProjectionSessionService : Service() {
                 } else {
                     handle = handle.copy(host = freshHost)
                     tBoxHandle = handle
-                    TBoxSessionRegistry.claim(SESSION_CONSUMER)
+                    // install() starts the consumer list over, so the claim has to come after it.
                     TBoxSessionRegistry.install(handle)
+                    TBoxSessionRegistry.claim(SESSION_CONSUMER)
                     result = handle.transport.negotiateVideoConfiguration(
                         host = handle.host,
                         savedArea = savedArea,
@@ -553,8 +566,9 @@ class ProjectionSessionService : Service() {
         val host = previousHandle.transport.discover(link, previousHandle.motorcycle.modelId).getOrThrow()
         val recoveredHandle = previousHandle.copy(host = host, link = link)
         tBoxHandle = recoveredHandle
-        TBoxSessionRegistry.claim(SESSION_CONSUMER)
+        // install() starts the consumer list over, so the claim has to come after it.
         TBoxSessionRegistry.install(recoveredHandle)
+        TBoxSessionRegistry.claim(SESSION_CONSUMER)
         observeActiveSession(recoveredHandle)
         recoveredHandle.transport.start(host).getOrThrow()
     }

@@ -134,6 +134,17 @@ class AdaptiveVideoPolicyTest {
     }
 
     @Test
+    fun `a Wi-Fi stall cannot pull the cap down to a slideshow`() {
+        // A frame or two lost while the dash barely polled is a hiccup, not the dash's capacity.
+        assertNull(AdaptiveVideoPolicy.nextPullRateCap(null, 30, dashPullRate = 2f, lostFrames = 1, cleanStreak = 0))
+        // Even a congested tick measured during a stall stops at the floor.
+        assertEquals(
+            AdaptiveVideoPolicy.MIN_PULL_RATE_CAP,
+            AdaptiveVideoPolicy.nextPullRateCap(null, 30, dashPullRate = 2f, lostFrames = 40, cleanStreak = 0)
+        )
+    }
+
+    @Test
     fun `a clean link climbs the pull cap one frame per tick and then lets go`() {
         val streak = AdaptiveVideoPolicy.FASTER_REGAIN_AFTER_CLEAN_TICKS
         assertEquals(11, AdaptiveVideoPolicy.nextPullRateCap(10, 30, null, lostFrames = 0, cleanStreak = streak))

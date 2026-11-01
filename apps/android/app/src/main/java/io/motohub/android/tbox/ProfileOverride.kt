@@ -39,7 +39,7 @@ enum class ProfileOverride(
     CFMOTO_800NK("cfmoto_800nk", "CFMOTO 800NK", "CRCP / sdk 0.9.23.x non-touch"),
     CFMOTO_MTX800("cfmoto_mtx800", "CFMOTO MTX800", "Portrait Wi-Fi Direct dashboard, modelId 66660732"),
     CFDL26_LANDSCAPE("cfdl26_landscape", "800MT (CFDL26)", "CFDL26 MotoPlay landscape touch"),
-    CFDL26_PORTRAIT("cfdl26_portrait", "1000 MT-X (CFDL26)", "CFDL26 MotoPlay portrait handlebar-primary"),
+    CFDL26_PORTRAIT("cfdl26_portrait", "1000 MT-X (CFDL26)", "CFDL26 MotoPlay portrait touch panel"),
     CFDL26_NK_TOUCH("cfdl26_nk_touch", "800NK Advanced (CFDL26)", "Near-square touch panel, 720x712"),
     CFDL16_MOTOPLAY_LANDSCAPE("cfdl16_motoplay_landscape", "MotoPlay Landscape (CFDL16)", "modelId 66660742, Wi-Fi Direct, non-touch"),
     CL_C450("cl_c450", "CL-C450", "Near-square panel, 544x512"),

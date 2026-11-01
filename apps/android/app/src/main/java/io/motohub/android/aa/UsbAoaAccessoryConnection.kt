@@ -69,10 +69,12 @@ class UsbAoaAccessoryConnection(private val session: AoaAccessorySession) : Acce
                     System.arraycopy(buffer, head, buf, offset, take)
                     head += take
                     offset += take
+                    // The reader may be parked on a full buffer.
+                    lock.notifyAll()
                     if (!readFully) return offset
                     continue
                 }
-                if (closed || endOfStream) return -1
+                if (closed || endOfStream) return if (offset > 0) offset else -1
                 try {
                     if (timeout > 0) {
                         val remaining = deadline - SystemClock.elapsedRealtime()
@@ -103,10 +105,19 @@ class UsbAoaAccessoryConnection(private val session: AoaAccessorySession) : Acce
             while (!closed) {
                 val n = session.inputStream.read(chunk)
                 if (n < 0) break
-                if (n == 0) continue
+                if (n == 0) {
+                    // A zero-length packet; back off so a driver that keeps returning them
+                    // cannot turn this thread into a spin.
+                    Thread.sleep(ZERO_READ_BACKOFF_MS)
+                    continue
+                }
                 if (total == 0L) AaLog.i("UsbAoaAccessoryConnection: first $n bytes from the head unit: ${hex(chunk, minOf(n, 32))}")
                 total += n
                 synchronized(lock) {
+                    // Nobody is draining: hold the next read until they do, rather than buffer a
+                    // head unit's stream until the process runs out of memory.
+                    while (!closed && tail - head + n > MAX_BUFFERED_BYTES) lock.wait()
+                    if (closed) return
                     append(chunk, n)
                     lock.notifyAll()
                 }
@@ -114,6 +125,8 @@ class UsbAoaAccessoryConnection(private val session: AoaAccessorySession) : Acce
         } catch (e: IOException) {
             // Closing the accessory is how a blocked read ends, so this is the normal way out.
             if (!closed) AaLog.i("UsbAoaAccessoryConnection: accessory read ended (${e.message})")
+        } catch (e: InterruptedException) {
+            Thread.currentThread().interrupt()
         } finally {
             AaLog.i("UsbAoaAccessoryConnection: reader stopped after $total bytes")
             synchronized(lock) {
@@ -149,5 +162,8 @@ class UsbAoaAccessoryConnection(private val session: AoaAccessorySession) : Acce
         /** The accessory driver's bulk buffer size; one read never returns more than this. */
         private const val BULK_READ_SIZE = 16 * 1024
         private const val INITIAL_BUFFER_SIZE = 64 * 1024
+        /** Unread bytes the reader may hold before it waits for the consumer. */
+        private const val MAX_BUFFERED_BYTES = 4 * 1024 * 1024
+        private const val ZERO_READ_BACKOFF_MS = 5L
     }
 }

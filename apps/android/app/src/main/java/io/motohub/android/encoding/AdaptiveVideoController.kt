@@ -130,17 +130,23 @@ object AdaptiveVideoPolicy {
      *  transport queue drains instead of sitting full. */
     const val PULL_RATE_HEADROOM = 0.9f
 
+    /** The lowest a measured poll rate may pace the stream. A Wi-Fi stall that leaves the dash
+     *  polling twice a second measures the stall, not the dash, and a cap read from it would take
+     *  minutes to climb back one frame per tick. */
+    const val MIN_PULL_RATE_CAP = 8
+
     /**
      * The frame rate the dash can actually take, learned from how often it polls.
      *
-     * Set only on a tick that lost frames: then the queue was full, every poll found a frame, and
-     * the poll rate IS the dash's capacity. On a clean tick the measurement also counts empty polls,
+     * Set only on a tick that lost at least [LOSS_TRIGGER] frames: then the queue was full, every
+     * poll found a frame, and the poll rate IS the dash's capacity. A frame or two lost in a tick
+     * is a hiccup, not a full queue. On a clean tick the measurement also counts empty polls,
      * which says nothing about capacity, so the cap is not re-read - it climbs one frame per tick
      * once the link has been clean for [FASTER_REGAIN_AFTER_CLEAN_TICKS], and lets go at the base.
      *
-     * Not floored at [MIN_FRAME_RATE], unlike the link cap: the MH Tray 125 (8F15-E4D6-0243) polled
-     * ~11.6 times a second, and the 12 fps floor kept its queue overflowing for the whole ride. Nine
-     * whole pictures beat twelve with holes in them.
+     * Floored at [MIN_PULL_RATE_CAP], not at [MIN_FRAME_RATE] like the link cap: the MH Tray 125
+     * (8F15-E4D6-0243) polled ~11.6 times a second, and the 12 fps floor kept its queue overflowing
+     * for the whole ride. Nine whole pictures beat twelve with holes in them.
      */
     fun nextPullRateCap(
         previous: Int?,
@@ -149,8 +155,9 @@ object AdaptiveVideoPolicy {
         lostFrames: Int,
         cleanStreak: Int
     ): Int? = when {
-        lostFrames > 0 && dashPullRate != null ->
-            (dashPullRate * PULL_RATE_HEADROOM).toInt().coerceIn(1, baseFrameRate)
+        lostFrames >= LOSS_TRIGGER && dashPullRate != null ->
+            (dashPullRate * PULL_RATE_HEADROOM).toInt()
+                .coerceIn(MIN_PULL_RATE_CAP.coerceAtMost(baseFrameRate), baseFrameRate)
         previous == null -> null
         cleanStreak < FASTER_REGAIN_AFTER_CLEAN_TICKS -> previous
         previous + 1 >= baseFrameRate -> null

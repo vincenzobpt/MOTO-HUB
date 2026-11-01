@@ -235,7 +235,6 @@ class AaReceiver(
             return false
         }
 
-
         acceptThread = thread(name = "aa-accept", isDaemon = true) { acceptLoop() }
         headUnitServerThread = thread(name = "aa-hu-server", isDaemon = true) {
             // A fallback poller must never take the process down: anything escaping this thread
@@ -572,8 +571,6 @@ class AaReceiver(
         activeTransport.sendNightMode(isNight)
         return true
     }
-
-
 }
 
 /** ENONET / unreachable from a socket that never leaves the phone: the pin, not the port. */
