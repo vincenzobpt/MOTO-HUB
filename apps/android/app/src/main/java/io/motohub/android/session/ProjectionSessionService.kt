@@ -193,7 +193,7 @@ class ProjectionSessionService : Service() {
         // so the only honest word here is the neutral one. "EasyConn" was wrong on every KOVE.
         ProjectionEventLog.record("SERVICE", "Starting the dashboard handshake.")
 
-        val handle = TBoxSessionRegistry.current()
+        var handle = TBoxSessionRegistry.current()
             ?: return fail("No T-Box session is ready. Reconnect the motorcycle before sharing.")
         tBoxHandle = handle
         TBoxSessionRegistry.claim(SESSION_CONSUMER)
@@ -212,12 +212,47 @@ class ProjectionSessionService : Service() {
         // onTBoxFailureEvent.
         handshakeInFlight.set(true)
         val configurationResult = try {
-            handle.transport.negotiateVideoConfiguration(
+            var result = handle.transport.negotiateVideoConfiguration(
                 host = handle.host,
                 savedArea = savedArea,
                 fallbackArea = fallbackArea,
                 videoAreaTimeoutMillis = VIDEO_AREA_TIMEOUT_MS
             )
+            if (result.isFailure) {
+                // Whichever mode ran before this one called transport.stop() on end, which for the
+                // real GPL transport fully tears down the underlying session, so a bare retry of
+                // negotiateVideoConfiguration fails identically every time. Re-run discover() from
+                // scratch instead, exactly like a rider's manual "Connect" retry does.
+                ProjectionEventLog.warning(
+                    "T-BOX",
+                    "Video negotiation failed (first attempt): ${result.exceptionOrNull()?.message}. " +
+                        "Re-discovering the T-Box before retrying."
+                )
+                val rediscovered = handle.transport.discover(handle.link, handle.motorcycle.modelId)
+                val freshHost = rediscovered.getOrNull()
+                if (freshHost == null) {
+                    // Said out loud because the alternative reads identically in a log: a
+                    // re-discovery that failed and a retry that was never reached both look like
+                    // the warning above followed by nothing.
+                    ProjectionEventLog.warning(
+                        "T-BOX",
+                        "Re-discovery failed, so there is no second negotiation attempt: " +
+                            "${rediscovered.exceptionOrNull()?.message}"
+                    )
+                } else {
+                    handle = handle.copy(host = freshHost)
+                    tBoxHandle = handle
+                    TBoxSessionRegistry.claim(SESSION_CONSUMER)
+                    TBoxSessionRegistry.install(handle)
+                    result = handle.transport.negotiateVideoConfiguration(
+                        host = handle.host,
+                        savedArea = savedArea,
+                        fallbackArea = fallbackArea,
+                        videoAreaTimeoutMillis = VIDEO_AREA_TIMEOUT_MS
+                    )
+                }
+            }
+            result
         } finally {
             handshakeInFlight.set(false)
         }
