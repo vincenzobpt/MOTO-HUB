@@ -18,6 +18,7 @@
     <string name="language_turkish">Türkçe</string>
     <string name="language_russian">Русский</string>
     <string name="language_thai">ไทย</string>
+    <string name="language_chinese">简体中文</string>
     <string name="language_title">ภาษา</string>
     <string name="language_description">เลือกภาษาที่ MOTO-HUB ใช้</string>
     <string name="language_detail_description">MOTO-HUB ใช้ภาษาของโทรศัพท์เป็นค่าเริ่มต้น เลือกภาษาด้านล่างเพื่อใช้เฉพาะกับแอปนี้</string>
