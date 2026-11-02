@@ -232,16 +232,17 @@ object AndroidAutoCapabilityProfiles {
        }
 
         val exactFit = exactFitPreset(target)
-        // No exact pixel match: always fall back to the SD preset for the orientation,
-        // never HD. HD is only ever selected when a saved T-Box geometry exactly matches
-        // it (exactFitPreset above) - it is unverified end-to-end on unrecognized dashes
-        // and picking it from aspect-ratio proximity alone is a black-screen risk on
-        // decoders that haven't been validated against it.
-        val preset = exactFit ?: if (target.height > target.width) {
-            AUTO_PORTRAIT_PRESETS.first()
-       } else {
-            AUTO_LANDSCAPE_PRESETS.first()
-       }
+        // No exact pixel match: the smallest auto-selectable source of the orientation that
+        // covers the panel on both axes, so the picture is only ever scaled down. The SD source
+        // alone was narrower than an 800x944 1000 MT-X and AA was upscaled onto it; that rider
+        // forced 1080x1920 by hand (9EE8-EAFB). Only the two lists below are eligible, never the
+        // manual-only sources, and a panel no listed source covers keeps the SD one.
+        val autoPresets = if (target.height > target.width) AUTO_PORTRAIT_PRESETS else AUTO_LANDSCAPE_PRESETS
+        val alignedWidth = target.width and 0xFFF0
+        val alignedHeight = target.height and 0xFFF0
+        val preset = exactFit ?: autoPresets.firstOrNull { candidate ->
+            candidate.videoWidth() >= alignedWidth && candidate.videoHeight() >= alignedHeight
+        } ?: autoPresets.first()
         val selectionReason = if (exactFit != null) {
             "Selected an exact-fit AA source for saved runtime T-Box geometry "
         } else {

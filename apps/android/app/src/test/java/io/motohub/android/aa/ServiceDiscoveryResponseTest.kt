@@ -97,19 +97,19 @@ class ServiceDiscoveryResponseTest {
             .single()
 
         assertEquals(
-            Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._720x1280,
+            Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._1080x1920,
             video.codecResolution
         )
         assertEquals(240, video.density)
-        assertEquals(AndroidAutoVideoPreset.PORTRAIT_720X1280, profile.videoPreset)
+        assertEquals(AndroidAutoVideoPreset.PORTRAIT_1080X1920, profile.videoPreset)
         assertEquals(AndroidAutoCapabilitySource.SAVED_TBOX_GEOMETRY, profile.source)
 
         val touch = response.servicesList
             .first { it.id == Channel.ID_INP }
             .inputSourceService
             .touchscreen
-        assertEquals(720, touch.width)
-        assertEquals(1280, touch.height)
+        assertEquals(1080, touch.width)
+        assertEquals(1920, touch.height)
     }
 
     @Test

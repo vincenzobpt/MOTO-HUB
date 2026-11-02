@@ -106,14 +106,15 @@ class AndroidAutoCapabilityProfileTest {
     }
 
     @Test
-   fun `selects the standard portrait profile for a portrait T-Box`() {
+   fun `selects the portrait source that covers the whole 1000 MT-X panel`() {
+        // 720 wide is narrower than the 800 px panel: AA would be upscaled onto it (9EE8-EAFB).
         val target = DisplayGeometry(800, 944)
 
         val profile = AndroidAutoCapabilityProfiles.select(target)
 
-        assertEquals(AndroidAutoVideoPreset.PORTRAIT_720X1280, profile.videoPreset)
+        assertEquals(AndroidAutoVideoPreset.PORTRAIT_1080X1920, profile.videoPreset)
         assertEquals(AndroidAutoCapabilitySource.SAVED_TBOX_GEOMETRY, profile.source)
-        assertEquals(DisplayGeometry(720, 1280), profile.video)
+        assertEquals(DisplayGeometry(1080, 1920), profile.video)
         assertEquals(240, profile.densityDpi)
         assertEquals(target, profile.target)
    }
@@ -136,9 +137,9 @@ class AndroidAutoCapabilityProfileTest {
             DisplayGeometry(800, 384) to AndroidAutoVideoPreset.LANDSCAPE_800X480,
             DisplayGeometry(800, 480) to AndroidAutoVideoPreset.LANDSCAPE_800X480,
             DisplayGeometry(1280, 720) to AndroidAutoVideoPreset.LANDSCAPE_1280X720,
-            DisplayGeometry(544, 512) to AndroidAutoVideoPreset.LANDSCAPE_800X480,
+            DisplayGeometry(544, 512) to AndroidAutoVideoPreset.LANDSCAPE_1280X720,
             DisplayGeometry(720, 712) to AndroidAutoVideoPreset.PORTRAIT_720X1280,
-            DisplayGeometry(800, 944) to AndroidAutoVideoPreset.PORTRAIT_720X1280
+            DisplayGeometry(800, 944) to AndroidAutoVideoPreset.PORTRAIT_1080X1920
         )
 
         cases.forEach { (projectionCanvas, expectedPreset) ->
@@ -279,18 +280,19 @@ class AndroidAutoCapabilityProfileTest {
     @Test
     fun `the rescued landscape area buys back most of rider 6e77dcf7's panel`() {
         // What the fix is actually worth. The portrait preset composited to 311x554 inside
-        // 784x576; the landscape source AUTO reaches from the measured area covers the full
-        // height and 83% of the width, and the aspect margins are what make up the rest.
+        // 784x576; the landscape source AUTO reaches from the measured area is the smallest one
+        // that covers the panel (800x480 is 96 rows short), and the aspect margins match its
+        // shape to the panel's.
         val target = DisplayGeometry(784, 576)
 
         val profile = AndroidAutoCapabilityProfiles.select(target).let {
             it.copy(aspectMargins = AaAspectMargins.forPanel(it.video, target))
         }
 
-        assertEquals(AndroidAutoVideoPreset.LANDSCAPE_800X480, profile.videoPreset)
+        assertEquals(AndroidAutoVideoPreset.LANDSCAPE_1280X720, profile.videoPreset)
         assertEquals(AndroidAutoCapabilitySource.SAVED_TBOX_GEOMETRY, profile.source)
-        assertEquals(DisplayGeometry(653, 480), profile.touchSurface)
-        assertEquals(147, profile.marginWidth)
+        assertEquals(DisplayGeometry(980, 720), profile.touchSurface)
+        assertEquals(300, profile.marginWidth)
         assertEquals(0, profile.marginHeight)
     }
 

@@ -311,7 +311,9 @@ enum class TBoxModelProfile(
         modelIds = setOf("37426"),
         mapTilesRequireCellular = true,
         supportsScreenTouch = true,
-        defaultAndroidAutoPreset = AndroidAutoVideoPreset.PORTRAIT_720X1280,
+        // The 800x951 panel is wider than 720: the smallest portrait source that covers it,
+        // the one its rider picked by hand (9EE8-EAFB).
+        defaultAndroidAutoPreset = AndroidAutoVideoPreset.PORTRAIT_1080X1920,
         requiresSockAuth = true,
         advertisedSupportFunction = 128,
         announcesMirrorState = true
