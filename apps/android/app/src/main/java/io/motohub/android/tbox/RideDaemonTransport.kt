@@ -611,6 +611,9 @@ class RideDaemonTransport(
                     setPhoneScreenWidth(screen.first.toLong())
                     setPhoneScreenHeight(screen.second.toLong())
                     setPhoneScreenRotation(screen.third.toLong())
+                    // enableAccessibility in that body: the official app's word that it acts on
+                    // the dash's touches. Only a profile that forwards them may say so.
+                    setAppStatusTouchInput(profile.supportsScreenTouch)
                 }
                 // The dash asks for wall-clock time over PXC and the daemon answers it,
                 // but only Android knows the zone: Go's local location on a device is

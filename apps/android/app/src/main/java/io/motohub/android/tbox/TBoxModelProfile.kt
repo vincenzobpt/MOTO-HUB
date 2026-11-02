@@ -135,7 +135,9 @@ enum class TBoxModelProfile(
      * open-cfmoto-zanderp, and not this app until now. It is on here for the one dashboard family
      * whose EasyConn client runs to completion - handshake, capture negotiation, video socket,
      * frames pulled at 30 Hz - while its panel stays blank, which is what a UI that was never told
-     * the mirror went live looks like from this side.
+     * the mirror went live looks like from this side. It is also on for [CFDL26_PORTRAIT], whose
+     * dash paints our picture but never sends a touch; there the body also says the phone acts on
+     * touches (`enableAccessibility`, from [supportsScreenTouch]).
      *
      * Unlike [sendsPageSwitchProbe] this one carries its own readout. `0x20030` is even, so the
      * dash owes it `0x20031`, and the SDK's own `y0.getResponseProcessType` puts the command in
@@ -296,6 +298,12 @@ enum class TBoxModelProfile(
      * CFDL26 MotoPlay Portrait (1000 MT‑X) — touch panel: a field 1000 MT-X (CFMOTO-124178,
      * 2026-10-18) declared supportScreenTouch=true and touchMode=1 in CLIENT_INFO, and its rider
      * could not tap Android Auto while this profile dropped every touch.
+     *
+     * Touch still never arrived once the profile allowed it: no 1000 MT-X in the collector has
+     * ever sent a single media `0x20` touch to MOTO-HUB, even with this profile and
+     * supportFunction=128 (9EE8-EAFB, 2026-11-02), while the official CFMOTO app gets touch on
+     * the same bike. That app tells the dash, in `ECP_P2C_APPSTATUS_*`, that it can act on touches
+     * (`enableAccessibility`); this profile now says the same. An experiment until a rider confirms it.
      */
     CFDL26_PORTRAIT(
         key = "cfdl26_portrait",
@@ -305,7 +313,8 @@ enum class TBoxModelProfile(
         supportsScreenTouch = true,
         defaultAndroidAutoPreset = AndroidAutoVideoPreset.PORTRAIT_720X1280,
         requiresSockAuth = true,
-        advertisedSupportFunction = 128
+        advertisedSupportFunction = 128,
+        announcesMirrorState = true
     ),
     /**
      * CFDL26 800NK Advanced — near-square touch panel measured 720x712 by the OpenCfMoto

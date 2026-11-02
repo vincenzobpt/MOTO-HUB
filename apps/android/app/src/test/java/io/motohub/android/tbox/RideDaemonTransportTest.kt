@@ -224,13 +224,15 @@ class RideDaemonTransportTest {
     }
 
     @Test
-    fun `only the QJ dash announces its mirroring state`() {
+    fun `only the QJ and 1000 MT-X dashes announce their mirroring state`() {
         // ECP_P2C_APPSTATUS_BACKGROUND is unsolicited: it goes out whether or not the dash
         // asked anything. Every other EasyConn dashboard in the fleet paints a picture today
-        // without ever having seen it from us, and none of them has a field log asking for it.
-        assertTrue(TBoxModelProfile.QJ_SRK921_RR.announcesMirrorState)
-        val others = TBoxModelProfile.entries.filter { it != TBoxModelProfile.QJ_SRK921_RR }
-        assertTrue(others.none { it.announcesMirrorState })
+        // without ever having seen it from us. The QJ never painted; the 1000 MT-X never sent
+        // a touch (9EE8-EAFB).
+        assertEquals(
+            listOf(TBoxModelProfile.CFDL26_PORTRAIT, TBoxModelProfile.QJ_SRK921_RR),
+            TBoxModelProfile.entries.filter { it.announcesMirrorState }
+        )
     }
 
     @Test
