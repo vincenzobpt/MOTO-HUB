@@ -1,13 +1,20 @@
 # Generated dependency record. Update this file whenever hudlib.aar is rebuilt.
 source_repository=https://github.com/vincenzobpt/ridedaemon-lib
-source_commit=1e249eda7f9da00dd12725315351aa49b0be5768
+source_commit=7092754ab0a88f0b0dcd101c6d5cabb977aa62c3
 source_dirty=false
 source_checkout=refs/ridedaemon-lib-motohub
 gomobile_android_api=31
 artifact=apps/android/app/libs/hudlib.aar
-sha256=983c729b35a55d3959c94d858a8c9ff7976083027be72105c8b2e021c2adccce
+sha256=bd227219d40ac3d8f90431366982d571d9b414f7832c14ccbe4095ae212b6dc2
 license=GPL-3.0-only
 
+# Rebuilt 2026-11-03 from the committed source: MobileConfig gains AppStatusLiveOnly, so a
+# host can send only the mode-1 app status, as the CFMOTO app does. The 1000 MT-X closes its
+# command socket on a mode 2 (ticket 9EE8-EAFB).
+#
+# Same build shape: -androidapi 31, 4 ABIs. javap: purely additive, exactly
+# get/setAppStatusLiveOnly on api.MobileConfig; api.MobileSession and api.Api unchanged.
+#
 # Rebuilt 2026-11-02 from the committed source: the ECP_P2C_APPSTATUS_* body can now
 # say enableAccessibility=true. MobileConfig gains
 # AppStatusTouchInput; the host sets it when its profile forwards the dash's touches.
@@ -18,4 +25,4 @@ license=GPL-3.0-only
 # additive, exactly get/setAppStatusTouchInput on api.MobileConfig; api.MobileSession and
 # api.Api byte-identical. source_commit must be on the public origin before MOTO-HUB
 # is pushed, or the Locked RideDaemon tests job cannot fetch it.
-source_note=app-status-touch-input
+source_note=app-status-live-only

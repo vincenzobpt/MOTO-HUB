@@ -137,7 +137,8 @@ enum class TBoxModelProfile(
      * frames pulled at 30 Hz - while its panel stays blank, which is what a UI that was never told
      * the mirror went live looks like from this side. It is also on for [CFDL26_PORTRAIT], whose
      * dash paints our picture but never sends a touch; there the body also says the phone acts on
-     * touches (`enableAccessibility`, from [supportsScreenTouch]).
+     * touches (`enableAccessibility`, from [supportsScreenTouch]), and only mode 1 goes out
+     * ([announcesMirrorLiveOnly]).
      *
      * Unlike [sendsPageSwitchProbe] this one carries its own readout. `0x20030` is even, so the
      * dash owes it `0x20031`, and the SDK's own `y0.getResponseProcessType` puts the command in
@@ -149,6 +150,13 @@ enum class TBoxModelProfile(
      * a picture today has never seen it on.
      */
     val announcesMirrorState: Boolean = false,
+    /**
+     * With [announcesMirrorState], send only mode 1 ("the mirror is live", at STREAM_START) and
+     * never mode 2 when PXC comes up. That is what the CFMOTO app does: its listener sends the
+     * app status itself, always as mode 1. The 1000 MT-X closed its command socket within 10 ms
+     * of our mode 2 in all ten sessions on 1.1.122 and never pulled a frame (9EE8-EAFB).
+     */
+    val announcesMirrorLiveOnly: Boolean = false,
     /**
      * Encode exactly [fallbackTBoxVideoArea]'s dimensions instead of the 16-aligned canvas.
      * ThinkerRide declares the stream size to the dash in a header, and the reference app
@@ -302,8 +310,9 @@ enum class TBoxModelProfile(
      * Touch still never arrived once the profile allowed it: no 1000 MT-X in the collector has
      * ever sent a single media `0x20` touch to MOTO-HUB, even with this profile and
      * supportFunction=128 (9EE8-EAFB, 2026-11-02), while the official CFMOTO app gets touch on
-     * the same bike. That app tells the dash, in `ECP_P2C_APPSTATUS_*`, that it can act on touches
-     * (`enableAccessibility`); this profile now says the same. An experiment until a rider confirms it.
+     * the same bike. That app tells the dash, in `ECP_P2C_APPSTATUS_BACKGROUND` mode 1, that it can act on touches
+     * (`enableAccessibility`); this profile now says the same, mode 1 only. An experiment until a
+     * rider confirms it.
      */
     CFDL26_PORTRAIT(
         key = "cfdl26_portrait",
@@ -316,7 +325,8 @@ enum class TBoxModelProfile(
         defaultAndroidAutoPreset = AndroidAutoVideoPreset.PORTRAIT_1080X1920,
         requiresSockAuth = true,
         advertisedSupportFunction = 128,
-        announcesMirrorState = true
+        announcesMirrorState = true,
+        announcesMirrorLiveOnly = true
     ),
     /**
      * CFDL26 800NK Advanced — near-square touch panel measured 720x712 by the OpenCfMoto

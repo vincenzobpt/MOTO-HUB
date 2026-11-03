@@ -606,6 +606,7 @@ class RideDaemonTransport(
                 // those, and a wrong size stated confidently is worse than an honest zero,
                 // so they are measured here rather than guessed in the daemon.
                 setAppStatusNotifyEnabled(profile.announcesMirrorState)
+                setAppStatusLiveOnly(profile.announcesMirrorLiveOnly)
                 if (profile.announcesMirrorState) {
                     val screen = readPhoneScreen()
                     setPhoneScreenWidth(screen.first.toLong())

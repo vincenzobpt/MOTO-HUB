@@ -236,6 +236,16 @@ class RideDaemonTransportTest {
     }
 
     @Test
+    fun `the 1000 MT-X is never sent the mode 2 app status it hangs up on`() {
+        // Ten sessions out of ten on 1.1.122: the dash closed its command socket within 10 ms
+        // of mode 2. The CFMOTO app only ever sends mode 1 (9EE8-EAFB).
+        assertEquals(
+            listOf(TBoxModelProfile.CFDL26_PORTRAIT),
+            TBoxModelProfile.entries.filter { it.announcesMirrorLiveOnly }
+        )
+    }
+
+    @Test
     fun `no dash is told JPEG when it asked for H264`() {
         // Every other EasyConn dashboard in the fleet paints an H.264 stream today. Answering
         // the capture negotiation with encoder=1 anywhere else would change the wire format of
