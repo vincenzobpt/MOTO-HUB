@@ -158,6 +158,14 @@ enum class TBoxModelProfile(
      */
     val announcesMirrorLiveOnly: Boolean = false,
     /**
+     * Answer two PXC questions the way the CFMOTO app does (jadx-225): the CLIENT_INFO reply
+     * leaves out `supportFunction` (that app calls `reply()` with no map, and only a map makes
+     * the SDK write it), and `CHECK_APP_NETWORKING_CAPABILITY` (0x10750, asked every 2 s) gets
+     * `{"status":0}` instead of an empty ack. On for [CFDL26_PORTRAIT] only, whose dash paints
+     * our picture and sends touches to that app but never to us (9EE8-EAFB).
+     */
+    val repliesAsCfmotoApp: Boolean = false,
+    /**
      * Encode exactly [fallbackTBoxVideoArea]'s dimensions instead of the 16-aligned canvas.
      * ThinkerRide declares the stream size to the dash in a header, and the reference app
      * encodes precisely what it declares (600x1024); we used to declare 600 and stream 592.
@@ -326,7 +334,8 @@ enum class TBoxModelProfile(
         requiresSockAuth = true,
         advertisedSupportFunction = 128,
         announcesMirrorState = true,
-        announcesMirrorLiveOnly = true
+        announcesMirrorLiveOnly = true,
+        repliesAsCfmotoApp = true
     ),
     /**
      * CFDL26 800NK Advanced — near-square touch panel measured 720x712 by the OpenCfMoto

@@ -1,12 +1,20 @@
 # Generated dependency record. Update this file whenever hudlib.aar is rebuilt.
 source_repository=https://github.com/vincenzobpt/ridedaemon-lib
-source_commit=7092754ab0a88f0b0dcd101c6d5cabb977aa62c3
+source_commit=8b623947a14c8c2fb1e9e10165b225468e546e67
 source_dirty=false
 source_checkout=refs/ridedaemon-lib-motohub
 gomobile_android_api=31
 artifact=apps/android/app/libs/hudlib.aar
-sha256=bd227219d40ac3d8f90431366982d571d9b414f7832c14ccbe4095ae212b6dc2
+sha256=60334f14a289ecddf94280b515f9c4f9860a3041cc9b78dd0fe107351de1ba90
 license=GPL-3.0-only
+
+# Rebuilt 2026-11-04 from the committed source: MobileConfig gains CfmotoAppReplies, so a
+# host can answer two PXC questions as the CFMOTO app does - the CLIENT_INFO reply without
+# supportFunction, and CHECK_APP_NETWORKING_CAPABILITY answered {"status":0}. The 1000 MT-X
+# sends touches to that app and never to us (ticket 9EE8-EAFB).
+#
+# Same build shape: -androidapi 31, 4 ABIs. javap: purely additive, exactly
+# get/setCfmotoAppReplies on api.MobileConfig; api.MobileSession and api.Api unchanged.
 
 # Rebuilt 2026-11-03 from the committed source: MobileConfig gains AppStatusLiveOnly, so a
 # host can send only the mode-1 app status, as the CFMOTO app does. The 1000 MT-X closes its

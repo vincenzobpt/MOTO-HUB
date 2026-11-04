@@ -607,6 +607,7 @@ class RideDaemonTransport(
                 // so they are measured here rather than guessed in the daemon.
                 setAppStatusNotifyEnabled(profile.announcesMirrorState)
                 setAppStatusLiveOnly(profile.announcesMirrorLiveOnly)
+                setCfmotoAppReplies(profile.repliesAsCfmotoApp)
                 if (profile.announcesMirrorState) {
                     val screen = readPhoneScreen()
                     setPhoneScreenWidth(screen.first.toLong())

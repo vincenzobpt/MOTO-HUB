@@ -246,6 +246,16 @@ class RideDaemonTransportTest {
     }
 
     @Test
+    fun `only the 1000 MT-X gets the CFMOTO app's PXC replies`() {
+        // Every other dash keeps the supportFunction it has always been told and the empty
+        // 0x10751 it has always received (9EE8-EAFB).
+        assertEquals(
+            listOf(TBoxModelProfile.CFDL26_PORTRAIT),
+            TBoxModelProfile.entries.filter { it.repliesAsCfmotoApp }
+        )
+    }
+
+    @Test
     fun `no dash is told JPEG when it asked for H264`() {
         // Every other EasyConn dashboard in the fleet paints an H.264 stream today. Answering
         // the capture negotiation with encoder=1 anywhere else would change the wire format of
