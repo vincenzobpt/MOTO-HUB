@@ -1,11 +1,15 @@
 # Generated dependency record. Update this file whenever hudlib.aar is rebuilt.
+
+# Rebuilt 2026-11-07 from the committed source: the 1000 MT-X gets
+# 0x201c0 and 0x20030 on CAR_DATA, enableAOAHid true, and a CAR_DATA beat (SetCfmotoAppReplies).
+# No new API: the change is in the net package only. Same build shape, -androidapi 31.
 source_repository=https://github.com/vincenzobpt/ridedaemon-lib
-source_commit=8b623947a14c8c2fb1e9e10165b225468e546e67
+source_commit=2e8485506bb7445a08d1485eab823319e73ddb41
 source_dirty=false
 source_checkout=refs/ridedaemon-lib-motohub
 gomobile_android_api=31
 artifact=apps/android/app/libs/hudlib.aar
-sha256=60334f14a289ecddf94280b515f9c4f9860a3041cc9b78dd0fe107351de1ba90
+sha256=b4138918ba7c5a27eff87dc87c713d393f5259e25a90faddb1255d4456516471
 license=GPL-3.0-only
 
 # Rebuilt 2026-11-04 from the committed source: MobileConfig gains CfmotoAppReplies, so a
