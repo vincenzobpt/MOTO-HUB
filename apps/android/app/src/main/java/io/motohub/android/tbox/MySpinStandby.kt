@@ -3,10 +3,13 @@
 // Part of MOTO-HUB. Free software under the GNU AGPL v3; see LICENSE.
 package io.motohub.android.tbox
 
+import android.Manifest
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 import androidx.core.content.IntentCompat
 import io.motohub.android.data.MotorcycleProfileStore
 import io.motohub.android.session.MotorcycleProfile
@@ -56,6 +59,8 @@ object MySpinStandby {
     }
 
     fun onDashLink(context: Context, device: BluetoothDevice, connected: Boolean) {
+        // The bike name needs BLUETOOTH_CONNECT; without it this receiver would throw.
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) return
         val store = MotorcycleProfileStore(context)
         val profile = store.load()
         when (decide(profile, device.address, device.name, connected, MySpinBluetoothLink.current)) {

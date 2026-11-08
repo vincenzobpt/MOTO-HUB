@@ -1139,8 +1139,12 @@ enum class TBoxModelProfile(
                 if (sockAuth) points += 2
                 if (identity.contains("cfdl26") || identity.contains("motoplay")) points += 2
                 if (points == 0) return 0
-                if (sdkVersion.isNotEmpty() && !sdkVersion.startsWith("0.")) points += 2
-                if (supportFunction == 128) points += 1
+                if (sdkVersion.isNotEmpty() && !sdkVersion.startsWith("0.")) {
+                    points += 2
+                }
+                if (supportFunction == 128) {
+                    points += 1
+                }
                 return points
             }
 

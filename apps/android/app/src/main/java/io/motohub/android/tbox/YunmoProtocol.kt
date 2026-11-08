@@ -139,7 +139,9 @@ object YunmoProtocol {
         frame[7] = ((hi.toInt() and 0xFF) + (lo.toInt() and 0xFF)).toByte()
         payload.copyInto(frame, destinationOffset = 8)
         var sum = 0
-        for (i in 4 until 8 + length) sum += frame[i].toInt() and 0xFF
+        for (i in 4 until 8 + length) {
+            sum += frame[i].toInt() and 0xFF
+        }
         frame[8 + length] = (sum and 0xFF).toByte()
         return frame
     }
