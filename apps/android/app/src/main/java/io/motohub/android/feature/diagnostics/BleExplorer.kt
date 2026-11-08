@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.asStateFlow
  *
  * It exists because the alternative is guessing. A remote that advertises no service UUIDs cannot
  * be recognised by any app — the phone can only find out what it is by connecting and asking, and
- * until this screen there was nowhere in MOTO-HUB to ask. Decompiling a vendor's own app only
+ * until this screen there was nowhere in MOTO-HUB to ask. Studying a vendor's own app only
  * works when there IS a vendor app; this works on anything with a radio.
  *
  * **Every GATT operation is queued.** Android allows exactly one in flight per connection, and a

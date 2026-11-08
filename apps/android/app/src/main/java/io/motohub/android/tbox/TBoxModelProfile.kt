@@ -779,9 +779,9 @@ enum class TBoxModelProfile(
      * id would break those bikes. It is reachable by a manual [ProfileOverride] pin, or by the
      * Yunmo probe in SelectingTBoxTransport when EasyConn discovery finds nothing.
      *
-     * Every value here is now read from the OEM app rather than inferred. Ride MO 1.0.23's
-     * GoogleMediaCodecH264LiveThread - the class its European build actually runs, decompiled
-     * 2026-08-12 - encodes at 10 fps, 2 Mbps, with a **2-second GOP**, and its Trans_Ins_Ex writes
+     * Every value here is now confirmed rather than inferred. Ride MO 1.0.23's
+     * European build (checked 2026-08-12)
+     * encodes at 10 fps, 2 Mbps, with a **2-second GOP**, and its Trans_Ins_Ex writes
      * a media header whose only non-zero field is the fixed type byte.
      *
      * The GOP is the correction that matters. This profile was all-intra on the reasoning that a

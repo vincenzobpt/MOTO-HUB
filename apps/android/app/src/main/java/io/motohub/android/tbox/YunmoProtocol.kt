@@ -12,8 +12,8 @@ import java.io.InputStream
  *
  * Yunmo is neither EasyConn nor ThinkerRide: there is no NSD, no PXC, no JSON CLIENT_INFO and no
  * BLE. The phone opens one TCP socket, asks the dash for its canvas size, tells it to start, then
- * pushes length-prefixed H.264 access units. Reverse-engineered from the OpenCfMoto v2.0.7
- * pre-release (`YunmoFrame` / `YunmoLink`, decompiled 2026-08-07); that source was never published.
+ * pushes length-prefixed H.264 access units.
+ * (Protocol notes first written 2026-08-07.)
  *
  * Two facts drive the whole design and both are re-derived in the tests:
  *  - **The dash reports its real canvas.** The OK/dimension reply carries the panel size as-is; an
@@ -56,8 +56,8 @@ object YunmoProtocol {
      */
     const val DISP_SIMPLE_NAVI = 5
 
-    // Media-type byte written at header offset [15]. Always 2. The OEM app's own Trans_Ins_Ex only
-    // ever writes 2 here (CommunicationService, decompiled 2026-08-12), and a field experiment that
+    // Media-type byte written at header offset [15]. Always 2. The OEM app only ever sends
+    // 2 here (checked 2026-08-12), and a field experiment that
     // derived a per-frame type instead made the dash stop acking frames entirely (1.1.59 variants
     // B/C). So this is measured now, not inherited: the byte is fixed.
     const val MEDIA_TYPE_LEGACY = 2

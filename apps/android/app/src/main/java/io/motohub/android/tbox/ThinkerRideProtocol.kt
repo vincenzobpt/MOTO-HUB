@@ -210,7 +210,7 @@ object ThinkerRideProtocol {
      * case — across 12 sessions it answered none of our writes, not even the `item:6` version
      * reply that `{"msg_id":13}` is supposed to force, while sending its own telemetry the whole
      * time (case 32e132d0, 2026-08-24). Source for the frame shape: ttarlov/kove-dash
-     * `app/.../net/ByteCat.kt` + `proto-poc/PROTOCOL.md`, itself decompiled from the OEM app.
+     * `app/.../net/ByteCat.kt` + `proto-poc/PROTOCOL.md`.
      */
     const val BYTE_CAT_FRAME_LENGTH = 104
     const val BYTE_CAT_CHUNK_MAX = 100
