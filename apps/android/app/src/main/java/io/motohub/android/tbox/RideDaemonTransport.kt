@@ -2590,7 +2590,7 @@ class RideDaemonTransport(
 
         /**
          * Opcodes named by the open-cflink/open-cfmoto reverse-engineering work
-         * (refs/open-cflink PxcFrame.kt and PxcHandshake.kt). Naming them here
+         * (their PxcFrame.kt and PxcHandshake.kt). Naming them here
          * only changes what the log reads like, but a field log full of
          * "UNKNOWN" hides which of these a dash did and did not send - which is
          * exactly the question a T-Box investigation starts from.

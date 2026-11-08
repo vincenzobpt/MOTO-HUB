@@ -48,7 +48,16 @@ enum class TBoxConnectionMode {
      * ThinkerRide pairing QR (`g.thinkerride.com`) is scanned; also selectable by hand for a
      * rebadged unit whose QR points at some OEM host.
      */
-    THINKERRIDE
+    THINKERRIDE,
+
+    /**
+     * Bosch mySPIN dashes (Ducati Multistrada V4 "Ducati Connect", Suzuki, Kawasaki, BMW). The dash,
+     * already paired with the phone in Android's Bluetooth settings, connects to the phone over
+     * Bluetooth and hands over its Wi-Fi; nothing is typed but the Bluetooth name.
+     * [MotorcycleProfile.ssid] holds that name (or the dash's Bluetooth address), the way
+     * [BLE_PROVISIONED] keeps its Bluetooth name there.
+     */
+    MYSPIN
 }
 
 enum class SessionPhase {

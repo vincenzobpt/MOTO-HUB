@@ -38,8 +38,8 @@ internal object CompanionAppRegistry {
     /**
      * Only packages this project has actually observed, never a guess: a wrong package name is a
      * silent miss, and the whole point here is not to send a rider after the wrong app again.
-     * `com.cfmoto.*` and the Carbit framework namespaces come from the decompiled companions under
-     * `refs/`; the Zontes one is what its dash advertises over mDNS as the client it expects.
+     * `com.cfmoto.*` and the Carbit framework namespaces come from the companion apps themselves;
+     * the Zontes one is what its dash advertises over mDNS as the client it expects.
      *
      * Adding a brand is one line here plus one `<package>` entry in the manifest's `<queries>`
      * block - without that entry Android hides the package from [isInstalled] and the app is

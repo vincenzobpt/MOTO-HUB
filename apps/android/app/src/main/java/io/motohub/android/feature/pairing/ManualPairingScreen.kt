@@ -7,6 +7,7 @@ import io.motohub.android.i18n.motoHubText
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,16 +19,24 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import io.motohub.android.tbox.MySpinBikes
 import io.motohub.android.ui.components.MonoLabel
 import io.motohub.android.ui.components.MotoHubBackground
 import io.motohub.android.ui.components.MotoHubHeader
@@ -53,6 +62,8 @@ fun ManualPairingScreen(
      */
     ssidSuggestion: String?,
     onAcceptSsidSuggestion: () -> Unit,
+    /** The phone's paired devices, mySPIN bikes first ([MySpinBikes.pairedForPicker]); offered on the mySPIN path. */
+    pairedBluetoothNames: List<String> = emptyList(),
     onSsidChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
     onConnectionModeChanged: (TBoxConnectionMode) -> Unit,
@@ -76,13 +87,27 @@ fun ManualPairingScreen(
                 trailing = { TextButton(onClick = onClose) { Text(motoHubText("Close")) } }
             )
 
+            // The one mode whose dashboards have no Wi-Fi credentials to be told: the Save below
+            // refuses an empty name, so asking for a password here would make it unusable by hand.
+            val mySpin = connectionMode == TBoxConnectionMode.MYSPIN
+
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 MonoLabel(motoHubText("MANUAL SETUP"))
                 Text(motoHubText("Connect without a QR code"), style = MaterialTheme.typography.displaySmall)
                 Text(
-                    motoHubText("Some motorcycles don't show a pairing QR code on the dash. If you already know ") +
-                        "the T-Box's Wi-Fi network name and password - from the bike itself, its manual, " +
-                        "or a dealer - enter them here instead of scanning.",
+                    if (mySpin) {
+                        motoHubText(
+                            "A Ducati Multistrada V4, a Suzuki GSX-S1000GT/GX, a Kawasaki Ninja H2 SX or a BMW with the " +
+                                "10.25-inch TFT (in testing) hands its Wi-Fi over on Bluetooth by " +
+                                "itself. Pair the motorcycle in the phone's Bluetooth settings first, " +
+                                "then type the Bluetooth name it has there. On a Ducati or a Suzuki, " +
+                                "choose Ducati Connect or mySPIN on the dash to connect."
+                        )
+                    } else {
+                        motoHubText("Some motorcycles don't show a pairing QR code on the dash. If you already know ") +
+                            "the T-Box's Wi-Fi network name and password - from the bike itself, its manual, " +
+                            "or a dealer - enter them here instead of scanning."
+                    },
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -91,10 +116,40 @@ fun ManualPairingScreen(
             OutlinedTextField(
                 value = ssid,
                 onValueChange = onSsidChanged,
-                label = { Text(motoHubText("Wi-Fi network name (SSID)")) },
+                label = {
+                    Text(
+                        if (mySpin) motoHubText("Bluetooth name of the paired motorcycle")
+                        else motoHubText("Wi-Fi network name (SSID)")
+                    )
+                },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
+            // Picking the name the phone already has beats typing it: one wrong letter and the
+            // link never finds the bike.
+            if (mySpin && pairedBluetoothNames.isNotEmpty()) {
+                var pickerOpen by rememberSaveable { mutableStateOf(false) }
+                Box(Modifier.fillMaxWidth()) {
+                    OutlinedButton(onClick = { pickerOpen = true }, modifier = Modifier.fillMaxWidth()) {
+                        Text(motoHubText("Choose from paired devices"))
+                    }
+                    DropdownMenu(expanded = pickerOpen, onDismissRequest = { pickerOpen = false }) {
+                        pairedBluetoothNames.forEach { name ->
+                            val brand = MySpinBikes.brandOf(name)
+                            DropdownMenuItem(
+                                text = { Text(name) },
+                                trailingIcon = if (brand == null) null else {
+                                    { Text(brand, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary) }
+                                },
+                                onClick = {
+                                    pickerOpen = false
+                                    onSsidChanged(name)
+                                }
+                            )
+                        }
+                    }
+                }
+            }
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(motoHubText("T-Box Wi-Fi transport"), style = MaterialTheme.typography.titleSmall)
                 Text(
@@ -110,14 +165,18 @@ fun ManualPairingScreen(
                     )
                 }
             }
-            OutlinedTextField(
-                value = password,
-                onValueChange = onPasswordChanged,
-                label = { Text(motoHubText("Wi-Fi password")) },
-                visualTransformation = PasswordVisualTransformation(),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
+            // Hidden rather than disabled: a greyed-out password box still tells the rider they
+            // are missing something, which is the whole misunderstanding.
+            if (!mySpin) {
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = onPasswordChanged,
+                    label = { Text(motoHubText("Wi-Fi password")) },
+                    visualTransformation = PasswordVisualTransformation(),
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
             formError?.let {
                 Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
             }
@@ -175,4 +234,5 @@ private fun TBoxConnectionMode.label(): String = when (this) {
     // Normally set by scanning the ThinkerRide QR; offered here for rebadged units whose code
     // points at an OEM host. "KOVE" is the brand a rider would look for, ThinkerRide the tech.
     TBoxConnectionMode.THINKERRIDE -> "KOVE / ThinkerRide (Bluetooth)"
+    TBoxConnectionMode.MYSPIN -> "Ducati / Suzuki / Kawasaki / BMW mySPIN (Bluetooth)"
 }

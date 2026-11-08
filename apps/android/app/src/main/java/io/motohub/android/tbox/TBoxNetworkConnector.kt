@@ -403,7 +403,9 @@ class TBoxNetworkConnector(context: Context) {
                 "the phone is currently ${currentWifiDescription(profile.ssid)}."
         )
         submitSpecifierRequest(profile)
-        return awaitRequestedNetwork(profile)
+        val requested = awaitRequestedNetwork(profile)
+        if (requested.isSuccess) return requested
+        return adoptAssociatedNetwork(profile)?.let { Result.success(it) } ?: requested
     }
 
     fun disconnect() {
@@ -518,6 +520,9 @@ class TBoxNetworkConnector(context: Context) {
 
     /** Current Wi-Fi network confirmed by the SSID-specific request callback, if still active. */
     fun currentNetwork(): Network? = activeNetwork
+
+    /** Whether a rejoin ladder is running now. Read by [TBoxWifiRejoinService]. */
+    fun isRejoinRunning(): Boolean = rejoinActive.get()
 
     /**
      * Whether this connector's live-or-pending Wi-Fi request already targets [ssid] - the same
@@ -1160,6 +1165,11 @@ class TBoxNetworkConnector(context: Context) {
                 // this rider to rescan the QR code sends them to fix a profile that is fine.
                 val refusedAsBackground = !networkGranted &&
                     specifierSubmitImportance > FOREGROUND_SERVICE_IMPORTANCE
+                // Refused with the dash measurably there: "not broadcasting" is ruled out, and so,
+                // usually, is the password - so "rescan the QR" sends the rider after the one
+                // thing that is fine.
+                val dashInRange = !networkGranted && !refusedAsBackground &&
+                    (isAssociatedTo(profile) || isDashBroadcasting(profile) == true)
                 ProjectionEventLog.error(
                     "NETWORK",
                     "Android reported the requested T-Box Wi-Fi as unavailable $elapsed; " +
@@ -1173,6 +1183,14 @@ class TBoxNetworkConnector(context: Context) {
                             "Android refused the request for ${profile.ssid} without trying it: " +
                                 "MOTO-HUB was in the background when it was made. Open MOTO-HUB " +
                                 "and tap Connect again."
+                        dashInRange ->
+                            "Android refused to join ${profile.ssid}, although the phone can see " +
+                                "it. Usually another device is holding the dash: if " +
+                                "${profile.ssid} is saved in the phone's Wi-Fi settings, forget " +
+                                "it there; close the motorcycle's own app and disconnect any " +
+                                "other phone; then switch the motorcycle off and on and tap " +
+                                "Connect again. Rescan the QR code only if the dash shows a new " +
+                                "password."
                         else ->
                             "Android gave up connecting to ${profile.ssid}: either the dash was " +
                                 "not broadcasting it, the saved password no longer matches, or " +
@@ -1592,21 +1610,30 @@ class TBoxNetworkConnector(context: Context) {
         }
     }
 
-    /** Polls the already-connected Wi-Fi used by the Mac simulator, which has no specifier callback. */
-    private fun startSimulatorMonitor(profile: MotorcycleProfile) {
+    /**
+     * Polls an already-connected Wi-Fi this connector did not request, which has no specifier
+     * callback to report its loss: the Mac simulator's, or a dash's access point the phone joined
+     * from Android's own settings ([adoptAssociatedNetwork]). [label] names which in the log;
+     * [find] is how strict the match is.
+     */
+    private fun startSimulatorMonitor(
+        profile: MotorcycleProfile,
+        label: String = "Simulator Wi-Fi",
+        find: (String) -> Network? = ::findMatchingWifi
+    ) {
         if (simulatorMonitorJob?.isActive == true) return
         simulatorMonitorJob = reconnectScope.launch {
             try {
                 while (activeProfile == profile && connectedOnce) {
                     delay(SIMULATOR_MONITOR_POLL_MS)
-                    val matching = findMatchingWifi(profile.ssid)
+                    val matching = find(profile.ssid)
                     val current = activeNetwork
                     when {
                         current != null && matching == null -> {
                             activeNetwork = null
                             ProjectionEventLog.warning(
                                 "NETWORK",
-                                "Simulator Wi-Fi disappeared; waiting for it to become available again."
+                                "$label disappeared; waiting for it to become available again."
                             )
                             mutableEvents.tryEmit(TBoxNetworkEvent.Lost(current))
                         }
@@ -1614,7 +1641,7 @@ class TBoxNetworkConnector(context: Context) {
                             activeNetwork = matching
                             ProjectionEventLog.record(
                                 "NETWORK",
-                                "Simulator Wi-Fi automatically reacquired: network=$matching."
+                                "$label automatically reacquired: network=$matching."
                             )
                             mutableEvents.tryEmit(TBoxNetworkEvent.Reacquired(matching))
                         }
@@ -1663,6 +1690,63 @@ class TBoxNetworkConnector(context: Context) {
             }
         }
         return null
+    }
+
+    /**
+     * The network Android's own Wi-Fi is holding for [expectedSsid], or null. Strict where
+     * [findMatchingWifi] is lenient: that one may take the only Wi-Fi around when the name is
+     * hidden, which is right for a simulator on the rider's desk and wrong for a motorcycle - a
+     * home network is not a dash. A withheld name therefore matches nothing here.
+     */
+    @SuppressLint("MissingPermission")
+    private fun findAssociatedWifi(expectedSsid: String): Network? {
+        val target = normalizeSsid(expectedSsid)
+        val connectedSsid = runCatching { normalizeSsid(wifiManager.connectionInfo?.ssid.orEmpty()) }
+            .getOrDefault("")
+        if (target.isEmpty() || !connectedSsid.equals(target, ignoreCase = true)) return null
+        val active = connectivityManager.activeNetwork ?: return null
+        val onWifi = connectivityManager.getNetworkCapabilities(active)
+            ?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true
+        return active.takeIf { onWifi && usableIpv4Addresses(it).isNotEmpty() }
+    }
+
+    /**
+     * Takes the dash's access point the phone is ALREADY on, after Android refused to hand it to
+     * this app's own request.
+     *
+     * A `WifiNetworkSpecifier` for the SSID the phone's Wi-Fi is already associated to is not
+     * guaranteed to succeed: Android has to move the association from its own saved network onto
+     * the app's request, and a dash that takes one station at a time can refuse the move. Case
+     * 74149ea9 (Pixel 7, Android 17, KOVE 450 Rally, 2026-09-14) logged "already on
+     * CQKY_c632fceef" twice and both requests were declared unavailable 1.4s and 6.7s later, with
+     * the dash at -41dBm - in a session where 14 of 15 requests failed and the rider had saved the
+     * dash in Android's Wi-Fi settings. The network was there, addressed, and usable; nothing took
+     * it. The simulator path has always used a network nobody requested, so the rest of the
+     * session (binding, loss, reacquire) already knows how to live on one.
+     *
+     * Strict on purpose: only the SSID the rider saved, read off the association itself, with an
+     * IPv4 address on it. Anything less falls back to the original failure.
+     */
+    private fun adoptAssociatedNetwork(profile: MotorcycleProfile): Network? {
+        val network = findAssociatedWifi(profile.ssid) ?: return null
+        synchronized(requestLock) {
+            // The refused request goes first: left registered, Android could still act on it and
+            // pull the association this session is about to stand on.
+            clearCurrentNetworkRequestLocked()
+            val bound = runCatching { connectivityManager.bindProcessToNetwork(network) }
+                .getOrDefault(false)
+            if (bound) processBoundNetwork = network
+            activeNetwork = network
+            connectedOnce = true
+            ProjectionEventLog.record(
+                "NETWORK",
+                "Android refused this app's request for ${profile.ssid}, but the phone's own Wi-Fi " +
+                    "is on it: taking that network instead (network=$network, " +
+                    "addresses=${usableIpv4Addresses(network)}, processBound=$bound)."
+            )
+        }
+        startSimulatorMonitor(profile, label = "The ${profile.ssid} network", find = ::findAssociatedWifi)
+        return network
     }
 
     private fun usableIpv4Addresses(network: Network): List<String> =

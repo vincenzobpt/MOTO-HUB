@@ -35,6 +35,7 @@ import io.motohub.android.tbox.shouldOfferPhoneHotspot
 import io.motohub.android.tbox.TBoxModelProfile
 import io.motohub.android.tbox.TBoxProtocolMemory
 import io.motohub.android.tbox.ThinkerRideGate
+import io.motohub.android.tbox.KoveModelChoice
 import io.motohub.android.tbox.ProfileOverride
 import io.motohub.android.tbox.TBoxNetworkConnectors
 import io.motohub.android.tbox.TBoxNetworkEvent
@@ -95,7 +96,12 @@ data class HubUiState(
      * Kept apart from [pendingTrial] rather than flagged inside it so the two states cannot be
      * confused at a glance: one means "watching", the other means "a question is on screen".
      */
-    val trialToConfirm: PendingProfileTrial? = null
+    val trialToConfirm: PendingProfileTrial? = null,
+    /**
+     * A KOVE whose panel size nobody has chosen, waiting for the rider to say which model it is
+     * before Connect runs. See [io.motohub.android.tbox.KoveModelChoice].
+     */
+    val koveModelQuestionFor: MotorcycleProfile? = null
 )
 
 class HubViewModel(application: Application) : AndroidViewModel(application) {
@@ -297,9 +303,19 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
     fun saveMotorcycle(): Boolean {
         val current = mutableUiState.value
         val normalizedSsid = current.ssid.trim()
+        // A mySPIN bike hands its own Wi-Fi over on Bluetooth at every connect, so there is no
+        // network name to type. What the profile still needs is a key, because motorcycles are
+        // keyed by this field, and the Bluetooth name is what the rider reads off the phone.
+        val keyedByBluetoothName = current.connectionMode == TBoxConnectionMode.MYSPIN
         if (normalizedSsid.isEmpty()) {
             ProjectionEventLog.warning("PAIRING", "Manual profile save rejected because the SSID is empty.")
-            mutableUiState.value = current.copy(formError = "Enter the motorcycle Wi-Fi network name.")
+            mutableUiState.value = current.copy(
+                formError = if (keyedByBluetoothName) {
+                    "Enter the Bluetooth name of the paired motorcycle, so it can be told apart."
+                } else {
+                    "Enter the motorcycle Wi-Fi network name."
+                }
+            )
             return false
         }
 
@@ -311,11 +327,16 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
         // Asked once, and only once: accepting the suggestion or editing the field clears it, and
         // pressing Save again on the same text saves it. A rider who really does have a space in
         // their SSID loses one tap, and gets the right motorcycle either way.
-        val verdict = manualSsidVerdict(
-            typed = normalizedSsid,
-            savedSsids = current.motorcycles.map { it.ssid },
-            visibleSsids = networkConnector.visibleSsids()
-        )
+        // Skipped for a Bluetooth name, which is not a network and will never be on the air.
+        val verdict = if (keyedByBluetoothName) {
+            ManualSsidVerdict.Accepted
+        } else {
+            manualSsidVerdict(
+                typed = normalizedSsid,
+                savedSsids = current.motorcycles.map { it.ssid },
+                visibleSsids = networkConnector.visibleSsids()
+            )
+        }
         if (verdict is ManualSsidVerdict.DidYouMean && current.ssidSuggestion != verdict.candidate) {
             ProjectionEventLog.warning(
                 "PAIRING",
@@ -365,6 +386,21 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
                 "passwordPresent=${current.password.isNotEmpty()}."
         )
         return true
+    }
+
+    /**
+     * One tap from the Garage or the "found" notification: a paired mySPIN motorcycle saved by its
+     * exact Bluetooth name, through the same path as the manual form.
+     */
+    fun addMySpinMotorcycle(bluetoothName: String): Boolean {
+        mutableUiState.value = mutableUiState.value.copy(
+            ssid = bluetoothName,
+            password = "",
+            connectionMode = TBoxConnectionMode.MYSPIN,
+            formError = null,
+            ssidSuggestion = null
+        )
+        return saveMotorcycle()
     }
 
     /** Clears the pairing form fields - called before showing manual pairing so it never
@@ -556,6 +592,20 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
                 "CONNECTION",
                 "Duplicate connection request ignored; phase=$phase, activeJob=${connectJob?.isActive == true}."
             )
+            return
+        }
+        // Before any radio work: the answer decides the stream geometry, and a session started on
+        // the wrong panel size has to be torn down to fix. Quiet on a repeat, because auto-connect
+        // comes back here every few seconds while the question is on screen.
+        if (KoveModelChoice.isNeeded(profile)) {
+            if (mutableUiState.value.koveModelQuestionFor?.id != profile.id) {
+                ProjectionEventLog.record(
+                    "PROFILE",
+                    "${profile.ssid} runs the KOVE ThinkerRide transport with no model chosen; " +
+                        "asking the rider which KOVE it is before connecting."
+                )
+                mutableUiState.value = mutableUiState.value.copy(koveModelQuestionFor = profile)
+            }
             return
         }
         // A connection is genuinely starting - manual Connect, the permission-grant retry, the
@@ -967,6 +1017,37 @@ class HubViewModel(application: Application) : AndroidViewModel(application) {
             updateMotorcycle(motorcycle.copy(profileOverrideKey = trial.previousKey))
         }
         mutableUiState.value = mutableUiState.value.copy(trialToConfirm = null)
+    }
+
+    /**
+     * Pins the KOVE the rider named. Returns whether it was saved, so the caller only starts the
+     * connect the question was holding back when the answer actually stuck - a connect on a
+     * failed save would just ask again.
+     */
+    fun answerKoveModel(override: ProfileOverride): Boolean {
+        val motorcycle = mutableUiState.value.koveModelQuestionFor ?: return false
+        mutableUiState.value = mutableUiState.value.copy(koveModelQuestionFor = null)
+        // The live profile, not the one captured when the question was raised: the rider may have
+        // edited the bike in the Garage while the dialog was waiting.
+        val current = mutableUiState.value.motorcycles.firstOrNull { it.id == motorcycle.id } ?: motorcycle
+        ProjectionEventLog.record(
+            "PROFILE",
+            "Rider identified ${current.ssid} as ${override.label}; pinning that profile."
+        )
+        return updateMotorcycle(current.copy(profileOverrideKey = override.key))
+    }
+
+    /** Asked again on the next Connect: no answer is not an answer, and guessing is the bug. */
+    fun dismissKoveModelQuestion() {
+        val motorcycle = mutableUiState.value.koveModelQuestionFor ?: return
+        ProjectionEventLog.record(
+            "PROFILE",
+            "Rider closed the KOVE model question for ${motorcycle.ssid} without answering; not connecting."
+        )
+        // A cancel in all but name, or auto-connect's next look puts the question straight back.
+        riderCancelledConnect = true
+        cancelledWithDashInReach = dashReachable(isDashBroadcasting(), isAssociatedToDash())
+        mutableUiState.value = mutableUiState.value.copy(koveModelQuestionFor = null)
     }
 
     fun disconnect() {

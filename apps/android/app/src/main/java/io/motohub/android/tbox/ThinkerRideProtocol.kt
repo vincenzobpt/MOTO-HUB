@@ -13,8 +13,8 @@ import java.nio.charset.StandardCharsets
  * JVM-testable; sockets and BLE live in [ThinkerRideTransport] / [ThinkerRideBleLink].
  *
  * The protocol inverts EasyConn's roles: after a BLE GATT handshake the PHONE opens three TCP
- * servers and the dash connects to them. Reference: refs/KoveMirror (decoded from the working
- * iOS implementation against a KOVE 800X).
+ * servers and the dash connects to them. Reference: KoveMirror (decoded from the working iOS
+ * implementation against a KOVE 800X).
  *
  * Multi-model note: the dash never announces its panel size anywhere in this protocol. The
  * phone declares the stream geometry in [videoSizeHeader] and the dash scales, so resolution

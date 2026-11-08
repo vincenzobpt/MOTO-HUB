@@ -41,6 +41,7 @@ internal object ThinkerRideGate {
     fun requiresBle(profile: MotorcycleProfile?): Boolean =
         profile?.connectionMode == TBoxConnectionMode.THINKERRIDE ||
             profile?.connectionMode == TBoxConnectionMode.BLE_PROVISIONED ||
+            profile?.connectionMode == TBoxConnectionMode.MYSPIN ||
             (profile != null && TBoxModelProfile.resolve(
                 profile.modelId,
                 null,

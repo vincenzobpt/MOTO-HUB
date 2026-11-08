@@ -57,7 +57,12 @@ import kotlinx.coroutines.withTimeoutOrNull
  */
 class TBoxWifiDirectConnector(
     context: Context,
-    private val log: (String) -> Unit = { ProjectionEventLog.record("WIFI_DIRECT", it) }
+    private val log: (String) -> Unit = { ProjectionEventLog.record("WIFI_DIRECT", it) },
+    /**
+     * The PIN a dash handed over to be typed in (mySPIN "P2P"+"PIN": Suzuki GSX-S1000GX).
+     * Null for every dash that pairs by push button.
+     */
+    private val wpsPin: String? = null
 ) {
     private val appContext = context.applicationContext
 
@@ -486,8 +491,11 @@ class TBoxWifiDirectConnector(
         if (outcome.isCompleted) return null
 
         // Discovery and connect() contend for the same radio state machine; leaving the scan
-        // running is a known way to get connect() rejected.
-        awaitAction { listener -> manager.stopPeerDiscovery(channel, listener) }
+        // running is a known way to get connect() rejected. Not for a PIN dash: the Bosch mySPIN
+        // launcher connects with the scan still running, and Samsung phones empty the peer list
+        // the moment it stops, while the dash keeps its Wi-Fi up for only about 5 s after handing
+        // over the PIN.
+        if (wpsPin == null) awaitAction { listener -> manager.stopPeerDiscovery(channel, listener) }
 
         // Read back before connect(), not only after it was refused. Some frameworks empty
         // their peer list the moment discovery stops (see [connectWithRetry]), which turns the
@@ -495,7 +503,7 @@ class TBoxWifiDirectConnector(
         // answer it has for that is a bare ERROR in single-digit milliseconds. The post-mortem
         // snapshot could never say whether the peer went before the call or because of it; this
         // one can. Logged only when it happened: a line on every join is noise.
-        if (peer != null &&
+        if (peer != null && wpsPin == null &&
             requestPeers(manager, channel).none { candidate ->
                 candidate.deviceAddress.equals(peer.deviceAddress, ignoreCase = true)
             }
@@ -563,7 +571,7 @@ class TBoxWifiDirectConnector(
                 )
                 return match
             }
-            delay(PEER_POLL_INTERVAL_MS)
+            delay(if (wpsPin != null) PIN_PEER_POLL_INTERVAL_MS else PEER_POLL_INTERVAL_MS)
         }
         log("The dash did not appear in Wi-Fi Direct discovery; joining ${profile.ssid} by credentials.")
         return null
@@ -779,12 +787,14 @@ class TBoxWifiDirectConnector(
                 // The dash must own the group: at 0 this phone asks to be the least likely
                 // Group Owner, which is exactly the role split checkForFormedGroup enforces.
                 groupOwnerIntent = 0
-                wps.setup = when {
-                    peer.wpsPbcSupported() -> WpsInfo.PBC
-                    peer.wpsKeypadSupported() -> WpsInfo.KEYPAD
-                    peer.wpsDisplaySupported() -> WpsInfo.DISPLAY
-                    else -> wps.setup
-                }
+                wps.setup = wpsSetupFor(
+                    wpsPin,
+                    peer.wpsPbcSupported(),
+                    peer.wpsKeypadSupported(),
+                    peer.wpsDisplaySupported(),
+                    wps.setup
+                )
+                if (wpsPin != null) wps.pin = wpsPin
             }
         }
         return runCatching {
@@ -1205,6 +1215,9 @@ class TBoxWifiDirectConnector(
         private const val CONNECT_TIMEOUT_MS = 35_000L
         private const val PEER_DISCOVERY_TIMEOUT_MS = 6_000L
         private const val PEER_POLL_INTERVAL_MS = 600L
+
+        // A PIN dash's ~5 s window has no room for 600 ms of latency per look.
+        private const val PIN_PEER_POLL_INTERVAL_MS = 150L
         private const val FRAMEWORK_CALL_TIMEOUT_MS = 3_000L
         private const val CONNECT_CALL_TIMEOUT_MS = 6_000L
         /** Distinguishes "connect() was accepted" from "the framework never answered". */
@@ -1388,6 +1401,18 @@ class TBoxWifiDirectConnector(
          */
         internal fun expectedPeerName(ssid: String): String =
             peerNameFromGroupSsid(ssid) ?: ssid.trim().removeSurrounding("\"")
+
+        /**
+         * A PIN the dash gave wins: the Bosch mySPIN launcher joins with KEYPAD and that PIN
+         * whatever the peer advertises. Otherwise the peer's own preference, push button first.
+         */
+        internal fun wpsSetupFor(pin: String?, pbc: Boolean, keypad: Boolean, display: Boolean, fallback: Int): Int = when {
+            pin != null -> WpsInfo.KEYPAD
+            pbc -> WpsInfo.PBC
+            keypad -> WpsInfo.KEYPAD
+            display -> WpsInfo.DISPLAY
+            else -> fallback
+        }
 
         /**
          * Whether a formed group is the profile's dash.

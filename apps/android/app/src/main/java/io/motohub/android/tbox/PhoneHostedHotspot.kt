@@ -36,10 +36,7 @@ import kotlinx.coroutines.withTimeoutOrNull
  *    not ask "is Wi-Fi on" on this path.
  */
 @SuppressLint("MissingPermission")
-internal class PhoneHostedHotspot(context: Context, private val log: (String) -> Unit) {
-
-    /** What the dash has to be told to join this network. */
-    data class Credentials(val ssid: String, val passphrase: String, val auth: String)
+internal class PhoneHostedHotspot(context: Context, private val log: (String) -> Unit) : PhoneHostedNetwork {
 
     private val appContext = context.applicationContext
     private val wifiManager = appContext.getSystemService(WifiManager::class.java)
@@ -55,12 +52,12 @@ internal class PhoneHostedHotspot(context: Context, private val log: (String) ->
      * fix: tethering can be blocked by policy, another app can already own the SoftAP, and some
      * phones refuse while a hotspot they own is already running.
      */
-    suspend fun start(timeoutMillis: Long): Result<Credentials> {
+    override suspend fun start(timeoutMillis: Long, frequencyMhz: Int): Result<PhoneHostedNetwork.Credentials> {
         val manager = wifiManager
             ?: return Result.failure(IllegalStateException("This phone exposes no Wi-Fi service."))
         if (closed.get()) return Result.failure(IllegalStateException("The hotspot was already released."))
 
-        val started = CompletableDeferred<Result<Credentials>>()
+        val started = CompletableDeferred<Result<PhoneHostedNetwork.Credentials>>()
         val callback = object : WifiManager.LocalOnlyHotspotCallback() {
             override fun onStarted(granted: WifiManager.LocalOnlyHotspotReservation) {
                 reservation = granted
@@ -135,7 +132,7 @@ internal class PhoneHostedHotspot(context: Context, private val log: (String) ->
         return state.importance
     }
 
-    fun close() {
+    override fun close() {
         if (!closed.compareAndSet(false, true)) return
         val active = reservation
         reservation = null
@@ -145,13 +142,13 @@ internal class PhoneHostedHotspot(context: Context, private val log: (String) ->
 
     private fun readCredentials(
         reservation: WifiManager.LocalOnlyHotspotReservation
-    ): Credentials? {
+    ): PhoneHostedNetwork.Credentials? {
         val configuration = runCatching { reservation.softApConfiguration }.getOrNull() ?: return null
         val ssid = readSsid(configuration)?.takeIf { it.isNotBlank() } ?: return null
         val passphrase = configuration.passphrase.orEmpty()
         val auth = authName(runCatching { configuration.securityType }.getOrNull())
         log("Phone-hosted hotspot is up: \"$ssid\" ($auth).")
-        return Credentials(ssid = ssid, passphrase = passphrase, auth = auth)
+        return PhoneHostedNetwork.Credentials(ssid = ssid, passphrase = passphrase, auth = auth)
     }
 
     /**

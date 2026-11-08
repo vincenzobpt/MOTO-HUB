@@ -54,6 +54,13 @@
         <package android:name="tayo.com.ZontesIntelligence" />
         <package android:name="net.easyconn.carman" />
         <package android:name="com.carbit.easyconnect" />
+        <!-- The official Ducati Connect, SUZUKI mySPIN and Kawasaki SPIN apps register the same mySPIN
+             Bluetooth service, and BMW Motorrad Connected holds the TFT's; MySpinBluetoothLink warns
+             the rider when one is installed. -->
+        <package android:name="com.bosch.myspin.ducati_launcherapp" />
+        <package android:name="com.SUZUKI.SUZUKImySPIN" />
+        <package android:name="jp.co.khi.mce.kawasakispin" />
+        <package android:name="com.bmw.ConnectedRide" />
     </queries>
 
     <application
@@ -171,6 +178,32 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <!-- The saved mySPIN bike connecting over Bluetooth opens the mySPIN service before the rider
+             asks, as the official app does; see MySpinStandby. Exported because the system sends
+             these broadcasts; both are protected, so nothing else can. -->
+        <receiver
+            android:name=".tbox.MySpinAutoStartReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
+                <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Keeps the app in the foreground while the mySPIN Bluetooth link waits for the dash. -->
+        <service
+            android:name=".tbox.MySpinKeepAliveService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice" />
+
+        <!-- Exists only between losing the motorcycle's Wi-Fi and getting it back. It connects to
+             nothing: Android refuses a WifiNetworkSpecifier request from a process that is not a
+             foreground app or service, and the session that held that status has just ended. -->
+        <service
+            android:name=".tbox.TBoxWifiRejoinService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice" />
     </application>
 
 </manifest>

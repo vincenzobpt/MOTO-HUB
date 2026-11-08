@@ -41,6 +41,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import io.motohub.android.tbox.ProfileOverride
+import io.motohub.android.tbox.TBoxTransportNotice
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -831,6 +832,17 @@ private fun ConnectingContent(
                     current = phase == SessionPhase.DISCOVERING_TBOX
                 )
             }
+        }
+        // A step only the rider can take on the dash; a list of phases cannot ask for it.
+        val transportNotice by TBoxTransportNotice.latest.collectAsStateWithLifecycle()
+        transportNotice?.let { notice ->
+            Spacer(Modifier.height(14.dp))
+            MotoHubNotice(
+                label = motoHubText("ON THE DASH"),
+                tone = NoticeTone.ACTION,
+                modifier = Modifier.fillMaxWidth(),
+                body = notice
+            )
         }
         Spacer(Modifier.height(18.dp))
         SecondaryAction("Cancel", onCancel, Modifier.fillMaxWidth(0.55f))

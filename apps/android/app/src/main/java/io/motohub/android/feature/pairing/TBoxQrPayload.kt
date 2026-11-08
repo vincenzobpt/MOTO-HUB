@@ -3,7 +3,9 @@
 // Part of MOTO-HUB. Free software under the GNU AGPL v3; see LICENSE.
 package io.motohub.android.feature.pairing
 
+import io.motohub.android.i18n.MotoHubStrings
 import io.motohub.android.session.TBoxConnectionMode
+import io.motohub.android.tbox.EyLinkProtocol
 import io.motohub.android.tbox.ThinkerRideProtocol
 import java.io.ByteArrayOutputStream
 import java.net.URI
@@ -140,7 +142,8 @@ object TBoxQrParser {
      */
     fun parse(rawValue: String): Result<TBoxQrPayload> = runCatching {
         val trimmed = rawValue.trim()
-        parseWifiNetworkCode(trimmed)
+        parseEyLinkUrl(trimmed)
+            ?: parseWifiNetworkCode(trimmed)
             ?: parseCarbitToken(trimmed)
             ?: parseMotoFunUrl(trimmed)
             ?: parseThinkerRideUrl(trimmed)
@@ -231,13 +234,79 @@ object TBoxQrParser {
         )
     }
 
-    private fun parseProvisioningUrl(rawValue: String): TBoxQrPayload {
-        // URI rejects the whole string over one unescaped character - a `%` in a passphrase is
-        // enough - so a dash whose QR is slightly off spec would be unpairable. Fall back to
-        // reading the query and host by hand; content that carries no SSID is still rejected
-        // below, which is the only rejection this parser owes the caller.
+    /**
+     * The EyLink (Erya) pairing code, found on the Kove 350 RR:
+     *
+     *     https://appstore.eryanet.com?productid=EYLINK&device=EY_…&ssid=EY_…&pwd=…
+     *         &name=EY_…&mac=TYWKOVE…&IP=192.168.13.1&key=…
+     *
+     * `productid=EYLINK` is the code's own name for itself, and it is checked before every other
+     * dialect because the rest of the code looks like a Carbit one: [parseProvisioningUrl] would
+     * take `ssid=` and `pwd=` and save an access-point profile for a dash that has no access point.
+     * `ssid` and `name` are the dash's Wi-Fi *Direct* device name, so the profile is saved under
+     * that name in [TBoxConnectionMode.WIFI_DIRECT], where
+     * [io.motohub.android.tbox.TBoxWifiDirectConnector] finds the peer by it and joins its group.
+     * `mac` is not a MAC address and is not kept.
+     *
+     * A KTEY dash (Kove 450 Rally, field log 30C1-136A-AF70) prints the same code with no `ssid`,
+     * `pwd` or `name` at all: `...productid=EYLINK&device=KTEY_1E55BF_LE&mac=40D95A1E55BE&key=...`.
+     * That dash has no network to name. It wants the phone to host one and be told over Bluetooth,
+     * so `device`, its Bluetooth name, becomes the profile's key and the mode is
+     * [TBoxConnectionMode.BLE_PROVISIONED] ([io.motohub.android.tbox.EyLinkBleLink]). Here `mac` is
+     * a real address, kept for identification only: the radio answers one digit away from it.
+     *
+     * The pseudo modelId routes later sessions to the EyLink transport; see
+     * the maintainer's EyLink protocol notes for the wire.
+     */
+    private fun parseEyLinkUrl(rawValue: String): TBoxQrPayload? {
+        val parameters = queryParameters(rawValue)
+        val productId = parameters["productid"]
+        if (!productId.equals(EyLinkProtocol.PROVISIONING_MODEL_ID, ignoreCase = true)) return null
+        // `name` is what the dash answers to in a peer scan; `ssid` has carried the same value on
+        // the one code seen, and stands in when `name` is missing.
+        val peerName = listOf(parameters["name"], parameters["ssid"])
+            .firstNotNullOfOrNull { it?.trim()?.takeIf(String::isNotEmpty) }
+        if (peerName == null) {
+            val bluetoothName = parameters["device"]?.trim()?.takeIf(String::isNotEmpty)
+            if (bluetoothName != null) {
+                return TBoxQrPayload(
+                    ssid = bluetoothName,
+                    password = "",
+                    encryption = null,
+                    modelId = EyLinkProtocol.PROVISIONING_MODEL_ID,
+                    displayName = bluetoothName,
+                    origin = TBoxQrOrigin.RECOGNISED,
+                    suggestedConnectionMode = TBoxConnectionMode.BLE_PROVISIONED,
+                    dashMacAddress = normaliseMac(parameters["mac"])
+                )
+            }
+            error(
+                MotoHubStrings.get(
+                    "This EyLink pairing code does not name the dashboard. Scan the code again " +
+                        "from the dashboard's connection screen."
+                )
+            )
+        }
+        return TBoxQrPayload(
+            ssid = peerName,
+            password = parameters["pwd"].orEmpty(),
+            encryption = null,
+            modelId = EyLinkProtocol.PROVISIONING_MODEL_ID,
+            displayName = peerName,
+            // The code names its own family, which is the standard the CARBIT token meets too.
+            origin = TBoxQrOrigin.RECOGNISED,
+            suggestedConnectionMode = TBoxConnectionMode.WIFI_DIRECT
+        )
+    }
+
+    /**
+     * The query of [rawValue] as a map with folded parameter names. URI rejects the whole string
+     * over one unescaped character - a `%` in a passphrase is enough - so the query is read by
+     * hand when it has to be.
+     */
+    private fun queryParameters(rawValue: String): Map<String, String> {
         val uri = runCatching { URI(rawValue) }.getOrNull()
-        val parameters = (uri?.rawQuery ?: rawValue.substringAfter('?', "").substringBefore('#'))
+        return (uri?.rawQuery ?: rawValue.substringAfter('?', "").substringBefore('#'))
             .split('&')
             .filter(String::isNotBlank)
             .associate { item ->
@@ -246,6 +315,15 @@ object TBoxQrParser {
                 // and an `SSID=` that reads as absent costs a pairing for a cosmetic difference.
                 decode(keyAndValue[0]).lowercase() to decode(keyAndValue.getOrElse(1) { "" })
             }
+    }
+
+    private fun parseProvisioningUrl(rawValue: String): TBoxQrPayload {
+        // URI rejects the whole string over one unescaped character - a `%` in a passphrase is
+        // enough - so a dash whose QR is slightly off spec would be unpairable. Fall back to
+        // reading the query and host by hand; content that carries no SSID is still rejected
+        // below, which is the only rejection this parser owes the caller.
+        val uri = runCatching { URI(rawValue) }.getOrNull()
+        val parameters = queryParameters(rawValue)
         val host = (uri?.host ?: hostOf(rawValue))?.lowercase()
         val origin = if (host != null && isKnownProvisioningHost(host)) {
             TBoxQrOrigin.RECOGNISED

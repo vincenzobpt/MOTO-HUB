@@ -56,7 +56,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 internal class EcBtpNetLink(
     context: Context,
     private val log: (String) -> Unit,
-    private val hotspot: PhoneHostedHotspot,
+    private val hotspot: PhoneHostedNetwork,
     private val now: () -> Date = { Date() },
     private val zone: () -> TimeZone = { TimeZone.getDefault() }
 ) {
@@ -153,7 +153,7 @@ internal class EcBtpNetLink(
 
         var modelId: String? = null
         var authRetries = 0
-        var hosted: PhoneHostedHotspot.Credentials? = null
+        var hosted: PhoneHostedNetwork.Credentials? = null
         var subnet: TBoxHotspotScan.Subnet? = null
         var deadline = System.currentTimeMillis() + EXCHANGE_TIMEOUT_MS
 
@@ -230,12 +230,12 @@ internal class EcBtpNetLink(
                         EcBtpNetProtocol.STATUS_USE_PHONE_AP -> {
                             if (hosted != null) continue
                             if (status.phoneApFrequencyMhz != 0) {
-                                // Nothing can be done about it - Android picks the band for a
-                                // local-only hotspot - but a dash that asked for 5GHz and got
+                                // A Wi-Fi Direct group honours it; a local-only hotspot cannot -
+                                // Android picks that band - and a dash that asked for 5GHz and got
                                 // 2.4GHz would otherwise fail for no visible reason.
-                                log("$dashName asked for a ${status.phoneApFrequencyMhz}MHz hotspot; Android chooses the band.")
+                                log("$dashName asked for a ${status.phoneApFrequencyMhz}MHz network.")
                             }
-                            val credentials = hotspot.start(HOTSPOT_TIMEOUT_MS)
+                            val credentials = hotspot.start(HOTSPOT_TIMEOUT_MS, status.phoneApFrequencyMhz)
                                 .getOrElse { failure -> return Result.failure(failure) }
                             val found = awaitHostedSubnet()
                                 ?: return Result.failure(

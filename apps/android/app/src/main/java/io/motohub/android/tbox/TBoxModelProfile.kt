@@ -22,6 +22,13 @@ private const val KOVE_450_RALLY_VIDEO_HEIGHT = 640
  */
 internal const val KOVE_625X_PROVISIONING_MODEL_ID = "KOVE-625X"
 
+/**
+ * The pseudo modelId a motorcycle saved with [io.motohub.android.session.TBoxConnectionMode.MYSPIN]
+ * carries, which routes it to [TBoxModelProfile.DUCATI_MULTISTRADA_V4]. Not something any dash
+ * reports: a mySPIN dash names no model, and EasyConn model ids are numeric.
+ */
+internal const val MYSPIN_PROVISIONING_MODEL_ID = "MYSPIN"
+
 /** Tunings that can be applied after the transport has decoded a touch frame. */
 data class TBoxTouchPolicy(
     val ghostMergePx: Int = 48,
@@ -158,7 +165,7 @@ enum class TBoxModelProfile(
      */
     val announcesMirrorLiveOnly: Boolean = false,
     /**
-     * Answer two PXC questions the way the CFMOTO app does (jadx-225): the CLIENT_INFO reply
+     * Answer two PXC questions the way the CFMOTO app does: the CLIENT_INFO reply
      * leaves out `supportFunction` (that app calls `reply()` with no map, and only a map makes
      * the SDK write it), and `CHECK_APP_NETWORKING_CAPABILITY` (0x10750, asked every 2 s) gets
      * `{"status":0}` instead of an empty ack. On for [CFDL26_PORTRAIT] only, whose dash paints
@@ -703,7 +710,7 @@ enum class TBoxModelProfile(
      *
      * Geometry, bitrate and GOP come from the ttarlov/kove-dash reverse-engineering of the OEM
      * `oversea.whbluestar.thinkerride` app plus its own working projection on this exact bike
-     * (`refs/kove-dash/proto-poc/PROTOCOL.md`): 1280x640 confirmed rendering, 30fps, 1s GOP,
+     * (its `proto-poc/PROTOCOL.md`): 1280x640 confirmed rendering, 30fps, 1s GOP,
      * `3 * width * height` — the same `r=3` bitrate tier [KOVE_800X] uses, which is why both
      * profiles compute it the same way rather than sharing a constant.
      *
@@ -897,6 +904,66 @@ enum class TBoxModelProfile(
         yunmoMapNavExperiment = true,
         yunmoJpegVideo = true,
         ssidPrefixes = setOf("KY_ADV_")
+    ),
+
+    /**
+     * Ducati Multistrada V4 (S, Pikes Peak, Rally, RS), Suzuki GSX-S1000GT/GX, Kawasaki Ninja H2 SX
+     * and the BMW 10.25-inch TFT: a Bosch mySPIN client. Bluetooth hands over the Wi-Fi, the dash
+     * pulls one JPEG at a time, and no H.264 path exists at all - the official apps have none
+     * either. The screen size comes from the dash's own ClientInit; 848x304 is the projection area
+     * measured on a Pikes Peak and only matters before that arrives.
+     *
+     * No real modelId and no SSID prefix: the dash never shows a QR and its network appears only
+     * after Bluetooth, so nothing a dash reports can resolve here. The only id is the pseudo one
+     * stamped when the rider picks the mySPIN mode (see withModelIdForConnectionMode), the same way
+     * the ThinkerRide mode reaches its profile. No profile override exists for it on purpose:
+     * overrides are offered to riders of failing sessions, and a mySPIN profile without its
+     * Bluetooth step can only fail on any other bike.
+     *
+     * shortcut: frame rate and dpi are first guesses (no Multistrada tested yet); tune them from the
+     * first field log.
+     */
+    DUCATI_MULTISTRADA_V4(
+        key = "ducati_multistrada_v4",
+        displayName = "Bosch mySPIN (Ducati, Suzuki, Kawasaki, BMW)",
+        modelIds = setOf(MYSPIN_PROVISIONING_MODEL_ID),
+        mapTilesRequireCellular = true,
+        supportsScreenTouch = false,
+        defaultAndroidAutoPreset = AndroidAutoVideoPreset.LANDSCAPE_800X480,
+        fallbackTBoxVideoArea = TBoxEvent.VideoArea(848, 304),
+        requiresSockAuth = false,
+        advertisedSupportFunction = 0,
+        encoderFrameRate = 15,
+        virtualDisplayDpi = 160,
+        transportFamily = TBoxTransportFamily.MYSPIN
+    ),
+    /**
+     * KOVE 350 RR, and any other Erya dash on the EyLink stack: Wi-Fi Direct with the dash as
+     * group owner, then two sockets the phone dials, reached through [TBoxTransportFamily.EYLINK].
+     *
+     * The dash negotiates its own geometry in its reply to MIRROR_START, so [fallbackTBoxVideoArea]
+     * only matters when that reply never comes. Every number here is the one reported upstream on
+     * a single 350 RR (784x352, 30 fps, 2000 kbps); the plain 1s GOP is a guess on the side of the
+     * KOVE decoders we do know, which froze on intra refresh. The panel is not a touchscreen.
+     *
+     * Reached only through [EyLinkProtocol.PROVISIONING_MODEL_ID], which the EyLink QR stamps:
+     * nothing an EasyConn dash reports can resolve here.
+     */
+    KOVE_350RR_EYLINK(
+        key = "kove_350rr_eylink",
+        displayName = "KOVE (EyLink)",
+        modelIds = setOf(EyLinkProtocol.PROVISIONING_MODEL_ID),
+        mapTilesRequireCellular = true,
+        supportsScreenTouch = false,
+        fallbackTBoxVideoArea = TBoxEvent.VideoArea(784, 352),
+        requiresSockAuth = false,
+        advertisedSupportFunction = 0,
+        encoderKeyframeIntervalSeconds = 1,
+        encoderFrameRate = 30,
+        encoderBitRate = 2_000_000,
+        encoderPlainGopWithoutIntraRefresh = true,
+        encoderUsesExactVideoArea = true,
+        transportFamily = TBoxTransportFamily.EYLINK
     );
 
     /**
@@ -910,7 +977,7 @@ enum class TBoxModelProfile(
      * path should have to know which family it is looking at.
      */
     val usesJpegStills: Boolean
-        get() = yunmoJpegVideo || easyConnJpegStills
+        get() = yunmoJpegVideo || easyConnJpegStills || transportFamily == TBoxTransportFamily.MYSPIN
 
     companion object {
         /**
@@ -1193,7 +1260,10 @@ enum class TBoxModelProfile(
                 // shared with the EasyConn X-Cape 649/700 and the Seiemmezzo, so letting any
                 // of them win on capabilities would route those bikes to the wrong wire.
                 // They are reachable only by a rider pinning them.
-                MORINI_XCAPE_1200, MORINI_XCAPE_1200_MIRROR, MORINI_XCAPE_1200_JPEG, KOVE_625X -> 0
+                MORINI_XCAPE_1200, MORINI_XCAPE_1200_MIRROR, MORINI_XCAPE_1200_JPEG, KOVE_625X,
+                DUCATI_MULTISTRADA_V4 -> 0
+                // Nor does an EyLink dash: it is reached only through the QR's pseudo modelId.
+                KOVE_350RR_EYLINK -> 0
                 GENERIC -> 0
             }
         }

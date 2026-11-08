@@ -39,7 +39,20 @@ enum class TBoxTransportFamily {
     THINKERRIDE,
 
     /** Yunmo SoftAP dashes (Moto Morini X-Cape 1200): one TCP socket to 192.168.4.1:8200. */
-    YUNMO
+    YUNMO,
+
+    /**
+     * Bosch mySPIN dashes (Ducati Multistrada V4 "Ducati Connect", Suzuki, Kawasaki, BMW): Bluetooth
+     * hands over the Wi-Fi, the dash announces itself over UDP and pulls JPEG frames over TCP.
+     * Reached only through a profile the rider picked by hand.
+     */
+    MYSPIN,
+
+    /**
+     * EyLink (Erya) dashes (Kove 350 RR): the phone joins the dash's Wi-Fi Direct group, then
+     * dials its control (11113) and video (11111) ports and pushes H.264. See [EyLinkProtocol].
+     */
+    EYLINK
 }
 
 sealed interface TBoxTransportStatus {

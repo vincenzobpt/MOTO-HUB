@@ -40,7 +40,7 @@ import kotlinx.coroutines.withTimeoutOrNull
  * ThinkerRide projection transport (KOVE-family dashboards). The roles are the inverse of
  * EasyConn: after [ThinkerRideBleLink] completes the BLE handshake, the *dash* connects to three
  * TCP servers the phone opens on the shared Wi-Fi network — control (17818), keep-alive (15457)
- * and video (15456). See [ThinkerRideProtocol] for the wire format and refs/KoveMirror for the
+ * and video (15456). See [ThinkerRideProtocol] for the wire format and KoveMirror for the
  * decoded reference implementation.
  *
  * The [TBoxTransport] lifecycle maps as: [discover] = bind the servers, pair over BLE and wait

@@ -31,6 +31,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -80,6 +81,7 @@ import io.motohub.android.feature.garage.TBoxCapabilityScreen
 import io.motohub.android.feature.home.HubHomeScreen
 import io.motohub.android.feature.home.HubViewModel
 import io.motohub.android.feature.home.AdvancedPromoScreen
+import io.motohub.android.feature.home.KoveModelDialog
 import io.motohub.android.feature.home.WireNeedsAndroidAutoDialog
 import io.motohub.android.feature.home.WireVerdictDialog
 import io.motohub.android.feature.androidauto.AndroidAutoHelpScreen
@@ -298,6 +300,7 @@ class MainActivity : ComponentActivity() {
         handleAndroidAutoPreviewLaunchIntent(intent)
         handleHandlebarBluetoothRequestIntent(intent)
         handleTBoxScanPermissionRequestIntent(intent)
+        io.motohub.android.tbox.MySpinFoundInbox.offer(intent)
 
         setContent {
             MotoHubTheme {
@@ -907,7 +910,11 @@ class MainActivity : ComponentActivity() {
                     checkForUpdates(openDialog = false)
                 }
                 suspend fun attemptAutoConnect() {
-                    if (!MotoHubSettings.autoConnect(context)) {
+                    // A mySPIN bike that handed over its Wi-Fi while MOTO-HUB was away (MySpinStandby):
+                    // the rider selected the connection on the dash, which is the request to connect.
+                    val mySpinReady = io.motohub.android.tbox.MySpinBluetoothLink.current
+                        ?.let { it.standby && it.isOpen && it.hasCredentials } == true
+                    if (!mySpinReady && !MotoHubSettings.autoConnect(context)) {
                         ProjectionEventLog.debug("AUTO_CONNECT", "Auto-connect on launch is disabled.")
                         return
                     }
@@ -929,31 +936,37 @@ class MainActivity : ComponentActivity() {
                         return
                     }
                     val now = SystemClock.elapsedRealtime()
-                    if (now - lastAutoConnectAttemptAt < AUTO_CONNECT_RETRY_COOLDOWN_MS) return
+                    if (!mySpinReady && now - lastAutoConnectAttemptAt < AUTO_CONNECT_RETRY_COOLDOWN_MS) return
                     // Deliberately before the timestamp is stamped: a skip must not push the
                     // cooldown out, so the resume that finally finds the dash on the air is not
                     // made to wait for a decision that cost nothing.
                     // Both rungs read ONCE and shared with the cancel evidence: asking twice
                     // would spend a second scan read and could answer differently between the
                     // decision and the observation that retires the evidence.
-                    val dashBroadcasting = viewModel.isDashBroadcasting()
-                    val associatedToDash = viewModel.isAssociatedToDash()
-                    val decision = autoConnectDecision(
-                        riderCancelled = viewModel.riderCancelledConnect,
-                        previousAttempts = autoConnectAttempts,
-                        dashBroadcasting = dashBroadcasting,
-                        associatedToDash = associatedToDash,
-                        dashReachableWhenCancelled = viewModel.dashReachableWhenCancelled(
-                            dashReachable(dashBroadcasting, associatedToDash)
+                    // Not for mySPIN: its saved name is a Bluetooth one, so no Wi-Fi scan will ever
+                    // show it, and the dash keeps its Wi-Fi up for only about 5 s.
+                    val decision = if (mySpinReady) {
+                        AutoConnectDecision.Go
+                    } else {
+                        val dashBroadcasting = viewModel.isDashBroadcasting()
+                        val associatedToDash = viewModel.isAssociatedToDash()
+                        autoConnectDecision(
+                            riderCancelled = viewModel.riderCancelledConnect,
+                            previousAttempts = autoConnectAttempts,
+                            dashBroadcasting = dashBroadcasting,
+                            associatedToDash = associatedToDash,
+                            dashReachableWhenCancelled = viewModel.dashReachableWhenCancelled(
+                                dashReachable(dashBroadcasting, associatedToDash)
+                            )
                         )
-                    )
+                    }
                     if (decision is AutoConnectDecision.Skip) {
                         ProjectionEventLog.debug("AUTO_CONNECT", "Auto-connect skipped; ${decision.reason}")
                         return
                     }
                     lastAutoConnectAttemptAt = now
                     autoConnectAttempts++
-                    delay(AUTO_CONNECT_START_DELAY_MS)
+                    if (!mySpinReady) delay(AUTO_CONNECT_START_DELAY_MS)
                     ProjectionEventLog.record(
                         "AUTO_CONNECT",
                         "Launching automatic connection to saved motorcycle ${profile.ssid}."
@@ -975,6 +988,35 @@ class MainActivity : ComponentActivity() {
                 // check already skips this once a connection is established or in progress.
                 val autoConnectScope = rememberCoroutineScope()
                 val lifecycleOwner = LocalLifecycleOwner.current
+                // Paired mySPIN bikes not saved yet, re-read on every return (the rider pairs in
+                // Android's settings and comes back), and the bike a "found" notification asked to add.
+                var mySpinFound by remember { mutableStateOf(emptyList<String>()) }
+                var pairedBluetoothNames by remember { mutableStateOf(emptyList<String>()) }
+                LaunchedEffect(lifecycleOwner, state.motorcycles) {
+                    lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                        mySpinFound = io.motohub.android.tbox.MySpinBikes.pairedUnsaved(context, state.motorcycles.map { it.ssid })
+                        pairedBluetoothNames = io.motohub.android.tbox.MySpinBikes.pairedForPicker(context)
+                    }
+                }
+                val mySpinToAdd by io.motohub.android.tbox.MySpinFoundInbox.pending.collectAsState()
+                LaunchedEffect(mySpinToAdd) {
+                    val name = mySpinToAdd ?: return@LaunchedEffect
+                    io.motohub.android.tbox.MySpinFoundInbox.consume()
+                    // Only a bike this phone is really paired with: MainActivity is exported, and the
+                    // extra must not let another app plant a profile.
+                    if (name in io.motohub.android.tbox.MySpinBikes.pairedUnsaved(context, state.motorcycles.map { it.ssid })) {
+                        ProjectionEventLog.record("UI", "Rider added the mySPIN motorcycle \"$name\" from the found notification.")
+                        viewModel.addMySpinMotorcycle(name)
+                        selectedTab = HubTab.GARAGE
+                    }
+                }
+                // A mySPIN dash that hands over its Wi-Fi while MOTO-HUB is on screen: the polling
+                // below is far slower than the ~5 s the Suzuki dash keeps its Wi-Fi up for.
+                LaunchedEffect(lifecycleOwner) {
+                    lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                        io.motohub.android.tbox.MySpinBluetoothLink.standbyCredentials.collect { attemptAutoConnect() }
+                    }
+                }
                 DisposableEffect(lifecycleOwner) {
                     val observer = LifecycleEventObserver { _, event ->
                         if (event == Lifecycle.Event.ON_RESUME) {
@@ -1491,6 +1533,7 @@ class MainActivity : ComponentActivity() {
                         formError = state.formError,
                         ssidSuggestion = state.ssidSuggestion,
                         onAcceptSsidSuggestion = viewModel::acceptSsidSuggestion,
+                        pairedBluetoothNames = pairedBluetoothNames,
                         onSsidChanged = viewModel::onSsidChanged,
                         onPasswordChanged = viewModel::onPasswordChanged,
                         onConnectionModeChanged = viewModel::onConnectionModeChanged,
@@ -1687,6 +1730,11 @@ class MainActivity : ComponentActivity() {
                             GarageTabContent(
                                 profiles = state.motorcycles,
                                 activeProfileId = state.session.motorcycle?.id,
+                                mySpinFound = mySpinFound,
+                                onAddMySpin = { name ->
+                                    ProjectionEventLog.record("UI", "Rider added the paired mySPIN motorcycle \"$name\" from the Garage.")
+                                    viewModel.addMySpinMotorcycle(name)
+                                },
                                 onAddMotorcycle = {
                                     returnToGarageAfterPairing = true
                                     if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) ==
@@ -1872,6 +1920,18 @@ class MainActivity : ComponentActivity() {
                 state.wireNeedsAndroidAutoFor?.let {
                     WireNeedsAndroidAutoDialog(onDismiss = { viewModel.dismissWireAndroidAutoNudge() })
                 }
+                state.koveModelQuestionFor?.let { motorcycle ->
+                    KoveModelDialog(
+                        motorcycleName = motorcycle.displayName?.takeIf { it.isNotBlank() } ?: motorcycle.ssid,
+                        onChoose = { override ->
+                            // The question held a connect back; answering it is the rider's go-ahead.
+                            if (viewModel.answerKoveModel(override)) {
+                                connectWhenAndroidAccepts("KOVE model chosen")
+                            }
+                        },
+                        onDismiss = viewModel::dismissKoveModelQuestion
+                    )
+                }
                 CompanionConflictGateDialog(companionConflictGate)
                 // Asked only of riders who never opted in; the scheduler raises this after a
                 // crash and clears it on either answer. Queued behind the safety disclaimer,
@@ -1985,6 +2045,7 @@ class MainActivity : ComponentActivity() {
         handleAndroidAutoPreviewLaunchIntent(intent)
         handleHandlebarBluetoothRequestIntent(intent)
         handleTBoxScanPermissionRequestIntent(intent)
+        io.motohub.android.tbox.MySpinFoundInbox.offer(intent)
     }
 
     /**

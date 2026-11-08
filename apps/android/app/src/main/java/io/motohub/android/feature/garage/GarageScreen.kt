@@ -56,7 +56,10 @@ fun GarageTabContent(
     onAddMotorcycleManually: () -> Unit,
     onSelectMotorcycle: (String) -> Unit,
     onOpenDetails: (String) -> Unit,
-    onOpenDefaultSettings: () -> Unit = {}
+    onOpenDefaultSettings: () -> Unit = {},
+    /** Paired mySPIN motorcycles (Suzuki, Ducati, Kawasaki, BMW) not saved yet, by their exact Bluetooth name. */
+    mySpinFound: List<String> = emptyList(),
+    onAddMySpin: (String) -> Unit = {}
 ) {
     val active = profiles.firstOrNull { it.id == activeProfileId }
 
@@ -71,6 +74,22 @@ fun GarageTabContent(
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
             MonoLabel(motoHubText("YOUR GARAGE"))
             Text(motoHubText("Motorcycles"), style = MaterialTheme.typography.displaySmall)
+        }
+
+        // A mySPIN dash has no QR: the bike the phone is already paired with is offered by name,
+        // so nothing is chosen from a list of modes or typed.
+        if (mySpinFound.isNotEmpty()) {
+            MonoLabel(motoHubText("MYSPIN MOTORCYCLES FOUND"))
+            mySpinFound.forEach { name ->
+                HeroTile(
+                    title = motoHubText("Add %1\$s", name),
+                    subtitle = motoHubText("Paired over Bluetooth"),
+                    icon = "Manual",
+                    color = MotoHubManual,
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { onAddMySpin(name) }
+                )
+            }
         }
 
         // The rider's first pairing is the one moment this whole tab has a single before/after:

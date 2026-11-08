@@ -5,6 +5,7 @@ package io.motohub.android.feature.pairing
 
 import io.motohub.android.session.MotorcycleProfile
 import io.motohub.android.session.TBoxConnectionMode
+import io.motohub.android.tbox.MYSPIN_PROVISIONING_MODEL_ID
 import io.motohub.android.tbox.TBoxModelProfile
 import io.motohub.android.tbox.ThinkerRideProtocol
 
@@ -34,6 +35,12 @@ import io.motohub.android.tbox.ThinkerRideProtocol
  */
 internal fun MotorcycleProfile.withModelIdForConnectionMode(): MotorcycleProfile {
     val known = modelId?.takeIf { it.isNotBlank() }
+    // The mySPIN mode works like ThinkerRide's, with one difference: its pseudo id always wins,
+    // because no dash it can reach reports a real one worth keeping.
+    if (connectionMode == TBoxConnectionMode.MYSPIN) {
+        return if (known == MYSPIN_PROVISIONING_MODEL_ID) this else copy(modelId = MYSPIN_PROVISIONING_MODEL_ID)
+    }
+    if (known == MYSPIN_PROVISIONING_MODEL_ID) return copy(modelId = null).withModelIdForConnectionMode()
     val isThinkerRide = connectionMode == TBoxConnectionMode.THINKERRIDE
     return when {
         isThinkerRide && known == null -> copy(modelId = ThinkerRideProtocol.PROVISIONING_MODEL_ID)

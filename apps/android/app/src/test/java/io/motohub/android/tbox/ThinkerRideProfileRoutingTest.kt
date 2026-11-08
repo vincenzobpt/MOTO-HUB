@@ -43,12 +43,15 @@ class ThinkerRideProfileRoutingTest {
             TBoxModelProfile.KOVE_450_RALLY.transportFamily
         )
         // Every EasyConn profile must keep the wire it has always used. KOVE is ThinkerRide and
-        // the X-Cape 1200 is Yunmo; every other profile stays on EasyConn.
+        // the X-Cape 1200 is Yunmo, the Ducati is mySPIN (MySpinProfileRoutingTest guards that
+        // one), the 350 RR is EyLink (EylinkQrDialectTest); every other profile stays on EasyConn.
         TBoxModelProfile.entries
             .filterNot {
                 it == TBoxModelProfile.KOVE_800X ||
                     it == TBoxModelProfile.KOVE_450_RALLY ||
-                    it.transportFamily == TBoxTransportFamily.YUNMO
+                    it.transportFamily == TBoxTransportFamily.YUNMO ||
+                    it == TBoxModelProfile.DUCATI_MULTISTRADA_V4 ||
+                    it == TBoxModelProfile.KOVE_350RR_EYLINK
             }
             .forEach { profile ->
                 assertEquals(

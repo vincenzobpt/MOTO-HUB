@@ -22,6 +22,8 @@ class SelectingTBoxTransport(context: Context) : TBoxTransport {
     private val easyConn = RideDaemonTransport(context)
     private val thinkerRide = ThinkerRideTransport(context)
     private val yunmo = YunmoTransport(context)
+    private val mySpin = MySpinTransport()
+    private val eyLink = EyLinkTransport()
 
     @Volatile
     private var active: TBoxTransport = easyConn
@@ -79,7 +81,7 @@ class SelectingTBoxTransport(context: Context) : TBoxTransport {
     @Volatile
     private var configuredMotorcycle: io.motohub.android.session.MotorcycleProfile? = null
 
-    override val events: Flow<TBoxEvent> = merge(easyConn.events, thinkerRide.events, yunmo.events)
+    override val events: Flow<TBoxEvent> = merge(easyConn.events, thinkerRide.events, yunmo.events, mySpin.events, eyLink.events)
 
     override fun configureProtocolProfile(
         profile: TBoxModelProfile,
@@ -89,6 +91,8 @@ class SelectingTBoxTransport(context: Context) : TBoxTransport {
             TBoxTransportFamily.EASYCONN -> easyConn
             TBoxTransportFamily.THINKERRIDE -> thinkerRide
             TBoxTransportFamily.YUNMO -> yunmo
+            TBoxTransportFamily.MYSPIN -> mySpin
+            TBoxTransportFamily.EYLINK -> eyLink
         }
         activeProtocolProfile = routedProfileToPublish(profile)
         discoverySwitchedProfile = null
@@ -152,11 +156,13 @@ class SelectingTBoxTransport(context: Context) : TBoxTransport {
     override fun offerAccessUnit(avcc: ByteArray): Boolean = active.offerAccessUnit(avcc)
 
     override suspend fun stop() {
-        // Stopping all three is deliberate: a routing change between sessions must never leave the
-        // previous family's sockets or BLE link alive, and stop() is a no-op on an idle transport.
+        // Stopping every family is deliberate: a routing change between sessions must never leave
+        // the previous family's sockets or BLE link alive, and stop() is a no-op on an idle transport.
         easyConn.stop()
         thinkerRide.stop()
         yunmo.stop()
+        mySpin.stop()
+        eyLink.stop()
     }
 
     companion object {

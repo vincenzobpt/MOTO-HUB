@@ -3,8 +3,10 @@
 // Part of MOTO-HUB. Free software under the GNU AGPL v3; see LICENSE.
 package io.motohub.android.tbox
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.wifi.p2p.WifiP2pManager
 import io.motohub.android.data.MotorcycleProfileStore
 import io.motohub.android.session.MotorcycleProfile
 import io.motohub.android.session.ProjectionEventLog
@@ -12,6 +14,9 @@ import io.motohub.android.session.TBoxConnectionMode
 import java.net.Inet4Address
 import java.net.InetAddress
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.coroutines.resume
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeoutOrNull
 
 /**
  * Single decision point for how to reach a T-Box. A profile can explicitly select Auto, AP, or
@@ -42,7 +47,13 @@ object TBoxLinkResolver {
         profile: MotorcycleProfile,
         formedGroup: FormedP2pGroup? = null
     ): Result<TBoxLink> =
-        if (profile.connectionMode == TBoxConnectionMode.BLE_PROVISIONED) {
+        if (profile.connectionMode == TBoxConnectionMode.MYSPIN) {
+            mySpinLink(context, networkConnector, profile)
+        } else if (profile.connectionMode == TBoxConnectionMode.BLE_PROVISIONED &&
+            profile.modelId == EyLinkProtocol.PROVISIONING_MODEL_ID
+        ) {
+            eyLinkBluetoothLink(context, profile)
+        } else if (profile.connectionMode == TBoxConnectionMode.BLE_PROVISIONED) {
             bluetoothProvisionedLink(context).recoverUnlessCancelled { bluetoothFailure ->
                 // No dash answered the scan. The mirror of the PHONE_HOTSPOT fallback below, and it
                 // exists for the same reason: a Carbit code that names no network reaches both the
@@ -144,6 +155,13 @@ object TBoxLinkResolver {
         // not go anywhere, and on a Bluetooth-provisioned dash tearing it down and building it
         // again would put the dash through the whole pairing exchange for nothing.
         if (currentLink is TBoxLink.PhoneHotspot) return currentLink
+        // The session's stop() closed the Bluetooth link, and without it the dash has no reason
+        // to keep or announce its Wi-Fi. Nor can the fallbacks below help: this profile's ssid is
+        // a Bluetooth name. Only the whole road back gets a new hand-over.
+        if (profile.connectionMode == TBoxConnectionMode.MYSPIN) {
+            currentLink?.disconnect()
+            return connect(context, networkConnector, profile).getOrThrow()
+        }
         if (profile.connectionMode == TBoxConnectionMode.BLE_PROVISIONED) {
             return connect(context, networkConnector, profile).getOrThrow()
         }
@@ -178,18 +196,107 @@ object TBoxLinkResolver {
         TBoxConnectionMode.PHONE_HOTSPOT,
         TBoxConnectionMode.BLE_PROVISIONED,
         TBoxConnectionMode.THINKERRIDE -> false
+        // Decided at connect time by the dash itself, over Bluetooth; see mySpinLink.
+        TBoxConnectionMode.MYSPIN -> false
         TBoxConnectionMode.AUTO -> TBoxWifiDirectConnector.isWifiDirectSsid(profile.ssid)
     }
 
     /**
-     * There is nothing to connect *to* in hotspot mode - the rider has already turned tethering on
-     * by hand, because Android does not let an app create a hotspot with the SSID and password the
-     * dash dictates. All this does is find the interface hosting it, so discovery knows which
-     * subnet the dash is sitting on.
+     * The Ducati Connect road: Bluetooth first, then whatever Wi-Fi the dash names. The control
+     * link stays open in [MySpinBluetoothLink.current] for the transport, and is closed here only
+     * when the Wi-Fi join fails; otherwise the transport's stop() ends it with the session.
      *
-     * Failing with a rider-readable message matters more here than anywhere else: "no hotspot
-     * found" is something they can act on immediately, and it is by far the likeliest mistake.
+     * A dash that hands over a Wi-Fi Direct PIN is joined with it (see
+     * [TBoxWifiDirectConnector]'s wpsPin); every other one by push button.
      */
+    private suspend fun mySpinLink(
+        context: Context,
+        networkConnector: TBoxNetworkConnector,
+        profile: MotorcycleProfile
+    ): Result<TBoxLink> {
+        // A link MySpinStandby opened when the bike connected is adopted, credentials and all:
+        // a second RFCOMM service would only compete with it for the dash.
+        val standby = MySpinBluetoothLink.current?.takeIf { it.isOpen && it.servesDevice(profile.ssid) }
+        val control = standby ?: MySpinBluetoothLink(context, profile.ssid, MySpinBluetoothLink.regionCode()).also {
+            MySpinBluetoothLink.install(it)
+        }
+        if (standby != null) {
+            standby.adopt()
+            ProjectionEventLog.record(
+                "NETWORK",
+                "Reusing the Bluetooth link opened when the motorcycle connected" +
+                    if (standby.hasCredentials) "; the dash already handed over its Wi-Fi." else "."
+            )
+        } else if (MySpinBluetoothLink.isBmw(profile.ssid)) {
+            ProjectionEventLog.record("NETWORK", "Connecting to the BMW TFT \"${profile.ssid}\" over Bluetooth (Ice).")
+        } else {
+            ProjectionEventLog.record(
+                "NETWORK",
+                "Waiting for the dash \"${profile.ssid}\" on Bluetooth; choose ${MySpinBluetoothLink.dashServiceName(profile.ssid)} on the dash."
+            )
+        }
+        val credentials = control.awaitCredentials { ownWifiDirectName(context) }
+            .getOrElse { failure ->
+                MySpinBluetoothLink.closeCurrent()
+                return Result.failure(failure)
+            }
+        val joined = when (credentials) {
+            is MySpinBluetoothLink.Credentials.AccessPoint -> {
+                ProjectionEventLog.record(
+                    "NETWORK",
+                    "The dash named its access point ${credentials.ssid} (${credentials.frequencyBand}); joining it."
+                )
+                networkConnector.connect(
+                    profile.copy(
+                        ssid = credentials.ssid,
+                        password = credentials.password,
+                        connectionMode = TBoxConnectionMode.ACCESS_POINT
+                    )
+                ).map { TBoxLink.Infrastructure(it) }
+            }
+            is MySpinBluetoothLink.Credentials.WifiDirect -> {
+                val how = if (credentials.pin != null) "with the PIN it gave" else "by push button"
+                ProjectionEventLog.record(
+                    "NETWORK",
+                    "The dash asked for Wi-Fi Direct with ${credentials.deviceName}; joining it $how."
+                )
+                TBoxWifiDirectConnector(context, wpsPin = credentials.pin).connect(
+                    profile.copy(ssid = credentials.deviceName, password = "", connectionMode = TBoxConnectionMode.WIFI_DIRECT)
+                ).map { it }
+            }
+        }
+        return joined.onFailure { MySpinBluetoothLink.closeCurrent() }
+    }
+
+    /** This phone's own Wi-Fi Direct name, which a push-button request to the dash has to carry. */
+    @SuppressLint("MissingPermission")
+    internal suspend fun ownWifiDirectName(context: Context): String? = runCatching {
+        withTimeoutOrNull(WIFI_DIRECT_NAME_TIMEOUT_MS) {
+            val manager = context.getSystemService(WifiP2pManager::class.java) ?: return@withTimeoutOrNull null
+            val channel = manager.initialize(context, context.mainLooper, null) ?: return@withTimeoutOrNull null
+            try {
+                suspendCancellableCoroutine<String?> { continuation ->
+                    manager.requestDeviceInfo(channel) { device -> continuation.resume(device?.deviceName) }
+                }
+            } finally {
+                channel.close()
+            }
+        }
+    }.getOrNull()
+
+    /** The EyLink counterpart of [bluetoothProvisionedLink]; see [EyLinkBleLink]. */
+    private suspend fun eyLinkBluetoothLink(context: Context, profile: MotorcycleProfile): Result<TBoxLink> {
+        val link = EyLinkBleLink(context) { message -> ProjectionEventLog.record("EYLINK", message) }
+        return link.provision(profile.ssid).map { provisioned ->
+            ProjectionEventLog.record(
+                "NETWORK",
+                "${provisioned.dashName} is on the network this phone is hosting " +
+                    "(${provisioned.subnet.interfaceName}), at ${provisioned.dashIp.hostAddress}."
+            )
+            TBoxLink.PhoneHotspot(provisioned.subnet, provisioned.dashIp, link::close)
+        }
+    }
+
     /**
      * Puts a dash onto a network the app itself hosts, over Bluetooth.
      *
@@ -203,11 +310,18 @@ object TBoxLinkResolver {
         context: Context,
         scanTimeoutMillis: Long = EcBtpNetLink.SCAN_TIMEOUT_MS
     ): Result<TBoxLink> {
-        val hotspot = PhoneHostedHotspot(context) { message ->
+        val hotspot = PreferredHostedNetwork(context) { message ->
             ProjectionEventLog.record("NETWORK", message)
         }
         val link = EcBtpNetLink(context, { message -> ProjectionEventLog.record("PAIRING", message) }, hotspot)
-        val provisioned = link.provision(scanTimeoutMillis).getOrElse { failure ->
+        val provisioned = try {
+            link.provision(scanTimeoutMillis)
+        } catch (cancellation: CancellationException) {
+            // The network may already be up by now, and nobody else can take it back down.
+            link.close()
+            hotspot.close()
+            throw cancellation
+        }.getOrElse { failure ->
             link.close()
             hotspot.close()
             return Result.failure(failure)
@@ -242,6 +356,8 @@ object TBoxLinkResolver {
      */
     private const val FALLBACK_SCAN_MILLIS = 6_000L
 
+    private const val WIFI_DIRECT_NAME_TIMEOUT_MS = 5_000L
+
     private const val FALLBACK_PREFERENCES = "tbox_access_point_fallback"
     private const val FALLBACK_KEY_PREFIX = "streak_"
 
@@ -254,6 +370,15 @@ object TBoxLinkResolver {
      */
     private const val AP_FALLBACKS_BEFORE_REWRITE = 2
 
+    /**
+     * There is nothing to connect *to* in hotspot mode - the rider has already turned tethering on
+     * by hand, because Android does not let an app create a hotspot with the SSID and password the
+     * dash dictates. All this does is find the interface hosting it, so discovery knows which
+     * subnet the dash is sitting on.
+     *
+     * Failing with a rider-readable message matters more here than anywhere else: "no hotspot
+     * found" is something they can act on immediately, and it is by far the likeliest mistake.
+     */
     private fun hostedLink(context: Context): Result<TBoxLink> {
         // Passing what the phone is *using* is not optional, though it was for a long time: the
         // parameter existed and the only production caller left it empty, so the rider's home

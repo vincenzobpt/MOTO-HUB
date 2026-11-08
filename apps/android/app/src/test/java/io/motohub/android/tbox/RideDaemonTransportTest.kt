@@ -280,7 +280,10 @@ class RideDaemonTransportTest {
         assertTrue(TBoxModelProfile.KOVE_625X in stillProfiles)
         assertTrue(
             TBoxModelProfile.entries.none {
-                it.usesJpegStills != (it.yunmoJpegVideo || it.easyConnJpegStills)
+                it.usesJpegStills != (
+                    it.yunmoJpegVideo || it.easyConnJpegStills ||
+                        it.transportFamily == TBoxTransportFamily.MYSPIN
+                )
             }
         )
     }

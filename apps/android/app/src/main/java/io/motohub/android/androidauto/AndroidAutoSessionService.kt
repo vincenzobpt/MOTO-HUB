@@ -44,6 +44,7 @@ import io.motohub.android.session.ProjectionRuntime
 import io.motohub.android.session.ProjectionRuntimeState
 import io.motohub.android.tbox.TBoxEvent
 import io.motohub.android.tbox.TBoxLinkResolver
+import io.motohub.android.tbox.TBoxWifiRejoinService
 import io.motohub.android.tbox.ProfileOverride
 import io.motohub.android.tbox.TBoxCapabilityStore
 import io.motohub.android.tbox.TBoxNetworkEvent
@@ -1041,6 +1042,10 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
             return
         }
         if (!MotoHubSettings.seamlessResume(this)) {
+            // Rejoining the bike's Wi-Fi needs no overlay permission, so seamless resume being off
+            // must not take it away. Held before fail(), while this is still the foreground
+            // service: Android 16 refuses the start from the background.
+            TBoxWifiRejoinService.hold(this, "Android Auto")
             fail("T-Box Wi-Fi connection lost; seamless resume is disabled.")
             return
         }
