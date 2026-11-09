@@ -95,6 +95,7 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
     private val streamingLocks = TBoxStreamingLocks(this, "Android Auto")
     private var mediaButtonBridge: MediaButtonBridge? = null
     private var simulatorHandlebarBridge: SimulatorHandlebarBridge? = null
+    private var externalInputDeviceLog: ExternalInputDeviceLog? = null
     private val displayGeometryStore by lazy { TBoxDisplayGeometryStore(this) }
     private val screenMarginsStore by lazy { TBoxScreenMarginsStore(this) }
     private val capabilityStore by lazy { TBoxCapabilityStore(this) }
@@ -204,6 +205,9 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
         tBoxHandle = handle
         TBoxSessionRegistry.claim(SESSION_CONSUMER)
         startSimulatorHandlebarBridgeIfNeeded(handle)
+        if (externalInputDeviceLog == null) {
+            externalInputDeviceLog = ExternalInputDeviceLog(applicationContext).also { it.start() }
+        }
         val cachedCapabilities = capabilityStore.load(handle.motorcycle)?.capabilities
         val profileOverride = ProfileOverride.byKey(handle.motorcycle.profileOverrideKey)
         val modelProfile = TBoxModelProfile.resolve(
@@ -1454,6 +1458,8 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
         AndroidAutoReceiverOwnership.release(this@AndroidAutoSessionService)
         simulatorHandlebarBridge?.stop()
         simulatorHandlebarBridge = null
+        externalInputDeviceLog?.stop()
+        externalInputDeviceLog = null
         mediaButtonBridge?.stop()
         mediaButtonBridge = null
         AndroidAutoPreviewRuntime.clear(this)
