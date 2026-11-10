@@ -511,6 +511,42 @@ class RideDaemonTransport(
      * rather than to a plausible-looking guess - the daemon sends what it is given, and a field
      * log has to be able to tell a real measurement from a missing one.
      */
+    private data class PhoneIdentity(
+        val uuid: String,
+        val brand: String,
+        val model: String,
+        val osVersion: String,
+        val bluetoothName: String
+    )
+
+    /**
+     * The phone as the CFMOTO app describes it in CLIENT_INFO (ticket 9EE8-EAFB experiment).
+     * The Bluetooth name is the adapter's own, which needs BLUETOOTH_CONNECT; without the
+     * grant the system device name stands in. phoneUUID is random once and then kept, as the
+     * CFMOTO app keeps it (AppUtil.getImei): a dash that pairs by it must see one phone.
+     */
+    private fun phoneIdentity(): PhoneIdentity {
+        val adapterName = runCatching {
+            appContext.getSystemService(android.bluetooth.BluetoothManager::class.java)?.adapter?.name
+        }.getOrNull()?.takeIf { it.isNotBlank() }
+        ProjectionEventLog.record(
+            "DISCOVERY",
+            "Phone identity ready for CLIENT_INFO (sent only if the dash is a 1000 MT-X): Bluetooth adapter name ${if (adapterName != null) "read" else "not readable, device name used"}."
+        )
+        val prefs = appContext.getSharedPreferences("ridedaemon_phone", Context.MODE_PRIVATE)
+        val uuid = prefs.getString("phone_uuid", null)?.takeIf { it.isNotEmpty() }
+            ?: java.util.UUID.randomUUID().toString().also { prefs.edit().putString("phone_uuid", it).apply() }
+        return PhoneIdentity(
+            uuid = uuid,
+            brand = android.os.Build.BRAND,
+            model = android.os.Build.MODEL,
+            osVersion = android.os.Build.VERSION.SDK_INT.toString(),
+            bluetoothName = adapterName
+                ?: android.provider.Settings.Global.getString(appContext.contentResolver, android.provider.Settings.Global.DEVICE_NAME)
+                ?: android.os.Build.MODEL
+        )
+    }
+
     private fun readPhoneScreen(): Triple<Int, Int, Int> = runCatching {
         val windowManager = appContext.getSystemService(android.view.WindowManager::class.java)
             ?: return@runCatching Triple(0, 0, 0)
@@ -608,6 +644,15 @@ class RideDaemonTransport(
                 setAppStatusNotifyEnabled(profile.announcesMirrorState)
                 setAppStatusLiveOnly(profile.announcesMirrorLiveOnly)
                 setCfmotoAppReplies(profile.repliesAsCfmotoApp)
+                // The daemon puts these in the CLIENT_INFO reply only for the 1000 MT-X dash
+                // (package com.cfmoto.cfdashmotoplay), whatever profile resolved: Auto is still
+                // generic when CLIENT_INFO arrives. Every other dash keeps the placeholder.
+                val phone = phoneIdentity()
+                setPhoneUUID(phone.uuid)
+                setPhoneBrand(phone.brand)
+                setPhoneModel(phone.model)
+                setPhoneOsVersion(phone.osVersion)
+                setPhoneBluetoothName(phone.bluetoothName)
                 if (profile.announcesMirrorState) {
                     val screen = readPhoneScreen()
                     setPhoneScreenWidth(screen.first.toLong())

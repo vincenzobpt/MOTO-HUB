@@ -1,16 +1,24 @@
 # Generated dependency record. Update this file whenever hudlib.aar is rebuilt.
 
-# Rebuilt 2026-11-07 from the committed source: the 1000 MT-X gets
-# 0x201c0 and 0x20030 on CAR_DATA, enableAOAHid true, and a CAR_DATA beat (SetCfmotoAppReplies).
-# No new API: the change is in the net package only. Same build shape, -androidapi 31.
+# Rebuilt 2026-11-10 from the committed source: MobileConfig gains PhoneUUID, PhoneBrand,
+# PhoneModel, PhoneOsVersion and PhoneBluetoothName. The CLIENT_INFO reply describes the real
+# phone and CFMOTO RIDE 2.2.13 (versionCode 145) only to the dash whose package_name is
+# com.cfmoto.cfdashmotoplay (1000 MT-X, ticket 9EE8-EAFB); every other dash keeps the placeholder.
+# Same build shape: -androidapi 31, 4 ABIs. javap: purely additive, exactly the five get/set
+# pairs on api.MobileConfig; api.MobileSession and api.Api unchanged.
 source_repository=https://github.com/vincenzobpt/ridedaemon-lib
-source_commit=2e8485506bb7445a08d1485eab823319e73ddb41
+source_commit=19bfbf29a69f12628c64945b85803b3773636ebf
 source_dirty=false
 source_checkout=ridedaemon-lib-motohub
 gomobile_android_api=31
 artifact=apps/android/app/libs/hudlib.aar
-sha256=b4138918ba7c5a27eff87dc87c713d393f5259e25a90faddb1255d4456516471
+sha256=528aadbba92c78ab20063871a646c71348a62a72fab6bf6f3ea0aa0f68fa4e8d
 license=GPL-3.0-only
+
+# Previous build 2026-11-07 (2e84855, sha b4138918...):
+# Rebuilt 2026-11-07 from the committed source: the 1000 MT-X gets
+# 0x201c0 and 0x20030 on CAR_DATA, enableAOAHid true, and a CAR_DATA beat (SetCfmotoAppReplies).
+# No new API: the change is in the net package only. Same build shape, -androidapi 31.
 
 # Rebuilt 2026-11-04 from the committed source: MobileConfig gains CfmotoAppReplies, so a
 # host can answer two PXC questions as the CFMOTO app does - the CLIENT_INFO reply without
