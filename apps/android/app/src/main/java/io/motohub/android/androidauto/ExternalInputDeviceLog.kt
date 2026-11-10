@@ -44,7 +44,7 @@ class ExternalInputDeviceLog(context: Context) {
         val manager = inputManager ?: return
         if (started) return
         started = true
-        val devices = manager.inputDeviceIds.mapNotNull { read(InputDevice.getDevice(it)) }
+        val devices = manager.inputDeviceIds.asList().mapNotNull { read(InputDevice.getDevice(it)) }
         val snapshot = describeSnapshot(devices)
         if (devices.any(::isExternalTouch)) {
             ProjectionEventLog.warning(SOURCE, snapshot)
