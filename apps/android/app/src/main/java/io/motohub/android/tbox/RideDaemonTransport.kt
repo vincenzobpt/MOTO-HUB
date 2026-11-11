@@ -526,9 +526,11 @@ class RideDaemonTransport(
      * CFMOTO app keeps it (AppUtil.getImei): a dash that pairs by it must see one phone.
      */
     private fun phoneIdentity(): PhoneIdentity {
-        val adapterName = runCatching {
+        val adapterName = try {
             appContext.getSystemService(android.bluetooth.BluetoothManager::class.java)?.adapter?.name
-        }.getOrNull()?.takeIf { it.isNotBlank() }
+        } catch (_: SecurityException) {
+            null
+        }?.takeIf { it.isNotBlank() }
         ProjectionEventLog.record(
             "DISCOVERY",
             "Phone identity ready for CLIENT_INFO (sent only if the dash is a 1000 MT-X): Bluetooth adapter name ${if (adapterName != null) "read" else "not readable, device name used"}."
