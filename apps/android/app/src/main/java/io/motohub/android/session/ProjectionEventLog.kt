@@ -321,7 +321,7 @@ object ProjectionEventLog {
         // the caller's thread, which can be the T-Box callback delivering a touch.
         if (!synchronized(lock) { appendOrCollapseLocked(source, detail, level) }) return
         if (level == LogLevel.ERROR && reportToTelemetry) {
-            SentryIntegration.captureDiagnosticError(source, detail)
+            SentryIntegration.captureDiagnosticError(source, detail, hasThrowable = throwable != null)
         }
         when (level) {
             LogLevel.DEBUG -> Log.d(LOG_TAG, "$source: $detail")

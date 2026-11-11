@@ -10,7 +10,6 @@ import io.motohub.android.BuildConfig
 import io.sentry.Sentry
 import io.sentry.SentryLevel
 import io.sentry.android.core.SentryAndroid
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -33,18 +32,15 @@ object SentryIntegration {
      * the organisation's error quota on 2026-08-12: 30,137 events in the window, of which about
      * 150 were real crashes. The rest were these reports, retried for the length of a ride.
      */
-    private const val MAX_DIAGNOSTIC_EVENTS_PER_DAY = 40
-
-    /** Bound on the distinct reports tracked for the backoff, so a bad call site cannot leak. */
-    private const val MAX_TRACKED_REPORTS = 200
+    private const val MAX_DIAGNOSTIC_EVENTS_PER_DAY = 5
 
     private const val BUDGET_PREFS = "motohub_telemetry_budget"
     private const val KEY_BUDGET_DAY = "day"
     private const val KEY_BUDGET_SENT = "sent"
+    private const val KEY_BUDGET_SEEN = "seen"
     private const val MILLIS_PER_DAY = 24L * 60L * 60L * 1000L
 
     private val diagnosticEventsSent = AtomicInteger(0)
-    private val repeatsByReport = ConcurrentHashMap<String, AtomicInteger>()
     private val budgetLock = Any()
     @Volatile private var budgetPrefs: SharedPreferences? = null
     @Volatile private var enabled = false
@@ -85,9 +81,17 @@ object SentryIntegration {
             }.getOrNull()
     }
 
-    /** Sends a bounded, redacted diagnostic event without changing the local log behavior. */
-    fun captureDiagnosticError(source: String, message: String) {
+    /**
+     * Sends a bounded, redacted diagnostic event without changing the local log behavior.
+     *
+     * Only [isUnexpectedDiagnostic] reports go out. On 2026-11-11 over 99% of the events were
+     * expected connection failures (dash off, hotspot down, Wi-Fi refused) from hundreds of phones,
+     * and they emptied the monthly quota in four days. The diagnostics collector already gets
+     * those with the whole log; Sentry keeps the reports that point at a bug.
+     */
+    fun captureDiagnosticError(source: String, message: String, hasThrowable: Boolean) {
         if (!enabled) return
+        if (!isUnexpectedDiagnostic(source, message, hasThrowable)) return
         val fingerprint = fingerprintOf(source, message)
         if (!admits(fingerprint)) return
 
@@ -127,48 +131,39 @@ object SentryIntegration {
     }
 
     /**
-     * Decides whether this report is worth one of the day's slots.
-     *
-     * Three gates, cheapest first. The same report backs off by powers of two, so a dash that
-     * refuses to join for a whole ride costs seven events rather than a hundred - and the ones
-     * that do get through still say how long it went on. Then the per-process cap. The per-day
-     * budget is claimed last, so a report the backoff already swallowed never spends one.
+     * Decides whether this report is worth one of the day's slots: each report once per day per
+     * installation, and at most [MAX_DIAGNOSTIC_EVENTS_PER_DAY] a day. Sentry's user count then
+     * says how many riders hit it; the collector has the repeats.
      *
      * Crashes do not pass through here. They reach Sentry from the SDK's own uncaught-exception
      * handler, and nothing in this class may ever throttle those: the whole point of cutting the
      * diagnostic volume is that the crashes get through.
      */
     private fun admits(fingerprint: List<String>): Boolean {
-        val key = fingerprint.joinToString("\u0000")
-        // Distinct reports are few, because fingerprintOf strips the numbers that would otherwise
-        // make every retry its own key. This only trips if a call site starts inventing messages.
-        if (repeatsByReport.size >= MAX_TRACKED_REPORTS && !repeatsByReport.containsKey(key)) {
-            repeatsByReport.clear()
-        }
-        val occurrence = repeatsByReport.getOrPut(key) { AtomicInteger(0) }.incrementAndGet()
-        if (!isDiagnosticBackoffMilestone(occurrence)) return false
         if (diagnosticEventsSent.incrementAndGet() > MAX_DIAGNOSTIC_EVENTS_PER_PROCESS) return false
-        return claimDailySlot()
+        return claimDailySlot(fingerprint.joinToString("\u0000").hashCode().toString())
     }
 
     /**
-     * Takes one slot out of today's budget, rolling the counter over on a new day.
+     * Takes one slot out of today's budget for [key], rolling the counters over on a new day.
      *
      * Fails open when [initialize] has not stored the preferences yet: at that point the SDK is
      * not sending anything anyway, and the per-process cap still applies.
      */
-    private fun claimDailySlot(): Boolean {
+    private fun claimDailySlot(key: String): Boolean {
         val prefs = budgetPrefs ?: return true
         return synchronized(budgetLock) {
             val today = System.currentTimeMillis() / MILLIS_PER_DAY
-            val storedDay = prefs.getLong(KEY_BUDGET_DAY, Long.MIN_VALUE)
-            val sentToday = if (storedDay == today) prefs.getInt(KEY_BUDGET_SENT, 0) else 0
-            if (sentToday >= MAX_DIAGNOSTIC_EVENTS_PER_DAY) {
+            val sameDay = prefs.getLong(KEY_BUDGET_DAY, Long.MIN_VALUE) == today
+            val sentToday = if (sameDay) prefs.getInt(KEY_BUDGET_SENT, 0) else 0
+            val seenToday = if (sameDay) prefs.getStringSet(KEY_BUDGET_SEEN, null).orEmpty() else emptySet()
+            if (!admitsToday(key, seenToday, sentToday, MAX_DIAGNOSTIC_EVENTS_PER_DAY)) {
                 false
             } else {
                 prefs.edit()
                     .putLong(KEY_BUDGET_DAY, today)
                     .putInt(KEY_BUDGET_SENT, sentToday + 1)
+                    .putStringSet(KEY_BUDGET_SEEN, seenToday + key)
                     .apply()
                 true
             }
@@ -196,10 +191,13 @@ object SentryIntegration {
 }
 
 /**
- * True on the 1st, 2nd, 4th, 8th ... occurrence of the same report - the powers of two.
- *
- * Keeping the first occurrence means a report never goes missing, and the widening gaps mean a
- * retry storm still shows how long it lasted without costing an event per attempt.
+ * Whether a logged ERROR points at a bug rather than at the world: an exception was attached, the
+ * previous process died ([CrashRecovery]), or the streaming library gave up from inside. Connection
+ * failures without an exception (dash off, hotspot down, Wi-Fi refused) are expected states.
  */
-internal fun isDiagnosticBackoffMilestone(occurrence: Int): Boolean =
-    occurrence > 0 && occurrence and (occurrence - 1) == 0
+internal fun isUnexpectedDiagnostic(source: String, message: String, hasThrowable: Boolean): Boolean =
+    hasThrowable || source == "CRASH" || message.startsWith("RideDaemon fatal callback")
+
+/** One report per [key] per day, and no more than [cap] reports a day in all. */
+internal fun admitsToday(key: String, seenToday: Set<String>, sentToday: Int, cap: Int): Boolean =
+    key !in seenToday && sentToday < cap
