@@ -205,9 +205,20 @@ class YunmoTransport(context: Context) : TBoxTransport {
     override suspend fun stop() {
         val active = synchronized(sessionLock) { session } ?: return
         // Tell the dash the mirror ended so its UI returns to the stock dashboard before the
-        // socket is closed under it.
-        active.sendStop()
-        teardownSession()
+        // socket is closed under it. On its own thread with a deadline: a dash that stopped
+        // reading leaves the frame writer blocked inside the stream's lock, and waiting for it
+        // froze the app (ANR, WB-45). Closing the socket below is what unblocks both writers.
+        withContext(Dispatchers.IO) {
+            val stopFrames = Thread({ active.sendStop() }, "MotoHubYunmoStop").apply {
+                isDaemon = true
+                start()
+            }
+            stopFrames.join(STOP_FRAME_WAIT_MS)
+            if (stopFrames.isAlive) {
+                ProjectionEventLog.warning("YUNMO", "Stop frames not written within ${STOP_FRAME_WAIT_MS}ms; closing the socket anyway.")
+            }
+            teardownSession()
+        }
         mutableEvents.tryEmit(TBoxEvent.Stopped)
     }
 
@@ -776,6 +787,9 @@ class YunmoTransport(context: Context) : TBoxTransport {
     private companion object {
         const val YUNMO_PACKAGE_TAG = "yunmo"
         const val CONNECT_TIMEOUT_MS = 5_000
+
+        /** How long stop() waits for the stop frames before closing the socket under them. */
+        const val STOP_FRAME_WAIT_MS = 500L
 
         /** Short on purpose: this runs after EasyConn discovery has already spent its budget. */
         const val PROBE_CONNECT_TIMEOUT_MS = 1_500

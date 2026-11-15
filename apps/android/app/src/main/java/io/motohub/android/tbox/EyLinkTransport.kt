@@ -130,8 +130,20 @@ class EyLinkTransport : TBoxTransport {
     override suspend fun stop() {
         val active = synchronized(sessionLock) { session } ?: return
         // MIRROR_STOP first, so the dash goes back to its own screen before the sockets close.
-        active.sendStop()
-        teardownSession()
+        // On its own thread with a deadline: a dash that stopped reading leaves the frame writer
+        // blocked inside the video stream's lock, and waiting for it froze the app (ANR, WB-45).
+        // Closing the sockets below is what unblocks both writers.
+        withContext(Dispatchers.IO) {
+            val stopFrame = Thread({ active.sendStop() }, "MotoHubEyLinkStop").apply {
+                isDaemon = true
+                start()
+            }
+            stopFrame.join(STOP_FRAME_WAIT_MS)
+            if (stopFrame.isAlive) {
+                ProjectionEventLog.warning("EYLINK", "MIRROR_STOP not written within ${STOP_FRAME_WAIT_MS}ms; closing the sockets anyway.")
+            }
+            teardownSession()
+        }
         mutableEvents.tryEmit(TBoxEvent.Stopped)
     }
 
@@ -411,6 +423,9 @@ class EyLinkTransport : TBoxTransport {
         const val CONNECT_TIMEOUT_MS = 5_000
         const val OK_TIMEOUT_MS = 10_000L
         const val MIRROR_START_REPEAT_MS = 1_000L
+
+        /** How long stop() waits for MIRROR_STOP before closing the sockets under it. */
+        const val STOP_FRAME_WAIT_MS = 500L
 
         /** Room for the 13-byte reply plus whatever unknown bytes may come around it. */
         const val OK_SEARCH_LIMIT = 256
