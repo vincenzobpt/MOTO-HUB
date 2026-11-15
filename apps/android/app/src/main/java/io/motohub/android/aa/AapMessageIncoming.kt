@@ -5,7 +5,9 @@
 package io.motohub.android.aa
 
 internal class AapMessageIncoming(header: EncryptedHeader, ba: ByteArrayWithLimit)
-    : AapMessage(header.chan, header.flags.toByte(), Utils.bytesToInt(ba.data, 0, true), calcOffset(header), ba.limit, ba.data) {
+    // A continuation fragment carries raw bytes and no message type; one of a single byte has
+    // nothing to read a 2-byte type from, so it gets -1 (unknown) instead of an out-of-bounds read.
+    : AapMessage(header.chan, header.flags.toByte(), if (ba.data.size >= 2) Utils.bytesToInt(ba.data, 0, true) else -1, calcOffset(header), ba.limit, ba.data) {
 
     internal class EncryptedHeader {
         var chan: Int = 0
@@ -39,8 +41,13 @@ internal class AapMessageIncoming(header: EncryptedHeader, ba: ByteArrayWithLimi
 
             val ba = ssl.decrypt(offset, header.enc_len, buf) ?: return null
 
-            if (ba.data.size < 2) {
-                AaLog.e("Decrypted payload too short: " + ba.data.size)
+            // Only a first (or single) fragment starts with the 2-byte type. A last fragment of
+            // one byte is valid: rejecting it lost that video frame (WB-48).
+            if (ba.data.size < 2 && header.flags and 0x01 == 0x01) {
+                AaLog.e(
+                    "Decrypted payload too short: %d (chan: %d flags: 0x%02x enc_len: %d)",
+                    ba.data.size, header.chan, header.flags, header.enc_len
+                )
                 return null
             }
 
