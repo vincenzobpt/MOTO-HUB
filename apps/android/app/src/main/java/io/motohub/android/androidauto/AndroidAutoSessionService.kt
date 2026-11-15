@@ -163,7 +163,26 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
         }
         // A stop that never reached a running service must not name the session about to start.
         AndroidAutoStopReason.clear()
-        if (AndroidAutoRuntime.isActive()) return START_STICKY
+        if (AndroidAutoRuntime.isActive()) {
+            // Every startForegroundService() call owes Android a startForeground(), also this one
+            // that only finds a session already running; returning without it killed the app with
+            // ForegroundServiceDidNotStartInTimeException (WB-36). Same id, so no second notification.
+            createNotificationChannel()
+            val current = foregroundServiceType
+            if (current != 0) {
+                // This service hosts the session: repeat the types it already holds. Asking for the
+                // microphone again from the background would be refused and fall back to the plain
+                // type, taking the Assistant's voice away mid-session.
+                runCatching { startForeground(NOTIFICATION_ID, createNotification(), current) }
+                return START_STICKY
+            }
+            // The session is not this instance's (a stale active state after a stop): satisfy the
+            // contract and leave, so no notification stays behind for a session this service does not run.
+            runCatching { startForeground(NOTIFICATION_ID, createNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE) }
+            stopForeground(STOP_FOREGROUND_REMOVE)
+            stopSelf()
+            return START_NOT_STICKY
+        }
 
         ProjectionEventLog.record("ANDROID AUTO", "Preparing local AAP receiver.")
         createNotificationChannel()
