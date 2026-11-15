@@ -75,7 +75,7 @@ object AaSelfMode {
      */
     suspend fun trigger(
         context: Context,
-        port: Int = AaReceiver.PORT,
+        port: Int = AaReceiver.listeningPort,
         isConnected: () -> Boolean = { AaReceiver.hasAndroidAutoConnectedSinceStart() },
         onProgress: (String) -> Unit = { io.motohub.android.androidauto.AndroidAutoRuntime.publishStartupDetail(it) },
         log: (String) -> Unit

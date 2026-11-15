@@ -73,6 +73,14 @@ class AaReceiver(
         private var androidAutoConnectedSinceStart = false
 
         fun hasAndroidAutoConnectedSinceStart(): Boolean = androidAutoConnectedSinceStart
+
+        /**
+         * The loopback port the listener actually holds: [PORT], or a free one when another app
+         * on the phone already holds [PORT] (WB-49). Self-mode tells Android Auto to dial this one.
+         */
+        @Volatile
+        var listeningPort: Int = PORT
+            private set
     }
 
     @Volatile private var running = false
@@ -226,9 +234,21 @@ class AaReceiver(
         AaLog.sink = log
         ConscryptInitializer.initialize()
 
+        listeningPort = PORT
         try {
             serverSocket = bindWirelessServerSocket()
             log("[AA] WirelessServer listening on :$PORT")
+        } catch (e: java.net.BindException) {
+            // Another app on this phone holds the port. Giving up here also killed the dial-out to
+            // Android Auto's head unit server below, the path that connects on AA 17.4+ (WB-49).
+            log("[AA] failed to bind :$PORT — ${e.message}; using a free port instead")
+            serverSocket = runCatching { openWirelessServerSocket(0) }
+                .onFailure { log("[AA] no loopback listener either (${it.message}); dial-out only") }
+                .getOrNull()
+            serverSocket?.let {
+                listeningPort = it.localPort
+                log("[AA] WirelessServer listening on :${it.localPort}")
+            }
         } catch (e: Exception) {
             log("[AA] failed to bind :$PORT — ${e.message}")
             running = false
@@ -284,13 +304,13 @@ class AaReceiver(
      * still-draining connection from a previous session can keep the port unbindable for a while
      * after the old listener is gone.
      */
-    private fun openWirelessServerSocket(): ServerSocket {
+    private fun openWirelessServerSocket(port: Int = PORT): ServerSocket {
         val socket = ServerSocket()
         return try {
             socket.reuseAddress = true
             // Loopback only: Android Auto on this phone is the only peer. On 0.0.0.0 anyone on the
             // same Wi-Fi could take the session, push video to the TFT and open the microphone.
-            socket.bind(InetSocketAddress("127.0.0.1", PORT))
+            socket.bind(InetSocketAddress("127.0.0.1", port))
             socket
         } catch (failure: Exception) {
             runCatching { socket.close() }
