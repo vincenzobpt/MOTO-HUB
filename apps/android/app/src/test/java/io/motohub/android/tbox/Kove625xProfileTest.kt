@@ -38,8 +38,12 @@ class Kove625xProfileTest {
 
     @Test
     fun onlyTheKoveFamiliesClaimANetworkNamePrefix() {
+        // KOVE_350RR_EYLINK claims KTEY_ since 1dc6e099 (a KTEY name typed by hand gets the EYLINK model id).
         val claimants = TBoxModelProfile.entries.filter { it.ssidPrefixes.isNotEmpty() }
-        assertEquals(setOf(TBoxModelProfile.KOVE_625X, TBoxModelProfile.KOVE_800X), claimants.toSet())
+        assertEquals(
+            setOf(TBoxModelProfile.KOVE_625X, TBoxModelProfile.KOVE_800X, TBoxModelProfile.KOVE_350RR_EYLINK),
+            claimants.toSet(),
+        )
     }
 
     @Test
