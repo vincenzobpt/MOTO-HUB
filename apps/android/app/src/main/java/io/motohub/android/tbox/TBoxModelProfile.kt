@@ -946,13 +946,16 @@ enum class TBoxModelProfile(
      * a single 350 RR (784x352, 30 fps, 2000 kbps); the plain 1s GOP is a guess on the side of the
      * KOVE decoders we do know, which froze on intra refresh. The panel is not a touchscreen.
      *
-     * Reached only through [EyLinkProtocol.PROVISIONING_MODEL_ID], which the EyLink QR stamps:
-     * nothing an EasyConn dash reports can resolve here.
+     * Reached through [EyLinkProtocol.PROVISIONING_MODEL_ID], which the EyLink QR stamps, or a
+     * KTEY name typed by hand: nothing an EasyConn dash reports can resolve here.
      */
     KOVE_350RR_EYLINK(
         key = "kove_350rr_eylink",
         displayName = "KOVE (EyLink)",
         modelIds = setOf(EyLinkProtocol.PROVISIONING_MODEL_ID),
+        // A KTEY dash paired by typing its Bluetooth name must still reach EyLinkBleLink, not the
+        // generic BLE provisioning that never finds it.
+        ssidPrefixes = setOf("KTEY_"),
         mapTilesRequireCellular = true,
         supportsScreenTouch = false,
         fallbackTBoxVideoArea = TBoxEvent.VideoArea(784, 352),

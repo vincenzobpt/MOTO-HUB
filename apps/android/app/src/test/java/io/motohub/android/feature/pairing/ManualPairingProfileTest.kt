@@ -5,6 +5,7 @@ package io.motohub.android.feature.pairing
 
 import io.motohub.android.session.MotorcycleProfile
 import io.motohub.android.session.TBoxConnectionMode
+import io.motohub.android.tbox.EyLinkProtocol
 import io.motohub.android.tbox.KOVE_625X_PROVISIONING_MODEL_ID
 import io.motohub.android.tbox.ProfileOverride
 import io.motohub.android.tbox.TBoxModelProfile
@@ -148,5 +149,16 @@ class ManualPairingProfileTest {
         val once = profile(TBoxConnectionMode.THINKERRIDE).withModelIdForConnectionMode()
 
         assertSame(once, once.withModelIdForConnectionMode())
+    }
+
+    @Test
+    fun `a KTEY name typed by hand reaches the EyLink Bluetooth link`() {
+        val stamped = MotorcycleProfile(
+            ssid = "KTEY_1CCDE5_LE",
+            password = "",
+            connectionMode = TBoxConnectionMode.BLE_PROVISIONED
+        ).withModelIdForConnectionMode()
+
+        assertEquals(EyLinkProtocol.PROVISIONING_MODEL_ID, stamped.modelId)
     }
 }

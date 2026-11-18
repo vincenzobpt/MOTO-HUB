@@ -240,7 +240,9 @@ object TBoxQrParser {
      *     https://appstore.eryanet.com?productid=EYLINK&device=EY_…&ssid=EY_…&pwd=…
      *         &name=EY_…&mac=TYWKOVE…&IP=192.168.13.1&key=…
      *
-     * `productid=EYLINK` is the code's own name for itself, and it is checked before every other
+     * `productid=EYLINK`, or a `device=` named like an EyLink dash
+     * ([EyLinkProtocol.DASH_NAME_PREFIXES]) when the brand put its own id in `productid`, marks the
+     * code, and it is checked before every other
      * dialect because the rest of the code looks like a Carbit one: [parseProvisioningUrl] would
      * take `ssid=` and `pwd=` and save an access-point profile for a dash that has no access point.
      * `ssid` and `name` are the dash's Wi-Fi *Direct* device name, so the profile is saved under
@@ -261,7 +263,10 @@ object TBoxQrParser {
     private fun parseEyLinkUrl(rawValue: String): TBoxQrPayload? {
         val parameters = queryParameters(rawValue)
         val productId = parameters["productid"]
-        if (!productId.equals(EyLinkProtocol.PROVISIONING_MODEL_ID, ignoreCase = true)) return null
+        val device = parameters["device"]?.trim().orEmpty()
+        val isEyLink = productId.equals(EyLinkProtocol.PROVISIONING_MODEL_ID, ignoreCase = true) ||
+            EyLinkProtocol.DASH_NAME_PREFIXES.any { device.startsWith(it, ignoreCase = true) }
+        if (!isEyLink) return null
         // `name` is what the dash answers to in a peer scan; `ssid` has carried the same value on
         // the one code seen, and stands in when `name` is missing.
         val peerName = listOf(parameters["name"], parameters["ssid"])

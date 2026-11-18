@@ -27,6 +27,14 @@ object EyLinkProtocol {
      */
     const val PROVISIONING_MODEL_ID = "EYLINK"
 
+    /**
+     * Name prefixes of an EyLink dash's `device=` in its QR. `productid=` is not the family: it is
+     * `EYLINK` on Kove's codes but a brand's own hex id on others (Aveta Vanguard 250 V2:
+     * `productid=f03aad9ac00ec5df&device=KTEY_1CCDE5_LE`), and the official EyLink app never
+     * reads it.
+     */
+    val DASH_NAME_PREFIXES = listOf("KTEY_", "EY_")
+
     /** The group owner address on the one dash reported. The link's real gateway wins. */
     const val DEFAULT_HOST = "192.168.13.1"
     const val CONTROL_PORT = 11113

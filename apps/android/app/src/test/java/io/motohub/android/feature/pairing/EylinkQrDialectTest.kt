@@ -61,6 +61,26 @@ class EylinkQrDialectTest {
         assertTrue(TBoxQrParser.parse("https://appstore.eryanet.com?productid=EYLINK&pwd=1").isFailure)
     }
 
+    /** A KTEY dash whose brand put its own hex id in `productid` (Aveta Vanguard 250 V2). */
+    @Test
+    fun aBrandsOwnProductIdStillReadsAsEyLinkByTheDeviceName() {
+        val payload = TBoxQrParser.parse(
+            "https://appstore.eryanet.com/?productid=f03aad9ac00ec5df&device=KTEY_1CCDE5_LE" +
+                "&mac=40D95A1CCDE4&key=0123456789abcdef"
+        ).getOrThrow()
+
+        assertEquals("KTEY_1CCDE5_LE", payload.ssid)
+        assertEquals(TBoxConnectionMode.BLE_PROVISIONED, payload.suggestedConnectionMode)
+        assertEquals(EyLinkProtocol.PROVISIONING_MODEL_ID, payload.modelId)
+    }
+
+    @Test
+    fun anUnrelatedDeviceParameterIsNotTakenForEyLink() {
+        val payload = TBoxQrParser.parse("https://example.com/?productid=abc&device=PHONE&ssid=CF-1&pwd=x")
+            .getOrThrow()
+        assertTrue(payload.modelId != EyLinkProtocol.PROVISIONING_MODEL_ID)
+    }
+
     /** The real code of a KTEY 450 Rally (30C1-136A-AF70), with its activation key replaced. */
     @Test
     fun aCodeWithOnlyABluetoothNameIsProvisionedOverBluetooth() {
