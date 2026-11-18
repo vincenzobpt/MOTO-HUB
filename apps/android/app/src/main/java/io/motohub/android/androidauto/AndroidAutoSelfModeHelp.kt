@@ -111,6 +111,23 @@ object AndroidAutoSelfModeHelp {
             "in Developer settings should be on too."
 
     /**
+     * Shown when Android Auto connected through its head unit server and never sent video.
+     *
+     * Its server can get stuck: it accepts, sets up every channel and drops the socket a second
+     * later, or stops answering the version request at all, and redialling never clears it.
+     * Field case B33E-5EA8 (2026-11-18, POCO on Android Auto 18.0): 31 drops in a row, no frame;
+     * 68448B92 had the same stuck server cleared by a restart. The old line, "start Android Auto
+     * again", sent the rider back into the same stuck server.
+     */
+    const val HEAD_UNIT_SERVER_STUCK_MESSAGE =
+        "Android Auto connected but never sent the picture: its head unit server is stuck. Open " +
+            "the Android Auto app's settings, open the three-dot menu at the top right and choose " +
+            "\"Stop head unit server\", then \"Start head unit server\" again. If it still shows " +
+            "nothing, force-stop Android Auto (phone Settings, Apps, Android Auto, Force stop) and " +
+            "start the head unit server once more. Keep the phone unlocked and accept anything " +
+            "Android Auto asks on the phone. Leave MOTO-HUB running: it reconnects on its own."
+
+    /**
      * A remedy the rider has to carry out by hand, kept in the parts it reads best in: the thing
      * to tap, the menu path it is buried in, and what has to be unlocked before that path exists.
      *
@@ -231,7 +248,8 @@ object AndroidAutoSelfModeHelp {
     fun isMessageAboutSelfMode(message: String?): Boolean =
         message == NEVER_CONNECTED_MESSAGE ||
             message == ACCEPTED_BUT_SILENT_MESSAGE ||
-            message == ACCEPTED_BUT_SILENT_ON_CLOSED_RELEASE_MESSAGE
+            message == ACCEPTED_BUT_SILENT_ON_CLOSED_RELEASE_MESSAGE ||
+            message == HEAD_UNIT_SERVER_STUCK_MESSAGE
 
     /**
      * Opens Android Auto's settings, falling back to its App info page: the settings activity is

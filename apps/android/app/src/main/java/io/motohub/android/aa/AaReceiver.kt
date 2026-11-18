@@ -142,6 +142,15 @@ class AaReceiver(
     val hasAndroidAutoConnected: Boolean get() = androidAutoConnected
 
     /**
+     * Whether that connection came through Android Auto's head unit server on :5277, the one
+     * path whose stuck state the rider can clear by hand (stop and start the server, or force-stop
+     * Android Auto). B33E-5EA8, 2026-11-18: AA 18.0 set up every channel 31 times and never
+     * started the video, then stopped answering the version request at all.
+     */
+    @Volatile private var connectedViaHeadUnitServer = false
+    val hasConnectedViaHeadUnitServer: Boolean get() = connectedViaHeadUnitServer
+
+    /**
      * True while an AAP session is actually running, as opposed to merely having been accepted
      * once. What the session service waits on when it holds a dropped session open instead of
      * tearing it down - see AndroidAutoSessionService.handleAndroidAutoDrop.
@@ -230,6 +239,7 @@ class AaReceiver(
         }
         running = true
         androidAutoConnected = false
+        connectedViaHeadUnitServer = false
         androidAutoConnectedSinceStart = false
         AaLog.sink = log
         ConscryptInitializer.initialize()
@@ -378,6 +388,7 @@ class AaReceiver(
             }
             log("[AA] <<< connected to Android Auto's head unit server on :$HEAD_UNIT_SERVER_PORT")
             androidAutoConnected = true
+            connectedViaHeadUnitServer = true
             androidAutoConnectedSinceStart = true
             val started = runSession(socket)
             // Deliberately NOT a return. A session that ends - Android Auto restarting, the phone

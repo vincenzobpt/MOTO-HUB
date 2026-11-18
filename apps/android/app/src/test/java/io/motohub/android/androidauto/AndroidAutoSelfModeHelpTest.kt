@@ -43,6 +43,10 @@ class AndroidAutoSelfModeHelpTest {
                 AndroidAutoSelfModeHelp.ACCEPTED_BUT_SILENT_ON_CLOSED_RELEASE_MESSAGE
             )
         )
+        // B33E-5EA8: the stuck head unit server is fixed from the same Android Auto settings.
+        assertTrue(
+            AndroidAutoSelfModeHelp.isMessageAboutSelfMode(AndroidAutoSelfModeHelp.HEAD_UNIT_SERVER_STUCK_MESSAGE)
+        )
         assertFalse(AndroidAutoSelfModeHelp.isMessageAboutSelfMode("Android Auto connected without delivering video."))
         assertFalse(AndroidAutoSelfModeHelp.isMessageAboutSelfMode(null))
     }

@@ -447,7 +447,9 @@ class AndroidAutoSessionService : Service(), AndroidAutoPreviewController {
                     // different remedies, and reporting the second for the first sent riders
                     // hunting a video problem when Google Android Auto had in fact refused to
                     // start at all (newer builds no longer export the self-mode entry point).
-                    if (activeReceiver.hasAndroidAutoConnected) {
+                    if (activeReceiver.hasConnectedViaHeadUnitServer) {
+                        fail(AndroidAutoSelfModeHelp.HEAD_UNIT_SERVER_STUCK_MESSAGE)
+                    } else if (activeReceiver.hasAndroidAutoConnected) {
                         fail(
                             "Android Auto connected without delivering video. " +
                                 "The AAP session was closed; start Android Auto again."
