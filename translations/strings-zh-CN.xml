@@ -1615,7 +1615,7 @@
     <string name="legacy_follow_development_join_our_community_report_iss_b8b8fffa">关注开发进展、加入我们的社区、反馈问题并下载发布版本。</string>
     <string name="legacy_moto_hub_is_an_independent_project_it_is_not_aff_9e4c2633">MOTO-HUB 是独立项目，与 Carbit、CFMOTO、其他使用 EasyConn 仪表盘的厂商、Google 或 Android Auto 均无隶属、认可或赞助关系。所有产品名称和标识均归各自所有者所有。</string>
     <string name="legacy_moto_hub_is_an_experimental_proof_of_concept_not_34b4b321">MOTO-HUB 是实验性的概念验证，并非量产级产品。</string>
-    <string name="legacy_development_and_testing_happen_on_a_cfmoto_700mt_ac58afbf">开发和测试在 CFMOTO 700MT-ADV 仪表盘上完成，搭配 OnePlus 13 / Galaxy Z Fold4 手机。其他摩托车、品牌、T-Box 固件版本和手机在此均未测试：可能表现不同、反复重试，或完全连不上。如果仪表盘显示了配对 QR 码，值得一试。</string>
+    <string name="legacy_development_happens_on_a_cfmoto_700mt_adv_dashbo_a681fff">开发在 CFMOTO 700MT-ADV 仪表盘上完成，搭配 OnePlus 13 / Galaxy Z Fold4 手机。骑手们还在 %1$s 等品牌的许多其他摩托车上测试过。其他摩托车、T-Box 固件版本和手机仍可能表现不同：可能反复重试，或完全连不上。如果仪表盘显示了配对 QR 码，值得一试。</string>
     <string name="legacy_do_not_rely_on_it_as_your_only_source_of_critica_39775433">不要把它当作关键导航的唯一依据。请在停车状态下配置导航，使用本软件的风险自负。</string>
 
     <!-- Garage - hero tiles -->

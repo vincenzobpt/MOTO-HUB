@@ -24,7 +24,7 @@ Your motorcycle already has the screen. MOTO-HUB gives it the software.<br>
 Project **Android Auto**, mirror **any app**, or run a full **GPS ride dashboard** on the TFT —
 and control it all from the **handlebar buttons** you already have.
 
-**CFMOTO · Benelli · Voge · Zontes · QJ Motor · Moto Morini · Longjia · Morbidelli · KOVE · Cyclone · Italjet · Keeway** — one app for the EasyConn / Carbit dashboards many brands ship.
+**CFMOTO · Benelli · Voge · Zontes · QJ Motor · Moto Morini · Longjia · Morbidelli · KOVE · Cyclone · Italjet · Keeway · Rieju** — one app for the EasyConn / Carbit dashboards many brands ship.
 
 <br>
 
@@ -147,6 +147,7 @@ MOTO-HUB is **not a CFMOTO-only app**. It speaks to the EasyConn / Carbit dashbo
 | **KOVE 450 Rally** | ✅ Works | SiQi firmware: projection is started **from the dash**, not from the phone — press and hold **UP** on the dash while MOTO-HUB is connecting. No app can trigger it over the wire, which is why it otherwise just waits and then times out |
 | **KOVE 800X** | ⚪ Untested | ThinkerRide (BLE-provisioned) dashboard; pairing not confirmed working yet |
 | **KOVE 625X** | ✅ Works | A different dashboard from the other KOVEs: Wi-Fi only, speaking the X-Cape 1200 (Yunmo) protocol with still images. Recognised from its `KY_ADV_…` network name, so pairing by QR is enough; Android Auto and the Ride Dashboard confirmed, mirroring from ADVANCED not yet |
+| **Rieju 307 Rally** | ✅ Works | Android Auto on the TFT confirmed by a rider |
 
 <sub>✅ riders confirmed it working &middot; 🟡 works in part, or not on every path &middot; ⚪ nobody has reported back yet</sub>
 
@@ -485,7 +486,7 @@ This section is intentionally explicit because the project combines original MOT
 - `ridedaemon-lib` and the reference Android project are distributed under AGPL-3.0 according to their repositories and license files; the generated `hudlib.aar` is derived from that fork. Redistributing it (including inside this repository) must comply with the applicable AGPL obligations — the corresponding source must remain available to anyone who interacts with it, including over a network.
 - The `open-cfmoto` project used for research **is licensed under AGPL-3.0-or-later** (it carries both a `LICENSE` and a `NOTICE`, and an SPDX header on each source file). That statement replaces an earlier note here that it had no license file, which was true of the snapshot reviewed at the time and is no longer true. Code may therefore flow in either direction under the AGPL, provided the copyright notices and the modification notices required by section 5 travel with it. The influence recorded in the research references above is behavioural — bitrate, source profiles, startup automation, stream recovery — not source. In the other direction, `EcBtpProtocol.kt` was written here on 2026-08-13 and appears in OpenCfMoto the same day; see the note in that file.
 - **MOTO-HUB ADVANCED** is a separate, closed-source companion application maintained in a private repository. It contains no GPL-3.0 or AGPL-3.0 code — it reaches this repository's T-Box transport and Android Auto receiver exclusively through a documented Binder IPC boundary (`apps/android/ipc-contract/`, `IpcBridgeService`), which is why it can be distributed under different terms. ADVANCED requires MOTO-HUB to be installed to function; MOTO-HUB does not require ADVANCED.
-- CFMOTO, Voge, Zontes, Moto Morini, MotoFun, Benelli, QJ Motor, Morbidelli, MBP, KOVE, ThinkerRide, EasyConn, Carbit, MotoPlay, Android Auto, Google, and related names remain the property of their respective owners. MOTO-HUB is an independent project and must not imply official support from any of them.
+- CFMOTO, Voge, Zontes, Moto Morini, MotoFun, Benelli, QJ Motor, Morbidelli, MBP, KOVE, Rieju, ThinkerRide, EasyConn, Carbit, MotoPlay, Android Auto, Google, and related names remain the property of their respective owners. MOTO-HUB is an independent project and must not imply official support from any of them.
 
 This README documents the project's licensing rationale; it is not a substitute for legal advice.
 

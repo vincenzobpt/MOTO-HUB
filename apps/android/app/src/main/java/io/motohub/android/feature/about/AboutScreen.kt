@@ -47,6 +47,10 @@ const val MOTO_HUB_DISCORD_URL = "https://discord.gg/FzhXZtPhC8"
 /** Taps on the version card that reveal an edition's hidden prototype page. */
 private const val PROTOTYPE_UNLOCK_TAP_COUNT = 10
 
+/** Brands riders have tested on the TFT, from the community compatibility report. */
+private const val RIDER_TESTED_BRANDS =
+    "CFMOTO, Zontes, QJMOTOR, KOVE, Benelli, Voge, Moto Morini, Morbidelli, Keeway, Rieju"
+
 @Composable
 fun AboutScreen(
     onOpenGithub: () -> Unit,
@@ -299,11 +303,12 @@ private fun DisclaimerCard() {
             )
             Text(
                 text = motoHubText(
-                    "Development and testing happen on a CFMOTO 700MT-ADV dashboard with " +
-                        "OnePlus 13 / Galaxy Z Fold4 phones. Other motorcycles, brands, T-Box " +
-                        "firmware versions and phones are untested here: expect different behaviour, " +
-                        "retries, or no connection at all. If the dashboard shows a pairing QR code, " +
-                        "it is worth trying."
+                    "Development happens on a CFMOTO 700MT-ADV dashboard with OnePlus 13 / " +
+                        "Galaxy Z Fold4 phones. Riders have also tested it on many other motorcycles " +
+                        "from %1\$s and more. Other bikes, T-Box firmware versions and phones can " +
+                        "still behave differently: expect retries, or no connection at all. If the " +
+                        "dashboard shows a pairing QR code, it is worth trying.",
+                    RIDER_TESTED_BRANDS
                 ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant

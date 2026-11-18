@@ -1608,7 +1608,7 @@
     <string name="legacy_follow_development_join_our_community_report_iss_b8b8fffa">개발 상황을 확인하고, 커뮤니티에 참여하고, 문제를 보고하고, 릴리스를 내려받으세요.</string>
     <string name="legacy_moto_hub_is_an_independent_project_it_is_not_aff_9e4c2633">MOTO-HUB는 독립적인 프로젝트입니다. Carbit, CFMOTO, EasyConn을 사용하는 다른 제조사, Google 또는 Android Auto와 제휴하거나 이들의 승인 또는 후원을 받지 않았습니다. 모든 제품명과 상표는 각 소유자에게 귀속됩니다.</string>
     <string name="legacy_moto_hub_is_an_experimental_proof_of_concept_not_34b4b321">MOTO-HUB는 실험적인 개념 검증이며, 상용 수준의 제품이 아닙니다.</string>
-    <string name="legacy_development_and_testing_happen_on_a_cfmoto_700mt_ac58afbf">개발과 테스트는 CFMOTO 700MT-ADV 계기판과 OnePlus 13 / Galaxy Z Fold4 휴대폰으로 진행합니다. 다른 모터사이클, 다른 브랜드, 다른 T-Box 펌웨어 버전, 다른 휴대폰은 여기서 시험하지 않았습니다. 동작이 다르거나, 재시도가 반복되거나, 아예 연결되지 않을 수 있습니다. 계기판에 페어링 QR 코드가 표시된다면 시도해 볼 가치가 있습니다.</string>
+    <string name="legacy_development_happens_on_a_cfmoto_700mt_adv_dashbo_a681fff">개발은 CFMOTO 700MT-ADV 계기판과 OnePlus 13 / Galaxy Z Fold4 휴대폰으로 진행합니다. 라이더들이 %1$s 등 여러 브랜드의 다른 모터사이클에서도 시험해 보았습니다. 그래도 다른 모터사이클, T-Box 펌웨어 버전, 휴대폰에서는 동작이 다를 수 있으며, 재시도가 반복되거나 아예 연결되지 않을 수 있습니다. 계기판에 페어링 QR 코드가 표시된다면 시도해 볼 가치가 있습니다.</string>
     <string name="legacy_do_not_rely_on_it_as_your_only_source_of_critica_39775433">중요한 내비게이션을 이 앱에만 의존하지 마세요. 정차 중에 내비게이션을 설정하고, 소프트웨어 사용에 따른 책임은 본인에게 있습니다.</string>
 
     <!-- Garage - hero tiles -->
