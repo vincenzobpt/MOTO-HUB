@@ -16,6 +16,7 @@
 [![Android 12+](https://img.shields.io/badge/Android-12%2B-3DDC84?logo=android&logoColor=white)](#requirements)
 [![13 languages](https://img.shields.io/badge/languages-13-orange)](#what-moto-hub-does)
 [![Discord](https://img.shields.io/badge/Discord-join%20the%20community-5865F2?logo=discord&logoColor=white)](https://discord.gg/FzhXZtPhC8)
+[![Facebook](https://img.shields.io/badge/Facebook-follow%20the%20page-1877F2?logo=facebook&logoColor=white)](https://www.facebook.com/motohub.techub.eu/)
 [![Website](https://img.shields.io/badge/website-motohub.techub.eu-111111)](https://motohub.techub.eu)
 
 <img src="media/hero-bike.jpg" alt="A motorcycle TFT dashboard running MOTO-HUB on the road" width="820">
