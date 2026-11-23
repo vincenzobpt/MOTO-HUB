@@ -10,13 +10,18 @@ The in-app updater reads GitHub releases and pre-releases, selects only the
 latest APK release newer than the installed build, shows the release notes, and
 labels pre-releases before installation.
 
-The expected release asset name is:
+The release asset name carries no version, so the same link always downloads the latest APK
+(`releases/latest/download/MOTO-HUB-CORE.apk`). The updater reads the version from the release tag,
+never from the file name. Rename the APK on disk before uploading: `gh release create file#label`
+only sets a label.
 
 ```text
-MOTO-HUB-<versionName>-<versionCode>-android-auto.apk
+MOTO-HUB-CORE.apk
 ```
 
-Every release also contains a matching `.sha256` checksum file.
+Every release also contains a matching `.sha256` checksum file, made after the rename
+(`sha256sum MOTO-HUB-CORE.apk > MOTO-HUB-CORE.apk.sha256`) so that `sha256sum -c` finds the file.
+A release holds exactly one `.apk`: the updater installs the first one it finds.
 
 ## Source And Binary Separation
 
